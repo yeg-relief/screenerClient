@@ -11,9 +11,6 @@ export class QuestionControlService {
     let group = {};
 
     questions.forEach(question => {
-      if(question.conditon !== ''){
-        //return;
-      }
       group[question.key] = question.required ? 
                             [question.value || '', Validators.required] : [question.value || ''];
       
