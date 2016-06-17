@@ -33,6 +33,8 @@ const barrels: string[] = [
   // App specific barrels.
   'app',
   'app/shared',
+  'app/dynamic-form',
+  'app/dynamic-form-question',
   /** @cli-barrel */
 ];
 
