@@ -1,6 +1,6 @@
 import { Component }            from '@angular/core';
 import { DynamicFormComponent } from './dynamic-form/dynamic-form.component';
-import { QuestionService }      from './Question/question.service';
+import { QuestionService }      from './Question/data/question.service';
 @Component({
   selector: 'my-app',
   template: `

@@ -5,7 +5,7 @@
             [id]="question.key" [type]="question.type">
             
     <input *ngSwitchWhen="'checkbox'" [ngControl]="question.key"
-            [id]="question.key" type="checkbox">
+            [id]="question.key" type="checkbox" [(ngModel)]="question.checked">
      
   </div>
   <div class="errorMessage" *ngIf="!isValid">{{question.label}} is required</div>

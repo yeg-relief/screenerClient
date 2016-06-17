@@ -1,4 +1,4 @@
-import { QuestionBase } from './question-base';
+import { QuestionBase } from '../base/question-base';
 
 export class CheckboxQuestion extends QuestionBase<string> {
   controlType = 'checkbox';
