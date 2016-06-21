@@ -1,6 +1,6 @@
 <div>
   <form (ngSubmit)="onSubmit()" [ngFormModel]="form">
-    <div *ngFor="let question of questions" class="form-row">
+    <div *ngFor="let question of questions.followingQuestions" class="form-row">
       <df-question (onChanged)="logChange($event)" [question]="question" [form]="form"></df-question>
     </div>
     <div class="form-row">

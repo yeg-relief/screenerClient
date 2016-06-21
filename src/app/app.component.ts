@@ -13,7 +13,7 @@ import { QuestionService }      from './Question/data/question.service';
   providers:  [QuestionService]
 })
 export class AppComponent {
-  questions: any[];
+  questions: Object;
   constructor(service: QuestionService) {
     this.questions = service.getQuestions();
   }

@@ -7,6 +7,7 @@ export class QuestionBase<T>{
   controlType: string;
   conditon: string;
   checked: boolean;
+  lead: boolean;
   constructor(options: {
       value?: T,
       key?: string,
@@ -15,7 +16,8 @@ export class QuestionBase<T>{
       order?: number,
       controlType?: string,
       condition?: string,
-      checked?: boolean;
+      checked?: boolean,
+      lead?: boolean;
     } = {}) {
     this.value = options.value;
     this.key = options.key || '';
@@ -25,5 +27,6 @@ export class QuestionBase<T>{
     this.controlType = options.controlType || '';
     this.conditon = options.condition || '';
     this.checked = !!options.checked;
+    this.lead = !!options.lead;
   }
 }
