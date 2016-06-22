@@ -1,3 +1,6 @@
-<p>
-  dynamic-question-group works!
-</p>
+<df-question (onChanged)="toggleFollowing($event)" [question]="group.leadingQuestion" [form]="form"></df-question>
+<div *ngIf="showFollowing">
+  <div *ngFor="let question of group.followingQuestions" class="form-row">
+    <df-question [question]="question" [form]="form"></df-question>
+  </div>
+</div>

@@ -8,17 +8,19 @@ import { RadioButtonState } from '@angular/common';
 export class QuestionControlService {
   constructor(private fb: FormBuilder) { }
 
-  toControlGroup(questions: QuestionGroup<any>) {
-    let group = {};
-    group[questions.leadingQuestion.key] = questions.leadingQuestion.required ? 
-                            [questions.leadingQuestion.value || '', Validators.required] : 
-                            [questions.leadingQuestion.value || ''];
+  toControlGroup(questions: QuestionGroup<any>[]) {
+    let cGroup = {};
+    questions.forEach( (qGroup) => {
+      cGroup[qGroup.leadingQuestion.key] = qGroup.leadingQuestion.required ? 
+                            [qGroup.leadingQuestion.value || '', Validators.required] : 
+                            [qGroup.leadingQuestion.value || ''];
 
-    questions.followingQuestions.forEach(question => {
-      group[question.key] = question.required ? 
+    qGroup.followingQuestions.forEach(question => {
+      cGroup[question.key] = question.required ? 
                             [question.value || '', Validators.required] : [question.value || ''];
       
-    });
-    return this.fb.group(group);
+      });
+    })
+    return this.fb.group(cGroup);
   }
 }

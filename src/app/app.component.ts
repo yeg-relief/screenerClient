@@ -1,6 +1,7 @@
 import { Component }            from '@angular/core';
 import { DynamicFormComponent } from './dynamic-form/dynamic-form.component';
 import { QuestionService }      from './Question/data/question.service';
+import { QuestionGroup }        from './Question/group/question-group';
 @Component({
   selector: 'my-app',
   template: `
@@ -13,7 +14,7 @@ import { QuestionService }      from './Question/data/question.service';
   providers:  [QuestionService]
 })
 export class AppComponent {
-  questions: Object;
+  questions: QuestionGroup<any>[];
   constructor(service: QuestionService) {
     this.questions = service.getQuestions();
   }
