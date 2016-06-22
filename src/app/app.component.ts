@@ -6,7 +6,7 @@ import { QuestionGroup }        from './Question/group/question-group';
   selector: 'my-app',
   template: `
     <div>
-      <h2>Job Application for Heroes</h2>
+      <h2>Dev Test Form</h2>
       <dynamic-form [questions]="questions"></dynamic-form>
     </div>
   `,

@@ -8,9 +8,26 @@ import { Control } from '@angular/common';
 
 @Component({
   selector: 'dynamic-form',
-  templateUrl: 'app/dynamic-form/dynamic-form.component.html',
+  template: `
+            <div>
+              <form (ngSubmit)="onSubmit()" [ngFormModel]="form">
+                <div *ngFor="let group of questions">
+                  <df-question-group 
+                    [group]="group" 
+                    [form]="form" 
+                    [showFollowing]="group.leadingQuestion.checked">
+                  </df-question-group>
+                </div>
+                <div class="form-row">
+                  <button type="submit" [disabled]="!form.valid">Save</button>
+                </div>
+              </form>
+              <div *ngIf="payLoad" class="form-row">
+                <strong>Saved the following values</strong><br>{{payLoad}}
+              </div>
+            </div>`,
   directives: [DynamicQuestionGroupComponent],
-  providers:  [QuestionControlService]
+  providers:  [QuestionControlService],
 })
 export class DynamicFormComponent implements OnInit {
   @Input() questions: QuestionGroup<any>[];
