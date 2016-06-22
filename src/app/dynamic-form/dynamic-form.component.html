@@ -1,12 +1,11 @@
 <div>
   <form (ngSubmit)="onSubmit()" [ngFormModel]="form">
-    <!--
-    <div *ngFor="let question of questions.followingQuestions" class="form-row">
-      <df-question (onChanged)="logChange($event)" [question]="question" [form]="form"></df-question>
-    </div>
-    --> 
     <div *ngFor="let group of questions">
-      <df-question-group [group]="group" [form]="form" [hideFollowing]="true"></df-question-group>
+      <df-question-group 
+        [group]="group" 
+        [form]="form" 
+        [showFollowing]="group.leadingQuestion.checked">
+      </df-question-group>
     </div>
     <div class="form-row">
       <button type="submit" [disabled]="!form.valid">Save</button>

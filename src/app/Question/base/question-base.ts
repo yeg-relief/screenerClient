@@ -15,7 +15,6 @@ export class QuestionBase<T>{
       required?: boolean,
       order?: number,
       controlType?: string,
-      condition?: string,
       checked?: boolean,
       lead?: boolean;
     } = {}) {
@@ -25,7 +24,6 @@ export class QuestionBase<T>{
     this.required = !!options.required;
     this.order = options.order === undefined ? 1 : options.order;
     this.controlType = options.controlType || '';
-    this.conditon = options.condition || '';
     this.checked = !!options.checked;
     this.lead = !!options.lead;
   }

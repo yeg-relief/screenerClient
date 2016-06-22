@@ -33,7 +33,6 @@ export class QuestionService {
           new TextboxQuestion({
             key: 'numberChildren',
             label: "How many children under 18?",
-            condition: "children",
             required: true,
             order: 4
           })
