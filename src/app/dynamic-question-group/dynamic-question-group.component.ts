@@ -3,6 +3,9 @@ import { QuestionGroup } from '../Question/group/question-group';
 import { DynamicFormQuestionComponent } from '../dynamic-form-question/dynamic-form-question.component';
 import { QuestionControlService }       from '../Question/control/question-control.service';
 import { ControlGroup } from '@angular/common';
+import { QuestionBase } from '../Question/base/question-base';
+
+import { Subscription } from 'rxjs/Subscription';
 
 @Component({
   selector: 'df-question-group',
@@ -12,20 +15,24 @@ import { ControlGroup } from '@angular/common';
   providers: [QuestionControlService]
 })
 export class DynamicQuestionGroupComponent implements OnInit {
-  
+  private _subscription: Subscription;
   @Input() group: QuestionGroup<any>;
   @Input() form: ControlGroup;
-  // onChanged will be called on initialization, so you need to initialize showFollowing 
-  // to true to hide at start...
   @Input() showFollowing: boolean;
   
   ngOnInit() {
-    console.log(this.showFollowing);
+    /*
+    this._subscription = this.form.controls[this.group.leadingQuestion.key].valueChanges
+    .subscribe(data => {
+      this.toggleFollowing();
+    });
+    */
   }
   
-  toggleFollowing($event){
+  toggleFollowing(){
     this.showFollowing = !this.showFollowing;
-    console.log(this.showFollowing);
+    console.log('changed');
+    
   }
 
 }

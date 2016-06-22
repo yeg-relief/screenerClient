@@ -6,7 +6,7 @@
     </div>
     --> 
     <div *ngFor="let group of questions">
-      <df-question-group [group]="group" [form]="form" [showFollowing]="true"></df-question-group>
+      <df-question-group [group]="group" [form]="form" [hideFollowing]="true"></df-question-group>
     </div>
     <div class="form-row">
       <button type="submit" [disabled]="!form.valid">Save</button>

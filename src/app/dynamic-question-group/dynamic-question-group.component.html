@@ -1,4 +1,10 @@
-<df-question (onChanged)="toggleFollowing($event)" [question]="group.leadingQuestion" [form]="form"></df-question>
+<div [ngFormModel]="form">
+  <label [attr.for]="group.leadingQuestion.key">{{group.leadingQuestion.label}}</label>
+  <input [ngControl]="group.leadingQuestion.key" 
+    [id]="group.leadingQuestion.key" 
+    type="checkbox" [(ngModel)]="group.leadingQuestion.checked"
+    (ngModelChange)="toggleFollowing()">
+</div>
 <div *ngIf="showFollowing">
   <div *ngFor="let question of group.followingQuestions" class="form-row">
     <df-question [question]="question" [form]="form"></df-question>
