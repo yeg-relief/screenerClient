@@ -1,17 +1,17 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input} from '@angular/core';
 import { QuestionGroup } from '../Question/group/question-group';
 import { DynamicFormQuestionComponent } from '../dynamic-form-question/dynamic-form-question.component';
-import { ControlGroup, Control } from '@angular/common';
+import { FormGroup, REACTIVE_FORM_DIRECTIVES, FormControl, Validators } from '@angular/forms';
 import { QuestionBase } from '../Question/base/question-base';
 
 @Component({
   selector: 'df-question-group',
   styleUrls: ['app/dynamic-question-group/dynamic-question-group.component.css'],
-  directives: [DynamicFormQuestionComponent],
+  directives: [DynamicFormQuestionComponent, REACTIVE_FORM_DIRECTIVES],
   template: `
-            <div *ngIf="group.leadingQuestion" [ngFormModel]="form">
+            <div *ngIf="group.leadingQuestion" [formGroup]="form">
               <label [attr.for]="group.leadingQuestion.key">{{group.leadingQuestion.label}}</label>
-              <input [ngControl]="group.leadingQuestion.key" 
+              <input [formControlName]="group.leadingQuestion.key" 
                 [id]="group.leadingQuestion.key" 
                 type="checkbox" [(ngModel)]="group.leadingQuestion.checked"
                 (ngModelChange)="toggleFollowing()">
@@ -25,13 +25,18 @@ import { QuestionBase } from '../Question/base/question-base';
 export class DynamicQuestionGroupComponent{
 
   @Input() group: QuestionGroup<any>;
-  @Input() form: ControlGroup;
+  @Input() form: FormGroup;
   @Input() showFollowing: boolean;
+  
+
   
   toggleFollowing(){
     if(this.showFollowing = !this.showFollowing){
       this.group.followingQuestions.map( question => {
-        this.form.addControl(question.key, new Control(''));
+        question.required? 
+          this.form.addControl(question.key, new FormControl(question.value, Validators.required)) : 
+          this.form.addControl(question.key, new FormControl(question.value)) 
+        
         this.form.include(question.key);
       })
     }else{
@@ -40,5 +45,6 @@ export class DynamicQuestionGroupComponent{
         this.form.exclude(question.key);
       })
     }
+    console.log(this.form);
   }
 }

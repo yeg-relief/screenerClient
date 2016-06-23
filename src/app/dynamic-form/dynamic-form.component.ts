@@ -1,16 +1,15 @@
 import { Component, Input, OnInit }     from '@angular/core';
-import { ControlGroup }                 from '@angular/common';
 import { QuestionGroup }                from '../Question/group/question-group';
 import { QuestionBase }                 from '../Question/base/question-base';
 import { QuestionControlService }       from '../Question/control/question-control.service';
 import { DynamicQuestionGroupComponent } from '../dynamic-question-group/dynamic-question-group.component';
-import { Control } from '@angular/common';
+import { FormGroup, REACTIVE_FORM_DIRECTIVES } from '@angular/forms';
 
 @Component({
   selector: 'dynamic-form',
   template: `
             <div>
-              <form (ngSubmit)="onSubmit()" [ngFormModel]="form">
+              <form (ngSubmit)="onSubmit()" [formGroup]="form">
                 <div *ngFor="let group of questions">
                   <df-question-group 
                     [group]="group" 
@@ -26,17 +25,17 @@ import { Control } from '@angular/common';
                 <strong>Saved the following values</strong><br>{{payLoad}}
               </div>
             </div>`,
-  directives: [DynamicQuestionGroupComponent],
+  directives: [DynamicQuestionGroupComponent, REACTIVE_FORM_DIRECTIVES],
   providers:  [QuestionControlService],
 })
 export class DynamicFormComponent implements OnInit {
   @Input() questions: QuestionGroup<any>[];
-  form: ControlGroup;
+  form: FormGroup;
   payLoad = '';
   
   constructor(private qcs: QuestionControlService) {  }
   ngOnInit() {
-    this.form = this.qcs.toControlGroup(this.questions);
+    this.form = this.qcs.toFormGroup(this.questions);
   }
   
   onSubmit() {

@@ -1,20 +1,19 @@
 import { Injectable }   from '@angular/core';
-import { FormBuilder, Validators } from '@angular/common';
+import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { QuestionBase } from '../base/question-base';
 import { QuestionGroup } from '../group/question-group';
-import { RadioButtonState } from '@angular/common';
 
 @Injectable()
 export class QuestionControlService {
-  constructor(private fb: FormBuilder) { }
+  constructor() { }
 
-  toControlGroup(questions: QuestionGroup<any>[]) {
-    let cGroup = {};
+  toFormGroup(questions: QuestionGroup<any>[]) {
+    let group: any = {};
     questions.forEach( (qGroup) => {
-      cGroup[qGroup.leadingQuestion.key] = qGroup.leadingQuestion.required ? 
-                            [qGroup.leadingQuestion.value || '', Validators.required] : 
-                            [qGroup.leadingQuestion.value || ''];
+      group[qGroup.leadingQuestion.key] = qGroup.leadingQuestion.required ? 
+                            new FormControl(qGroup.leadingQuestion.value || '', Validators.required) : 
+                            new FormControl(qGroup.leadingQuestion.value || '');
     });
-    return this.fb.group(cGroup);
+    return new FormGroup(group);
   }
 }
