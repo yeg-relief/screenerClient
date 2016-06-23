@@ -45,6 +45,5 @@ export class DynamicQuestionGroupComponent{
         this.form.exclude(question.key);
       })
     }
-    console.log(this.form);
   }
 }

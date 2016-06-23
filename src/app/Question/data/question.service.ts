@@ -1,7 +1,7 @@
 import { Injectable }       from '@angular/core';
 import { QuestionGroup }     from '../group/question-group';
-import { TextboxQuestion }  from '../textbox/question-textbox';
-import { CheckboxQuestion } from '../checkbox/question-checkbox';
+import { TextboxQuestion }  from '../ControlType/textbox/question-textbox';
+import { CheckboxQuestion } from '../ControlType/checkbox/question-checkbox';
 @Injectable()
 export class QuestionService {
   // Todo: get from a remote source of question metadata

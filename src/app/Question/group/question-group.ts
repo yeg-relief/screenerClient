@@ -1,5 +1,5 @@
 import { QuestionBase } from '../base/question-base';
-import { CheckboxQuestion } from '../checkbox/question-checkbox';
+import { CheckboxQuestion } from '../ControlType/checkbox/question-checkbox';
 import { Control, ControlGroup } from '@angular/common';
 
 export interface IQuestionGroup{
