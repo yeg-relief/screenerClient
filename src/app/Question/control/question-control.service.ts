@@ -15,14 +15,6 @@ export class QuestionControlService {
                             [qGroup.leadingQuestion.value || '', Validators.required] : 
                             [qGroup.leadingQuestion.value || ''];
     });
-    /*
-    qGroup.followingQuestions.forEach(question => {
-      cGroup[question.key] = question.required ? 
-                            [question.value || '', Validators.required] : [question.value || ''];
-      
-      });
-    })
-    */
     return this.fb.group(cGroup);
   }
 }
