@@ -6,7 +6,7 @@ export interface IOptions<T>{
   label: string;
   required: boolean;
   order: number;
-  controlType?: string;
+  controlType: string;
   checked?: boolean;
   lead?: boolean;
   type?: string;

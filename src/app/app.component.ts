@@ -1,5 +1,4 @@
-import { Component }            from '@angular/core';
-import { QuestionService }      from './Question/data/question.service';
+import { Component } from '@angular/core';
 
 @Component({
   selector: 'my-app',
@@ -8,8 +7,7 @@ import { QuestionService }      from './Question/data/question.service';
       hi this is working
     </div>
   `,
-  directives: [],
-  providers:  [QuestionService]
+  directives: []
 })
 export class AppComponent {
   constructor() {

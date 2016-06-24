@@ -1,14 +1,15 @@
-import { QuestionBase } from '../question-base';
+import { QuestionBase, IOptions } from '../question-base';
 import { FormControl, Validators } from '@angular/forms';
-
 
 export class QuestionSet{
   _constantQuestions: QuestionBase<any>[];
 
   
-  constructor(constantQuestions: QuestionBase<any>[]){
-    this._constantQuestions = constantQuestions;
-    
+  constructor(constantQuestions: IOptions<string|boolean>[]){
+    this._constantQuestions = new Array<QuestionBase<any>>();
+    constantQuestions.map( question => {
+      
+    })
   }
   
   sort(): void{

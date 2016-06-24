@@ -1,4 +1,4 @@
-import { QuestionBase } from '../question-base';
+import { IOptions } from '../question-base';
 import { QuestionSet } from './question-set';
 import { FormControl } from '@angular/forms';
 import { QuestionGroup, Controls, GROUP_TYPE } from './interface';
@@ -7,7 +7,7 @@ export class ConstantGroup implements QuestionGroup{
   questions: QuestionSet;
 
    
-  constructor(group: QuestionBase<boolean | string>[]){
+  constructor(group: IOptions<string|boolean>[]){
     this.questions = new QuestionSet(group);
   }
   

@@ -1,6 +1,6 @@
 import { QuestionSet } from './question-set';
 import { FormControl } from '@angular/forms';
-import { QuestionBase } from '../question-base';
+import { IOptions } from '../question-base';
 
 export class GROUP_TYPE{
   static EXPANDABLE(): string{
@@ -21,4 +21,10 @@ export interface Controls{
 export interface QuestionGroup{
   getControls(): Controls;
   GROUP_TYPE(): string
+}
+
+export interface RawQuestionGroup{
+  lead?: IOptions<string|boolean>,
+  following?: Array<IOptions<string|boolean>>,
+  constants?: Array<IOptions<string|boolean>>
 }

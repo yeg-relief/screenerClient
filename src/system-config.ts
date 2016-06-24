@@ -11,6 +11,7 @@ const map: any = {
 
 /** User packages configuration. */
 const packages: any = {
+
 };
 
 ////////////////////////////////////////////////////////////////////////////////////////////////
@@ -30,14 +31,8 @@ const barrels: string[] = [
 
   // Thirdparty barrels.
   'rxjs',
-  'rxjs/add',
-  
   // App specific barrels.
   'app',
-  'app/shared',
-  'app/dynamic-form',
-  'app/dynamic-form-question',
-  'app/dynamic-question-group',
   /** @cli-barrel */
 ];
 
