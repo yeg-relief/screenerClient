@@ -1,21 +1,17 @@
 import { Component }            from '@angular/core';
-import { DynamicFormComponent } from './dynamic-form/dynamic-form.component';
 import { QuestionService }      from './Question/data/question.service';
-import { QuestionGroup }        from './Question/group/question-group';
+
 @Component({
   selector: 'my-app',
   template: `
     <div>
-      <h2>Dev Test Form</h2>
-      <dynamic-form [questions]="questions"></dynamic-form>
+      hi this is working
     </div>
   `,
-  directives: [DynamicFormComponent],
+  directives: [],
   providers:  [QuestionService]
 })
 export class AppComponent {
-  questions: QuestionGroup<any>[];
-  constructor(service: QuestionService) {
-    this.questions = service.getQuestions();
+  constructor() {
   }
 }

@@ -6,9 +6,8 @@ import {
   expect, it, xit,
   async, inject
 } from '@angular/core/testing';
-import { TextboxQuestion } from './question-textbox';
+import { QuestionBase } from './question-base';
 import { FormControl, Validators } from '@angular/forms';
-
 
 describe( 'QuestionBase', ()=> {
   it('can convert to a form control', () => {
@@ -19,7 +18,7 @@ describe( 'QuestionBase', ()=> {
       value: '',
       order: 4
     }
-    let test: TextboxQuestion = new TextboxQuestion(options);
+    let test: QuestionBase<string> = new QuestionBase<string>(options);
     expect(test.getFormControl()).toEqual(new FormControl('', Validators.required));
   })
 })

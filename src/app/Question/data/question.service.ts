@@ -1,19 +1,22 @@
 import { Injectable }       from '@angular/core';
-import { QuestionGroup }     from '../group/question-group';
+import { ExpandableGroup }     from '../group/expandable-group';
 import { TextboxQuestion }  from '../ControlType/textbox/question-textbox';
 import { CheckboxQuestion } from '../ControlType/checkbox/question-checkbox';
+import { QuestionBase } from '../question-base';
 @Injectable()
 export class QuestionService {
   // Todo: get from a remote source of question metadata
   // Todo: make asynchronous
   getQuestions() {
-    let questions: QuestionGroup<any>[] = [
-      new QuestionGroup(
+    let questions: ExpandableGroup[] = [
+      new ExpandableGroup(
         new CheckboxQuestion({
           key: 'expand',
           label: 'expand group 0?',
-          value: 'groupZero',
+          value: false,
           checked: false,
+          required: false,
+          lead: true,
           order: 1
         }),
         [
@@ -28,12 +31,15 @@ export class QuestionService {
             key: 'emailAddress',
             label: 'Email',
             type: 'email',
+            value: '',
+            required: false,
             order: 3
           }),
           new TextboxQuestion({
             key: 'numberChildren',
             label: "How many children under 18?",
             required: true,
+            value: '',
             order: 4
           })
         ]

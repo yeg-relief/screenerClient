@@ -1,12 +1,9 @@
-import { QuestionBase } from '../../base/question-base';
+import { QuestionBase, IOptions } from '../../question-base';
 
-export class CheckboxQuestion extends QuestionBase<string> {
-  controlType = 'checkbox';
-  type: string;
+export class CheckboxQuestion extends QuestionBase<boolean> {
+  controlType: string = 'checkbox';
 
-  constructor(options: {} = {}) {
+  constructor(options: IOptions<boolean>) {
     super(options);
-    this.type = options['type'] || '';
-    this.checked = options['checked'] || false;
   }
 }
