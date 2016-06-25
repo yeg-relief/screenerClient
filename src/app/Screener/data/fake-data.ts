@@ -1,54 +1,44 @@
-import { Injectable } from '@angular/core';
-import { QuestionBase } from '../Question/index';
-import { Observable } from 'rxjs/Rx';
-import 'rxjs/add/observable/from';
-
-@Injectable()
-export class DataService {
-  obs: Observable<any>
-  private cache: any = [
+export function fakeData():any{
+  return [
     {
-      lead: {
+    
+      conditional: {
         key: 'expand',
         label: 'expand group 0?',
         controlType: 'checkbox',
         value: false,
-        checked: false,
-        required: false,
-        lead: true,
-        order: 1
+        validators: ['REQUIRED'],
+        conditional: 'true'
       },
-      following: 
+      expandable: 
       [
         {
           key: 'firstName',
           label: 'First name',
+          controlType: 'textbox',
           value: 'Bombasto',
-          required: true,
+          validators: ['REQUIRED'],
           order: 2
         },
         {
           key: 'emailAddress',
           label: 'Email',
           type: 'email',
+          controlType: 'textbox',
           value: '',
-          required: false,
+          validators: [],
           order: 3
         },
         {
           key: 'numberChildren',
           label: "How many children under 18?",
-          required: true,
+          controlType: 'textbox',
+          validators: ['REQUIRED'],
           value: '',
           order: 4
         }
-        ]
-      }
+      ]
+      
+    } 
   ] 
-   
-  
-  constructor() {
-    this.obs = Observable.from(this.cache);
-  }
-
 }
