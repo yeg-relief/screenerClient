@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
 import { Http, Response } from '@angular/http';
 import { fakeData } from './fake-data';
-import { MasterScreener, GeneralQuestionGroup, ControlMap } from '../question/types';
-import { controlReducer, assign } from '../question/functions';
+import { MasterScreener, GeneralQuestionGroup, ControlMap } from '../question/index';
+import { controlReducer, assign } from '../question/index';
 import { Observable } from 'rxjs/Rx';
 import 'rxjs/add/observable/from';
 import 'rxjs/add/operator/reduce';
@@ -18,14 +18,13 @@ export class DataService {
   }
   
   getMasterScreener(): Observable<any>{
-    const masterScreener: any = {
+    const masterScreener: MasterScreener = {
       controls: {},
       questionGroups: new Array<GeneralQuestionGroup>()
     }
     return this._pullData()
            .reduce( (screener: any, questionGroup: any) => {                            
               masterScreener.questionGroups.push(questionGroup);
-              // error here
               const cntrl: ControlMap = controlReducer(questionGroup);
               assign(masterScreener.controls, cntrl);
               return masterScreener;

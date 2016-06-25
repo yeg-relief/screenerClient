@@ -8,7 +8,7 @@ import {
 import { DataService } from './data.service';
 import { HTTP_PROVIDERS } from '@angular/http';
 import {fakeData} from './fake-data';
-import {MasterScreener , ExpandableGroup, ConditionalQuestion} from '../question/types'
+import {MasterScreener , ExpandableGroup, ConditionalQuestion} from '../question'
 
 describe('Data Service', () => {
   beforeEachProviders(() => [DataService, HTTP_PROVIDERS]);
@@ -35,5 +35,6 @@ describe('Data Service', () => {
         expect(ex.conditional.key).toBe('expand');
         expect(Object.keys(masterScreener.controls).length).toBe(4);
   }));
+
 });
 

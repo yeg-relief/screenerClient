@@ -10,6 +10,35 @@ import * as QTypes from './types'
 import {controlReducer} from './functions';
 import {FormControl, Validators} from '@angular/forms';
 
+
+describe('control reducer', () => {
+
+  it('will return a ControlMap with the controls for a QuestionGroup', () => {
+    const controlMap: QTypes.ControlMap = controlReducer(FAKE_GROUP);
+    Object.keys(controlMap).map( key => {
+      expect(controlMap[key].value).toEqual(FAKE_GROUP_EXPECTED[key].value);
+      expect(controlMap[key] instanceof FormControl).toBe(true);
+    })
+    expect(Object.keys(controlMap).length).toEqual(3);
+  })
+  
+  it('will return a ControlMap with the controls for a ExpandableGroup', () => {
+    const controlMap: QTypes.ControlMap = controlReducer(FAKE_EXPANDABLE);
+    Object.keys(controlMap).map( key => {
+      expect(controlMap[key].value).toEqual(FAKE_GROUP_EXPECTED[key].value);
+      expect(controlMap[key] instanceof FormControl).toBe(true);
+    })
+    expect(Object.keys(controlMap).length).toEqual(4);
+  })
+
+})
+
+
+
+
+
+
+
 const FAKE_EXPANDABLE: QTypes.ExpandableGroup = {
     
       conditional: {
@@ -93,25 +122,3 @@ FAKE_GROUP_EXPECTED['firstName'] = new FormControl('Bombasto', Validators.requir
 FAKE_GROUP_EXPECTED['emailAddress'] = new FormControl('');
 FAKE_GROUP_EXPECTED['numberChildren'] = new FormControl('', Validators.required);
 FAKE_GROUP_EXPECTED['expand'] = new FormControl(false, Validators.required);
-
-describe('control reducer', () => {
-  /*
-  it('will return a ControlMap with the controls for a QuestionGroup', () => {
-    const controlMap: QTypes.ControlMap = controlReducer(FAKE_GROUP);
-    Object.keys(controlMap).map( key => {
-      expect(controlMap[key].value).toEqual(FAKE_GROUP_EXPECTED[key].value);
-      expect(controlMap[key] instanceof FormControl).toBe(true);
-    })
-    expect(Object.keys(controlMap).length).toEqual(3);
-  })
-  
-  it('will return a ControlMap with the controls for a ExpandableGroup', () => {
-    const controlMap: QTypes.ControlMap = controlReducer(FAKE_EXPANDABLE);
-    Object.keys(controlMap).map( key => {
-      expect(controlMap[key].value).toEqual(FAKE_GROUP_EXPECTED[key].value);
-      expect(controlMap[key] instanceof FormControl).toBe(true);
-    })
-    expect(Object.keys(controlMap).length).toEqual(4);
-  })
-  */
-})

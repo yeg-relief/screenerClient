@@ -33,6 +33,7 @@ const barrels: string[] = [
   'rxjs',
   // App specific barrels.
   'app',
+  'app/master-screener',
   /** @cli-barrel */
 ];
 
