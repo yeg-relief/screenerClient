@@ -111,9 +111,9 @@ describe('Component: MasterScreener', () => {
     .overrideProviders(DataService, [provide(DataService, {useValue: mockDataService})])
     .createAsync(MasterScreenerComponent)
     .then((fixture) => {
-      let nativeElement = fixture.nativeElement;
+      const nativeElement = fixture.nativeElement;
       fixture.detectChanges();
-      expect(nativeElement.querySelector('#thing') === null).toBe(false);
+      expect(nativeElement.querySelector('form') !== null).toBe(true);
     })
   }));
 });

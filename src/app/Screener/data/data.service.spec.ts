@@ -7,7 +7,6 @@ import {
 } from '@angular/core/testing';
 import { DataService } from './data.service';
 import { HTTP_PROVIDERS } from '@angular/http';
-import {fakeData} from './fake-data';
 import {MasterScreener , ExpandableGroup, ConditionalQuestion} from '../question'
 
 describe('Data Service', () => {
