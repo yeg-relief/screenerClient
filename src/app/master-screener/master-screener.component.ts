@@ -45,7 +45,6 @@ export class MasterScreenerComponent implements OnInit {
           () => {
             this.form = toForm(this.data);
             this.collapsedControlMap = expandableControlMap(this.data);
-            console.log(this.collapsedControlMap);
           }
         )
   }

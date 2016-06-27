@@ -64,7 +64,6 @@ export class ExpandableGroupComponent implements OnInit{
       })
     }
     this.expanded = !this.expanded;
-    console.log(this.form);
   }
 }
 
