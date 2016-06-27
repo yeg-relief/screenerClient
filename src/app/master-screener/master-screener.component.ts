@@ -1,15 +1,20 @@
 import { Component, OnInit } from '@angular/core';
 import { DataService, MasterScreener, ExpandableGroup, QuestionGroup  } from '../Screener/index';
-import { FormGroup, REACTIVE_FORM_DIRECTIVES } from '@angular/forms';
-import { toForm } from '../Screener/form/index';
+import { FormGroup, REACTIVE_FORM_DIRECTIVES, FormControl } from '@angular/forms';
+import { toForm, expandableControlMap } from '../Screener/index';
+import { GeneralQuestionGroupComponent } from '../question-group/index';
 
 @Component({
   selector: 'master-screener',
   template:` 
   <div>
     <form (ngSubmit)="onSubmit()" [formGroup]="form">
-      <div *ngFor="let question of data.questionGroups" class="form-row">
-        a group is present
+      <div *ngFor="let questionGroup of data.questionGroups" class="form-row">
+        <general-question-group 
+          [form]="form" 
+          [questionGroup]="questionGroup"
+          [collapsedControlMap]="collapsedControlMap">
+        </general-question-group>
       </div>
       <div class="form-row">
         <button type="submit" [disabled]="!form.valid">Save</button>
@@ -21,13 +26,15 @@ import { toForm } from '../Screener/form/index';
     </div>
   </div>`,
   styles: [''], 
-  directives: [REACTIVE_FORM_DIRECTIVES],
+  directives: [REACTIVE_FORM_DIRECTIVES, GeneralQuestionGroupComponent],
   providers:  [DataService]
 })
 export class MasterScreenerComponent implements OnInit {
   private data: MasterScreener;
   private form: FormGroup;
   private payload: string = '';
+  private collapsedControlMap: { [key:string]:{key:string, control:FormControl}[]};
+
 
   constructor(private dataService: DataService) {}
   ngOnInit() {
@@ -35,7 +42,11 @@ export class MasterScreenerComponent implements OnInit {
         .subscribe( 
           (data) => {this.data = data},
           (error) => {console.log(error)},
-          () => {this.form = toForm(this.data)}
+          () => {
+            this.form = toForm(this.data);
+            this.collapsedControlMap = expandableControlMap(this.data);
+            console.log(this.collapsedControlMap);
+          }
         )
   }
 

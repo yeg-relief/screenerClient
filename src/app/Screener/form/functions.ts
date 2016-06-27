@@ -3,7 +3,7 @@ import {
   QuestionGroup, GeneralQuestionGroup, 
   Question 
 } from '../index';
-import { FormGroup } from '@angular/forms';
+import { FormGroup, FormControl } from '@angular/forms';
 
 export function toForm(masterScreener: MasterScreener): FormGroup{
   const toFormGroup:any = {};
@@ -47,4 +47,25 @@ export function toForm(masterScreener: MasterScreener): FormGroup{
     } 
   }) 
   return new FormGroup(toFormGroup);
+}
+
+export function expandableControlMap(masterScreener: MasterScreener):{ [key:string]:{key:string, control:FormControl}[]}{
+  
+  const expandableMap = masterScreener.questionGroups
+  .filter( questionGroup => {
+    const expandableGroup: ExpandableGroup = <ExpandableGroup>questionGroup;
+    const constantGroup: QuestionGroup = <QuestionGroup>questionGroup;
+    return expandableGroup.conditional !== undefined 
+           && expandableGroup.conditional !== undefined && constantGroup.group === undefined;
+  })
+  .reduce( (expMap, questionGroup: ExpandableGroup) => {
+    const controls: {key:string, control:FormControl}[] = new Array<{key:string, control:FormControl}>();
+    questionGroup.expandable.map( (question:Question) => {
+      controls.push({key: question.key, control:masterScreener.controls[question.key]});
+    })
+    expMap[questionGroup.conditional.key]=controls;;
+    return expMap;
+  }, {})
+  
+  return expandableMap;
 }
