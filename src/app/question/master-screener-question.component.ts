@@ -13,6 +13,10 @@ import { Question } from '../Screener/index';
             
       <input *ngSwitchCase="'checkbox'" [formControlName]="question.key"
             [id]="question.key" type="checkbox" [(ngModel)]="question.value">
+      
+      <select [id]="question.key" *ngSwitchCase="'dropdown'" [formControlName]="question.key">
+        <option *ngFor="let opt of question.options" [value]="opt.key">{{opt.value}}</option>
+      </select>
     </div>
   </div>
   `,

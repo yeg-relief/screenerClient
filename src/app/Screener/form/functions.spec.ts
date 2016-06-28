@@ -24,13 +24,11 @@ const TEST_DATA_1: MasterScreener = {
             value: true,
             validators: ["REQUIRED"],
             key: 'constantTwo',
-            order: 1,
             controlType: 'checkbox',
           },
           {
             key: 'constantOne',
             validators: [],
-            order: 2,
             controlType: 'textbox',
             value: 'stuff'
           }
@@ -50,7 +48,6 @@ const TEST_DATA_1: MasterScreener = {
            validators: ["REQUIRED"],
            label: '',
            value: 'stuff',
-           order: 1
          }
        ]
     }

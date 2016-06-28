@@ -56,8 +56,7 @@ const FAKE_EXPANDABLE: QTypes.ExpandableGroup = {
           label: 'First name',
           controlType: 'textbox',
           value: 'Bombasto',
-          validators: ['REQUIRED'],
-          order: 2
+          validators: ['REQUIRED']
         },
         {
           key: 'emailAddress',
@@ -65,16 +64,14 @@ const FAKE_EXPANDABLE: QTypes.ExpandableGroup = {
           type: 'email',
           controlType: 'textbox',
           value: '',
-          validators: [],
-          order: 3
+          validators: []
         },
         {
           key: 'numberChildren',
           label: "How many children under 18?",
           controlType: 'textbox',
           validators: ['REQUIRED'],
-          value: '',
-          order: 4
+          value: ''
         }
       ]
       
@@ -89,8 +86,7 @@ const FAKE_GROUP: QTypes.QuestionGroup =
           label: 'First name',
           controlType: 'textbox',
           value: 'Bombasto',
-          validators: ['REQUIRED'],
-          order: 2
+          validators: ['REQUIRED']
         },
         {
           key: 'emailAddress',
@@ -98,16 +94,14 @@ const FAKE_GROUP: QTypes.QuestionGroup =
           type: 'email',
           controlType: 'textbox',
           value: '',
-          validators: [],
-          order: 3
+          validators: []
         },
         {
           key: 'numberChildren',
           label: "How many children under 18?",
           controlType: 'textbox',
           validators: ['REQUIRED'],
-          value: '',
-          order: 4
+          value: ''
         }
     ]
 }

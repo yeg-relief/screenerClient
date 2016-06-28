@@ -16,8 +16,7 @@ export function fakeData():any{
           label: 'First name',
           controlType: 'textbox',
           value: 'Bombasto',
-          validators: ['REQUIRED'],
-          order: 2
+          validators: ['REQUIRED']
         },
         {
           key: 'emailAddress',
@@ -25,19 +24,33 @@ export function fakeData():any{
           type: 'email',
           controlType: 'textbox',
           value: '',
-          validators: [],
-          order: 3
+          validators: []
         },
         {
           key: 'numberChildren',
           label: "How many children under 18?",
           controlType: 'textbox',
           validators: ['REQUIRED'],
-          value: '',
-          order: 4
+          value: ''
         }
       ]
       
+    },
+    {
+      group: [
+        {
+          key: 'dropdownQuestion',
+          label: 'select an option',
+          controlType: 'dropdown',
+          validators: [''],
+          value: 'optionOne',
+          options: [
+            {key: 'optionOne', value: 'option 1'},
+            {key: 'optionTwo', value: 'option 2'},
+            {key: 'optionThree', value: 'option 3'}
+          ]
+        }
+      ]
     } 
   ] 
 }

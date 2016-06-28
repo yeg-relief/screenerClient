@@ -5,9 +5,9 @@ export type Question = {
   validators: ValidatorTypes[];
   key: string;
   label: string;
-  order: number;
   controlType: string;
   type?: string;
+  options?: DropdownOptions;
 }
 
 export type ConditionalQuestion = {
@@ -34,6 +34,10 @@ export type ValidatorTypes = string;
 export type ControlMap = { [key: string]: FormControl };
 
 export type QuestionMap = { [key: string]: Question | ConditionalQuestion };
+
+export type ExpandableControls = { [key:string]:{key:string, control:FormControl}[]};
+
+export type DropdownOptions = {key:string, value:string}[];
 
 export type MasterScreener = {
   controls: ControlMap;

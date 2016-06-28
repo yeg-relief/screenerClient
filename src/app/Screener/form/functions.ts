@@ -1,7 +1,7 @@
 import { 
   MasterScreener, ExpandableGroup, 
   QuestionGroup, GeneralQuestionGroup, 
-  Question 
+  Question, ExpandableControls 
 } from '../index';
 import { FormGroup, FormControl } from '@angular/forms';
 
@@ -53,8 +53,7 @@ export function toForm(masterScreener: MasterScreener): FormGroup{
 
 // a quick way to map collapsed groups to their controls. Used in the ExpandableGroupComponent 
 // to toggle add/remove the controls
-export function expandableControlMap(masterScreener: MasterScreener):{ [key:string]:{key:string, control:FormControl}[]}{
-  
+export function expandableControlMap(masterScreener: MasterScreener):ExpandableControls{
   const expandableMap = masterScreener.questionGroups
   .filter( questionGroup => {
     const expandableGroup: ExpandableGroup = <ExpandableGroup>questionGroup;
@@ -67,9 +66,22 @@ export function expandableControlMap(masterScreener: MasterScreener):{ [key:stri
     questionGroup.expandable.map( (question:Question) => {
       controls.push({key: question.key, control:masterScreener.controls[question.key]});
     })
-    expMap[questionGroup.conditional.key]=controls;;
+    expMap[questionGroup.conditional.key]=controls;
     return expMap;
   }, {})
   
   return expandableMap;
+}
+
+function mapKeyToControl(masterScreener: MasterScreener, key: string, control: FormControl)
+:{key: string, control: FormControl}
+{
+  
+  return;
+}
+
+class InvalidKey extends Error{
+  constructor(message:string){
+    super(message);
+  }
 }
