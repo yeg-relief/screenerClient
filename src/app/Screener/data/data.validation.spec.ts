@@ -94,5 +94,3 @@ describe('how validateQuestionGroup operates on TEST_DATA_3', () => {
     expect(() => {validateQuestionGroup(TEST_DATA_3)}).toThrow();
   })
 });
-
-// TODO: write tests dealing with key errors.

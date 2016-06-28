@@ -56,6 +56,8 @@ export function toForm(masterScreener: MasterScreener): FormGroup{
 export function expandableControlMap(masterScreener: MasterScreener):ExpandableControls{
   const expandableMap = masterScreener.questionGroups
   .filter( questionGroup => {
+    // TODO: abstract into a user define type-guard function 
+    // https://github.com/Microsoft/TypeScript/wiki/What's-new-in-TypeScript#user-defined-type-guard-functions
     const expandableGroup: ExpandableGroup = <ExpandableGroup>questionGroup;
     const constantGroup: QuestionGroup = <QuestionGroup>questionGroup;
     return expandableGroup.conditional !== undefined 
@@ -73,15 +75,11 @@ export function expandableControlMap(masterScreener: MasterScreener):ExpandableC
   return expandableMap;
 }
 
-function mapKeyToControl(masterScreener: MasterScreener, key: string, control: FormControl)
+function mapKeyToControl(masterScreener: MasterScreener, key: string, control: FormControl, question:Question)
 :{key: string, control: FormControl}
 {
-  
-  return;
-}
-
-class InvalidKey extends Error{
-  constructor(message:string){
-    super(message);
+  if(question.key === undefined){
+    throw new Error(`key invalid for ${question}`);
   }
+  return;
 }
