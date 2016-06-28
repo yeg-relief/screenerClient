@@ -6,9 +6,8 @@ export function fakeData():any{
         key: 'expand',
         label: 'expand group 0?',
         controlType: 'checkbox',
-        value: true,
-        validators: ['REQUIRED'],
-        conditional: 'true'
+        value: false,
+        validators: ['REQUIRED']
       },
       expandable: 
       [

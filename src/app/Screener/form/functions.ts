@@ -5,6 +5,7 @@ import {
 } from '../index';
 import { FormGroup, FormControl } from '@angular/forms';
 
+// build a form (FormGroup) from a MasterScreener, do not add collapsed expandable groups
 export function toForm(masterScreener: MasterScreener): FormGroup{
   const toFormGroup:any = {};
   // partition the array of General Question groups into expandable and 'normal' or non-expandable groups
@@ -49,6 +50,9 @@ export function toForm(masterScreener: MasterScreener): FormGroup{
   return new FormGroup(toFormGroup);
 }
 
+
+// a quick way to map collapsed groups to their controls. Used in the ExpandableGroupComponent 
+// to toggle add/remove the controls
 export function expandableControlMap(masterScreener: MasterScreener):{ [key:string]:{key:string, control:FormControl}[]}{
   
   const expandableMap = masterScreener.questionGroups

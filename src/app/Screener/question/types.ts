@@ -1,7 +1,7 @@
 import { FormControl } from '@angular/forms';
 
 export type Question = {
-  value: string | boolean;
+  value: any;
   validators: ValidatorTypes[];
   key: string;
   label: string;

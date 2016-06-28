@@ -8,7 +8,7 @@ import { GeneralQuestionGroupComponent } from '../question-group/index';
   selector: 'master-screener',
   template:` 
   <div>
-    <form (ngSubmit)="onSubmit()" [formGroup]="form">
+    <form (ngSubmit)="onSubmit()" [formGroup]="form" [id]="masterScreenerForm">
       <div *ngFor="let questionGroup of data.questionGroups" class="form-row">
         <general-question-group 
           [form]="form" 
@@ -17,7 +17,7 @@ import { GeneralQuestionGroupComponent } from '../question-group/index';
         </general-question-group>
       </div>
       <div class="form-row">
-        <button type="submit" [disabled]="!form.valid">Save</button>
+        <button type="submit" [disabled]="!form.valid" [id]="masterScreenerSubmit">Save</button>
       </div>
       
     </form>
@@ -45,6 +45,7 @@ export class MasterScreenerComponent implements OnInit {
           () => {
             this.form = toForm(this.data);
             this.collapsedControlMap = expandableControlMap(this.data);
+
           }
         )
   }

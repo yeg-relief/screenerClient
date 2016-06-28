@@ -11,7 +11,7 @@ import {controlReducer} from './functions';
 import {FormControl, Validators} from '@angular/forms';
 
 
-describe('control reducer', () => {
+describe('control reducer turns a GeneralQuestionGroup into a map[question.key] = FormControl', () => {
 
   it('will return a ControlMap with the controls for a QuestionGroup', () => {
     const controlMap: QTypes.ControlMap = controlReducer(FAKE_GROUP);
