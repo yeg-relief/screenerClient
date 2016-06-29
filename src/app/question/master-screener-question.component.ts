@@ -5,7 +5,7 @@ import { Question } from '../Screener/index';
 @Component({
   selector:'ms-question',
   template:`
-  <div [formGroup]="form" class="mt50">
+  <div [formGroup]="form">
     <label [attr.for]="question.key">{{question.label}}</label>
     <div [ngSwitch]="question.controlType">
       <input 
