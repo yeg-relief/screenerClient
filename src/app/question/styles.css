@@ -1,31 +1,30 @@
-.ng-invalid{
+.ng-invalid[type='textbox']{
   border-left: 5px solid red !important;
 }
-.ng-valid.ng-touched{
+
+.ng-valid.ng-touched[type='textbox']{
   border-left: 5px solid green !important;
 }
-.ng-dirty{
-  border-left: none !important;
-}
-
 
 /* Basscss Forms */
 
-label[for='textbox'] {
-  font-size: 1rem;
+label {
+  font-size: 1.15rem;
   font-weight: bold;
   display: block;
   margin-bottom: .5rem;
+  margin-top: .5rem;
 }
 
-input[type='textbox']{
+input[type='textbox'] {
   font-family: inherit;
   font-size: inherit;
   display: block;
+  width: 100%;
   height: 2.5rem;
   padding: .5rem;
   margin-bottom: 1rem;
-  border: 1px solid grey;
+  border: 1px solid #ccc;
   border-radius: 5px;
   box-sizing: border-box;
 }
@@ -34,21 +33,11 @@ select {
   font-family: inherit;
   font-size: inherit;
   display: block;
+  width: 100%;
   height: 2.5rem;
   padding: .5rem;
   margin-bottom: 1rem;
   border: 1px solid #ccc;
-  border-radius: 3px;
-  box-sizing: border-box;
-}
-
-textarea {
-  font-family: inherit;
-  font-size: inherit;
-  display: block;
-  padding: .5rem;
-  margin-bottom: 1rem;
-  border: 1px solid #ccc;
-  border-radius: 3px;
+  border-radius: 5px;
   box-sizing: border-box;
 }

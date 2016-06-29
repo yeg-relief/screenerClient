@@ -8,7 +8,11 @@ import { GeneralQuestionGroupComponent } from '../question-group/index';
   selector: 'master-screener',
   template:` 
   <div>
-    <form (ngSubmit)="onSubmit()" [formGroup]="form" [id]="masterScreenerForm" class="sm-col-6">
+    <form (ngSubmit)="onSubmit()" 
+     [formGroup]="form" 
+     [id]="masterScreenerForm" 
+     class="flex flex-column ml2 mr2">
+     
       <div *ngFor="let questionGroup of data.questionGroups">
         <general-question-group 
           [form]="form" 
@@ -16,10 +20,12 @@ import { GeneralQuestionGroupComponent } from '../question-group/index';
           [collapsedControlMap]="collapsedControlMap">
         </general-question-group>
       </div>
-      <div>
+      <!-- flex padding -->
+      <div class="mt2"></div>
+      <div class="md-show">
         <button type="submit" 
           [id]="masterScreenerSubmit" 
-          class="btn btn-primary z1 ml2">
+          class="btn btn-primary border mt1">
             Save
         </button>
       </div>
@@ -28,6 +34,8 @@ import { GeneralQuestionGroupComponent } from '../question-group/index';
     <div *ngIf="payload">
       <strong>Saved the following values</strong><br>{{payload}}
     </div>
+    
+    
   </div>`,
   styles: [''], 
   directives: [REACTIVE_FORM_DIRECTIVES, GeneralQuestionGroupComponent],

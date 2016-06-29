@@ -5,29 +5,26 @@ import { Question } from '../Screener/index';
 @Component({
   selector:'ms-question',
   template:`
-  <div [formGroup]="form">
-    <label [attr.for]="question.key" class="z2 ml2">{{question.label}}</label>
+  <div [formGroup]="form" class="mt50">
+    <label [attr.for]="question.key">{{question.label}}</label>
     <div [ngSwitch]="question.controlType">
       <input 
         *ngSwitchCase="'textbox'" 
         [formControlName]="question.key"
         [id]="question.key" 
-        type="textbox" 
-        class="block mt1 mb1 field fit ml2 z2">
+        type="textbox">
             
       <input 
         *ngSwitchCase="'checkbox'" 
         [formControlName]="question.key"
         [id]="question.key" 
         type="checkbox" 
-        [(ngModel)]="question.value" 
-        class="block mt1 mb2 fit ml2 z2">
+        [(ngModel)]="question.value">
       
       <select 
         *ngSwitchCase="'dropdown'" 
         [id]="question.key" 
-        [formControlName]="question.key"
-        class="block mt1 mb1 field fit ml2 z2">
+        [formControlName]="question.key">
           <option *ngFor="let opt of question.options" [value]="opt.key">
               {{opt.value}}
           </option>

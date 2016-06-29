@@ -24,13 +24,13 @@ export class QuestionGroupComponent implements OnInit {
 @Component({
   selector: 'expandable-group',
   template:` 
-  <div>
+  <div >
     <ms-question [question]="expandableGroup.conditional" 
       [form]="form"
       (change)="toggleExpanded()">
     </ms-question>
     
-    <div *ngIf="expanded">
+    <div *ngIf="expanded" >
       <div *ngFor="let question of expandableGroup.expandable" class="form-row">
         <ms-question [question]="question" [form]="form"></ms-question>
       </div>
@@ -71,7 +71,7 @@ export class ExpandableGroupComponent implements OnInit{
   selector: 'general-question-group',
   template:` 
   <div [formGroup]="form">
-    <div [ngSwitch]="groupType">
+    <div [ngSwitch]="groupType" class="p1 border">
       <question-group 
         *ngSwitchCase="'QuestionGroup'" 
         [questionGroup]="questionGroup" 
