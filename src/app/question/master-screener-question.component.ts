@@ -6,29 +6,34 @@ import { Question } from '../Screener/index';
   selector:'ms-question',
   template:`
   <div [formGroup]="form">
-    <label [attr.for]="question.key">{{question.label}}</label>
+    
     <div [ngSwitch]="question.controlType">
+     <div  class="px1 py1">   
+      <label [attr.for]="question.key">{{question.label}}</label>
       <input 
+          *ngSwitchCase="'checkbox'" 
+          [formControlName]="question.key"
+          [id]="question.key" 
+          type="checkbox" 
+          [(ngModel)]="question.value">
+      
+        
+        
+        <input 
         *ngSwitchCase="'textbox'" 
         [formControlName]="question.key"
         [id]="question.key" 
         type="textbox">
-            
-      <input 
-        *ngSwitchCase="'checkbox'" 
-        [formControlName]="question.key"
-        [id]="question.key" 
-        type="checkbox" 
-        [(ngModel)]="question.value">
-      
-      <select 
-        *ngSwitchCase="'dropdown'" 
-        [id]="question.key" 
-        [formControlName]="question.key">
-          <option *ngFor="let opt of question.options" [value]="opt.key">
-              {{opt.value}}
-          </option>
-      </select>
+       
+        <select 
+          *ngSwitchCase="'dropdown'" 
+          [id]="question.key" 
+          [formControlName]="question.key">
+            <option *ngFor="let opt of question.options" [value]="opt.key">
+                {{opt.value}}
+            </option>
+        </select>
+     </div>
       
     </div>
   </div>

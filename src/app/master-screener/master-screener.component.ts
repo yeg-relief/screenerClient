@@ -7,11 +7,11 @@ import { GeneralQuestionGroupComponent } from '../question-group/index';
 @Component({
   selector: 'master-screener',
   template:` 
-  <div>
+  <div class="mt3">
     <form (ngSubmit)="onSubmit()" 
      [formGroup]="form" 
      [id]="masterScreenerForm" 
-     class="flex flex-column ml2 mr2">
+     class="mt3">
      
       <div *ngFor="let questionGroup of data.questionGroups">
         <general-question-group 
@@ -21,11 +21,10 @@ import { GeneralQuestionGroupComponent } from '../question-group/index';
         </general-question-group>
       </div>
       <!-- flex padding -->
-      <div class="mt2"></div>
       <div class="md-show">
         <button type="submit" 
           [id]="masterScreenerSubmit" 
-          class="btn btn-primary border mt1">
+          class="btn btn-primary border">
             Save
         </button>
       </div>

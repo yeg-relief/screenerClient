@@ -32,8 +32,7 @@ export class QuestionGroupComponent implements OnInit {
       [form]="form"
       (change)="toggleExpanded()">
     </ms-question>
-    
-    <div *ngIf="expanded" >
+    <div *ngIf="expanded" class="bg-darken-2 rounded">
       <div *ngFor="let question of expandableGroup.expandable" class="form-row">
         <ms-question [question]="question" [form]="form"></ms-question>
       </div>
@@ -76,7 +75,7 @@ export class ExpandableGroupComponent implements OnInit{
   selector: 'general-question-group',
   template:` 
   <div [formGroup]="form">
-    <div [ngSwitch]="groupType" class="p1 border">
+    <div [ngSwitch]="groupType">
       <question-group 
         *ngSwitchCase="'QuestionGroup'" 
         [questionGroup]="questionGroup" 
