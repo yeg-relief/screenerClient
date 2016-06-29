@@ -3,6 +3,7 @@ import { GeneralQuestionGroup, QuestionGroup, ExpandableGroup } from '../Screene
 import { FormGroup, REACTIVE_FORM_DIRECTIVES, FormControl } from '@angular/forms';
 import { MSQuestionComponent } from '../question/master-screener-question.component';
 
+// a normal or 'constant' question group
 @Component({
   selector: 'question-group',
   template:` 
@@ -21,10 +22,12 @@ export class QuestionGroupComponent implements OnInit {
   form: FormGroup;
   ngOnInit(){}
 }
+
+// an expandable question group, ie click a checkbox => more question pop up
 @Component({
   selector: 'expandable-group',
   template:` 
-  <div >
+  <div>
     <ms-question [question]="expandableGroup.conditional" 
       [form]="form"
       (change)="toggleExpanded()">
@@ -67,6 +70,8 @@ export class ExpandableGroupComponent implements OnInit{
   }
 }
 
+
+// a partitioning component
 @Component({
   selector: 'general-question-group',
   template:` 
