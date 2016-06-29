@@ -7,7 +7,7 @@ import { GeneralQuestionGroupComponent } from '../question-group/index';
 @Component({
   selector: 'master-screener',
   template:` 
-  <div class="mt3">
+  <div class="mt3 mb3 border-bottom">
     <form (ngSubmit)="onSubmit()" 
      [formGroup]="form" 
      [id]="masterScreenerForm" 
@@ -21,21 +21,21 @@ import { GeneralQuestionGroupComponent } from '../question-group/index';
         </general-question-group>
       </div>
       <!-- flex padding -->
-      <div class="md-show">
-        <button type="submit" 
-          [id]="masterScreenerSubmit" 
-          class="btn btn-primary border">
-            Save
-        </button>
-      </div>
-      
     </form>
     <div *ngIf="payload">
       <strong>Saved the following values</strong><br>{{payload}}
     </div>
-    
-    
-  </div>`,
+  </div>
+  <div class="ml2 mt2">
+    <button type="submit" 
+      [id]="masterScreenerSubmit" 
+      class="btn btn-primary border"
+      [disabled]="!form.valid"
+      (click)="onSubmit()">
+      Submit
+    </button>
+  </div>
+  `,
   styles: [''], 
   directives: [REACTIVE_FORM_DIRECTIVES, GeneralQuestionGroupComponent],
   providers:  [DataService]
