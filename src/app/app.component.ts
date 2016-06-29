@@ -4,7 +4,6 @@ import { MasterScreenerComponent } from './master-screener';
   selector: 'my-app',
   template: `
     <div>
-      hi this is working
       <master-screener></master-screener>
     </div>
   `,

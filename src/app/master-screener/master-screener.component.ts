@@ -8,20 +8,24 @@ import { GeneralQuestionGroupComponent } from '../question-group/index';
   selector: 'master-screener',
   template:` 
   <div>
-    <form (ngSubmit)="onSubmit()" [formGroup]="form" [id]="masterScreenerForm">
-      <div *ngFor="let questionGroup of data.questionGroups" class="form-row">
+    <form (ngSubmit)="onSubmit()" [formGroup]="form" [id]="masterScreenerForm" class="sm-col-6">
+      <div *ngFor="let questionGroup of data.questionGroups">
         <general-question-group 
           [form]="form" 
           [questionGroup]="questionGroup"
           [collapsedControlMap]="collapsedControlMap">
         </general-question-group>
       </div>
-      <div class="form-row">
-        <button type="submit" [disabled]="!form.valid" [id]="masterScreenerSubmit">Save</button>
+      <div>
+        <button type="submit" 
+          [id]="masterScreenerSubmit" 
+          class="btn btn-primary z1 ml2">
+            Save
+        </button>
       </div>
       
     </form>
-    <div *ngIf="payload" class="form-row">
+    <div *ngIf="payload">
       <strong>Saved the following values</strong><br>{{payload}}
     </div>
   </div>`,
