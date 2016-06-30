@@ -1,0 +1,69 @@
+<div class="flex flex-column" style="min-height:100vh">
+  <!-- HEADER -->
+  <header class="p2 border">
+    <h1 class="h2 m0">Master Screener Route</h1>
+  </header>
+  <div class="flex-auto sm-flex">
+  
+    <!-- MAIN -->
+    <main class="flex-auto">
+      
+      <!-- MASTER SCREENER-->
+      <div class="flex-row">
+        <div class="clearfix container md-col-10 sm-col-12">
+          <div class="border">
+            <form (ngSubmit)="onSubmit()" 
+              [formGroup]="form" 
+              [id]="masterScreenerForm" 
+              class="mt3">
+                
+              <div *ngFor="let questionGroup of data.questionGroups">
+                <general-question-group 
+                  [form]="form" 
+                  [questionGroup]="questionGroup"
+                  [collapsedControlMap]="collapsedControlMap">
+                </general-question-group>
+              </div>
+            </form>
+            
+            <!-- SUBMIT BUTTON -->
+
+            <div class="ml2 mt2">
+              <button type="submit" 
+                [id]="masterScreenerSubmit" 
+                class="btn btn-primary border"
+                [disabled]="!form.valid"
+                (click)="onSubmit()">
+                Submit
+              </button>
+            </div> 
+
+            <!-- PAYLOAD DISPLAY -->
+            <div class="mt2" *ngIf="payload">
+              <strong>Saved the following values</strong><br>{{payload}}
+            </div>
+            
+          </div>
+        </div>
+      </div>
+      
+    </main>
+    <!-- LEFT SIDE NAV --> 
+    <nav class="flex-first border md-show" style="width:10rem">
+      <ul class="list-reset mt2 mb2">
+        <li><a href="#" class="btn block">Link</a>
+        <li><a href="#" class="btn block">Link</a>
+        <li><a href="#" class="btn block">Link</a>
+      </ul>
+    </nav>
+    
+    <!-- RIGHT SIDE NAV -->
+    <aside class="p2 border md-show" style="width:10rem">
+      <p>Sidebar</p>
+    </aside>
+  </div>
+  <!-- FOOTER -->
+    <footer class="p2 border">
+      <p class="m0">Footer</p>
+    </footer>
+</div>

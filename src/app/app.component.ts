@@ -7,7 +7,8 @@ import { MasterScreenerComponent } from './master-screener';
       <master-screener></master-screener>
     </div>
   `,
-  directives: [MasterScreenerComponent]
+  directives: [MasterScreenerComponent],
+  styles: ['app/app.component.css']
 })
 export class AppComponent {
   constructor() {

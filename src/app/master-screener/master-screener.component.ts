@@ -6,36 +6,7 @@ import { GeneralQuestionGroupComponent } from '../question-group/index';
 
 @Component({
   selector: 'master-screener',
-  template:` 
-  <div class="mt3 mb3 border-bottom">
-    <form (ngSubmit)="onSubmit()" 
-     [formGroup]="form" 
-     [id]="masterScreenerForm" 
-     class="mt3">
-     
-      <div *ngFor="let questionGroup of data.questionGroups">
-        <general-question-group 
-          [form]="form" 
-          [questionGroup]="questionGroup"
-          [collapsedControlMap]="collapsedControlMap">
-        </general-question-group>
-      </div>
-      <!-- flex padding -->
-    </form>
-    <div *ngIf="payload">
-      <strong>Saved the following values</strong><br>{{payload}}
-    </div>
-  </div>
-  <div class="ml2 mt2">
-    <button type="submit" 
-      [id]="masterScreenerSubmit" 
-      class="btn btn-primary border"
-      [disabled]="!form.valid"
-      (click)="onSubmit()">
-      Submit
-    </button>
-  </div>
-  `,
+  templateUrl:'app/master-screener/master-screener.component.html',
   styles: [''], 
   directives: [REACTIVE_FORM_DIRECTIVES, GeneralQuestionGroupComponent],
   providers:  [DataService]
