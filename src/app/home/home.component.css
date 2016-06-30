@@ -1,0 +1,27 @@
+
+input[type='textbox'] {
+  font-family: inherit;
+  font-size: inherit;
+  display: block;
+  height: 2.5rem;
+  padding: .5rem;
+  color: navy;
+  border: 1px solid navy;
+  box-shadow: 1px 2px 5px #888888; 
+}
+
+@media(min-width: 20em){
+  input[type='textbox']{
+    width: 80%;
+    margin-left: 10%;
+    margin-right: 10%;
+  }
+}
+
+@media(min-width: 40em){
+  input[type='textbox']{
+    width: 40%;
+    margin-left: 30%;
+    margin-right: 30%;
+  }
+}

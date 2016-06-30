@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { DataService, MasterScreener, ExpandableGroup, QuestionGroup  } from '../Screener/index';
+import { DataService, MasterScreener, ExpandableGroup, QuestionGroup  } from '../MasterScreener/index';
 import { FormGroup, REACTIVE_FORM_DIRECTIVES, FormControl } from '@angular/forms';
-import { toForm, expandableControlMap } from '../Screener/index';
+import { toForm, expandableControlMap } from '../MasterScreener/index';
 import { GeneralQuestionGroupComponent } from '../question-group/index';
 
 @Component({

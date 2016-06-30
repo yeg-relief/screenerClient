@@ -1,5 +1,5 @@
 import { Component, OnInit, Input } from '@angular/core';
-import { GeneralQuestionGroup, QuestionGroup, ExpandableGroup } from '../Screener/index';
+import { GeneralQuestionGroup, QuestionGroup, ExpandableGroup } from '../MasterScreener/index';
 import { FormGroup, REACTIVE_FORM_DIRECTIVES, FormControl } from '@angular/forms';
 import { MSQuestionComponent } from '../question/master-screener-question.component';
 

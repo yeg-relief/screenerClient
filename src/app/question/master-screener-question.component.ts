@@ -1,6 +1,6 @@
 import { Component, Input, ViewEncapsulation } from '@angular/core';
 import { FormGroup, REACTIVE_FORM_DIRECTIVES } from '@angular/forms';
-import { Question } from '../Screener/index';
+import { Question } from '../MasterScreener/index';
 
 @Component({
   selector:'ms-question',

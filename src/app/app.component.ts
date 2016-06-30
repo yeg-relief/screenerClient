@@ -9,9 +9,7 @@ import {
 
 @Component({
   selector: 'my-app',
-  template: `      
-      <router-outlet></router-outlet>
-  `,
+  templateUrl:'app/app.component.html',
   directives: [MasterScreenerComponent, ROUTER_DIRECTIVES],
   styles: ['app/app.component.css']
 })

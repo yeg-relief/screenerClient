@@ -34,6 +34,7 @@ const barrels: string[] = [
   // App specific barrels.
   'app',
   'app/master-screener',
+  'app/home',
   /** @cli-barrel */
 ];
 
