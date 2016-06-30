@@ -11,7 +11,7 @@
       <!-- MASTER SCREENER-->
       <div class="flex-row">
         <div class="clearfix container md-col-10 sm-col-12">
-          <div class="border">
+          <div>
             <form (ngSubmit)="onSubmit()" 
               [formGroup]="form" 
               [id]="masterScreenerForm" 
@@ -28,10 +28,10 @@
             
             <!-- SUBMIT BUTTON -->
 
-            <div class="ml2 mt2">
+            <div class="ml2 mt2 mb2">
               <button type="submit" 
                 [id]="masterScreenerSubmit" 
-                class="btn btn-primary border"
+                class="btn btn-primary border rounded"
                 [disabled]="!form.valid"
                 (click)="onSubmit()">
                 Submit

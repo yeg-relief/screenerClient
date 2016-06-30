@@ -9,7 +9,7 @@ import { MasterScreener, QuestionGroup, ExpandableGroup, Question, toForm } from
 import { FormGroup, Validators, FormControl, Validator } from '@angular/forms';
 
 
-/**************** MOCK DATA SCROLL TO READ TESTS *******************/
+
 const TEST_DATA_1: MasterScreener = {
   controls: {
     expand: new FormControl(false, Validators.required),
@@ -55,7 +55,7 @@ const TEST_DATA_1: MasterScreener = {
 }
 
 
-/*************************** TESTS START ************************************/
+
 
 
 
