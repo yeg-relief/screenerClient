@@ -28,8 +28,10 @@ export class ForWidth implements OnDestroy{
 
     return () => {
       const msg = nativeELement
-      
-      this.windowResize.emit({content: msg});
+      const left = nativeELement.getBoundingClientRect().left;
+      const right = nativeELement.getBoundingClientRect().right;
+      const width = right - left;
+      this.windowResize.emit({width: width});
     }
     
   }

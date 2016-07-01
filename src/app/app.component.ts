@@ -56,12 +56,7 @@ export class AppComponent{
     });
   }
   
-  test(val){
-    Object.keys(val.content).map( key => {
-      const left = val.content[key][0].data.target.getBoundingClientRect().left;
-      const right = val.content[key][0].data.target.getBoundingClientRect().right;
-      const diff = right - left;
-      console.log(`the screen width is ${diff}`);
-    })
+  test(window){
+    console.log(window.width)
   }
 }
