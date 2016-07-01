@@ -4,13 +4,14 @@ import {
   ROUTER_DIRECTIVES, Router, Event,  
   NavigationStart, NavigationEnd, 
   NavigationCancel, NavigationError} from '@angular/router';
+import {ForWidth} from './for-width.directive';
 
 
 
 @Component({
   selector: 'my-app',
   templateUrl:'app/app.component.html',
-  directives: [MasterScreenerComponent, ROUTER_DIRECTIVES],
+  directives: [MasterScreenerComponent, ROUTER_DIRECTIVES, ForWidth],
   styles: [`
   @media(min-width: 20em){
     input[type='textbox']{
