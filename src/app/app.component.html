@@ -1,3 +1,5 @@
+<div forWidth (windowResize)="test($event)" style="width:100%; height:100%">
+
 <!-- this is present on every route --> 
 <nav class="clearfix white py2 flex flex-center flex-justify border-bottom bg-black" style="min-height:3vh; height: 3%;">
   <div class="flex">
@@ -5,8 +7,7 @@
       home
     </a>
   </div>
-  <div forWidth
-    (windowResize)="test($event)" 
+  <div  
     class="flex ml1 mr1">
     <a href="/" class="btn btn-outline">About</a>
   </div>
@@ -18,7 +19,6 @@
       login/logout
     </a>
   </div>
-  
 </nav>
 
 
@@ -84,3 +84,4 @@
     <p class="h6 mb0">&copy; 2014 Hamburgers, LLC</p>
   </div>
 </footer>
+</div>

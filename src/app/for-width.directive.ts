@@ -20,22 +20,22 @@ export class ForWidth implements OnDestroy{
                         .listenGlobal(
                            'window', 
                            'resize', 
-                           this.otherFunc(this.windowResize));
+                           this.otherFunc(this.windowResize, this.el.nativeElement));
 
   }
   
-  otherFunc(windowResize: EventEmitter<any>){
-    const val = {num: 2};
+  otherFunc(windowResize: EventEmitter<any>, nativeELement){
+
     return () => {
-      console.log(val)
-      console.log(windowResize);
-      console.log(JSON.stringify(val));
-      this.windowResize.emit(['hit']);
+      const msg = nativeELement
+      
+      this.windowResize.emit({content: msg});
     }
     
   }
   
   ngOnDestroy(){
     this.globalResize();
+    this.windowResize.unsubscribe();
   }
 }
