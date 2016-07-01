@@ -5,7 +5,9 @@
       home
     </a>
   </div>
-  <div forWidth class="flex ml1 mr1">
+  <div forWidth
+    (windowResize)="test($event)" 
+    class="flex ml1 mr1">
     <a href="/" class="btn btn-outline">About</a>
   </div>
   <div class="flex container" id="search">

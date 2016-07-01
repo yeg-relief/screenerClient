@@ -55,4 +55,8 @@ export class AppComponent{
       console.log(this.router.url);
     });
   }
+  
+  test(val){
+    console.log(`from component: ${val}`);
+  }
 }
