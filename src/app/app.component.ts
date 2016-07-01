@@ -11,7 +11,29 @@ import {
   selector: 'my-app',
   templateUrl:'app/app.component.html',
   directives: [MasterScreenerComponent, ROUTER_DIRECTIVES],
-  styles: ['app/app.component.css']
+  styles: [`
+  @media(min-width: 20em){
+    input[type='textbox']{
+      width: 100%;
+      margin-left: 5%;
+      margin-right: 2%;
+    }
+  }
+    input[type='textbox'] {
+    font-family: inherit;
+    font-size: inherit;
+    display: block;
+    height: 100%;
+    padding: .5rem;
+    color: navy;
+    border: 1px solid black;
+    max-width: 100%;
+  }
+
+  #search{
+    width:100%;
+  }
+  `]
 })
 export class AppComponent{
   
