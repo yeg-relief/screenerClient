@@ -40,9 +40,6 @@ export class AppComponent{
   constructor(private router:Router) {
     router.events.subscribe( event => {
       if(event instanceof NavigationStart){
-        if(event.url === '/'){
-          
-        }
         console.log(`navigations start: ${event}`)
       }
       if(event instanceof NavigationEnd){
