@@ -10,17 +10,25 @@ import {ObservableWrapper} from '@angular/core/src/facade/async';
 })
 export class ForWidth implements OnDestroy{ 
   globalResize: Function;
+
   @Output() windowResize: EventEmitter<any> = new EventEmitter<any>(); 
 
   
   constructor(private el: ElementRef, private renderer: Renderer){}
   
   ngOnInit(){
+    // right - left
+    const initWidth: number =   this.el.nativeElement.getBoundingClientRect().right  
+                              - this.el.nativeElement.getBoundingClientRect().left;
+                              
+    this.windowResize.emit({width: initWidth, message:"from init"});
+    
     this.globalResize = this.renderer
                         .listenGlobal(
                            'window', 
                            'resize', 
                            this.otherFunc(this.windowResize, this.el.nativeElement));
+   
 
   }
   
@@ -31,7 +39,7 @@ export class ForWidth implements OnDestroy{
       const left = nativeELement.getBoundingClientRect().left;
       const right = nativeELement.getBoundingClientRect().right;
       const width = right - left;
-      this.windowResize.emit({width: width});
+      this.windowResize.emit({width: width, message: "from resize"});
     }
     
   }
