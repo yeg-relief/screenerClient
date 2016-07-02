@@ -1,11 +1,10 @@
-import { Component, OnInit, EventEmitter } from '@angular/core';
+import { Component, EventEmitter, OnInit } from '@angular/core';
 import { MasterScreenerComponent } from './master-screener';
-import { 
-  ROUTER_DIRECTIVES, Router, Event,  
-  NavigationStart, NavigationEnd, 
-  NavigationCancel, NavigationError} from '@angular/router';
-import {ForWidth} from './for-width.directive';
-import {WidthState} from './app.responsive.service';
+import { ROUTER_DIRECTIVES, Router } from '@angular/router';
+import { ForWidth } from './for-width.directive';
+import { WidthState } from './app.responsive.service';
+import { Subscription } from 'rxjs/Subscription';
+import { NavbarComponent } from './navbar/navbar.component' 
 
 
 @Component({
@@ -35,25 +34,19 @@ import {WidthState} from './app.responsive.service';
     width:100%;
   }
   `],
-  providers: [WidthState]
+  providers: [WidthState, NavbarComponent]
 })
 export class AppComponent implements OnInit{
   private widthEmitter: EventEmitter<any>;
   
-  constructor(private router:Router, private widthState: WidthState) {
-    this.widthEmitter = widthState.subject;
-  }
+  constructor(private router:Router, private widthState: WidthState) {}
   
   ngOnInit(){
-    console.log(this.widthEmitter);
+    this.widthEmitter = this.widthState.subject;
   }
   
   windowResize(event){
-    console.log(`in app component: ${event.width} ${event.message}`)
+    //console.log(`in app component: ${event.width} ${event.message}`)
     this.widthEmitter.emit(event);
-  }
-  
-  test(window){
-    
   }
 }

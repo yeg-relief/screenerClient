@@ -1,6 +1,6 @@
 import { provideRouter, RouterConfig } from '@angular/router';
-import { MasterScreenerComponent } from './master-screener/index';
-import { HomeComponent } from './home/index';
+import { MasterScreenerComponent } from './master-screener';
+import { HomeComponent } from './home';
 
 export const routes: RouterConfig = [
   { path: 'master-screener', component: MasterScreenerComponent },
