@@ -11,7 +11,9 @@ import {ObservableWrapper} from '@angular/core/src/facade/async';
 export class ForWidth implements OnDestroy{ 
   globalResize: Function;
 
-  @Output() windowResize: EventEmitter<any> = new EventEmitter<any>(); 
+  @Output() 
+  windowResize: EventEmitter<any> = new EventEmitter<any>(); 
+
 
   
   constructor(private el: ElementRef, private renderer: Renderer){}

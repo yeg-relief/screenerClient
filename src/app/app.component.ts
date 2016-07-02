@@ -1,11 +1,11 @@
-import { Component } from '@angular/core';
+import { Component, OnInit, EventEmitter } from '@angular/core';
 import { MasterScreenerComponent } from './master-screener';
 import { 
   ROUTER_DIRECTIVES, Router, Event,  
   NavigationStart, NavigationEnd, 
   NavigationCancel, NavigationError} from '@angular/router';
 import {ForWidth} from './for-width.directive';
-
+import {WidthState} from './app.responsive.service';
 
 
 @Component({
@@ -34,29 +34,26 @@ import {ForWidth} from './for-width.directive';
   #search{
     width:100%;
   }
-  `]
+  `],
+  providers: [WidthState]
 })
-export class AppComponent{
+export class AppComponent implements OnInit{
+  private widthEmitter: EventEmitter<any>;
   
-  constructor(private router:Router) {
-    router.events.subscribe( event => {
-      if(event instanceof NavigationStart){
-        console.log(`navigations start: ${event}`)
-      }
-      if(event instanceof NavigationEnd){
-        console.log(`navigations end: ${event}`)
-      }
-      if(event instanceof NavigationCancel){
-        console.log(`navigations cancel: ${event}`)
-      }
-      if(event instanceof NavigationError){
-        console.log(`navigations error: ${event}`)
-      }
-      console.log(this.router.url);
-    });
+  constructor(private router:Router, private widthState: WidthState) {
+    this.widthEmitter = widthState.subject;
+  }
+  
+  ngOnInit(){
+    console.log(this.widthEmitter);
+  }
+  
+  windowResize(event){
+    console.log(`in app component: ${event.width} ${event.message}`)
+    this.widthEmitter.emit(event);
   }
   
   test(window){
-    console.log(`${window.width} ${window.message}`)
+    
   }
 }
