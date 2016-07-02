@@ -7,20 +7,18 @@ import { Subscription } from 'rxjs/Subscription';
 
 
 @Component({
-  selector: 'ycb-nav',
-  template:'content?????',
-  styleUrls: [],
-  directives: [MasterScreenerComponent, HomeComponent, ROUTER_DIRECTIVES],
-  providers: [WidthState]
+  selector: 'ycb-navbar',
+  templateUrl:'app/navbar/navbar.component.html',
+  directives: [MasterScreenerComponent, HomeComponent, ROUTER_DIRECTIVES]
 })
 export class NavbarComponent implements OnInit{
+  private width: number;
+  constructor(private widthState: WidthState){}
   
-  constructor(private widthState: WidthState){
-    console.log('constructed')
-  }
-  
-  ngOnInit(){
-    console.log(this.widthState)
-    this.widthState.subject.asObservable().subscribe( val => console.log(`in navbar: ${val}`))
+  ngOnInit(){    
+    this.widthState.behavior.subscribe( screen => {
+      this.width = screen.width;
+      console.log(`navbar screen width: ${this.width}`);
+    });
   }
 }

@@ -14,7 +14,8 @@ export class ForWidth implements OnDestroy{
   @Output() 
   windowResize: EventEmitter<any> = new EventEmitter<any>(); 
 
-
+  @Output()
+  windowInit: EventEmitter<any> = new EventEmitter<any>();
   
   constructor(private el: ElementRef, private renderer: Renderer){}
   
@@ -23,7 +24,9 @@ export class ForWidth implements OnDestroy{
     const initWidth: number =   this.el.nativeElement.getBoundingClientRect().right  
                               - this.el.nativeElement.getBoundingClientRect().left;
                               
-    this.windowResize.emit({width: initWidth, message:"from init"});
+    this.windowInit.emit({width: initWidth, message:"from init"});
+    
+    this.windowInit.complete();
     
     this.globalResize = this.renderer
                         .listenGlobal(
@@ -48,5 +51,6 @@ export class ForWidth implements OnDestroy{
   ngOnDestroy(){
     this.globalResize();
     this.windowResize.unsubscribe();
+    this.windowInit.unsubscribe();
   }
 }

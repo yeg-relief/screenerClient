@@ -10,31 +10,8 @@ import { NavbarComponent } from './navbar/navbar.component'
 @Component({
   selector: 'my-app',
   templateUrl:'app/app.component.html',
-  directives: [MasterScreenerComponent, ROUTER_DIRECTIVES, ForWidth],
-  styles: [`
-  @media(min-width: 20em){
-    input[type='textbox']{
-      width: 100%;
-      margin-left: 5%;
-      margin-right: 2%;
-    }
-  }
-    input[type='textbox'] {
-    font-family: inherit;
-    font-size: inherit;
-    display: block;
-    height: 100%;
-    padding: .5rem;
-    color: navy;
-    border: 1px solid black;
-    max-width: 100%;
-  }
-
-  #search{
-    width:100%;
-  }
-  `],
-  providers: [WidthState, NavbarComponent]
+  directives: [MasterScreenerComponent, NavbarComponent, ROUTER_DIRECTIVES, ForWidth],
+  providers: [WidthState]
 })
 export class AppComponent implements OnInit{
   private widthEmitter: EventEmitter<any>;
@@ -46,7 +23,10 @@ export class AppComponent implements OnInit{
   }
   
   windowResize(event){
-    //console.log(`in app component: ${event.width} ${event.message}`)
     this.widthEmitter.emit(event);
+  }
+  
+  windowInit(event){
+    this.widthState.buildBehavior(event.width);
   }
 }
