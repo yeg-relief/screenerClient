@@ -1,0 +1,18 @@
+<nav class="clearfix white py2 flex flex-center flex-justify border-bottom bg-black" style="min-height:3vh; height: 3%;">
+  <div class="flex">
+    <a class="btn btn-outline" [routerLink]="['/']">
+      home
+    </a>
+  </div>
+  <div class="flex ml1 mr1">
+    <a href="/" class="btn btn-outline">About</a>
+  </div>
+  <div class="flex container" id="search">
+    <input class="flex-center rounded" type='textbox' placeholder="search programs">
+  </div>
+  <div class="flex mr2 md-show">
+    <a class="btn btn-outline" [routerLink]="['/']" style="pointer-events: none;">
+      login/logout
+    </a>
+  </div>
+</nav>
