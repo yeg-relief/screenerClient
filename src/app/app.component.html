@@ -1,87 +1,65 @@
 <div style="width:100%; height:100%">
 
-<!-- this is present on every route --> 
-<nav class="clearfix white py2 flex flex-center flex-justify border-bottom bg-black" style="min-height:3vh; height: 3%;">
-  <div class="flex">
-    <a class="btn btn-outline" [routerLink]="['/']">
-      home
-    </a>
-  </div>
-  <div  
-    class="flex ml1 mr1">
-    <a href="/" class="btn btn-outline">About</a>
-  </div>
-  <div class="flex container" id="search">
-    <input class="flex-center rounded" type='textbox' placeholder="search programs">
-  </div>
-  <div class="flex mr2 md-show">
-    <a class="btn btn-outline" [routerLink]="['/']" style="pointer-events: none;">
-      login/logout
-    </a>
-  </div>
-</nav>
+  <ycb-navbar></ycb-navbar>
+  <router-outlet></router-outlet>
 
-
-
-<router-outlet></router-outlet>
-
-<footer class="white bg-black">
-  <div class="px2 py3 container">
-    <div class="clearfix mxn2">
-      <div class="col col-6 md-col-3">
-        <ul class="list-reset">
-          <li>
-            <h3 class="h4 m0">
-              <a href="#" class="btn block">Home</a>
-            </h3>
-          </li>
-          <li><a href="#" class="h5 btn block">Bacon</a></li>
-          <li><a href="#" class="h5 btn block">Bratwurst</a></li>
-          <li><a href="#" class="h5 btn block">Andouille</a></li>
-          <li><a href="#" class="h5 btn block">Pork Loin</a></li>
-        </ul>
+  <footer class="white bg-black">
+    <div class="px2 py3 container">
+      <div class="clearfix mxn2">
+        <div class="col col-6 md-col-3">
+          <ul class="list-reset">
+            <li>
+              <h3 class="h4 m0">
+                <a href="#" class="btn block">Home</a>
+              </h3>
+            </li>
+            <li><a href="#" class="h5 btn block">Bacon</a></li>
+            <li><a href="#" class="h5 btn block">Bratwurst</a></li>
+            <li><a href="#" class="h5 btn block">Andouille</a></li>
+            <li><a href="#" class="h5 btn block">Pork Loin</a></li>
+          </ul>
+        </div>
+        <div class="col col-6 md-col-3">
+          <ul class="list-reset">
+            <li>
+              <h3 class="h4 m0">
+                <a href="#" class="btn block">Categories</a>
+              </h3>
+            </li>
+            <li><a href="#" class="h5 btn block">Bacon</a></li>
+            <li><a href="#" class="h5 btn block">Bratwurst</a></li>
+            <li><a href="#" class="h5 btn block">Andouille</a></li>
+            <li><a href="#" class="h5 btn block">Pork Loin</a></li>
+          </ul>
+        </div>
+        <div class="col col-6 md-col-3">
+          <ul class="list-reset">
+            <li>
+              <h3 class="h4 m0">
+                <a href="#" class="btn block">Categories</a>
+              </h3>
+            </li>
+            <li><a href="#" class="h5 btn block">Bacon</a></li>
+            <li><a href="#" class="h5 btn block">Bratwurst</a></li>
+            <li><a href="#" class="h5 btn block">Andouille</a></li>
+            <li><a href="#" class="h5 btn block">Pork Loin</a></li>
+          </ul>
+        </div>
+        <div class="col col-6 md-col-3">
+          <ul class="list-reset">
+            <li>
+              <h3 class="h4 m0">
+                <a href="#" class="btn block">About</a>
+              </h3>
+            </li>
+            <li><a href="#" class="h5 btn block">Bacon</a></li>
+            <li><a href="#" class="h5 btn block">Bratwurst</a></li>
+            <li><a href="#" class="h5 btn block">Andouille</a></li>
+            <li><a href="#" class="h5 btn block">Pork Loin</a></li>
+          </ul>
+        </div>
       </div>
-      <div class="col col-6 md-col-3">
-        <ul class="list-reset">
-          <li>
-            <h3 class="h4 m0">
-              <a href="#" class="btn block">Categories</a>
-            </h3>
-          </li>
-          <li><a href="#" class="h5 btn block">Bacon</a></li>
-          <li><a href="#" class="h5 btn block">Bratwurst</a></li>
-          <li><a href="#" class="h5 btn block">Andouille</a></li>
-          <li><a href="#" class="h5 btn block">Pork Loin</a></li>
-        </ul>
-      </div>
-      <div class="col col-6 md-col-3">
-        <ul class="list-reset">
-          <li>
-            <h3 class="h4 m0">
-              <a href="#" class="btn block">Categories</a>
-            </h3>
-          </li>
-          <li><a href="#" class="h5 btn block">Bacon</a></li>
-          <li><a href="#" class="h5 btn block">Bratwurst</a></li>
-          <li><a href="#" class="h5 btn block">Andouille</a></li>
-          <li><a href="#" class="h5 btn block">Pork Loin</a></li>
-        </ul>
-      </div>
-      <div class="col col-6 md-col-3">
-        <ul class="list-reset">
-          <li>
-            <h3 class="h4 m0">
-              <a href="#" class="btn block">About</a>
-            </h3>
-          </li>
-          <li><a href="#" class="h5 btn block">Bacon</a></li>
-          <li><a href="#" class="h5 btn block">Bratwurst</a></li>
-          <li><a href="#" class="h5 btn block">Andouille</a></li>
-          <li><a href="#" class="h5 btn block">Pork Loin</a></li>
-        </ul>
-      </div>
+      <p class="h6 mb0">&copy; 2014 Hamburgers, LLC</p>
     </div>
-    <p class="h6 mb0">&copy; 2014 Hamburgers, LLC</p>
-  </div>
-</footer>
+  </footer>
 </div>
