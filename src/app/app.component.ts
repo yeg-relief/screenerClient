@@ -1,17 +1,15 @@
 import { Component } from '@angular/core';
-import { MasterScreenerComponent } from './master-screener';
 import { 
   ROUTER_DIRECTIVES, Router, Event,  
   NavigationStart, NavigationEnd, 
   NavigationCancel, NavigationError} from '@angular/router';
-import {ForWidth} from './for-width.directive';
 
 
 
 @Component({
   selector: 'my-app',
   templateUrl:'app/app.component.html',
-  directives: [MasterScreenerComponent, ROUTER_DIRECTIVES, ForWidth],
+  directives: [ROUTER_DIRECTIVES],
   styles: [`
   @media(min-width: 20em){
     input[type='textbox']{
@@ -54,9 +52,5 @@ export class AppComponent{
       }
       console.log(this.router.url);
     });
-  }
-  
-  test(window){
-    console.log(window.width)
   }
 }
