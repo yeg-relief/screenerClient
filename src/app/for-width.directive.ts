@@ -35,7 +35,6 @@ export class ForWidth implements OnDestroy{
   otherFunc(windowResize: EventEmitter<any>, nativeELement){
 
     return () => {
-      const msg = nativeELement
       const left = nativeELement.getBoundingClientRect().left;
       const right = nativeELement.getBoundingClientRect().right;
       const width = right - left;

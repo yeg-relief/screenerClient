@@ -57,6 +57,6 @@ export class AppComponent{
   }
   
   test(window){
-    console.log(window.width)
+    console.log(`${window.width} ${window.message}`)
   }
 }
