@@ -1,32 +1,31 @@
 import { Component, EventEmitter, OnInit } from '@angular/core';
-import { MasterScreenerComponent } from './master-screener';
-import { ROUTER_DIRECTIVES, Router } from '@angular/router';
-import { ForWidth } from './for-width.directive';
-import { WidthState } from './app.responsive.service';
+import { MediaListener } from './media-listener.directive';
 import { Subscription } from 'rxjs/Subscription';
 import { NavbarComponent } from './navbar/navbar.component' 
+import { ROUTER_DIRECTIVES } from '@angular/router';
+import { Store } from '@ngrx/store';
+import { SMALL, MEDIUM, LARGE  } from './reducers/index';
+
+
+interface AppState {
+  screen: string;
+}
+
 
 
 @Component({
   selector: 'my-app',
   templateUrl:'app/app.component.html',
-  directives: [MasterScreenerComponent, NavbarComponent, ROUTER_DIRECTIVES, ForWidth],
-  providers: [WidthState]
+  directives: [NavbarComponent, MediaListener, ROUTER_DIRECTIVES]
 })
 export class AppComponent implements OnInit{
-  private widthEmitter: EventEmitter<any>;
+  private widthEmitter: EventEmitter<any> = new EventEmitter<any>();
   
-  constructor(private router:Router, private widthState: WidthState) {}
+  constructor(private store: Store<AppState>) {}
   
-  ngOnInit(){
-    this.widthEmitter = this.widthState.subject;
-  }
+  ngOnInit(){}
 
   windowResize(event){
     this.widthEmitter.emit(event);
-  }
-  
-  windowInit(event){
-    this.widthState.buildBehavior(event.width);
   }
 }

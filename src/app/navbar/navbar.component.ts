@@ -13,12 +13,7 @@ import { Component, OnInit } from '@angular/core'
 })
 export class NavbarComponent implements OnInit{
   private width: number;
-  constructor(private widthState: WidthState){}
+  constructor(){}
   
-  ngOnInit(){    
-    this.widthState.behavior.subscribe( screen => {
-      this.width = screen.width;
-      console.log(`navbar screen width: ${this.width}`);
-    });
-  }
+  ngOnInit(){}
 }

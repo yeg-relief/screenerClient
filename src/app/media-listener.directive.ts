@@ -3,21 +3,54 @@ import{
   Input, Renderer, OnDestroy,
   Output, EventEmitter, OnInit 
 } from '@angular/core';
-import {ObservableWrapper} from '@angular/core/src/facade/async';
+
+import { Store } from '@ngrx/store';
+import { SMALL, MEDIUM, LARGE } from './reducers';
+
 
 @Directive({ 
-  selector: '[forWidth]'
+  selector: '[media-listener]'
 })
-export class ForWidth implements OnDestroy{ 
-  globalResize: Function;
+export class MediaListener implements OnDestroy, OnInit{ 
+  
+  private mediaQueries =  {
+    SMALL: "(max-width: 40em)",
+    MEDIUM: "(min-width: 40.063em)",
+    LARGE: "(min-width: 64.063em)"
+  }
 
   @Output() 
-  windowResize: EventEmitter<any> = new EventEmitter<any>(); 
-
-  @Output()
-  windowInit: EventEmitter<any> = new EventEmitter<any>();
+  mediaListener: EventEmitter<string> = new EventEmitter<string>(); 
   
-  constructor(private el: ElementRef, private renderer: Renderer){}
+  constructor(public store: Store<any>){}
+  
+  ngOnInit(){
+    this.initialMediaWidth();
+    window.matchMedia(this.mediaQueries.SMALL).addListener( () => this.store.dispatch({type: SMALL}));
+    window.matchMedia(this.mediaQueries.MEDIUM).addListener( () => this.store.dispatch({type: MEDIUM}));
+    window.matchMedia(this.mediaQueries.LARGE).addListener( () => this.store.dispatch({type: LARGE}));
+  }
+  
+  initialMediaWidth(){
+    Object.keys(this.mediaQueries).map( key => {
+      const matchObject = window.matchMedia(this.mediaQueries[key]);
+      if(matchObject.matches){
+        this.store.dispatch({type: key});
+      }
+    })
+  }
+  
+  
+  
+  ngOnDestroy(){
+    this.mediaListener.unsubscribe();
+  }
+  
+  
+  
+  
+  /*
+  
   
   ngOnInit(){
     // right - left
@@ -53,4 +86,5 @@ export class ForWidth implements OnDestroy{
     this.windowResize.unsubscribe();
     this.windowInit.unsubscribe();
   }
+  */
 }
