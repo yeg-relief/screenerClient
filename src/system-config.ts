@@ -7,7 +7,8 @@
  **********************************************************************************************/
 /** Map relative paths to URLs. */
 const map: any = {
-  '@ngrx': 'vendor/@ngrx'
+  '@ngrx': 'vendor/@ngrx',
+  'ngrx-store-logger': 'vendor/ngrx-store-logger'
 };
 
 /** User packages configuration. */
@@ -17,6 +18,10 @@ const packages: any = {
     format: 'cjs'
   },
   '@ngrx/store': {
+    main: 'index.js',
+    format: 'cjs'
+  },
+  'ngrx-store-logger': {
     main: 'index.js',
     format: 'cjs'
   }

@@ -1,21 +1,23 @@
 import { ActionReducer, Action } from '@ngrx/store';
+import { Media, MEDIA_SMALL, MEDIA_MEDIUM, MEDIA_LARGE } from '../models';
+import { MediaActions } from '../actions'; 
 
-export const SMALL = 'SMALL';
-export const MEDIUM = 'MEDIUM';
-export const LARGE = 'LARGE';
+export interface MediaState {
+  width: string;
+};
 
-export const mediaReducer: ActionReducer<string> = (state: string = SMALL, action: Action) => {
-  switch (action.type) {
-    case SMALL:
-      return SMALL;
+const initialState: MediaState = {
+  width: MEDIA_SMALL
+}
 
-    case MEDIUM:
-      return MEDIUM;
-
-    case LARGE:
-      return LARGE;
-
-    default:
-      return SMALL;
+export function mediaReducer(state = initialState, action: Action): MediaState {
+  switch(action.type){
+    case MediaActions.SET_SIZE: {
+      return state;
+    }
+    
+    default: {
+      return state;
+    }
   }
 }
