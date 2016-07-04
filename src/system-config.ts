@@ -8,7 +8,7 @@
 /** Map relative paths to URLs. */
 const map: any = {
   '@ngrx': 'vendor/@ngrx',
-  'ngrx-store-logger': 'vendor/ngrx-store-logger'
+  'ngrx-store-logger': 'vendor/ngrx-store-logger/dist'
 };
 
 /** User packages configuration. */
@@ -48,6 +48,9 @@ const barrels: string[] = [
   'app',
   'app/master-screener',
   'app/home',
+  'app/reducers',
+  'app/models',
+  'app/actions'
   /** @cli-barrel */
 ];
 

@@ -1,90 +1,43 @@
-import{ 
-  Directive, ElementRef, 
-  Input, Renderer, OnDestroy,
-  Output, EventEmitter, OnInit 
-} from '@angular/core';
-
+import{ Directive, OnInit } from '@angular/core';
 import { Store } from '@ngrx/store';
-import { SMALL, MEDIUM, LARGE } from './reducers';
-
+import { MEDIA_SMALL, MEDIA_MEDIUM, MEDIA_LARGE } from './models';
+import { AppState } from './reducers';
 
 @Directive({ 
   selector: '[media-listener]'
 })
-export class MediaListener implements OnDestroy, OnInit{ 
+export class MediaListener implements  OnInit{ 
   
   private mediaQueries =  {
-    SMALL: "(max-width: 40em)",
-    MEDIUM: "(min-width: 40.063em)",
-    LARGE: "(min-width: 64.063em)"
+    MEDIA_SMALL: "(max-width: 350px)",
+    MEDIA_MEDIUM: "(max-width: 650px)",
+    MEDIA_LARGE: "(min-width: 1200px)"
   }
-
-  @Output() 
-  mediaListener: EventEmitter<string> = new EventEmitter<string>(); 
   
-  constructor(public store: Store<any>){}
+  constructor(public store: Store<AppState>){}
   
   ngOnInit(){
     this.initialMediaWidth();
-    window.matchMedia(this.mediaQueries.SMALL).addListener( () => this.store.dispatch({type: SMALL}));
-    window.matchMedia(this.mediaQueries.MEDIUM).addListener( () => this.store.dispatch({type: MEDIUM}));
-    window.matchMedia(this.mediaQueries.LARGE).addListener( () => this.store.dispatch({type: LARGE}));
+    //these listeners are only created once and are only destroyed when window is destroyed... need to unsub?
+    window.matchMedia(this.mediaQueries.MEDIA_SMALL).addListener( () => this.store.dispatch({type: MEDIA_SMALL}));
+    window.matchMedia(this.mediaQueries.MEDIA_MEDIUM).addListener( () => this.store.dispatch({type: MEDIA_MEDIUM}));
+    window.matchMedia(this.mediaQueries.MEDIA_LARGE).addListener( () => this.store.dispatch({type: MEDIA_LARGE}));
   }
   
   initialMediaWidth(){
-    Object.keys(this.mediaQueries).map( key => {
-      const matchObject = window.matchMedia(this.mediaQueries[key]);
-      if(matchObject.matches){
-        this.store.dispatch({type: key});
+    const matcher = ():boolean => {
+      for(const key in this.mediaQueries){
+        const query = window.matchMedia(this.mediaQueries[key]);
+        if(query.matches){
+          this.store.dispatch({type: key});
+          return true;
+        }
       }
-    })
-  }
-  
-  
-  
-  ngOnDestroy(){
-    this.mediaListener.unsubscribe();
-  }
-  
-  
-  
-  
-  /*
-  
-  
-  ngOnInit(){
-    // right - left
-    const initWidth: number =   this.el.nativeElement.getBoundingClientRect().right  
-                              - this.el.nativeElement.getBoundingClientRect().left;
-                              
-    this.windowInit.emit({width: initWidth, message:"from init"});
-    
-    this.windowInit.complete();
-    
-    this.globalResize = this.renderer
-                        .listenGlobal(
-                           'window', 
-                           'resize', 
-                           this.otherFunc(this.windowResize, this.el.nativeElement));
-   
-
-  }
-  
-  otherFunc(windowResize: EventEmitter<any>, nativeELement){
-
-    return () => {
-      const left = nativeELement.getBoundingClientRect().left;
-      const right = nativeELement.getBoundingClientRect().right;
-      const width = right - left;
-      this.windowResize.emit({width: width, message: "from resize"});
+      return false;
     }
     
+    if(!matcher()){
+      this.store.dispatch({type: MEDIA_SMALL})
+    }
   }
-  
-  ngOnDestroy(){
-    this.globalResize();
-    this.windowResize.unsubscribe();
-    this.windowInit.unsubscribe();
-  }
-  */
 }

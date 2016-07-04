@@ -5,7 +5,7 @@ import { HTTP_PROVIDERS } from '@angular/http';
 import { disableDeprecatedForms, provideForms } from '@angular/forms';
 import { APP_ROUTER_PROVIDERS } from './app/app.routes';
 import { provideStore } from '@ngrx/store';
-import { mediaReducer } from './app/reducers/index'
+import  reducer  from './app/reducers'
 
 if (environment.production) {
   enableProdMode();
@@ -16,6 +16,6 @@ bootstrap(AppComponent, [
   disableDeprecatedForms(),
   provideForms(),
   APP_ROUTER_PROVIDERS,
-  provideStore({media: mediaReducer})
+  provideStore(reducer)
 ])
 .catch((err: any) => console.error(err));

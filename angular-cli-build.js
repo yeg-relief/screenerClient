@@ -17,7 +17,7 @@ module.exports = function(defaults) {
       'rxjs/**/*.+(js|js.map)',
       '@angular/**/*.+(js|js.map)',
       '@ngrx/**/*.+(js|js.map)',
-      'ngrx-store-logger/**/*.+(js|js.map)'
+      'ngrx-store-logger/dist/index.js'
     ]
   });
 };
