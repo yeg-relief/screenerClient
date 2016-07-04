@@ -1,43 +1,67 @@
-import{ Directive, OnInit } from '@angular/core';
+import { Directive, OnInit, OnDestroy } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { MEDIA_SMALL, MEDIA_MEDIUM, MEDIA_LARGE } from './models';
 import { AppState } from './reducers';
+import { MediaActions } from './actions';
 
 @Directive({ 
   selector: '[media-listener]'
 })
-export class MediaListener implements  OnInit{ 
-  
+export class MediaListener implements OnInit, OnDestroy{ 
+  // investigate these breakpoints
+  // http://stackoverflow.com/questions/16704243/widths-to-use-in-media-queries
+  // https://css-tricks.com/snippets/css/media-queries-for-standard-devices/
   private mediaQueries =  {
-    MEDIA_SMALL: "(max-width: 350px)",
-    MEDIA_MEDIUM: "(max-width: 650px)",
-    MEDIA_LARGE: "(min-width: 1200px)"
+    SMALL: "(min-width: 20em)",
+    MEDIUM: "(min-width: 30em)",
+    LARGE: "(min-width: 50.063em)"
   }
+  
+  private smallListener;
+  private mediumListener;
+  private largeListener;
   
   constructor(public store: Store<AppState>){}
   
   ngOnInit(){
     this.initialMediaWidth();
-    //these listeners are only created once and are only destroyed when window is destroyed... need to unsub?
-    window.matchMedia(this.mediaQueries.MEDIA_SMALL).addListener( () => this.store.dispatch({type: MEDIA_SMALL}));
-    window.matchMedia(this.mediaQueries.MEDIA_MEDIUM).addListener( () => this.store.dispatch({type: MEDIA_MEDIUM}));
-    window.matchMedia(this.mediaQueries.MEDIA_LARGE).addListener( () => this.store.dispatch({type: MEDIA_LARGE}));
+    
+    this.smallListener = window.matchMedia(this.mediaQueries.SMALL).addListener(
+       () => this.store.dispatch({type: MediaActions.SET_SIZE, payload: {width: MEDIA_SMALL}})
+    );
+   
+    this.mediumListener = window.matchMedia(this.mediaQueries.MEDIUM).addListener(
+       () => this.store.dispatch({type: MediaActions.SET_SIZE, payload: {width: MEDIA_MEDIUM}})
+    );
+    this.largeListener = window.matchMedia(this.mediaQueries.LARGE).addListener(
+       () => this.store.dispatch({type: MediaActions.SET_SIZE, payload: {width: MEDIA_LARGE}})
+    );
   }
   
   initialMediaWidth(){
-    const matcher = ():boolean => {
-      for(const key in this.mediaQueries){
+    let matched = false;
+    
+    const matcher = (keys: string[]) => {
+      keys.map( key => {
         const query = window.matchMedia(this.mediaQueries[key]);
         if(query.matches){
-          this.store.dispatch({type: key});
-          return true;
+          this.store.dispatch({type: MediaActions.SET_SIZE, payload: {width: key}});
+          console.log(`key: ${key} matched: ${query.matches}`)
+          matched = true;
+          return;
         }
-      }
-      return false;
-    }
+      })
+    } 
     
-    if(!matcher()){
-      this.store.dispatch({type: MEDIA_SMALL})
+    matcher(['LARGE', 'MEDIUM', 'SMALL']);
+    if(!matched){
+      this.store.dispatch({type: MediaActions.SET_SIZE, payload: {width: MEDIA_SMALL}})
     }
+  }
+  
+  ngOnDestroy(){
+    window.matchMedia(this.mediaQueries.SMALL).removeListener(this.smallListener);
+    window.matchMedia(this.mediaQueries.MEDIUM).removeListener(this.mediumListener);
+    window.matchMedia(this.mediaQueries.LARGE).removeListener(this.largeListener);
   }
 }

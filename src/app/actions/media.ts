@@ -6,9 +6,7 @@ import { Media } from '../models';
 export class MediaActions{
   static SET_SIZE = '[Media] SET_SIZE';
   setSize(size: string){
-    return {
-      type: MediaActions.SET_SIZE,
-      payload: size
-    }
+    console.log(`in action: ${size}`);
+    return <Action>{ type: MediaActions.SET_SIZE, payload: size};
   }
 }

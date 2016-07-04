@@ -1,19 +1,27 @@
-import { MasterScreenerComponent } from '../master-screener';
-import { HomeComponent } from '../home';
-import { ROUTER_DIRECTIVES, Router } from '@angular/router';
-import { WidthState } from '../app.responsive.service';
+import { ROUTER_DIRECTIVES } from '@angular/router';
+import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core'
+import { Store } from '@ngrx/store';
+import { AppState } from '../reducers';
 import { Subscription } from 'rxjs/Subscription';
-import { Component, OnInit } from '@angular/core'
-
 
 @Component({
   selector: 'ycb-navbar',
   templateUrl:'app/navbar/navbar.component.html',
-  directives: [MasterScreenerComponent, HomeComponent, ROUTER_DIRECTIVES]
+  directives: [ROUTER_DIRECTIVES],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class NavbarComponent implements OnInit{
-  private width: number;
-  constructor(){}
+  private subscription: Subscription;
+  private mediaWidth;
+
+  constructor(public store: Store<AppState>){}
   
-  ngOnInit(){}
+  ngOnInit(){
+    this.subscription = this.store.
+                        select('media').
+                        subscribe( (mediaState: {width: string}) => {
+                          this.mediaWidth = mediaState.width;
+                          console.log(this.mediaWidth)
+                        });                        
+  }
 }
