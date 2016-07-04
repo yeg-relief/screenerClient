@@ -21,7 +21,6 @@ export class NavbarComponent implements OnInit{
                         select('media').
                         subscribe( (mediaState: {width: string}) => {
                           this.mediaWidth = mediaState.width;
-                          console.log(this.mediaWidth)
                         });                        
   }
 }

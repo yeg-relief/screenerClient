@@ -41,9 +41,17 @@ export class MediaListener implements OnInit, OnDestroy{
   initialMediaWidth(){
     let matched = false;
     
+    // multiple matches are found with the class level mediaQueries 
+    // these seem to give better results. 
+    const initialMediaQueries =  {
+      SMALL: "(max-width: 20em)",
+      MEDIUM: "(max-width: 30em)",
+      LARGE: "(min-width: 50.063em)"
+    }
+    
     const matcher = (keys: string[]) => {
       keys.map( key => {
-        const query = window.matchMedia(this.mediaQueries[key]);
+        const query = window.matchMedia(initialMediaQueries[key]);
         if(query.matches){
           this.store.dispatch({type: MediaActions.SET_SIZE, payload: {width: key}});
           console.log(`key: ${key} matched: ${query.matches}`)
