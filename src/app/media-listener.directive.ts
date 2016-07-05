@@ -25,8 +25,7 @@ export class MediaListener implements OnInit, OnDestroy{
   
   ngOnInit(){
     this.initialMediaWidth();
-    /*
-    this._ngZone.runOutsideAngular( () => {
+    this._ngZone.run( () => {
       this.smallListener = window.matchMedia(this.mediaQueries.SMALL).addListener(
         () => this.store.dispatch({type: MediaActions.SET_SIZE, payload: {width: MEDIA_SMALL}})
       );
@@ -36,7 +35,7 @@ export class MediaListener implements OnInit, OnDestroy{
       this.largeListener = window.matchMedia(this.mediaQueries.LARGE).addListener(
         () => this.store.dispatch({type: MediaActions.SET_SIZE, payload: {width: MEDIA_LARGE}})
       );
-    });*/
+    });
   }
   
   initialMediaWidth(){

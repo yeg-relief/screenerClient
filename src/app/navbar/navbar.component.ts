@@ -44,7 +44,10 @@ export class NavbarComponent implements OnInit, OnDestroy {
     public store: Store<AppState>
   ){
     this.mediaWidth = store.select('media')
-  }
+                      .map((thing:any) => {
+                        this.width = thing.width;
+                        return thing;
+                      })}
   
   ngOnInit(){
                       
