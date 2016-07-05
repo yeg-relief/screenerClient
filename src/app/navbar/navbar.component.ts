@@ -22,25 +22,36 @@ import {MdIcon, MdIconRegistry} from '@angular2-material/icon/icon';
   <div [ngSwitch] = "width.width">
   
     <md-toolbar *ngSwitchCase="'LARGE'" color="primary">
+      <span class="small-space"></span>
       <button md-button>HOME</button>
       <button md-button>ABOUT</button>
-      <span class="space" ></span>
+      <span class="small-space" ></span>
       <md-input class="space" placeholder="Search" align="middle">
         <span md-prefix>
           <md-icon svgIcon="search"></md-icon>
         </span>
       </md-input>
-      <span class="space"></span>
+      <span class="small-space"></span>
       <button md-icon-button>
         <md-icon svgIcon="login"></md-icon>
       </button>
+      <span class="small-space"></span>
     </md-toolbar>
     
     <md-toolbar *ngSwitchDefault color="primary">
-      <span>First Row</span>
+      <!-- first row -->
+      <span class="space"></span>
+      <button md-button>HOME</button>
+      <span class="space"></span>
+      <button md-button>ABOUT</button>
+      <span class="space"></span>
             
       <md-toolbar-row>
-        <span>Third Row</span>
+        <md-input class="space" placeholder="Search" align="middle">
+          <span md-prefix>
+            <md-icon svgIcon="search"></md-icon>
+          </span>
+        </md-input>
       </md-toolbar-row>
     </md-toolbar>
     
@@ -53,7 +64,10 @@ import {MdIcon, MdIconRegistry} from '@angular2-material/icon/icon';
       MdIcon
     ],
  viewProviders: [MdIconRegistry],
- styles: [`.space { flex: 2 1 auto;}`]
+ styles: [`
+  .space { flex: 2 1 auto;}
+  .small-space { flex: 1 1 auto;}
+ `]
 })
 export class DummyComponent{
   @Input() width
