@@ -33,6 +33,8 @@ export class MediaListener implements OnInit, OnDestroy{
                            this.otherFunc(this.store, this.el.nativeElement));
   }
   
+  // Two different techs for getting window size... which is better?
+  
   otherFunc(store: Store<AppState>, nativeELement){
     let x;
     

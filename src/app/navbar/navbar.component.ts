@@ -19,7 +19,7 @@ import {MdIcon, MdIconRegistry} from '@angular2-material/icon/icon';
 @Component({
   selector: 'ycb-dummy-navbar',
   template:`
-  <div [ngSwitch] = "width.width">
+  <div [ngSwitch] = "width.width" style="position: fixed;width: 100%;height: 100px;z-index: 1;top: 0;left: 0;">
   
     <md-toolbar *ngSwitchCase="'LARGE'" color="primary">
       <span class="small-space"></span>
