@@ -10,6 +10,7 @@ import { AppState } from '../reducers';
 import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/observable/interval';
 import 'rxjs/add/operator/do';
+import 'rxjs/add/operator/distinctUntilChanged';
 import { MD_TOOLBAR_DIRECTIVES } from '@angular2-material/toolbar';
 
 
@@ -17,42 +18,43 @@ import { MD_TOOLBAR_DIRECTIVES } from '@angular2-material/toolbar';
 @Component({
   selector: 'ycb-dummy',
   template:`
-  SOMETHING IS HERE????
-  <div *ngFor="let thing of width">
-    {{width.width}}
-  </div>`
-})
-export class DummyComponent implements OnInit{
-  @Input() width
+  <div [ngSwitch] = "width.width">
   
-  ngOnInit(){
-    console.log('ng init in dummy ' + this.width)
-  }
+    <md-toolbar *ngSwitchCase="'LARGE'" color="primary">
+      <span>First Row</span>
+    </md-toolbar>
+    
+    <md-toolbar *ngSwitchDefault color="primary">
+      <span>First Row</span>
+            
+      <md-toolbar-row>
+        <span>Third Row</span>
+      </md-toolbar-row>
+    </md-toolbar>
+    
+  </div>`,
+  directives: [MD_TOOLBAR_DIRECTIVES]
+})
+export class DummyComponent{
+  @Input() width
 }
 
 
 @Component({
   selector: 'ycb-navbar',
   templateUrl:'app/navbar/navbar.component.html',
-  directives: [ROUTER_DIRECTIVES, MD_TOOLBAR_DIRECTIVES]
+  directives: [ROUTER_DIRECTIVES, MD_TOOLBAR_DIRECTIVES, DummyComponent]
 })
 export class NavbarComponent implements OnInit, OnDestroy {
   public mediaWidth;
-  public width;
   
-  constructor(
-    public store: Store<AppState>
-  ){
-    this.mediaWidth = store.select('media')
-                      .map((thing:any) => {
-                        this.width = thing.width;
-                        return thing;
-                      })}
+  constructor(public store: Store<AppState>){}
   
   ngOnInit(){
-                      
+    this.mediaWidth = this.store.select('media')                   
   }
   
   ngOnDestroy(){
+    this.mediaWidth.unsubscribe();
   }
 }

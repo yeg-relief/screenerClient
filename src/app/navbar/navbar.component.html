@@ -1,12 +1,2 @@
-<md-toolbar color="primary">
-  <span>First Row</span>
-  <md-toolbar-row>
-    <ycb-dummy>Hellow</ycb-dummy>
-  </md-toolbar-row>
-</md-toolbar>
+<ycb-dummy [width]="mediaWidth | async"></ycb-dummy>
 
-<div *ngIf="mediaWidth | async">
-  cats
-  {{ (mediaWidth | async).width}}
-  {{width}}
-</div>

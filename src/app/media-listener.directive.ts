@@ -1,4 +1,4 @@
-import { Directive, OnInit, OnDestroy, NgZone, ElementRef, Renderer } from '@angular/core';
+import { Directive, OnInit, OnDestroy, ElementRef, Renderer } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { MEDIA_SMALL, MEDIA_MEDIUM, MEDIA_LARGE } from './models';
 import { AppState } from './reducers';
@@ -21,23 +21,10 @@ export class MediaListener implements OnInit, OnDestroy{
   private mediumListener;
   private largeListener;
   
-  constructor(public store: Store<AppState>, private _ngZone: NgZone, private el: ElementRef, private renderer: Renderer){}
+  constructor(public store: Store<AppState>, private el: ElementRef, private renderer: Renderer){}
   
   ngOnInit(){
     this.initialMediaWidth();
-    /*
-    const store = this.store;
-    this._ngZone.run( () => {
-      this.smallListener = window.matchMedia(this.mediaQueries.SMALL).addListener(
-        () => store.dispatch({type: MediaActions.SET_SIZE, payload: {width: MEDIA_SMALL}})
-      );
-      this.mediumListener = window.matchMedia(this.mediaQueries.MEDIUM).addListener(
-        () => store.dispatch({type: MediaActions.SET_SIZE, payload: {width: MEDIA_MEDIUM}})
-      );
-      this.largeListener = window.matchMedia(this.mediaQueries.LARGE).addListener(
-        () => store.dispatch({type: MediaActions.SET_SIZE, payload: {width: MEDIA_LARGE}})
-      );
-    });*/
     
     this.globalResize = this.renderer
                         .listenGlobal(
@@ -47,16 +34,31 @@ export class MediaListener implements OnInit, OnDestroy{
   }
   
   otherFunc(store: Store<AppState>, nativeELement){
-
+    let x;
+    
+    
     return () => {
       const msg = nativeELement
       const left = nativeELement.getBoundingClientRect().left;
       const right = nativeELement.getBoundingClientRect().right;
       const width = right - left;
-      if(width < 400){
-        store.dispatch({type: MediaActions.SET_SIZE, payload: {width: MEDIA_SMALL}})
-      } else {
-        store.dispatch({type: MediaActions.SET_SIZE, payload: {width: MEDIA_LARGE}})
+      if(width < 400 && width >=0){
+        if(x != MEDIA_SMALL){
+          store.dispatch({type: MediaActions.SET_SIZE, payload: {width: MEDIA_SMALL}})
+           x = MEDIA_SMALL;
+        }
+      } else if(width >= 400 && width <= 900){
+        if(x != MEDIA_MEDIUM){
+          store.dispatch({type: MediaActions.SET_SIZE, payload: {width: MEDIA_MEDIUM}})
+          x = MEDIA_MEDIUM;
+        }
+        
+      } else if(width > 900){
+        if(x != MEDIA_LARGE){
+          store.dispatch({type: MediaActions.SET_SIZE, payload: {width: MEDIA_LARGE}})
+          x = MEDIA_LARGE;
+        }
+        
       }
       
     }
@@ -70,9 +72,9 @@ export class MediaListener implements OnInit, OnDestroy{
     // multiple matches are found with the class level mediaQueries 
     // these seem to give better results. 
     const initialMediaQueries =  {
-      SMALL: "(max-width: 25em)",
-      MEDIUM: "(max-width: 33em)",
-      LARGE: "(min-width: 50.063em)"
+      SMALL: "(max-width: 400px)",
+      MEDIUM: "(max-width: 900px)",
+      LARGE: "(min-width: 900px)"
     }
     
     const matcher = (keys: string[]) => {
