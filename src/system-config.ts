@@ -30,7 +30,10 @@ const packages: any = {
 
 const materialPkgs:string[] = [
   'core',
-  'toolbar'
+  'toolbar',
+  'button',
+  'input', 
+  'icon'
 ];
 
 materialPkgs.forEach((pkg) => {

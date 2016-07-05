@@ -12,16 +12,28 @@ import 'rxjs/add/observable/interval';
 import 'rxjs/add/operator/do';
 import 'rxjs/add/operator/distinctUntilChanged';
 import { MD_TOOLBAR_DIRECTIVES } from '@angular2-material/toolbar';
-
-
+import { MD_BUTTON_DIRECTIVES } from '@angular2-material/button';
+import { MD_INPUT_DIRECTIVES } from '@angular2-material/input';
+import {MdIcon, MdIconRegistry} from '@angular2-material/icon/icon';
 
 @Component({
-  selector: 'ycb-dummy',
+  selector: 'ycb-dummy-navbar',
   template:`
   <div [ngSwitch] = "width.width">
   
     <md-toolbar *ngSwitchCase="'LARGE'" color="primary">
-      <span>First Row</span>
+      <button md-button>HOME</button>
+      <button md-button>ABOUT</button>
+      <span class="space" ></span>
+      <md-input class="space" placeholder="Search" align="middle">
+        <span md-prefix>
+          <md-icon svgIcon="search"></md-icon>
+        </span>
+      </md-input>
+      <span class="space"></span>
+      <button md-icon-button>
+        <md-icon svgIcon="login"></md-icon>
+      </button>
     </md-toolbar>
     
     <md-toolbar *ngSwitchDefault color="primary">
@@ -33,16 +45,30 @@ import { MD_TOOLBAR_DIRECTIVES } from '@angular2-material/toolbar';
     </md-toolbar>
     
   </div>`,
-  directives: [MD_TOOLBAR_DIRECTIVES]
+  directives: 
+    [
+      MD_TOOLBAR_DIRECTIVES, 
+      MD_BUTTON_DIRECTIVES, 
+      MD_INPUT_DIRECTIVES, 
+      MdIcon
+    ],
+ viewProviders: [MdIconRegistry],
+ styles: [`.space { flex: 2 1 auto;}`]
 })
 export class DummyComponent{
   @Input() width
+  
+  constructor( mdIconRegistry: MdIconRegistry){
+    mdIconRegistry
+    .addSvgIcon('search', '../../icons/ic_search_black_24px.svg')
+    .addSvgIcon('login', '../../icons/ic_person_black_48px.svg')
+  }
 }
 
 
 @Component({
   selector: 'ycb-navbar',
-  templateUrl:'app/navbar/navbar.component.html',
+  template:`<ycb-dummy-navbar [width]="mediaWidth | async"></ycb-dummy-navbar>`,
   directives: [ROUTER_DIRECTIVES, MD_TOOLBAR_DIRECTIVES, DummyComponent]
 })
 export class NavbarComponent implements OnInit, OnDestroy {

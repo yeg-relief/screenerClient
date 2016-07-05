@@ -38,7 +38,6 @@ export class MediaListener implements OnInit, OnDestroy{
     
     
     return () => {
-      const msg = nativeELement
       const left = nativeELement.getBoundingClientRect().left;
       const right = nativeELement.getBoundingClientRect().right;
       const width = right - left;
@@ -52,17 +51,13 @@ export class MediaListener implements OnInit, OnDestroy{
           store.dispatch({type: MediaActions.SET_SIZE, payload: {width: MEDIA_MEDIUM}})
           x = MEDIA_MEDIUM;
         }
-        
       } else if(width > 900){
         if(x != MEDIA_LARGE){
           store.dispatch({type: MediaActions.SET_SIZE, payload: {width: MEDIA_LARGE}})
           x = MEDIA_LARGE;
         }
-        
       }
-      
     }
-    
   }
   
   
