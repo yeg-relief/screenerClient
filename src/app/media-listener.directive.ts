@@ -1,4 +1,4 @@
-import { Directive, OnInit, OnDestroy, NgZone } from '@angular/core';
+import { Directive, OnInit, OnDestroy, NgZone, ElementRef, Renderer } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { MEDIA_SMALL, MEDIA_MEDIUM, MEDIA_LARGE } from './models';
 import { AppState } from './reducers';
@@ -16,27 +16,53 @@ export class MediaListener implements OnInit, OnDestroy{
     MEDIUM: "(min-width: 33em)",
     LARGE: "(min-width: 40.063em)"
   }
-  
+  globalResize: Function;
   private smallListener;
   private mediumListener;
   private largeListener;
   
-  constructor(public store: Store<AppState>, private _ngZone: NgZone){}
+  constructor(public store: Store<AppState>, private _ngZone: NgZone, private el: ElementRef, private renderer: Renderer){}
   
   ngOnInit(){
     this.initialMediaWidth();
+    /*
+    const store = this.store;
     this._ngZone.run( () => {
       this.smallListener = window.matchMedia(this.mediaQueries.SMALL).addListener(
-        () => this.store.dispatch({type: MediaActions.SET_SIZE, payload: {width: MEDIA_SMALL}})
+        () => store.dispatch({type: MediaActions.SET_SIZE, payload: {width: MEDIA_SMALL}})
       );
       this.mediumListener = window.matchMedia(this.mediaQueries.MEDIUM).addListener(
-        () => this.store.dispatch({type: MediaActions.SET_SIZE, payload: {width: MEDIA_MEDIUM}})
+        () => store.dispatch({type: MediaActions.SET_SIZE, payload: {width: MEDIA_MEDIUM}})
       );
       this.largeListener = window.matchMedia(this.mediaQueries.LARGE).addListener(
-        () => this.store.dispatch({type: MediaActions.SET_SIZE, payload: {width: MEDIA_LARGE}})
+        () => store.dispatch({type: MediaActions.SET_SIZE, payload: {width: MEDIA_LARGE}})
       );
-    });
+    });*/
+    
+    this.globalResize = this.renderer
+                        .listenGlobal(
+                           'window', 
+                           'resize', 
+                           this.otherFunc(this.store, this.el.nativeElement));
   }
+  
+  otherFunc(store: Store<AppState>, nativeELement){
+
+    return () => {
+      const msg = nativeELement
+      const left = nativeELement.getBoundingClientRect().left;
+      const right = nativeELement.getBoundingClientRect().right;
+      const width = right - left;
+      if(width < 400){
+        store.dispatch({type: MediaActions.SET_SIZE, payload: {width: MEDIA_SMALL}})
+      } else {
+        store.dispatch({type: MediaActions.SET_SIZE, payload: {width: MEDIA_LARGE}})
+      }
+      
+    }
+    
+  }
+  
   
   initialMediaWidth(){
     let matched = false;
