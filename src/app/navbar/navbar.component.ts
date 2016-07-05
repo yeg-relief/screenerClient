@@ -37,7 +37,6 @@ export class DummyComponent implements OnInit{
   directives: [ROUTER_DIRECTIVES, MD_TOOLBAR_DIRECTIVES]
 })
 export class NavbarComponent implements OnInit, OnDestroy {
-  clock = Observable.interval(1000);
   public mediaWidth;
   public width;
   
@@ -45,10 +44,6 @@ export class NavbarComponent implements OnInit, OnDestroy {
     public store: Store<AppState>
   ){
     this.mediaWidth = store.select('media')
-                      .subscribe( (width:{width: string}) => {
-                        console.log(width);
-                        this.width = width.width;
-                      })
   }
   
   ngOnInit(){

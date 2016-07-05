@@ -1,4 +1,4 @@
-import { Directive, OnInit, OnDestroy } from '@angular/core';
+import { Directive, OnInit, OnDestroy, NgZone } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { MEDIA_SMALL, MEDIA_MEDIUM, MEDIA_LARGE } from './models';
 import { AppState } from './reducers';
@@ -14,28 +14,29 @@ export class MediaListener implements OnInit, OnDestroy{
   private mediaQueries =  {
     SMALL: "(min-width: 25em)",
     MEDIUM: "(min-width: 33em)",
-    LARGE: "(min-width: 50.063em)"
+    LARGE: "(min-width: 40.063em)"
   }
   
   private smallListener;
   private mediumListener;
   private largeListener;
   
-  constructor(public store: Store<AppState>){}
+  constructor(public store: Store<AppState>, private _ngZone: NgZone){}
   
   ngOnInit(){
     this.initialMediaWidth();
-    
-    this.smallListener = window.matchMedia(this.mediaQueries.SMALL).addListener(
-       () => this.store.dispatch({type: MediaActions.SET_SIZE, payload: {width: MEDIA_SMALL}})
-    );
-   
-    this.mediumListener = window.matchMedia(this.mediaQueries.MEDIUM).addListener(
-       () => this.store.dispatch({type: MediaActions.SET_SIZE, payload: {width: MEDIA_MEDIUM}})
-    );
-    this.largeListener = window.matchMedia(this.mediaQueries.LARGE).addListener(
-       () => this.store.dispatch({type: MediaActions.SET_SIZE, payload: {width: MEDIA_LARGE}})
-    );
+    /*
+    this._ngZone.runOutsideAngular( () => {
+      this.smallListener = window.matchMedia(this.mediaQueries.SMALL).addListener(
+        () => this.store.dispatch({type: MediaActions.SET_SIZE, payload: {width: MEDIA_SMALL}})
+      );
+      this.mediumListener = window.matchMedia(this.mediaQueries.MEDIUM).addListener(
+        () => this.store.dispatch({type: MediaActions.SET_SIZE, payload: {width: MEDIA_MEDIUM}})
+      );
+      this.largeListener = window.matchMedia(this.mediaQueries.LARGE).addListener(
+        () => this.store.dispatch({type: MediaActions.SET_SIZE, payload: {width: MEDIA_LARGE}})
+      );
+    });*/
   }
   
   initialMediaWidth(){
@@ -68,8 +69,10 @@ export class MediaListener implements OnInit, OnDestroy{
   }
   
   ngOnDestroy(){
+    /*
     window.matchMedia(this.mediaQueries.SMALL).removeListener(this.smallListener);
     window.matchMedia(this.mediaQueries.MEDIUM).removeListener(this.mediumListener);
     window.matchMedia(this.mediaQueries.LARGE).removeListener(this.largeListener);
+    */
   }
 }

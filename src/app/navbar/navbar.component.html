@@ -5,7 +5,7 @@
   </md-toolbar-row>
 </md-toolbar>
 
-<ycb-dummy [width]="mediaWidth">Hellow {{width}}</ycb-dummy><br>
-{{clock | async}}<br>
-
-stuff {{mediaWidth.width | async}}
+<div *ngIf="mediaWidth | async">
+  cats
+  {{(mediaWidth | async).width}}
+</div>
