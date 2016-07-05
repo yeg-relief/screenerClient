@@ -12,8 +12,8 @@ export class MediaListener implements OnInit, OnDestroy{
   // http://stackoverflow.com/questions/16704243/widths-to-use-in-media-queries
   // https://css-tricks.com/snippets/css/media-queries-for-standard-devices/
   private mediaQueries =  {
-    SMALL: "(min-width: 20em)",
-    MEDIUM: "(min-width: 30em)",
+    SMALL: "(min-width: 25em)",
+    MEDIUM: "(min-width: 33em)",
     LARGE: "(min-width: 50.063em)"
   }
   
@@ -44,8 +44,8 @@ export class MediaListener implements OnInit, OnDestroy{
     // multiple matches are found with the class level mediaQueries 
     // these seem to give better results. 
     const initialMediaQueries =  {
-      SMALL: "(max-width: 20em)",
-      MEDIUM: "(max-width: 30em)",
+      SMALL: "(max-width: 25em)",
+      MEDIUM: "(max-width: 33em)",
       LARGE: "(min-width: 50.063em)"
     }
     
@@ -54,13 +54,13 @@ export class MediaListener implements OnInit, OnDestroy{
         const query = window.matchMedia(initialMediaQueries[key]);
         if(query.matches){
           this.store.dispatch({type: MediaActions.SET_SIZE, payload: {width: key}});
-          console.log(`key: ${key} matched: ${query.matches}`)
           matched = true;
           return;
         }
       })
     } 
     
+    // trying to control order of query execution... this seems to give better results 
     matcher(['LARGE', 'MEDIUM', 'SMALL']);
     if(!matched){
       this.store.dispatch({type: MediaActions.SET_SIZE, payload: {width: MEDIA_SMALL}})

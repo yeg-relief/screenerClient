@@ -8,7 +8,8 @@
 /** Map relative paths to URLs. */
 const map: any = {
   '@ngrx': 'vendor/@ngrx',
-  'ngrx-store-logger': 'vendor/ngrx-store-logger/dist'
+  'ngrx-store-logger': 'vendor/ngrx-store-logger/dist',
+  '@angular2-material': 'vendor/@angular2-material'
 };
 
 /** User packages configuration. */
@@ -26,6 +27,16 @@ const packages: any = {
     format: 'cjs'
   }
 };
+
+const materialPkgs:string[] = [
+  'core',
+  'toolbar'
+];
+
+materialPkgs.forEach((pkg) => {
+  packages[`@angular2-material/${pkg}`] = {main: `${pkg}.js`};
+});
+
 
 ////////////////////////////////////////////////////////////////////////////////////////////////
 /***********************************************************************************************
