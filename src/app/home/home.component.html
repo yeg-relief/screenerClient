@@ -16,12 +16,16 @@
                   <md-grid-list cols="2" [style.background]="'lightblue'">
                     <md-grid-tile>
                       <div>
-                        <button md-raised-button [style.width]="'100%'">Browse</button>
+                        <a [routerLink]="['/404']">
+                          <button md-raised-button [style.width]="'100%'">Browse</button>
+                        </a>
                       </div>
                     </md-grid-tile>
                     <md-grid-tile>
                       <div>
-                        <button md-raised-button [style.width]="'100%'">Discover</button>
+                        <a [routerLink]="['/master-screener']">
+                          <button md-raised-button [style.width]="'100%'">Discover</button>
+                        </a>
                       </div>
                     </md-grid-tile>
                   </md-grid-list>
@@ -47,22 +51,26 @@
                   <md-grid-tile>
                     <md-card [style.background-color]="'lightyellow'">
                       <md-card-header>
-                        <md-card-title>Find Details</md-card-title>
-                        <md-card-subtitle>Learn About Programs</md-card-subtitle>
+                        <md-card-title><b>Find Details</b></md-card-title>
+                        <md-card-subtitle><b>Learn About Programs</b></md-card-subtitle>
                       </md-card-header>
                       <md-card-content>
-                        <button md-raised-button>Launch</button>
+                        <a [routerLink]="['/404']">
+                          <button md-raised-button [style.width]="'100%'">Launch</button>
+                        </a>
                       </md-card-content>
                     </md-card> 
                   </md-grid-tile>
                   <md-grid-tile>
                     <md-card [style.background-color]="'lightyellow'">
                       <md-card-header>
-                        <md-card-title>Master Screener</md-card-title>
-                        <md-card-subtitle>Discover Potential Programs</md-card-subtitle>
+                        <md-card-title><b>Master Screener</b></md-card-title>
+                        <md-card-subtitle><b>Discover Potential Programs</b></md-card-subtitle>
                       </md-card-header>
                       <md-card-content>
-                        <button md-raised-button>Launch</button>
+                        <a [routerLink]="['/master-screener']">
+                          <button md-raised-button [style.width]="'100%'">Discover</button>
+                        </a>
                       </md-card-content>
                   </md-card>  
                   </md-grid-tile>

@@ -21,8 +21,12 @@ import {MdIcon, MdIconRegistry} from '@angular2-material/icon/icon';
   
     <md-toolbar *ngSwitchCase="'LARGE'" [style.background]="'lightblue'" [style.color]="'yellow'">
       <span class="small-space"></span>
-      <button md-button>HOME</button>
-      <button md-button>ABOUT</button>
+      <a [routerLink]="['']">
+        <button md-button>HOME</button>
+      </a>
+      <a [routerLink]="['/404']">
+        <button md-button>ABOUT</button>
+      </a>
       <span class="tiny-space" ></span>
       <md-input class="space" placeholder="Search" align="middle">
         <span md-prefix>
@@ -30,18 +34,24 @@ import {MdIcon, MdIconRegistry} from '@angular2-material/icon/icon';
         </span>
       </md-input>
       <span class="tiny-space"></span>
-      <button md-icon-button>
-        <md-icon svgIcon="login"></md-icon>
-      </button>
+      <a [routerLink]="['/404']">
+        <button md-icon-button>
+          <md-icon svgIcon="login"></md-icon>
+        </button>
+      </a>
       <span class="small-space"></span>
     </md-toolbar>
     
     <md-toolbar *ngSwitchDefault [style.background]="'lightblue'">
       <!-- first row -->
       <span class="space"></span>
-      <button md-button>HOME</button>
+      <a [routerLink]="['']">
+        <button md-button>HOME</button>
+      </a>
       <span class="space"></span>
-      <button md-button>ABOUT</button>
+       <a [routerLink]="['/404']">
+        <button md-button>ABOUT</button>
+       </a>
       <span class="space"></span>
             
       <md-toolbar-row>
@@ -59,7 +69,7 @@ import {MdIcon, MdIconRegistry} from '@angular2-material/icon/icon';
       MD_TOOLBAR_DIRECTIVES, 
       MD_BUTTON_DIRECTIVES, 
       MD_INPUT_DIRECTIVES, 
-      MdIcon
+      MdIcon, ROUTER_DIRECTIVES
     ],
  viewProviders: [MdIconRegistry],
  styles: [`
@@ -86,7 +96,7 @@ export class DummyComponent{
 @Component({
   selector: 'ycb-navbar',
   template:`<ycb-dummy-navbar [width]="mediaWidth | async"></ycb-dummy-navbar>`,
-  directives: [ROUTER_DIRECTIVES, MD_TOOLBAR_DIRECTIVES, DummyComponent],
+  directives: [ DummyComponent],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class NavbarComponent implements OnInit, OnDestroy {
