@@ -2,43 +2,41 @@ import { ROUTER_DIRECTIVES } from '@angular/router';
 import { 
   Component, OnInit, 
   OnDestroy, ChangeDetectionStrategy, 
-  Input, Output, 
-  EventEmitter 
+  Input 
 } from '@angular/core'
 import { Store } from '@ngrx/store';
 import { AppState } from '../reducers';
-import { Observable } from 'rxjs/Observable';
-import 'rxjs/add/observable/interval';
-import 'rxjs/add/operator/do';
-import 'rxjs/add/operator/distinctUntilChanged';
 import { MD_TOOLBAR_DIRECTIVES } from '@angular2-material/toolbar';
 import { MD_BUTTON_DIRECTIVES } from '@angular2-material/button';
 import { MD_INPUT_DIRECTIVES } from '@angular2-material/input';
 import {MdIcon, MdIconRegistry} from '@angular2-material/icon/icon';
 
+
+//TODO: merge DummyComponent into NavbarComponent
+
 @Component({
   selector: 'ycb-dummy-navbar',
   template:`
-  <div [ngSwitch] = "width.width" style="position: fixed;width: 100%;height: 100px;z-index: 1;top: 0;left: 0;">
+  <div [ngSwitch] = "width.width" style="position: fixed;width: 100%;top: 0;left: 0; z-index: 100;">
   
-    <md-toolbar *ngSwitchCase="'LARGE'" color="primary">
+    <md-toolbar *ngSwitchCase="'LARGE'" [style.background]="'lightblue'" [style.color]="'yellow'">
       <span class="small-space"></span>
       <button md-button>HOME</button>
       <button md-button>ABOUT</button>
-      <span class="small-space" ></span>
+      <span class="tiny-space" ></span>
       <md-input class="space" placeholder="Search" align="middle">
         <span md-prefix>
           <md-icon svgIcon="search"></md-icon>
         </span>
       </md-input>
-      <span class="small-space"></span>
+      <span class="tiny-space"></span>
       <button md-icon-button>
         <md-icon svgIcon="login"></md-icon>
       </button>
       <span class="small-space"></span>
     </md-toolbar>
     
-    <md-toolbar *ngSwitchDefault color="primary">
+    <md-toolbar *ngSwitchDefault [style.background]="'lightblue'">
       <!-- first row -->
       <span class="space"></span>
       <button md-button>HOME</button>
@@ -67,7 +65,12 @@ import {MdIcon, MdIconRegistry} from '@angular2-material/icon/icon';
  styles: [`
   .space { flex: 2 1 auto;}
   .small-space { flex: 1 1 auto;}
- `]
+  .tiny-space { flex: 0.5 1 auto;}
+  button{
+    color: black;
+  }
+ `],
+ changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class DummyComponent{
   @Input() width
@@ -83,7 +86,8 @@ export class DummyComponent{
 @Component({
   selector: 'ycb-navbar',
   template:`<ycb-dummy-navbar [width]="mediaWidth | async"></ycb-dummy-navbar>`,
-  directives: [ROUTER_DIRECTIVES, MD_TOOLBAR_DIRECTIVES, DummyComponent]
+  directives: [ROUTER_DIRECTIVES, MD_TOOLBAR_DIRECTIVES, DummyComponent],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class NavbarComponent implements OnInit, OnDestroy {
   public mediaWidth;
