@@ -1,4 +1,4 @@
-import {  QuestionGroup, ExpandableGroup, GeneralQuestionGroup } from '../question/index';
+import {  QuestionGroup, ExpandableGroup, GeneralQuestionGroup } from '../../MasterScreener/question/index';
 
 
 export function validateQuestionGroup(questionGroup: GeneralQuestionGroup){

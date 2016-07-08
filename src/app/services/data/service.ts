@@ -1,14 +1,19 @@
 import { Injectable } from '@angular/core';
 import { Http, Response } from '@angular/http';
 import { fakeData } from './fake-data';
-import { controlReducer, assign } from '../question/index';
+import { controlReducer, assign } from '../../MasterScreener/question/index';
 import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/observable/from';
 import 'rxjs/add/operator/reduce';
+import 'rxjs/add/operator/toArray';
 import { 
   MasterScreener, GeneralQuestionGroup, 
   ControlMap
-} from '../question/index';
+} from '../../MasterScreener/question/index';
+
+// new imports
+import { Question } from '../../models';
+
 
 @Injectable()
 export class DataService {
@@ -34,10 +39,8 @@ export class DataService {
            }, masterScreener)
   }
   
-  
-  private extractData(res: Response) {
-    let body = res.json();
-    return body.data || { };
+  getQuestions(): Observable<Question[]>{
+    return this._pullData().toArray();
   }
 }
 

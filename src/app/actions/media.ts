@@ -5,8 +5,10 @@ import { Media } from '../models';
 @Injectable()
 export class MediaActions{
   static SET_SIZE = '[Media] SET_SIZE';
-  setSize(size: string){
-    console.log(`in action: ${size}`);
-    return <Action>{ type: MediaActions.SET_SIZE, payload: size};
+  setSize(size: string): Action{
+    return { 
+      type: MediaActions.SET_SIZE, 
+      payload: size
+    };
   }
 }

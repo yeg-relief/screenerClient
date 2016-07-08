@@ -1,37 +1,31 @@
 import { Component, OnInit } from '@angular/core';
-import { DataService, MasterScreener, ExpandableGroup, QuestionGroup  } from '../MasterScreener/index';
-import { FormGroup, REACTIVE_FORM_DIRECTIVES, FormControl } from '@angular/forms';
-import { toForm, expandableControlMap } from '../MasterScreener/index';
-import { GeneralQuestionGroupComponent } from '../question-group/index';
+import { Store } from '@ngrx/store';
+import { AppState } from '../reducers';
+import { MasterScreenerEffects } from '../effects/master-screener';
+import { Observable } from 'rxjs/Observable';
+import 'rxjs/add/operator/map';
+import 'rxjs/add/operator/let';
 
 @Component({
   selector: 'master-screener',
   templateUrl:'app/master-screener/master-screener.component.html',
   styles: [''], 
-  directives: [REACTIVE_FORM_DIRECTIVES, GeneralQuestionGroupComponent],
-  providers:  [DataService]
+  directives: [],
+  providers: [MasterScreenerEffects]
 })
 export class MasterScreenerComponent implements OnInit {
-  private data: MasterScreener;
-  private form: FormGroup;
-  private payload: string = '';
-  private collapsedControlMap: { [key:string]:{key:string, control:FormControl}[]};
+  width$: Observable<any>
+  masterScreener$: Observable<any>
 
-
-  constructor(private dataService: DataService) {}
+  constructor(private store: Store<AppState>) {}
   ngOnInit() {
-    this.dataService.getMasterScreener()
-        .subscribe( 
-          (data) => {this.data = data},
-          (error) => {console.log(error)},
-          () => {
-            this.form = toForm(this.data);
-            this.collapsedControlMap = expandableControlMap(this.data);
-          }
-        )
+    this.width$ = this.store.select('media')      
+                      .map( (thing:any) => thing.width);
+                      
+    this.masterScreener$ = this.store.select('masterScreener');
+    
+    
   }
 
-  private onSubmit() {
-    this.payload = JSON.stringify(this.form.value);
-  }
+
 }

@@ -5,7 +5,7 @@ import {
   expect, it, xit,
   async, inject
 } from '@angular/core/testing';
-import {GeneralQuestionGroup, QuestionGroup} from '../question/index';
+import {GeneralQuestionGroup, QuestionGroup} from '../../MasterScreener/question/index';
 import {validateQuestionGroup} from './data.validation';
 
 const TEST_DATA_1: any = 

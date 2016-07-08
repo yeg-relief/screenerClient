@@ -93,10 +93,6 @@ export class MediaListener implements OnInit, OnDestroy{
   }
   
   ngOnDestroy(){
-    /*
-    window.matchMedia(this.mediaQueries.SMALL).removeListener(this.smallListener);
-    window.matchMedia(this.mediaQueries.MEDIUM).removeListener(this.mediumListener);
-    window.matchMedia(this.mediaQueries.LARGE).removeListener(this.largeListener);
-    */
+    this.globalResize();
   }
 }

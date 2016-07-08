@@ -5,7 +5,12 @@ import { HTTP_PROVIDERS } from '@angular/http';
 import { disableDeprecatedForms, provideForms } from '@angular/forms';
 import { APP_ROUTER_PROVIDERS } from './app/app.routes';
 import { provideStore } from '@ngrx/store';
-import  reducer  from './app/reducers'
+import { DataService } from './app/services/index';
+import { runEffects } from '@ngrx/effects';
+import { MasterScreenerEffects } from './app/effects/master-screener';
+
+import actions from './app/actions/index'
+import reducer  from './app/reducers'
 
 if (environment.production) {
   enableProdMode();
@@ -16,6 +21,9 @@ bootstrap(AppComponent, [
   disableDeprecatedForms(),
   provideForms(),
   APP_ROUTER_PROVIDERS,
-  provideStore(reducer)
+  provideStore(reducer),
+  actions,
+  runEffects(MasterScreenerEffects),
+  DataService
 ])
 .catch((err: any) => console.error(err));
