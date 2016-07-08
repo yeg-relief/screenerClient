@@ -3,6 +3,8 @@ import { Injectable } from '@angular/core';
 import { Action } from '@ngrx/store';
 import { MasterScreener, Question } from '../models';
 
+
+
 @Injectable()
 export class MasterScreenerActions{
   static LOAD_QUESTIONS = '[MASTER_SCREENER] LOAD_QUESTIONS';
@@ -20,3 +22,4 @@ export class MasterScreenerActions{
     };
   };
 }
+

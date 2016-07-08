@@ -18,11 +18,21 @@ export default compose(storeLogger(), combineReducers)({
 });
 
 export function getMediaState() {
-  return (state$: Observable<AppState>) => state$
+  return (state$) => state$
     .select(s => s.media);
 }
 
 export function getMasterScreenerState() {
-  return (state$: Observable<AppState>) => state$ 
+  return (state$) => state$ 
     .select(s => s.masterScreener);
+}
+
+export function getQuestions(){
+  return (state$) => state$
+    .select(s => s.data.questions);
+}
+
+export function getCurrentQuestion(){
+  return (state$) => state$
+    .select(s => s.masterScreener.currentQuestion);
 }

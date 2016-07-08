@@ -3,9 +3,12 @@ import { MasterScreener, Question, ConditionalQuestion } from '../models';
 import { MasterScreenerActions } from '../actions';
 import { FormGroup, FormControl } from '@angular/forms';
 
+import { Observable } from 'rxjs/Observable';
+import '@ngrx/core/add/operator/select';
+
 export interface MasterScreenerState{
   data: MasterScreener;
-  currentQuestion: number; //Question.id
+  currentQuestion: Question; 
   loaded: boolean;
 }
 
@@ -39,7 +42,7 @@ export function masterScreenerReducer(state = initialState, action: Action): Mas
           form: form,
           controls: controls
         },
-        currentQuestion: 0,
+        currentQuestion: questions[0],
         loaded: true
       }
     }
@@ -48,4 +51,5 @@ export function masterScreenerReducer(state = initialState, action: Action): Mas
     }
   }
 }
+
 
