@@ -19,7 +19,9 @@ export interface Question{
   control: FormControl;
 }
 
-export interface ConditionalQuestion extends Question{
-  conditionalQuestion: Question;
-  expandableGroup: Question[];
+
+
+export interface NestedQuestion extends Question{
+  head: Question
+  tail: Question[];
 }

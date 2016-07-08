@@ -1,14 +1,12 @@
 export function fakeData():any{
   return [
     {
-    
-      conditional: {
-        key: 'expand',
-        label: 'expand group 0?',
-        controlType: 'checkbox',
-        value: false,
-        validators: ['REQUIRED']
-      },
+      key: 'expand',
+      label: 'expand group 0?',
+      controlType: 'checkbox',
+      value: false,
+      validators: ['REQUIRED'],
+      
       expandable: 
       [
         {
@@ -37,8 +35,7 @@ export function fakeData():any{
       
     },
     {
-      group: [
-        {
+
           key: 'dropdownQuestion',
           label: 'select an option',
           controlType: 'dropdown',
@@ -49,8 +46,8 @@ export function fakeData():any{
             {key: 'optionTwo', value: 'option 2'},
             {key: 'optionThree', value: 'option 3'}
           ]
-        }
-      ]
-    } 
+    }
+      
+     
   ] 
 }
