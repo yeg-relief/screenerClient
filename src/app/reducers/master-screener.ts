@@ -1,5 +1,5 @@
 import { ActionReducer, Action } from '@ngrx/store';
-import { MasterScreener, Question, ConditionalQuestion } from '../models';
+import { MasterScreener, Question, NestedQuestion } from '../models';
 import { MasterScreenerActions } from '../actions';
 import { FormGroup, FormControl } from '@angular/forms';
 
@@ -30,8 +30,8 @@ export function masterScreenerReducer(state = initialState, action: Action): Mas
       
       action.payload.map( question => {
         controls[question.id] = new FormControl(question.value);
-        if(<ConditionalQuestion>question.expandableGroup !== undefined){
-          <ConditionalQuestion>question.expandableGroup.map( collapsibleQuestion => {
+        if(<NestedQuestion>question.expandableGroup !== undefined){
+          <NestedQuestion>question.expandableGroup.map( collapsibleQuestion => {
             controls[collapsibleQuestion.id] = new FormControl(collapsibleQuestion.value);
           })
         }

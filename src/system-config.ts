@@ -39,7 +39,8 @@ const materialPkgs:string[] = [
   'input', 
   'icon',
   'grid-list',
-  'card'
+  'card',
+  'radio'
 ];
 
 materialPkgs.forEach((pkg) => {
