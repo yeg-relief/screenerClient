@@ -38,14 +38,15 @@ export function fakeData():any{
 
           key: 'dropdownQuestion',
           label: 'select an option',
-          controlType: 'dropdown',
+          controlType: 'radio',
           validators: [''],
           value: 'optionOne',
           options: [
             {key: 'optionOne', value: 'option 1'},
             {key: 'optionTwo', value: 'option 2'},
             {key: 'optionThree', value: 'option 3'}
-          ]
+          ],
+          expandable: []
     }
       
      

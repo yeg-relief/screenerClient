@@ -9,12 +9,14 @@ import '@ngrx/core/add/operator/select';
 export interface MasterScreenerState{
   data: MasterScreener;
   currentQuestion: Question; 
+  currentIndex: number;
   loaded: boolean;
 }
 
 const initialState: MasterScreenerState = {
   data: undefined,
   currentQuestion: undefined,
+  currentIndex: undefined,
   loaded: false
 }
 
@@ -23,29 +25,82 @@ export function masterScreenerReducer(state = initialState, action: Action): Mas
     case MasterScreenerActions.LOAD_QUESTIONS: {
       return state;
     }
+    
     case MasterScreenerActions.LOAD_QUESTIONS_SUCCESS: {
       const questions: Question[] = action.payload;
       const controls: {[key:string]:FormControl} = {};
-      const form: FormGroup = new FormGroup({});
       
       action.payload.map( question => {
-        controls[question.id] = new FormControl(question.value);
-        if(<NestedQuestion>question.expandableGroup !== undefined){
-          <NestedQuestion>question.expandableGroup.map( collapsibleQuestion => {
-            controls[collapsibleQuestion.id] = new FormControl(collapsibleQuestion.value);
+        controls[question.key] = new FormControl(question.value);
+        if(question.expandable.length !== 0){
+          <NestedQuestion>question.expandable.map( collapsibleQuestion => {
+            controls[collapsibleQuestion.key] = new FormControl(collapsibleQuestion.value);
           })
         }
       })
       return {
         data: {
           questions: questions,
-          form: form,
-          controls: controls
+          form: new FormGroup(controls),
+          payload: ''
         },
         currentQuestion: questions[0],
+        currentIndex: 0,
         loaded: true
       }
     }
+    
+    case MasterScreenerActions.NEXT_QUESTION: {
+      if(state.currentIndex + 1 < state.data.questions.length){
+        return {
+          data: state.data,
+          currentQuestion: state.data.questions[state.currentIndex + 1],
+          currentIndex: state.currentIndex + 1, 
+          loaded: true
+        }
+      } 
+      return state;
+    }
+    
+    case MasterScreenerActions.PREVIOUS_QUESTION: {
+      if(state.currentIndex - 1 >= 0){
+        return {
+          data: state.data,
+          currentQuestion: state.data.questions[state.currentIndex - 1],
+          currentIndex: state.currentIndex - 1, 
+          loaded: true
+        }
+      }
+      return state;
+    }
+    
+    case MasterScreenerActions.SUBMIT: {
+      const questions: Question[] = state.data.questions;
+      const controls: {[key:string]:FormControl} = {};
+      
+      questions.map( (question:any) => {
+        controls[question.key] = new FormControl(question.value);
+        if(question.expandable.length !== 0){
+          <NestedQuestion>question.expandable.map( collapsibleQuestion => {
+            controls[collapsibleQuestion.key] = new FormControl(collapsibleQuestion.value);
+          })
+        }
+      })
+      const form = new FormGroup(controls);
+      
+      
+      return {
+        data: {
+          questions: state.data.questions,
+          form: form,
+          payload: JSON.stringify(form.value)
+        }, 
+        currentQuestion: state.currentQuestion,
+        currentIndex: state.currentIndex,
+        loaded: state.loaded
+      }
+    }
+    
     default: {
       return state;
     }
