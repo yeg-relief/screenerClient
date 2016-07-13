@@ -5,7 +5,6 @@ export function fakeData():any{
       label: 'expand group 0?',
       controlType: 'checkbox',
       value: false,
-      validators: ['REQUIRED'],
       
       expandable: 
       [
@@ -14,7 +13,6 @@ export function fakeData():any{
           label: 'First name',
           controlType: 'textbox',
           value: 'Bombasto',
-          validators: ['REQUIRED']
         },
         {
           key: 'emailAddress',
@@ -22,31 +20,27 @@ export function fakeData():any{
           type: 'email',
           controlType: 'textbox',
           value: '',
-          validators: []
         },
         {
           key: 'numberChildren',
           label: "How many children under 18?",
           controlType: 'textbox',
-          validators: ['REQUIRED'],
           value: ''
         }
       ]
       
     },
     {
-
-          key: 'dropdownQuestion',
-          label: 'select an option',
-          controlType: 'radio',
-          validators: [''],
-          value: 'optionOne',
-          options: [
-            {key: 'optionOne', value: 'option 1'},
-            {key: 'optionTwo', value: 'option 2'},
-            {key: 'optionThree', value: 'option 3'}
-          ],
-          expandable: []
+      key: 'dropdownQuestion',
+      label: 'select an option',
+      controlType: 'radio',
+      value: 'optionOne',
+      options: [
+       'option 1',
+       'option 2',
+       'option 3'
+      ],
+      expandable: []
     }
       
      

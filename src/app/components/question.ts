@@ -8,6 +8,10 @@ import { MD_CARD_DIRECTIVES } from '@angular2-material/card';
 import { MD_INPUT_DIRECTIVES } from '@angular2-material/input';
 import { MD_CHECKBOX_DIRECTIVES } from '@angular2-material/checkbox'; 
 
+import {
+  MdUniqueSelectionDispatcher
+} from '@angular2-material/core/coordination/unique-selection-dispatcher';
+
 @Component({
   selector: 'ycb-question',
   template: `
@@ -18,13 +22,21 @@ import { MD_CHECKBOX_DIRECTIVES } from '@angular2-material/checkbox';
         </div>
       </div>
       <div *ngSwitchCase="'radio'">
-        <p> Not implemented as of yet </p>
+         <md-radio-group name="more_options" [(ngModel)]="question.value">
+          <div *ngFor="let option of question.options">
+            <md-radio-button  name="more_options" [value]="option">
+              {{option}}
+            </md-radio-button>
+            <br>
+          </div>
+         </md-radio-group>
       </div>
       <div *ngSwitchDefault>
         <p> unrecognized control type found: <strong>{{question.controlType}}</strong></p>
       </div>
     </div>
   `,
+  providers: [MdUniqueSelectionDispatcher],
   directives: [MD_INPUT_DIRECTIVES, MD_RADIO_DIRECTIVES]
 })
 class YcbQuestion{
