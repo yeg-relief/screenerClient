@@ -16,14 +16,6 @@ button{
   margin-right:25%;
 }
 
-main .LARGE{
-  margin-top: 5%;
-}
-
-main .MEDIUM{
-  margin-top: 30%;
-}
-
-main .SMALL{
-  margin-top: 50%;
+main{
+  padding-top: 2%;
 }

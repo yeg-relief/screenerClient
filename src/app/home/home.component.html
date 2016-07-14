@@ -1,10 +1,10 @@
-<main [ngClass]="mediaWidth| async" style="height: 100%; width: 100%;">
+<main [ngClass]="mediaWidth| async" style="height:100%">
   <div [ngSwitch] = "mediaWidth | async">
     
     <!-- SMALL LAYOUTS -->
     <div *ngSwitchCase="'SMALL'" >
       <div class="home-container" [ngClass]="mediaWidth| async">
-        <md-card [style.background-color]="'lightyellow'">
+        <md-card [style.background-color]="'lightblue'">
             <img 
               md-card-image src="http://d2v52k3cl9vedd.cloudfront.net/assets/images/placeholder-square.svg" 
               [style.width]="'50%'"
@@ -13,7 +13,7 @@
               [style.padding-top]="'5%'">
             <md-card-content>
                 <div style="width:100%">
-                  <md-grid-list cols="2" [style.background]="'lightblue'">
+                  <md-grid-list cols="2" [style.background]="'lightyellow'">
                     <md-grid-tile>
                       <div>
                         <a [routerLink]="['/404']">
@@ -38,7 +38,7 @@
     <!-- LARGE OR MEDIUM LAYOUTS -->
     <div *ngSwitchDefault >
       <div class="home-container" [ngClass]="mediaWidth| async">
-        <md-card [style.background-color]="'lightyellow'">
+        <md-card [style.background-color]="'lightblue'">
           <img 
             md-card-image src="http://d2v52k3cl9vedd.cloudfront.net/assets/images/placeholder-square.svg" 
             [style.width]="'50%'"
@@ -47,9 +47,9 @@
             [style.padding-top]="'5%'">
           <md-card-content [style.background-color]="'lightyellow'">
               <div style="width:100%">
-                <md-grid-list cols="2" [style.background]="'lightblue'">
+                <md-grid-list cols="2" [style.background]="'lightyellow'">
                   <md-grid-tile>
-                    <md-card [style.background-color]="'lightyellow'">
+                    <md-card [style.background-color]="'lightblue'">
                       <md-card-header>
                         <md-card-title><b>Find Details</b></md-card-title>
                         <md-card-subtitle><b>Learn About Programs</b></md-card-subtitle>
@@ -62,7 +62,7 @@
                     </md-card> 
                   </md-grid-tile>
                   <md-grid-tile>
-                    <md-card [style.background-color]="'lightyellow'">
+                    <md-card [style.background-color]="'lightblue'">
                       <md-card-header>
                         <md-card-title><b>Master Screener</b></md-card-title>
                         <md-card-subtitle><b>Discover Potential Programs</b></md-card-subtitle>

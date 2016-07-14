@@ -85,7 +85,7 @@ class ExpandableYcbQuestion{
             <exp-ycb-question [question]="question"></exp-ycb-question>
           </div>
       </md-card-content>
-      <ms-controls></ms-controls> 
+      <ms-controls [width]="width"></ms-controls> 
     </md-card>
   `,
   styles: [``], 
@@ -93,4 +93,5 @@ class ExpandableYcbQuestion{
 })
 export class GenYcbQuestion{
   @Input() question: Question;
+  @Input() width: any;
 }

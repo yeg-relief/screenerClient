@@ -1,36 +1,69 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
 import { MD_CARD_DIRECTIVES } from '@angular2-material/card';
 import { MD_BUTTON_DIRECTIVES } from '@angular2-material/button';
 import { Store } from '@ngrx/store';
 import { AppState } from '../reducers';
 import { MasterScreenerActions } from '../actions/index';
+import {MdIcon, MdIconRegistry} from '@angular2-material/icon/icon';
 
 import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/operator/map';
-import 'rxjs/add/operator/do';
 
 @Component({
   selector: 'ms-controls',
   template:`
-    <div style="margin-left:20%;margin-right:20%;width:60%;boder:solid;">
-      <button md-raised-button color="primary" (click)="submit()">SUBMIT</button>
-      <button md-raised-button color="primary" (click)="next()">NEXT</button>
-      <button md-raised-button color="primary" (click)="previous()">PREVIOUS</button>
-      {{payload$ | async }}
+  <div [ngSwitch]="width">
+    <div *ngSwitchCase="'LARGE'" class="flex-column" style="margin-left:25%;margin-right:25%;width:50%;">
+      <div>
+        <button md-raised-button color="primary" (click)="previous()">PREVIOUS</button>
+        <button md-raised-button color="primary" (click)="submit()">SUBMIT</button>
+        <button md-raised-button color="primary" (click)="next()">NEXT</button>
+      </div>
+      <div> 
+        <span> Question {{currentIndex$ | async}} of {{questionsLength$ | async}}</span>
+      </div>
     </div>
+    
+    <div *ngSwitchDefault class="flex-column" style="margin-left:25%;margin-right:25%;width:50%;">
+      <div>
+        <button md-mini-fab (click)="previous()">
+          <md-icon class="md-24">skip_previous</md-icon>
+        </button>
+        <button md-mini-fab (click)="submit()">
+          <md-icon class="md-24">done</md-icon>
+        </button>
+        <button md-mini-fab (click)="next()">
+          <md-icon class="md-24">skip_next</md-icon>
+        </button>
+      </div>
+      <div> 
+        <span> Question {{currentIndex$ | async}} of {{questionsLength$ | async}}</span>
+      </div>
+    </div>
+  </div>
   `,
   styles: [``], 
-  directives: [MD_CARD_DIRECTIVES, MD_BUTTON_DIRECTIVES]
+  viewProviders: [MdIconRegistry],
+  directives: [MD_CARD_DIRECTIVES, MD_BUTTON_DIRECTIVES, MdIcon]
 })
 export class MsControls implements OnInit{
+  @Input() width: any;
+  
   payload$: Observable<any>
+  currentIndex$: Observable<any>
+  questionsLength$: Observable<any>
   
   constructor(private store: Store<AppState>) {}
   
   ngOnInit(){
     this.payload$ = this.store.select('masterScreener')
-        .map( (msState:any) => msState.data.payload)
+                    .map( (msState:any) => msState.data.payload)
 
+    this.currentIndex$ = this.store.select('masterScreener')
+                         .map( (msState:any) => msState.currentIndex + 1)
+     
+     this.questionsLength$ = this.store.select('masterScreener')
+                             .map( (msState:any) => msState.data.questions.length)                    
   }
   
   submit(){
