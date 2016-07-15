@@ -12,7 +12,7 @@ import 'rxjs/add/operator/map';
 
 @Component({
   selector: 'master-screener',
-  templateUrl:'app/master-screener/master-screener.component.html',
+  templateUrl:'app/pages/master-screener/master-screener.component.html',
   styles: [''], 
   directives: [
     MD_GRID_LIST_DIRECTIVES, MD_CARD_DIRECTIVES, 

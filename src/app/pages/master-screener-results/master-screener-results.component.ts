@@ -9,7 +9,7 @@ import 'rxjs/add/operator/map';
 
 @Component({
   selector: 'master-screener-results',
-  templateUrl:'app/master-screener-results/master-screener-results.component.html',
+  templateUrl:'app/pages/master-screener-results/master-screener-results.component.html',
   styles: [''], 
   directives: [ResultComponent]
 })
