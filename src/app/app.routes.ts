@@ -1,8 +1,8 @@
 import { provideRouter, RouterConfig } from '@angular/router';
-import { MasterScreenerComponent } from './master-screener';
-import { HomeComponent } from './home';
-import { FourOhFourComponent } from './404/index';
-import { MasterScreenerResultsComponent } from './master-screener-results';
+import { MasterScreenerComponent } from './pages/index';
+import { HomeComponent } from './pages/index';
+import { FourOhFourComponent } from './pages/index';
+import { MasterScreenerResultsComponent } from './pages/index';
 
 export const routes: RouterConfig = [
   { path: '', component: HomeComponent },

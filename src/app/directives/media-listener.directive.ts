@@ -1,8 +1,8 @@
 import { Directive, OnInit, OnDestroy, ElementRef, Renderer } from '@angular/core';
 import { Store } from '@ngrx/store';
-import { MEDIA_SMALL, MEDIA_MEDIUM, MEDIA_LARGE } from './models';
-import { AppState } from './reducers';
-import { MediaActions } from './actions';
+import { MEDIA_SMALL, MEDIA_MEDIUM, MEDIA_LARGE } from '../models';
+import { AppState } from '../reducers';
+import { MediaActions } from '../actions';
 
 @Directive({ 
   selector: '[media-listener]'

@@ -1,6 +1,6 @@
 import { Component, EventEmitter, OnInit } from '@angular/core';
-import { MediaListener } from './media-listener.directive';
-import { NavbarComponent } from './navbar/navbar.component'; 
+import { MediaListener } from './directives/media-listener.directive';
+import { NavbarComponent } from './components/navbar.component'; 
 import { Store } from '@ngrx/store';
 import { AppState } from './reducers';
 import { ROUTER_DIRECTIVES } from '@angular/router';

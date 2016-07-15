@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { Store } from '@ngrx/store';
-import { AppState } from '../reducers';
-import { ResultComponent } from '../components/index';
-import { MasterScreenerActions } from '../actions/index';
+import { AppState } from '../../reducers';
+import { ResultComponent } from '../../components/index';
+import { MasterScreenerActions } from '../../actions/index';
 
 import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/operator/map';

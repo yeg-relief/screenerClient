@@ -1,1 +1,0 @@
-export * from './master-screener-results.component';

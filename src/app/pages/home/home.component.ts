@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ROUTER_DIRECTIVES } from '@angular/router';
 import { Store } from '@ngrx/store';
-import { AppState } from '../reducers';
+import { AppState } from '../../reducers';
 import 'rxjs/add/operator/map';
 import { MD_GRID_LIST_DIRECTIVES } from '@angular2-material/grid-list';
 import { MD_BUTTON_DIRECTIVES } from '@angular2-material/button';

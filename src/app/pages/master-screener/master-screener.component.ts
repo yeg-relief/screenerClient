@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, REACTIVE_FORM_DIRECTIVES } from '@angular/forms';
 import { Store } from '@ngrx/store';
-import { AppState } from '../reducers';
-import { GenYcbQuestion, MsControls } from '../components/index'
+import { AppState } from '../../reducers';
+import { GenYcbQuestion, MsControls } from '../../components/index'
 
 import { MD_GRID_LIST_DIRECTIVES } from '@angular2-material/grid-list';
 import { MD_CARD_DIRECTIVES } from '@angular2-material/card';
