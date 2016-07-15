@@ -1,7 +1,7 @@
 <div [ngSwitch] = "width$ | async">
-  <div *ngSwitchCase="'LARGE'" [style.background-color]="'lightblue'" class="flex flex-column" [style.height]="'100vh'" [style.width]="'100vw'">
+  <div *ngSwitchCase="'LARGE'" [style.background-color]="'lightblue'" class="flex flex-column" [style.height]="'95vh'" [style.width]="'100%'">
     <div class="flex-grow">
-      <div style="width:60%; height:96%; margin-left:20vw; margin-right:20vw; margin-top:5vh;">
+      <div style="width:60%; margin-left:20vw; margin-right:20vw; margin-top:5vh;">
         <form [formGroup]="form$ | async">
           <gen-ycb-question 
             [question]="currentQuestion$ | async"
@@ -12,9 +12,9 @@
     </div>
   </div>
   
-  <div *ngSwitchDefault [style.background-color]="'lightblue'" class="flex flex-column" [style.height]="'100vh'" [style.width]="'100vw'">
+  <div *ngSwitchDefault [style.background-color]="'lightblue'" class="flex flex-column" [style.height]="'95vh'" [style.width]="'100%'">
     <div class="flex-grow">
-      <div style="width: 90%; height:96%; margin-left:5vw; margin-right:5vw; margin-top:5vh;">
+      <div style="width: 90%;  margin-left:5vw; margin-right:5vw; margin-top:5vh;">
         <form [formGroup]="form$ | async">
           <gen-ycb-question 
             [question]="currentQuestion$ | async"

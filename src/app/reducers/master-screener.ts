@@ -11,13 +11,15 @@ export interface MasterScreenerState{
   currentQuestion: Question; 
   currentIndex: number;
   loaded: boolean;
+  results: any[];
 }
 
 const initialState: MasterScreenerState = {
   data: undefined,
   currentQuestion: undefined,
   currentIndex: undefined,
-  loaded: false
+  loaded: false,
+  results: []
 }
 
 export function masterScreenerReducer(state = initialState, action: Action): MasterScreenerState{
@@ -46,7 +48,8 @@ export function masterScreenerReducer(state = initialState, action: Action): Mas
         },
         currentQuestion: questions[0],
         currentIndex: 0,
-        loaded: true
+        loaded: true,
+        results: []
       }
     }
     
@@ -56,7 +59,8 @@ export function masterScreenerReducer(state = initialState, action: Action): Mas
           data: state.data,
           currentQuestion: state.data.questions[state.currentIndex + 1],
           currentIndex: state.currentIndex + 1, 
-          loaded: true
+          loaded: true,
+          results: state.results
         }
       } 
       return state;
@@ -68,7 +72,8 @@ export function masterScreenerReducer(state = initialState, action: Action): Mas
           data: state.data,
           currentQuestion: state.data.questions[state.currentIndex - 1],
           currentIndex: state.currentIndex - 1, 
-          loaded: true
+          loaded: true,
+          results: state.results
         }
       }
       return state;
@@ -97,7 +102,20 @@ export function masterScreenerReducer(state = initialState, action: Action): Mas
         }, 
         currentQuestion: state.currentQuestion,
         currentIndex: state.currentIndex,
-        loaded: state.loaded
+        loaded: state.loaded,
+        results: state.results
+      }
+    }
+    
+    case MasterScreenerActions.SUBMIT_SUCCESS: {
+      const results = action.payload;
+      
+      return {
+        data: state.data,
+        currentQuestion: state.currentQuestion,
+        currentIndex: state.currentIndex,
+        loaded: state.loaded,
+        results: results
       }
     }
     

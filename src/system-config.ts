@@ -72,7 +72,9 @@ const barrels: string[] = [
   'app/home',
   'app/reducers',
   'app/models',
-  'app/actions'
+  'app/actions',
+  'app/components',
+  'app/master-screener-results'
   /** @cli-barrel */
 ];
 

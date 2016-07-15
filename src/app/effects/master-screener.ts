@@ -26,4 +26,8 @@ export class MasterScreenerEffects{
     .switchMapTo( this.dataService.getQuestions())
     .map( (questions:Question[]) => {return this.masterScreenerActions.loadQuestionsSuccess(questions)})
     
+  @Effect() loadResults$ = this.updates$ 
+    .whenAction(MasterScreenerActions.SUBMIT)
+    .switchMapTo( this.dataService.getResults())
+    .map( (results:any[]) => {return this.masterScreenerActions.submitSuccess(results)})
 }

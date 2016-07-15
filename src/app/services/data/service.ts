@@ -1,10 +1,9 @@
 import { Injectable } from '@angular/core';
 import { Http, Response } from '@angular/http';
 import { fakeData } from './fake-data';
-
+import { fakeResults } from './fake-results';
 import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/observable/from';
-import 'rxjs/add/operator/reduce';
 import 'rxjs/add/operator/toArray';
 
 
@@ -24,6 +23,10 @@ export class DataService {
    
   getQuestions(): Observable<Question[]>{
     return this._pullData().toArray();
+  }
+  
+  getResults(): Observable<any[]>{
+    return Observable.from(fakeResults()).toArray();
   }
 }
 

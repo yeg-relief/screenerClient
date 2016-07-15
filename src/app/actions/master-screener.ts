@@ -42,5 +42,13 @@ export class MasterScreenerActions{
       type: MasterScreenerActions.SUBMIT
     }
   }
+  
+  static SUBMIT_SUCCESS = '[MASTER_SCREENER] SUBMIT_SUCCESS';
+  submitSuccess(responses: any[]): Action{
+    return {
+      type: MasterScreenerActions.SUBMIT_SUCCESS,
+      payload: responses
+    }
+  }
 }
 

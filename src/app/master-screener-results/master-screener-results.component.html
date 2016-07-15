@@ -1,0 +1,38 @@
+<div [ngSwitch]="width$ | async" 
+  class="flex flex-column"
+  [style.background-color]="'lightblue'" 
+  [style.height]="'100%'" 
+  [style.width]="'100%'">
+  <div *ngSwitchCase="'LARGE'"
+    [style.width]="'50%'"
+    [style.margin-left]="'25%'"
+    [style.margin-right]="'25%'"
+    [style.margin-top]="'5%'" 
+    [style.height]="'100%'"
+    [style.padding-bottom]="'10%'"
+    [style.background-color]="'lightblue'" >
+    
+    <div *ngFor="let res of (results$ | async)">
+      <ycb-result 
+        [result]="res"
+        ></ycb-result>
+      <div [style.height]="'5vh'"></div>
+    </div>
+    
+  </div>
+  
+  <div *ngSwitchDefault
+    [style.width]="'90%'"
+    [style.margin-left]="'5%'"
+    [style.margin-right]="'5%'"
+    [style.margin-top]="'5%'"
+    [style.height]="'100%'"
+    [style.padding-bottom]="'10%'"
+    [style.background-color]="'lightblue'" >
+    
+    <div *ngFor="let res of (results$ | async)">
+      <ycb-result [result]="res"></ycb-result>
+      <div [style.height]="'5vh'"></div>
+    </div>
+  </div>
+</div>
