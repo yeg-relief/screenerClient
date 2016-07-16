@@ -8,7 +8,6 @@ import { MD_BUTTON_DIRECTIVES } from '@angular2-material/button';
 import { MD_CARD_DIRECTIVES } from '@angular2-material/card';
 
 @Component({
-  selector: 'app-home',
   templateUrl: 'app/pages/home/home.component.html',
   styleUrls: ['app/pages/home/home.component.css'],
   directives: [ROUTER_DIRECTIVES, MD_GRID_LIST_DIRECTIVES, MD_BUTTON_DIRECTIVES, MD_CARD_DIRECTIVES]

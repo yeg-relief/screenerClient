@@ -11,7 +11,6 @@ import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/operator/map';
 
 @Component({
-  selector: 'master-screener',
   templateUrl:'app/pages/master-screener/master-screener.component.html',
   styles: [''], 
   directives: [
