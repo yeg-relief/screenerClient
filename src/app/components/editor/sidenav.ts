@@ -16,6 +16,14 @@ import { ROUTER_DIRECTIVES } from '@angular/router';
       <span class="spacer"></span>
       <md-card [style.width]="'50%'">
         <md-card-subtitle>
+           <a [routerLink]="['/editor/new-question']">
+            New Question
+          </a>
+        </md-card-subtitle>
+      </md-card>
+      <span class="spacer"></span>
+      <md-card [style.width]="'50%'">
+        <md-card-subtitle>
           <a [routerLink]="['/editor/programs']">
             Programs
           </a>

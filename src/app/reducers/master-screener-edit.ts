@@ -172,6 +172,25 @@ export function MasterScreenerEditReducer(state = initialState, action: Action):
       }
     }
     
+    case MasterScreenerEditActions.DELETE_EXPANDABLE_QUESTION: {
+      const editQuestion = state.editQuestion;
+      editQuestion.expandable.splice(action.payload, 1);
+      return {
+        data: state.data,
+        editQuestion: editQuestion,
+        expandableQuestion: state.expandableQuestion
+      }
+    }
+    
+    case MasterScreenerEditActions.SET_EDIT_EXPANDABLE: {
+      const expandableQuestion = state.editQuestion.expandable[action.payload];
+      return {
+        data: state.data,
+        editQuestion: state.editQuestion,
+        expandableQuestion: expandableQuestion
+      }
+    }
+    
     default: {
       return state;
     }

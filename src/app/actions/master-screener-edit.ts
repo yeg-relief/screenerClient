@@ -103,4 +103,20 @@ export class MasterScreenerEditActions{
       type: MasterScreenerEditActions.PUSH_EXPANDABLE_QUESTION
     }
   }
+  
+  static DELETE_EXPANDABLE_QUESTION = '[MASTER_SCREENER_EDIT] DELETE_EXPANDABLE_QUESTION';
+  deleteExpandableQuestion(index: number):Action{
+    return{
+      type: MasterScreenerEditActions.DELETE_EXPANDABLE_QUESTION,
+      payload: index
+    }
+  }
+  
+  static SET_EDIT_EXPANDABLE = '[MASTER_SCREENER_EDIT] SET_EDIT_EXPANDABLE';
+  setEditExpandable(index: number): Action{
+    return{
+      type: MasterScreenerEditActions.SET_EDIT_EXPANDABLE,
+      payload: index
+    }
+  }
 }

@@ -4,3 +4,6 @@ export * from './programs';
 export * from './key';
 export * from './ms-new-tab';
 export * from './ms-preview-tab';
+export * from './new-question';
+export * from './main-question';
+export * from './collapsable-question';
