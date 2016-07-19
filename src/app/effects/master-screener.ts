@@ -8,7 +8,6 @@ import { AppState } from '../reducers';
 import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/operator/switchMapTo';
 import 'rxjs/add/operator/map';
-import 'rxjs/add/operator/toArray';
 import 'rxjs/add/observable/of';
 
 @Injectable()

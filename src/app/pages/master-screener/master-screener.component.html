@@ -5,7 +5,8 @@
         <form [formGroup]="form$ | async">
           <gen-ycb-question 
             [question]="currentQuestion$ | async"
-            [width]="width$ | async">>
+            [width]="width$ | async"
+            [controls]="true">
           </gen-ycb-question>
         </form>
       </div>
@@ -18,7 +19,8 @@
         <form [formGroup]="form$ | async">
           <gen-ycb-question 
             [question]="currentQuestion$ | async"
-            [width]="width$ | async">
+            [width]="width$ | async"
+            [controls]="true">
           </gen-ycb-question>
         </form>
       </div>

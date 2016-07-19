@@ -1,4 +1,3 @@
-// not sure if needed yet
 import { Injectable } from '@angular/core';
 import { Action } from '@ngrx/store';
 import { MasterScreener, Question } from '../models';

@@ -1,10 +1,7 @@
 import { ActionReducer, Action } from '@ngrx/store';
-import { MasterScreener, Question, NestedQuestion } from '../models';
+import { MasterScreener, Question } from '../models';
 import { MasterScreenerActions } from '../actions';
 import { FormGroup, FormControl } from '@angular/forms';
-
-import { Observable } from 'rxjs/Observable';
-import '@ngrx/core/add/operator/select';
 
 export interface MasterScreenerState{
   data: MasterScreener;
@@ -35,7 +32,7 @@ export function masterScreenerReducer(state = initialState, action: Action): Mas
       action.payload.map( question => {
         controls[question.key] = new FormControl(question.value);
         if(question.expandable.length !== 0){
-          <NestedQuestion>question.expandable.map( collapsibleQuestion => {
+          question.expandable.map( collapsibleQuestion => {
             controls[collapsibleQuestion.key] = new FormControl(collapsibleQuestion.value);
           })
         }
@@ -86,7 +83,7 @@ export function masterScreenerReducer(state = initialState, action: Action): Mas
       questions.map( (question:any) => {
         controls[question.key] = new FormControl(question.value);
         if(question.expandable.length !== 0){
-          <NestedQuestion>question.expandable.map( collapsibleQuestion => {
+          question.expandable.map( collapsibleQuestion => {
             controls[collapsibleQuestion.key] = new FormControl(collapsibleQuestion.value);
           })
         }

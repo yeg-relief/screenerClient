@@ -22,6 +22,7 @@ import {
         </div>
       </div>
       <div *ngSwitchCase="'radio'">
+        {{question.label}}<br>
          <md-radio-group name="more_options" [(ngModel)]="question.value">
           <div *ngFor="let option of question.options">
             <md-radio-button  name="more_options" [value]="option">
@@ -78,14 +79,14 @@ class ExpandableYcbQuestion{
   template:`
     <md-card> 
       <md-card-content> 
-          <div *ngIf="question.expandable.length === 0">
+          <div *ngIf="question.type !== 'expandable'">
             <ycb-question [question]="question"></ycb-question>
           </div>
-          <div *ngIf="question.expandable.length > 0">
+          <div *ngIf="question.type === 'expandable'">
             <exp-ycb-question [question]="question"></exp-ycb-question>
           </div>
       </md-card-content>
-      <ms-controls [width]="width"></ms-controls> 
+      <ms-controls *ngIf="controls" [width]="width"></ms-controls> 
     </md-card>
   `,
   styles: [``], 
@@ -94,4 +95,5 @@ class ExpandableYcbQuestion{
 export class GenYcbQuestion{
   @Input() question: Question;
   @Input() width: any;
+  @Input() controls: boolean;
 }

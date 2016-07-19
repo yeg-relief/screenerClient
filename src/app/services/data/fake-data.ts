@@ -5,6 +5,7 @@ export function fakeData():any{
       label: 'expand group 0?',
       controlType: 'checkbox',
       value: false,
+      type: 'expandable',
       
       expandable: 
       [
@@ -17,7 +18,6 @@ export function fakeData():any{
         {
           key: 'emailAddress',
           label: 'Email',
-          type: 'email',
           controlType: 'textbox',
           value: '',
         },
