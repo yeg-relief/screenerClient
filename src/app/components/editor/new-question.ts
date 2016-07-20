@@ -28,7 +28,10 @@ import 'rxjs/add/operator/map';
           <template md-tab-label>Main Question</template>
           <template md-tab-content>
             <section style="width:85%; padding-bottom:10vh; height:200vh;">
-              <main-question [question]="(question$ | async)"></main-question>
+              <main-question 
+                [question]="(question$ | async)"
+                [keys]="(keys$ | async)">
+              </main-question>
             </section>
           </template>
         </md-tab>
@@ -38,7 +41,8 @@ import 'rxjs/add/operator/map';
             <section style="width:85%; padding-bottom:10vh; height:200vh;">
               <collapsable-question 
                 [question]="(question$ | async)"
-                [expandableQuestion]="(expandableQuestion$ | async)">
+                [expandableQuestion]="(expandableQuestion$ | async)"
+                [keys]="(keys$ | async)">
               </collapsable-question>
             </section>
           </template>
@@ -51,7 +55,7 @@ import 'rxjs/add/operator/map';
 export class NewQuestion implements OnInit{
   question$: any
   expandableQuestion$: any
-  
+  keys$: any;
   constructor(private store: Store<AppState>){}
   
   ngOnInit(){
@@ -60,6 +64,9 @@ export class NewQuestion implements OnInit{
                      
     this.expandableQuestion$ = this.store.select('masterScreenerEdit')
                                .map( (msEdit:any) => msEdit.expandableQuestion)
+                               
+    this.keys$ = this.store.select('masterScreenerEdit')
+                 .map( (msEdit:any) => msEdit.keys)
   }
 }
 

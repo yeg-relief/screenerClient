@@ -21,6 +21,8 @@ import { MD_BUTTON_DIRECTIVES } from '@angular2-material/button';
         <br><br>
         <button md-raised-button color="primary">CLEAR QUESTION</button> 
         <button style="margin-left:2vw" md-raised-button color="primary">ADD QUESTION</button> 
+        <br><br>
+        <p style="color:red">NOTE: these buttons are not implemented</p>
       </md-card-content>
     </md-card>
   `,

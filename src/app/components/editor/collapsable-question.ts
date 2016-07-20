@@ -65,6 +65,23 @@ class PreviewCollapsableSection{
         </md-card-content>
       </md-card>
       <md-card>
+        <md-card-title>Input Question Key</md-card-title>
+        <md-card-subtitle>
+          <p>
+            Every question must have a key, so that the program can match programs against the master screener. 
+            <strong> A key may only occur once per master screener </strong>
+          </p>
+        </md-card-subtitle>
+        <md-card-content>
+          <select [(ngModel)]="expandableQuestion.key">
+            <option *ngFor="let key of keys">
+              {{key.key}}
+            </option>
+          </select>
+        </md-card-content>
+      </md-card>
+      
+      <md-card>
         <md-card-title>Input Options </md-card-title>
         <md-card-subtitle>How the user inputs their answer</md-card-subtitle>
         <md-card-content>
@@ -142,6 +159,7 @@ class PreviewCollapsableSection{
 class CollapsableQuestionInput{
   @Input() question;
   @Input() expandableQuestion;
+  @Input() keys;
   
   controlTypes = [
     'radio',
@@ -221,7 +239,8 @@ class CollapsableQuestionInput{
     <section class="flex flex-column" style="width:40vw;">
       <collapsable-question-input 
         [question]="question"
-        [expandableQuestion]="expandableQuestion">
+        [expandableQuestion]="expandableQuestion"
+        [keys]="keys">
       </collapsable-question-input>
     </section>
     
@@ -238,4 +257,5 @@ class CollapsableQuestionInput{
 export class CollapsableQuestion{
   @Input() question;
   @Input() expandableQuestion;
+  @Input() keys;
 }

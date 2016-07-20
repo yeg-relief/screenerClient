@@ -6,12 +6,14 @@ export interface MasterScreenerEditState{
   data: MasterScreenerEdit;
   editQuestion: Question;
   expandableQuestion: Question;
+  keys: {key:string, type:string}[]
 }
 
 const initialState: MasterScreenerEditState = {
   data: undefined,
   editQuestion: undefined,
-  expandableQuestion: undefined
+  expandableQuestion: undefined,
+  keys: undefined
 }
 
 export function MasterScreenerEditReducer(state = initialState, action: Action): MasterScreenerEditState{
@@ -22,6 +24,25 @@ export function MasterScreenerEditReducer(state = initialState, action: Action):
     
     case MasterScreenerEditActions.LOAD_QUESTIONS_SUCCESS: {
       const questions: Question[] = action.payload;
+      const keys = [
+        {
+          key: 'children',
+          type: 'boolean'
+        },
+        {
+          key: 'number_of_children',
+          type: 'number'
+        },
+        {
+          key: 'yearly_personal_income',
+          type: 'number'
+        },
+        {
+          key: 'married',
+          type: 'boolean'
+        }
+      ]
+      
       
       return {
         data: {
@@ -46,7 +67,8 @@ export function MasterScreenerEditReducer(state = initialState, action: Action):
           control: null,
           expandable: null,
           options: []
-        }
+        },
+        keys: keys
       }
     };
     
@@ -58,7 +80,8 @@ export function MasterScreenerEditReducer(state = initialState, action: Action):
       return {
         data: state.data,
         editQuestion: editQuestion,
-        expandableQuestion: state.expandableQuestion
+        expandableQuestion: state.expandableQuestion,
+        keys: state.keys
       }
     }
     
@@ -69,7 +92,8 @@ export function MasterScreenerEditReducer(state = initialState, action: Action):
       return {
         data: state.data,
         editQuestion: editQuestion,
-        expandableQuestion: state.expandableQuestion
+        expandableQuestion: state.expandableQuestion,
+        keys: state.keys
       }
     }
     
@@ -79,7 +103,8 @@ export function MasterScreenerEditReducer(state = initialState, action: Action):
       return {
         data: state.data,
         editQuestion: editQuestion,
-        expandableQuestion: state.expandableQuestion
+        expandableQuestion: state.expandableQuestion,
+        keys: state.keys
       }
     }
     
@@ -89,7 +114,8 @@ export function MasterScreenerEditReducer(state = initialState, action: Action):
       return {
         data: state.data,
         editQuestion: editQuestion,
-        expandableQuestion: state.expandableQuestion
+        expandableQuestion: state.expandableQuestion,
+        keys: state.keys
       }
     }
     
@@ -99,7 +125,8 @@ export function MasterScreenerEditReducer(state = initialState, action: Action):
       return {
         data: state.data,
         editQuestion: editQuestion,
-        expandableQuestion: state.expandableQuestion
+        expandableQuestion: state.expandableQuestion,
+        keys: state.keys
       }
     }
     
@@ -109,7 +136,8 @@ export function MasterScreenerEditReducer(state = initialState, action: Action):
       return {
         data: state.data,
         editQuestion: editQuestion,
-        expandableQuestion: state.expandableQuestion
+        expandableQuestion: state.expandableQuestion,
+        keys: state.keys
       }
     }
     
@@ -119,7 +147,8 @@ export function MasterScreenerEditReducer(state = initialState, action: Action):
       return {
         data: state.data,
         editQuestion: state.editQuestion, 
-        expandableQuestion: expandableQuestion
+        expandableQuestion: expandableQuestion,
+        keys: state.keys
       }
     }
     
@@ -129,7 +158,8 @@ export function MasterScreenerEditReducer(state = initialState, action: Action):
       return {
         data: state.data,
         editQuestion: state.editQuestion,
-        expandableQuestion: expandableQuestion
+        expandableQuestion: expandableQuestion,
+        keys: state.keys
       }
     }
     
@@ -139,7 +169,8 @@ export function MasterScreenerEditReducer(state = initialState, action: Action):
       return {
         data: state.data,
         editQuestion: state.editQuestion,
-        expandableQuestion: expandableQuestion
+        expandableQuestion: expandableQuestion,
+        keys: state.keys
       } 
     }
     
@@ -149,7 +180,8 @@ export function MasterScreenerEditReducer(state = initialState, action: Action):
       return {
         data: state.data,
         editQuestion: state.editQuestion,
-        expandableQuestion: expandableQuestion
+        expandableQuestion: expandableQuestion,
+        keys: state.keys
       } 
     }    
     
@@ -169,7 +201,8 @@ export function MasterScreenerEditReducer(state = initialState, action: Action):
       return {
         data: state.data,
         editQuestion: editQuestion,
-        expandableQuestion: clearExpandableQuestion
+        expandableQuestion: clearExpandableQuestion,
+        keys: state.keys
       }
     }
     
@@ -179,7 +212,8 @@ export function MasterScreenerEditReducer(state = initialState, action: Action):
       return {
         data: state.data,
         editQuestion: editQuestion,
-        expandableQuestion: state.expandableQuestion
+        expandableQuestion: state.expandableQuestion,
+        keys: state.keys
       }
     }
     
@@ -188,7 +222,8 @@ export function MasterScreenerEditReducer(state = initialState, action: Action):
       return {
         data: state.data,
         editQuestion: state.editQuestion,
-        expandableQuestion: expandableQuestion
+        expandableQuestion: expandableQuestion,
+        keys: state.keys
       }
     }
     
@@ -206,7 +241,8 @@ export function MasterScreenerEditReducer(state = initialState, action: Action):
       return {
         data: state.data,
         editQuestion: state.editQuestion,
-        expandableQuestion: clearExpandableQuestion
+        expandableQuestion: clearExpandableQuestion,
+        keys: state.keys
       }
     }
     

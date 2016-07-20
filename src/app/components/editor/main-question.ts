@@ -54,6 +54,23 @@ class PreviewQuestion{
       </md-card-content>
     </md-card>
     
+    <md-card>
+      <md-card-title>Input Question Key</md-card-title>
+      <md-card-subtitle>
+        <p>
+           Every question must have a key, so that the program can match programs against the master screener. 
+           <strong> A key may only occur once per master screener </strong>
+        </p>
+      </md-card-subtitle>
+      <md-card-content>
+        <select [(ngModel)]="question.key">
+          <option *ngFor="let key of keys">
+            {{key.key}}
+          </option>
+        </select>
+      </md-card-content>
+    </md-card>
+    
     <md-card *ngIf="question.type !== 'expandable'">
       <md-card-title>Input Options</md-card-title>
       <md-card-subtitle>How the user inputs their answer</md-card-subtitle>
@@ -105,7 +122,7 @@ class PreviewQuestion{
 })
 export class MainQuestionInput implements OnInit{
   @Input() question: any;
-  
+  @Input() keys: any;
   expandable: string = '';
   questionTypes = [
     'no',
@@ -168,7 +185,9 @@ export class MainQuestionInput implements OnInit{
   <div class="flex" style="width:80vw;margin-left:5vw;margin-top:2vh;">
     
     <section style="width:40vw;">
-      <main-question-input [question]="question"></main-question-input>
+      <main-question-input 
+        [question]="question"
+        [keys]="keys"></main-question-input>
     </section>
     
     <section style="width:40vw; margin-left:2vw;margin-right:2vw;">
@@ -182,4 +201,5 @@ export class MainQuestionInput implements OnInit{
 })
 export class MainQuestion{
   @Input() question: any;
+  @Input() keys: any;
 }

@@ -33,7 +33,7 @@ import {MdIcon, MdIconRegistry} from '@angular2-material/icon/icon';
         </span>
       </md-input>
       <span class="tiny-space"></span>
-      <a [routerLink]="['/editor/master-screener']">
+      <a [routerLink]="['/editor/new-question']">
         <button md-icon-button>
           <md-icon svgIcon="login"></md-icon>
         </button>
