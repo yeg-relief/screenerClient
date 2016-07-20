@@ -32,8 +32,8 @@ import {
           </div>
          </md-radio-group>
       </div>
-      <div *ngSwitchDefault>
-        <p> unrecognized control type found: <strong>{{question.controlType}}</strong></p>
+      <div *ngSwitchDefault style="color:red">
+        <p> No Input Option Found </p>
       </div>
     </div>
   `,
@@ -59,12 +59,13 @@ class YcbQuestion{
     </div>
     
     <div *ngIf="question.expandable && question.value === true">
-      <div class="flex" style="height: 5vh; width:100%">
-        <span class="flex-grow"></span>
-      </div>
+      
       <div *ngFor="let expandableQuestion of question.expandable">
+        <br>
         <ycb-question [question]="expandableQuestion"></ycb-question>
+        <br>
       </div>
+      
     </div>
   `,
   styles: [``],

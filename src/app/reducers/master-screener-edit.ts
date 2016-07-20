@@ -54,6 +54,7 @@ export function MasterScreenerEditReducer(state = initialState, action: Action):
       const editQuestion = state.editQuestion;
       editQuestion.type = 'expandable';
       editQuestion.controlType = 'checkbox';
+      editQuestion.options = [];
       return {
         data: state.data,
         editQuestion: editQuestion,
@@ -188,6 +189,24 @@ export function MasterScreenerEditReducer(state = initialState, action: Action):
         data: state.data,
         editQuestion: state.editQuestion,
         expandableQuestion: expandableQuestion
+      }
+    }
+    
+    case MasterScreenerEditActions.CLEAR_EXPANDABLE_QUESTION: {
+      const clearExpandableQuestion = {
+        value: '',
+        key: '',
+        label: '',
+        controlType: '',
+        type: '',
+        control: null,
+        expandable: null,
+        options: []
+      }
+      return {
+        data: state.data,
+        editQuestion: state.editQuestion,
+        expandableQuestion: clearExpandableQuestion
       }
     }
     

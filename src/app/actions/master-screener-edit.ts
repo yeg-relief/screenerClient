@@ -119,4 +119,11 @@ export class MasterScreenerEditActions{
       payload: index
     }
   }
+  
+  static CLEAR_EXPANDABLE_QUESTION = '[MASTER_SCREENER_EDIT] CLEAR_EXPANDABLE_QUESTION';
+  clearExpandableQuestion(): Action{
+    return {
+      type: MasterScreenerEditActions.CLEAR_EXPANDABLE_QUESTION
+    }
+  }
 }

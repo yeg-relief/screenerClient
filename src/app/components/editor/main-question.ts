@@ -7,6 +7,7 @@ import {
   MdUniqueSelectionDispatcher
 } from '@angular2-material/core/coordination/unique-selection-dispatcher';
 
+import { MD_CARD_DIRECTIVES } from '@angular2-material/card';
 import { Store } from '@ngrx/store';
 import { AppState } from '../../reducers';
 import { GenYcbQuestion } from '../question';
@@ -14,9 +15,16 @@ import { GenYcbQuestion } from '../question';
 @Component({
   selector: 'preview-question',
   template: `
-    <gen-ycb-question [question]="question" [controls]="false"></gen-ycb-question>
+    <md-card>
+      <md-card-title>Question Preview</md-card-title>
+      <md-card-subtitle>A preview of the question you're currently working on</md-card-subtitle>
+      <md-card-content>
+        <gen-ycb-question [question]="question" [controls]="false"></gen-ycb-question>
+      </md-card-content>
+    </md-card>
+    
   `,
-  directives: [GenYcbQuestion]
+  directives: [GenYcbQuestion, MD_CARD_DIRECTIVES]
 })
 class PreviewQuestion{
   @Input() question: any
@@ -27,52 +35,72 @@ class PreviewQuestion{
 @Component({
   selector: 'main-question-input',
   template: `
-    <h3> Question Label </h3>
-    <md-input placeholder="enter label" [(ngModel)]="question.label"></md-input>
-    <br>
+  <div style="padding-bottom: 5vh;">
+    <md-card>
+      <md-card-title>Does the question have collapsable question(s)?</md-card-title>
+      <md-card-subtitle>Click yes if you want to hide questions unless the user checks the box</md-card-subtitle>
+      <md-card-content>
+        <md-radio-group name="question_type" [(ngModel)]="expandable" (change)="typeChange()">
+          <div *ngFor="let type of questionTypes">
+            <md-radio-button  name="questionTypeOptions" [value]="type">
+              {{type}}
+            </md-radio-button>
+            <br>
+          </div>
+        </md-radio-group>  
+        <div *ngIf="question.type === 'expandable'">
+          <strong> navigate to the Collapsable Section tab above to manage the list of hidden questions </strong>
+        </div>                
+      </md-card-content>
+    </md-card>
     
-    <h3> Does the question have collapsable question(s)? </h3> 
-    <md-radio-group name="question_type" [(ngModel)]="expandable" (change)="typeChange()">
-      <div *ngFor="let type of questionTypes">
-        <md-radio-button  name="questionTypeOptions" [value]="type">
-          {{type}}
-        </md-radio-button>
-        <br>
-      </div>
-    </md-radio-group>
-    <br>
-    <br>
+    <md-card *ngIf="question.type !== 'expandable'">
+      <md-card-title>Input Options</md-card-title>
+      <md-card-subtitle>How the user inputs their answer</md-card-subtitle>
+      <md-card-content>
+        <md-radio-group name="question_controlType" [(ngModel)]="question.controlType">
+          <div *ngFor="let type of controlTypes">
+            <md-radio-button  name="questionTypeOptions" [value]="type">
+              {{type}}
+            </md-radio-button>
+            <br>
+          </div>
+        </md-radio-group>
+      </md-card-content>
+    </md-card>
     
-    <div *ngIf="question.type !== 'expandable'">
-      <h3> Input Type </h3>
-      <md-radio-group name="question_controlType" [(ngModel)]="question.controlType">
-        <div *ngFor="let type of controlTypes">
-          <md-radio-button  name="questionTypeOptions" [value]="type">
-            {{type}}
-          </md-radio-button>
-          <br>
-        </div>
-      </md-radio-group>
-      <div *ngIf="question.controlType === 'radio'">
-        <br>
+    <md-card>
+      <md-card-title>Question Text</md-card-title>  
+      <md-card-subtitle>The question you want to ask</md-card-subtitle>
+      <md-card-content>
+        <md-input placeholder="Write your question here" [(ngModel)]="question.label"></md-input>
+      </md-card-content>
+    </md-card>
+    
+    <md-card *ngIf="question.controlType === 'radio'">
+      <md-card-title>Add a choice</md-card-title>
+      <md-card-subtitle>add an option to the multiple choice question</md-card-subtitle>
+      <md-card-content>
         <div class="flex flex-column">
           <strong> Add Options </strong>
           <md-input placeholder="enter option" [(ngModel)]="newOption"></md-input>
           <button md-raised-button color="primary" (click)="addOption()">ADD OPTION</button>
         </div>
-        <br>
-        <div class="flex flex-column">
-          <strong> Remove Option </strong>
-          <div *ngFor="let option of question.options" style="color:blue;" (click)="removeOption(option)">
-            {{option}}
-          </div>
-        </div>
-      </div>
-      <br><br>
-    </div>
+      </md-card-content>
+    </md-card>
     
+    <md-card *ngIf="question.controlType === 'radio'">
+      <md-card-title>Remove a choice</md-card-title>
+      <md-card-subtitle>remove an option from the multiple choice question</md-card-subtitle>
+      <md-card-content>
+        <div *ngFor="let option of question.options" style="color:blue;" (click)="removeOption(option)">
+          {{option}}
+        </div>
+      </md-card-content>
+    </md-card>
+  </div>
   `,
-  directives: [MD_INPUT_DIRECTIVES, MD_BUTTON_DIRECTIVES, MD_RADIO_DIRECTIVES],
+  directives: [MD_INPUT_DIRECTIVES, MD_BUTTON_DIRECTIVES, MD_RADIO_DIRECTIVES, MD_CARD_DIRECTIVES],
   viewProviders: [MdUniqueSelectionDispatcher]
 })
 export class MainQuestionInput implements OnInit{
@@ -137,13 +165,13 @@ export class MainQuestionInput implements OnInit{
 @Component({
   selector: 'main-question',
   template: `
-  <div class="flex" style="height:90vh;width:80vw;margin-left:2vw;margin-top:2vh">
+  <div class="flex" style="width:80vw;margin-left:5vw;margin-top:2vh;">
     
-    <section style="width:40vw; height:100%;">
+    <section style="width:40vw;">
       <main-question-input [question]="question"></main-question-input>
     </section>
     
-    <section style="width:40vw; padding-left:2vw; height:100%; padding-right:2vw;">
+    <section style="width:40vw; margin-left:2vw;margin-right:2vw;">
       <preview-question 
         [question]="question">
       </preview-question>

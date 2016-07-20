@@ -3,6 +3,7 @@ import { Component, OnInit } from '@angular/core';
 import { GenYcbQuestion } from '../question';
 import { MainQuestion } from './main-question';
 import { CollapsableQuestion } from './collapsable-question';
+import { MsPreviewTab } from './ms-preview-tab';
 import { MD_TABS_DIRECTIVES } from '@angular2-material/tabs';
 
 import { Store } from '@ngrx/store';
@@ -18,15 +19,15 @@ import 'rxjs/add/operator/map';
         <md-tab>
           <template md-tab-label>Preview Question</template>
           <template md-tab-content>
-            <section style="width:85%; height:90vh; margin-left:10%; margin-top:5%;">
-              <gen-ycb-question [question]="(question$ | async)" [controls]="false"></gen-ycb-question>
+            <section style="width:85%; margin-left:10%; margin-top:5%; height:100vh;">
+              <ms-preview-tab [question]="(question$ | async)"></ms-preview-tab>
             </section>
           </template>
         </md-tab>
         <md-tab>
           <template md-tab-label>Main Question</template>
           <template md-tab-content>
-            <section style="width:85%; height:90vh;">
+            <section style="width:85%; padding-bottom:10vh; height:200vh;">
               <main-question [question]="(question$ | async)"></main-question>
             </section>
           </template>
@@ -34,7 +35,7 @@ import 'rxjs/add/operator/map';
         <md-tab>
           <template md-tab-label>Collapsable Section</template>
           <template md-tab-content>
-            <section style="width:85%; height:90vh;">
+            <section style="width:85%; padding-bottom:10vh; height:200vh;">
               <collapsable-question 
                 [question]="(question$ | async)"
                 [expandableQuestion]="(expandableQuestion$ | async)">
@@ -45,7 +46,7 @@ import 'rxjs/add/operator/map';
       </md-tab-group>
     </div>
   `,
-  directives: [MD_TABS_DIRECTIVES, GenYcbQuestion, MainQuestion, CollapsableQuestion]
+  directives: [MD_TABS_DIRECTIVES, GenYcbQuestion, MainQuestion, CollapsableQuestion, MsPreviewTab]
 })
 export class NewQuestion implements OnInit{
   question$: any
