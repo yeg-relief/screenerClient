@@ -126,4 +126,12 @@ export class MasterScreenerEditActions{
       type: MasterScreenerEditActions.CLEAR_EXPANDABLE_QUESTION
     }
   }
+  
+  static DELETE_QUESTION = '[MASTER_SCREENER_EDIT] DELETE_QUESTION';
+  deleteQuestion(question:any): Action{
+    return {
+      type: MasterScreenerEditActions.DELETE_QUESTION,
+      payload: question
+    }
+  }
 }

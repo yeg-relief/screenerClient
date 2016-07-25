@@ -246,6 +246,20 @@ export function MasterScreenerEditReducer(state = initialState, action: Action):
       }
     }
     
+    case MasterScreenerEditActions.DELETE_QUESTION: {
+      // this case is not entirely "pure" because of some type of binding to state.data.questions 
+      // in components/editor/master-screener
+      const index = state.data.questions.indexOf(action.payload);
+      state.data.questions.splice(index, 1);
+      return {
+        data: state.data,
+        editQuestion: state.editQuestion,
+        expandableQuestion: state.expandableQuestion,
+        keys: state.keys
+      }
+    }
+    
+    
     default: {
       return state;
     }
