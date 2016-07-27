@@ -134,4 +134,15 @@ export class MasterScreenerEditActions{
       payload: question
     }
   }
+  
+  static SWAP_QUESTIONS = '[MASTER_SCREENER_EDIT] SWAP_QUESTIONS';
+  swapQuestions(questionA, questionB): Action{
+    return {
+      type: MasterScreenerEditActions.SWAP_QUESTIONS,
+      payload: {
+        questionA: questionA, 
+        questionB: questionB
+      }
+    }
+  }
 }

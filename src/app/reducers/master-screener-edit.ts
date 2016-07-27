@@ -259,6 +259,20 @@ export function MasterScreenerEditReducer(state = initialState, action: Action):
       }
     }
     
+    case MasterScreenerEditActions.SWAP_QUESTIONS: {
+      const a = action.payload.questionA;
+      const b = action.payload.questionB;
+      const aIndex = state.data.questions.indexOf(a);
+      const bIndex = state.data.questions.indexOf(b);
+      if(aIndex < 0 || bIndex < 0){
+        return state;
+      }
+      // impure swap function incoming Dan Abramov would probably cry :(
+      state.data.questions[aIndex] = b;
+      state.data.questions[bIndex] = a;
+      
+      return state;
+    }
     
     default: {
       return state;
