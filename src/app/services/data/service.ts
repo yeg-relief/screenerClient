@@ -15,6 +15,7 @@ import { Question } from '../../models';
 export class DataService {
   private masterScreenerUrl: string = 'api/masterscreener/';
   
+  // eventually we'll need to use http service could remove, but i'll just keep it for later
   constructor(private http: Http){}
   
   private _pullData(): Observable<any>{

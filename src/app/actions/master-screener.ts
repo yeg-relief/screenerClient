@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Action } from '@ngrx/store';
 import { MasterScreener, Question } from '../models';
-
+import { Observable } from 'rxjs/Observable';
 
 
 @Injectable()
@@ -49,5 +49,21 @@ export class MasterScreenerActions{
       payload: responses
     }
   }
+  
+  static UPDATE_QUESTIONS = '[MASTER_SCREENER] UPDATE_QUESTIONS';
+  updateQuestions(questions):Action{
+    return {
+      type: MasterScreenerActions.UPDATE_QUESTIONS,
+      payload: questions
+    }
+  }
+  
+  static UPDATE_QUESTIONS_SUCCESS = '[MASTER_SCREENER] UPDATE_QUESTIONS_SUCCESS';
+  updateQuestionsSuccess(questions):Action{
+    return {
+      type: MasterScreenerActions.UPDATE_QUESTIONS_SUCCESS,
+      payload: questions
+    }
+  } 
 }
 

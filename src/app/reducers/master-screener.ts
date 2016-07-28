@@ -2,6 +2,7 @@ import { ActionReducer, Action } from '@ngrx/store';
 import { MasterScreener, Question } from '../models';
 import { MasterScreenerActions } from '../actions';
 import { FormGroup, FormControl } from '@angular/forms';
+import { Subscription } from 'rxjs/Subscription';
 
 export interface MasterScreenerState{
   data: MasterScreener;
@@ -114,6 +115,11 @@ export function masterScreenerReducer(state = initialState, action: Action): Mas
         loaded: state.loaded,
         results: results
       }
+    }
+    
+    // could change state to isLoading or something here
+    case MasterScreenerActions.UPDATE_QUESTIONS: {
+      return state;
     }
     
     default: {

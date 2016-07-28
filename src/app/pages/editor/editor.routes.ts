@@ -10,7 +10,8 @@ export const EditorRoutes: RouterConfig = [
       {path: 'master-screener', component: MasterScreenerEdit},
       {path: 'keys', component: KeyEdit},
       {path: 'programs', component: ProgramsEdit},
-      {path: 'new-question', component: NewQuestion}
+      {path: 'new-question', component: NewQuestion},
+      
     ]
   }
 ];

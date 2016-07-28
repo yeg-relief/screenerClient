@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, OnDestroy, Input, Output, EventEmitter } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/operator/map';
 import { Store } from '@ngrx/store';
@@ -7,7 +7,7 @@ import { GenYcbQuestion } from '../question';
 import { MD_CARD_DIRECTIVES } from '@angular2-material/card';
 import { MD_BUTTON_DIRECTIVES } from '@angular2-material/button';
 import { MasterScreenerEditActions } from '../../actions/master-screener-edit';
-
+import { MasterScreenerActions } from '../../actions/master-screener';
 
 
 @Component({
@@ -38,7 +38,7 @@ import { MasterScreenerEditActions } from '../../actions/master-screener-edit';
     }
   `]
 })
-class MasterScreenerQuestion implements OnInit{
+class MasterScreenerQuestion{
   @Input() question:any;
   isSelected = false;
   isOver = false;
@@ -46,11 +46,7 @@ class MasterScreenerQuestion implements OnInit{
   @Output() dragStartEmmitter = new EventEmitter<any>();
   @Output() dragEndEmmitter = new EventEmitter<any>();
   @Output() dropEmmitter  = new EventEmitter<any>();
-  
-  constructor(){}
-  ngOnInit(){
-  }
-  
+    
   dragStartHandler(){
     this.isSelected = true;
     this.dragStartEmmitter.emit(this.question);
@@ -111,6 +107,9 @@ class MasterScreenerQuestion implements OnInit{
           </div>
         </div>
       </md-card-content>
+      <md-card-actions>
+        <button md-button (click)="submit()">SUBMIT</button>
+      </md-card-actions>
     </md-card>
   </div>
   `,
@@ -155,6 +154,13 @@ export class MasterScreenerEdit implements OnInit{
         questionA: this.currentDrag,
         questionB: question
       }
+    })
+  }
+  
+  submit(){
+    this.store.dispatch({
+      type: MasterScreenerActions.UPDATE_QUESTIONS,
+      payload: this.questions$
     })
   }
 }
