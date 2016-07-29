@@ -128,7 +128,7 @@ export class MasterScreenerEditActions{
   }
   
   static DELETE_QUESTION = '[MASTER_SCREENER_EDIT] DELETE_QUESTION';
-  deleteQuestion(question:any): Action{
+  deleteQuestion(question): Action{
     return {
       type: MasterScreenerEditActions.DELETE_QUESTION,
       payload: question
@@ -143,6 +143,23 @@ export class MasterScreenerEditActions{
         questionA: questionA, 
         questionB: questionB
       }
+    }
+  }
+  
+  // used in editor/master-screener to edit a question
+  static SET_EDIT_QUESTION = '[MASTER_SCREENER_EDIT] SET_EDIT_QUESTION';
+  setEditQuestion(question): Action{
+    return {
+      type: MasterScreenerEditActions.SET_EDIT_QUESTION,
+      payload: question
+    }
+  }
+  
+  static ADD_QUESTION_TO_SCREENER = '[MASTER_SCREENER_EDIT] ADD_QUESTION_TO_SCREENER';
+  addQuestionToScreener(question): Action{
+    return {
+      type: MasterScreenerEditActions.ADD_QUESTION_TO_SCREENER,
+      payload: question
     }
   }
 }

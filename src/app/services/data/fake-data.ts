@@ -35,6 +35,7 @@ export function fakeData():any{
       label: 'select an option',
       controlType: 'radio',
       value: 'optionOne',
+      type: '',
       options: [
        'option 1',
        'option 2',

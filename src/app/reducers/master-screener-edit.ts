@@ -5,6 +5,7 @@ import { MasterScreenerEditActions } from '../actions';
 export interface MasterScreenerEditState{
   data: MasterScreenerEdit;
   editQuestion: Question;
+  originalQuestion: Question;
   expandableQuestion: Question;
   keys: {key:string, type:string}[]
 }
@@ -12,6 +13,7 @@ export interface MasterScreenerEditState{
 const initialState: MasterScreenerEditState = {
   data: undefined,
   editQuestion: undefined,
+  originalQuestion: undefined,
   expandableQuestion: undefined,
   keys: undefined
 }
@@ -58,6 +60,16 @@ export function MasterScreenerEditReducer(state = initialState, action: Action):
           expandable: [],
           options: []
         },
+        originalQuestion: {
+          value: '',
+          key: '',
+          label: '',
+          controlType: '',
+          type: '',
+          control: null,
+          expandable: [],
+          options: []
+        },
         expandableQuestion: {
           value: '',
           key: '',
@@ -80,6 +92,7 @@ export function MasterScreenerEditReducer(state = initialState, action: Action):
       return {
         data: state.data,
         editQuestion: editQuestion,
+        originalQuestion: state.originalQuestion,
         expandableQuestion: state.expandableQuestion,
         keys: state.keys
       }
@@ -92,6 +105,7 @@ export function MasterScreenerEditReducer(state = initialState, action: Action):
       return {
         data: state.data,
         editQuestion: editQuestion,
+        originalQuestion: state.originalQuestion,
         expandableQuestion: state.expandableQuestion,
         keys: state.keys
       }
@@ -103,6 +117,7 @@ export function MasterScreenerEditReducer(state = initialState, action: Action):
       return {
         data: state.data,
         editQuestion: editQuestion,
+        originalQuestion: state.originalQuestion,
         expandableQuestion: state.expandableQuestion,
         keys: state.keys
       }
@@ -114,6 +129,7 @@ export function MasterScreenerEditReducer(state = initialState, action: Action):
       return {
         data: state.data,
         editQuestion: editQuestion,
+        originalQuestion: state.originalQuestion,
         expandableQuestion: state.expandableQuestion,
         keys: state.keys
       }
@@ -125,6 +141,7 @@ export function MasterScreenerEditReducer(state = initialState, action: Action):
       return {
         data: state.data,
         editQuestion: editQuestion,
+        originalQuestion: state.originalQuestion,
         expandableQuestion: state.expandableQuestion,
         keys: state.keys
       }
@@ -136,6 +153,7 @@ export function MasterScreenerEditReducer(state = initialState, action: Action):
       return {
         data: state.data,
         editQuestion: editQuestion,
+        originalQuestion: state.originalQuestion,
         expandableQuestion: state.expandableQuestion,
         keys: state.keys
       }
@@ -147,6 +165,7 @@ export function MasterScreenerEditReducer(state = initialState, action: Action):
       return {
         data: state.data,
         editQuestion: state.editQuestion, 
+        originalQuestion: state.originalQuestion,
         expandableQuestion: expandableQuestion,
         keys: state.keys
       }
@@ -158,6 +177,7 @@ export function MasterScreenerEditReducer(state = initialState, action: Action):
       return {
         data: state.data,
         editQuestion: state.editQuestion,
+        originalQuestion: state.originalQuestion,
         expandableQuestion: expandableQuestion,
         keys: state.keys
       }
@@ -169,6 +189,7 @@ export function MasterScreenerEditReducer(state = initialState, action: Action):
       return {
         data: state.data,
         editQuestion: state.editQuestion,
+        originalQuestion: state.originalQuestion,
         expandableQuestion: expandableQuestion,
         keys: state.keys
       } 
@@ -180,6 +201,7 @@ export function MasterScreenerEditReducer(state = initialState, action: Action):
       return {
         data: state.data,
         editQuestion: state.editQuestion,
+        originalQuestion: state.originalQuestion,
         expandableQuestion: expandableQuestion,
         keys: state.keys
       } 
@@ -201,6 +223,7 @@ export function MasterScreenerEditReducer(state = initialState, action: Action):
       return {
         data: state.data,
         editQuestion: editQuestion,
+        originalQuestion: state.originalQuestion,
         expandableQuestion: clearExpandableQuestion,
         keys: state.keys
       }
@@ -212,6 +235,7 @@ export function MasterScreenerEditReducer(state = initialState, action: Action):
       return {
         data: state.data,
         editQuestion: editQuestion,
+        originalQuestion: state.originalQuestion,
         expandableQuestion: state.expandableQuestion,
         keys: state.keys
       }
@@ -222,6 +246,7 @@ export function MasterScreenerEditReducer(state = initialState, action: Action):
       return {
         data: state.data,
         editQuestion: state.editQuestion,
+        originalQuestion: state.originalQuestion,
         expandableQuestion: expandableQuestion,
         keys: state.keys
       }
@@ -241,6 +266,7 @@ export function MasterScreenerEditReducer(state = initialState, action: Action):
       return {
         data: state.data,
         editQuestion: state.editQuestion,
+        originalQuestion: state.originalQuestion,
         expandableQuestion: clearExpandableQuestion,
         keys: state.keys
       }
@@ -254,23 +280,83 @@ export function MasterScreenerEditReducer(state = initialState, action: Action):
       return {
         data: state.data,
         editQuestion: state.editQuestion,
+        originalQuestion: state.originalQuestion,
         expandableQuestion: state.expandableQuestion,
         keys: state.keys
       }
     }
     
+    // impure swap function incoming Dan Abramov would probably cry :(
     case MasterScreenerEditActions.SWAP_QUESTIONS: {
       const a = action.payload.questionA;
       const b = action.payload.questionB;
       const aIndex = state.data.questions.indexOf(a);
       const bIndex = state.data.questions.indexOf(b);
-      if(aIndex < 0 || bIndex < 0){
+      if(!(aIndex < 0 || bIndex < 0)){
+        state.data.questions[aIndex] = b;
+        state.data.questions[bIndex] = a;
+      }
+      return state;
+    }
+    
+    case MasterScreenerEditActions.SET_EDIT_QUESTION: {
+      state.originalQuestion = (<any>Object).assign({}, action.payload);
+      state.editQuestion = (<any>Object).assign({}, action.payload);
+      return state;
+    }
+    
+    case MasterScreenerEditActions.ADD_QUESTION_TO_SCREENER: {
+      const blankQuestion = {
+        value: '',
+        key: '',
+        label: '',
+        controlType: '',
+        type: '',
+        control: null,
+        expandable: [],
+        options: []
+      }
+      
+      if(deepEqual(blankQuestion, action.payload)){
         return state;
       }
-      // impure swap function incoming Dan Abramov would probably cry :(
-      state.data.questions[aIndex] = b;
-      state.data.questions[bIndex] = a;
       
+      const replaceIndex = find(state.originalQuestion);
+      if(replaceIndex < 0){
+        state.data.questions.push(action.payload)
+        state.editQuestion = {
+          value: '',
+          key: '',
+          label: '',
+          controlType: '',
+          type: '',
+          control: null,
+          expandable: null,
+          options: []
+        }
+      } else {
+        state.data.questions[replaceIndex] = action.payload;
+        state.editQuestion = {
+          value: '',
+          key: '',
+          label: '',
+          controlType: '',
+          type: '',
+          control: null,
+          expandable: null,
+          options: []
+        }
+        state.originalQuestion = {
+          value: '',
+          key: '',
+          label: '',
+          controlType: '',
+          type: '',
+          control: null,
+          expandable: null,
+          options: []
+        }
+      }
       return state;
     }
     
@@ -278,4 +364,22 @@ export function MasterScreenerEditReducer(state = initialState, action: Action):
       return state;
     }
   }
+  
+  function find(question): number{
+    let index = -1;
+    state.data.questions.forEach( (stateQuestion, stateQuestionsIndex) => {
+      if(deepEqual(stateQuestion, question)){
+        index = stateQuestionsIndex;
+      }
+    })
+    return index;
+  }
+  
+  function deepEqual(questionA, questionB): boolean{
+    if(JSON.stringify(questionA) === JSON.stringify(questionB)){
+      return true;
+    }
+    return false;
+  }
 }
+

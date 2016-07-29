@@ -8,7 +8,7 @@ import { MD_CARD_DIRECTIVES } from '@angular2-material/card';
 import { MD_BUTTON_DIRECTIVES } from '@angular2-material/button';
 import { MasterScreenerEditActions } from '../../actions/master-screener-edit';
 import { MasterScreenerActions } from '../../actions/master-screener';
-
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'master-screener-question',
@@ -99,7 +99,7 @@ class MasterScreenerQuestion{
                 </master-screener-question>
               </md-card-content>
               <md-card-actions>
-                <button md-button>EDIT</button>
+                <button md-button (click)="edit(question)">EDIT</button>
                 <button md-button (click)="deleteQuestion(question)">DELETE</button>
               </md-card-actions>
             </md-card>
@@ -117,9 +117,9 @@ class MasterScreenerQuestion{
 })
 export class MasterScreenerEdit implements OnInit{
   private questions$: Observable<any>;
-  private currentDrag: any = undefined;
+  private currentDrag = undefined;
   
-  constructor(private store: Store<AppState>){}
+  constructor(private store: Store<AppState>, private router: Router){}
   
   ngOnInit(){
     this.questions$ = this.store.select('masterScreenerEdit')   
@@ -163,4 +163,14 @@ export class MasterScreenerEdit implements OnInit{
       payload: this.questions$
     })
   }
+  
+  edit(question){
+    console.log(question)
+    this.store.dispatch({
+      type: MasterScreenerEditActions.SET_EDIT_QUESTION,
+      payload: question
+    })
+    this.router.navigate(['/editor/new-question']);
+  }
+  
 }
