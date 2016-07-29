@@ -162,4 +162,11 @@ export class MasterScreenerEditActions{
       payload: question
     }
   }
+  
+  static CLEAR_EDIT_QUESTION = '[CLEAR_EDIT_QUESTION] CLEAR_EDIT_QUESTION';
+  clearEditQuestion(): Action{
+    return {
+      type: MasterScreenerEditActions.CLEAR_EDIT_QUESTION
+    }
+  }
 }

@@ -21,14 +21,13 @@ import { MasterScreenerEditActions } from '../../actions';
       <md-card-content>
         <gen-ycb-question [question]="question" [controls]="false"></gen-ycb-question>
         <br><br>
-        <button md-raised-button color="primary">CLEAR QUESTION</button> 
+        <button md-raised-button color="primary" (click)="clear(question)">CLEAR QUESTION</button> 
         <button style="margin-left:2vw" 
           md-raised-button color="primary" 
           (click)="add(question)">
           ADD QUESTION
         </button> 
         <br><br>
-        <p style="color:red">NOTE: these buttons are not implemented</p>
       </md-card-content>
     </md-card>
   `,
@@ -46,4 +45,19 @@ export class MsPreviewTab{
     })
   }
   
+  clear(){
+    this.store.dispatch({
+      type: MasterScreenerEditActions.CLEAR_EDIT_QUESTION
+    })
+    this.question = {
+      value: '',
+      key: '',
+      label: '',
+      controlType: '',
+      type: '',
+      control: null,
+      expandable: [],
+      options: []
+    }
+  }
 }

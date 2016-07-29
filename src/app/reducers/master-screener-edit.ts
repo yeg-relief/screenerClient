@@ -331,7 +331,7 @@ export function MasterScreenerEditReducer(state = initialState, action: Action):
           controlType: '',
           type: '',
           control: null,
-          expandable: null,
+          expandable: [],
           options: []
         }
       } else {
@@ -343,7 +343,7 @@ export function MasterScreenerEditReducer(state = initialState, action: Action):
           controlType: '',
           type: '',
           control: null,
-          expandable: null,
+          expandable: [],
           options: []
         }
         state.originalQuestion = {
@@ -353,10 +353,36 @@ export function MasterScreenerEditReducer(state = initialState, action: Action):
           controlType: '',
           type: '',
           control: null,
-          expandable: null,
+          expandable: [],
           options: []
         }
       }
+      return state;
+    }
+    
+    case MasterScreenerEditActions.CLEAR_EDIT_QUESTION: {
+      state.editQuestion = {
+        value: '',
+        key: '',
+        label: '',
+        controlType: '',
+        type: '',
+        control: null,
+        expandable: [],
+        options: []
+      }
+      
+      state.originalQuestion = {
+        value: '',
+        key: '',
+        label: '',
+        controlType: '',
+        type: '',
+        control: null,
+        expandable: [],
+        options: []
+      }
+      
       return state;
     }
     
@@ -365,6 +391,7 @@ export function MasterScreenerEditReducer(state = initialState, action: Action):
     }
   }
   
+  // helper functions
   function find(question): number{
     let index = -1;
     state.data.questions.forEach( (stateQuestion, stateQuestionsIndex) => {
