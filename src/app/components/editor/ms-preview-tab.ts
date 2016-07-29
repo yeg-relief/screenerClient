@@ -45,6 +45,7 @@ export class MsPreviewTab{
     })
   }
   
+  // really messy method... does this.question also reference editQuestion in the reducer/state?
   clear(){
     this.store.dispatch({
       type: MasterScreenerEditActions.CLEAR_EDIT_QUESTION

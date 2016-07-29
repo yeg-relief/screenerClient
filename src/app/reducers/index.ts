@@ -7,17 +7,20 @@ import '@ngrx/core/add/operator/select';
 import * as fromMsEditor from './master-screener-edit';
 import * as fromMedia from './media';
 import * as fromMasterScreener from './master-screener'; 
+import * as fromKeys from './keys';
 
 export interface AppState {
   media: fromMedia.MediaState;
   masterScreener: fromMasterScreener.MasterScreenerState;
   masterScreenerEdit: fromMsEditor.MasterScreenerEditState;
+  keys: fromKeys.KeyState;
 }
 
 export default compose(storeLogger(), combineReducers)({
   media: fromMedia.mediaReducer,
   masterScreener: fromMasterScreener.masterScreenerReducer,
-  masterScreenerEdit: fromMsEditor.MasterScreenerEditReducer
+  masterScreenerEdit: fromMsEditor.MasterScreenerEditReducer,
+  keys: fromKeys.keyReducer
 });
 
 export function getMediaState() {
