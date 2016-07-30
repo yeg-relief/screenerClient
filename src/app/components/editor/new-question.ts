@@ -65,8 +65,8 @@ export class NewQuestion implements OnInit{
     this.expandableQuestion$ = this.store.select('masterScreenerEdit')
                                .map( (msEdit:any) => msEdit.expandableQuestion)
                                
-    this.keys$ = this.store.select('masterScreenerEdit')
-                 .map( (msEdit:any) => msEdit.keys)
+    this.keys$ = this.store.select('keys')
+                 .map( (keys:any) => keys.keys)
   }
 }
 

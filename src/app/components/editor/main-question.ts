@@ -65,7 +65,7 @@ class PreviewQuestion{
       <md-card-content>
         <select [(ngModel)]="question.key">
           <option *ngFor="let key of keys">
-            {{key.key}}
+            {{key.id}}
           </option>
         </select>
       </md-card-content>

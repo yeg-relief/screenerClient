@@ -75,7 +75,7 @@ class PreviewCollapsableSection{
         <md-card-content>
           <select [(ngModel)]="expandableQuestion.key">
             <option *ngFor="let key of keys">
-              {{key.key}}
+              {{key.id}}
             </option>
           </select>
         </md-card-content>
