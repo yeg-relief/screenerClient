@@ -19,7 +19,7 @@ import 'rxjs/add/operator/map';
         <md-tab>
           <template md-tab-label>Preview Question</template>
           <template md-tab-content>
-            <section style="width:85%; margin-left:10%; margin-top:5%; height:100vh;">
+            <section style="width:85%; margin-left:10%; margin-top:5%; height:200vh;">
               <ms-preview-tab [question]="(question$ | async)"></ms-preview-tab>
             </section>
           </template>

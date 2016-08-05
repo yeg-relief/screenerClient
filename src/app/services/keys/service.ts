@@ -9,19 +9,48 @@ export class KeyService{
   private mockKeys:Array<Key> = [
     {
       id: 'children',
-      type: 'boolean'
+      type: 'boolean',
+      questionKey: null
     },
     {
       id: 'number_of_children',
-      type: 'number'
+      type: 'number',
+      questionKey: null
     },
     {
       id: 'yearly_personal_income',
-      type: 'number'
+      type: 'number',
+      questionKey: null
     },
     {
       id: 'married',
-      type: 'boolean'
+      type: 'boolean',
+      questionKey: null
+    },
+    {
+      id: 'expand',
+      type: 'boolean',
+      questionKey: 'expand'
+    },
+    {
+      id: 'firstName',
+      type: 'string',
+      questionKey: 'firstName'
+    },
+    {
+      id: 'emailAddress',
+      type: 'string',
+      questionKey: 'emailAddress'
+    },
+    {
+      id: 'numberChildren',
+      type: 'number',
+      questionKey: 'numberChildren'
+    },
+    {
+      id: 'dropDownQuestion',
+      type: 'string',
+      questionKey: 'dropDownQuestion'
     }
   ]  
   

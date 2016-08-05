@@ -1,5 +1,9 @@
 import { RouterConfig } from '@angular/router';
-import { KeyEdit, MasterScreenerEdit, ProgramsEdit, NewQuestion } from '../../components';
+import { 
+  KeyEdit, MasterScreenerEdit, 
+  ProgramsEdit, NewQuestion, 
+  KeyEditorAdd, KeyOverview,
+  KeyDetailEdit } from '../../components';
 import { Editor } from './editor.component';
 
 export const EditorRoutes: RouterConfig = [
@@ -8,10 +12,16 @@ export const EditorRoutes: RouterConfig = [
     component: Editor,
     children: [
       {path: 'master-screener', component: MasterScreenerEdit},
-      {path: 'keys', component: KeyEdit},
+      {
+        path: 'keys', component: KeyEdit, 
+        children: [
+          {path: 'add', component: KeyEditorAdd},
+          {path: '', component: KeyOverview },
+          {path: 'edit', component: KeyDetailEdit}
+        ] 
+      },
       {path: 'programs', component: ProgramsEdit},
       {path: 'new-question', component: NewQuestion},
-      
     ]
   }
 ];

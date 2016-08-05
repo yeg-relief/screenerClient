@@ -18,4 +18,12 @@ export class KeyActions{
       payload: keys
     }
   }
+  
+  static SET_EDIT_KEY = '[KEY_ACTIONS] SET_EDIT_KEY';
+  setEditKey(key:Key):Action{
+    return {
+      type: KeyActions.SET_EDIT_KEY,
+      payload: key
+    }
+  }
 }
