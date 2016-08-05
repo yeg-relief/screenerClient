@@ -5,7 +5,6 @@ import {
 } from './pages';
 
 import { EditorRoutes } from './pages';
-import { KeyEditorRoutes } from './components/editor/key-routes';
 
 export const routes: RouterConfig = [
   { path: '', component: HomeComponent },
