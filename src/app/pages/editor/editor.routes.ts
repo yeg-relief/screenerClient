@@ -3,7 +3,7 @@ import {
   KeyEdit, MasterScreenerEdit, 
   ProgramsEdit, NewQuestion, 
   KeyEditorAdd, KeyOverview,
-  KeyDetailEdit } from '../../components';
+  KeyDetailEdit, QuestionPreview } from '../../components';
 import { Editor } from './editor.component';
 
 export const EditorRoutes: RouterConfig = [
@@ -17,7 +17,8 @@ export const EditorRoutes: RouterConfig = [
         children: [
           {path: 'add', component: KeyEditorAdd},
           {path: '', component: KeyOverview },
-          {path: 'edit', component: KeyDetailEdit}
+          {path: 'edit', component: KeyDetailEdit},
+          {path: 'preview-question', component: QuestionPreview }
         ] 
       },
       {path: 'programs', component: ProgramsEdit},

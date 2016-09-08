@@ -163,10 +163,18 @@ export class MasterScreenerEditActions{
     }
   }
   
-  static CLEAR_EDIT_QUESTION = '[CLEAR_EDIT_QUESTION] CLEAR_EDIT_QUESTION';
+  static CLEAR_EDIT_QUESTION = '[MASTER_SCREENER_EDIT] CLEAR_EDIT_QUESTION';
   clearEditQuestion(): Action{
     return {
       type: MasterScreenerEditActions.CLEAR_EDIT_QUESTION
+    }
+  }
+  
+  static SET_INSPECT_QUESTION = '[MASTER_SCREENER_EDIT] SET_INSPECT_QUESTION';
+  setInspectQuestion(questionID): Action{
+    return{
+      type: MasterScreenerEditActions.SET_INSPECT_QUESTION,
+      payload: questionID
     }
   }
 }

@@ -26,4 +26,28 @@ export class KeyActions{
       payload: key
     }
   }
+  
+  static UPDATE_EDIT_KEY = '[KEY_ACTIONS] UPDATE_EDIT_KEY';
+  updateEditKey(key:Key):Action{
+    return {
+      type: KeyActions.UPDATE_EDIT_KEY, 
+      payload: key
+    }
+  }
+  
+  static ADD_KEY = '[KEY_ACTIONS] ADD_KEY';
+  addKey(key:Key):Action{
+    return{
+      type: KeyActions.ADD_KEY,
+      payload: key
+    }
+  }
+  
+  static DELETE_KEY = '[KEY_ACTIONS] DELETE_KEY';
+  deleteKey(key:Key):Action{
+    return{
+      type: KeyActions.DELETE_KEY, 
+      payload: key
+    }
+  }
 }

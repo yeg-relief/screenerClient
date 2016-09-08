@@ -6,6 +6,7 @@ import { AppState } from '../../reducers';
 import 'rxjs/add/operator/map'
 import { ROUTER_DIRECTIVES, Router } from '@angular/router';
 import { KeyActions } from '../../actions';
+import { MasterScreenerEditActions } from '../../actions';
 
 @Component({
   selector: 'key-overview',
@@ -38,8 +39,12 @@ import { KeyActions } from '../../actions';
                       EDIT 
                     </button>
                   </td>
-                  <td *ngIf="key.questionKey != null"> <button md-raised-button> DELETE </button> </td>
-                  <td *ngIf="key.questionKey != null"> <button md-raised-button> QUESTION </button> </td> 
+                  <td *ngIf="key.questionKey != null"> 
+                    <button md-raised-button (click)="delete(key)"> DELETE </button> 
+                  </td>
+                  <td *ngIf="key.questionKey != null"> 
+                    <button md-raised-button (click)="viewQuestion(key.questionKey)"> QUESTION </button> 
+                  </td> 
                 </tr>
               </table>
             </div>
@@ -63,7 +68,9 @@ import { KeyActions } from '../../actions';
                       EDIT 
                     </button>
                   </td>
-                  <td *ngIf="key.questionKey == null"> <button md-raised-button> DELETE </button> </td>
+                  <td *ngIf="key.questionKey == null"> 
+                    <button md-raised-button (click)="delete(key)"> DELETE </button> 
+                  </td>
                 </tr>
               </table>
             </div>
@@ -98,5 +105,20 @@ export class KeyOverview implements OnInit{
       payload: key
     })
     this.router.navigate(['/editor/keys/edit']);
+  }
+  
+  delete(key){
+    this.store.dispatch({
+      type: KeyActions.DELETE_KEY,
+      payload: key
+    })
+  }
+  
+  viewQuestion(questionKey){
+    this.store.dispatch({
+      type: MasterScreenerEditActions.SET_INSPECT_QUESTION,
+      payload: questionKey
+    })
+    this.router.navigate(['/editor/keys/preview-question'])
   }
 }
