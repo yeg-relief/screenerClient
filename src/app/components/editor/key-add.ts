@@ -14,34 +14,37 @@ import { ROUTER_DIRECTIVES } from '@angular/router';
 
 @Component({
   template: `
-    <md-card style="width:100%; margin-top:2%; height:200vh;">
-      <md-card-title> ADD KEY </md-card-title>
-      <md-card-subtitle> Add a key to the backend</md-card-subtitle>
-      <md-card-content>
-        <md-input placeholder="key id" [(ngModel)]="id"></md-input>
-        <md-card-subtitle> key type</md-card-subtitle>
-        <md-radio-group [(ngModel)] = "type">
-          <md-radio-button value="number">number</md-radio-button>
-          <md-radio-button value="string">string</md-radio-button>
-          <md-radio-button value="boolean">boolean</md-radio-button>
-        </md-radio-group>
-      </md-card-content>
-      <md-card-actions>
-        <button md-raised-button (click)="submit()">ADD</button>
-      </md-card-actions>
-      <md-card *ngIf="error !== null" style="background-color: red">
-        <md-card-subtitle > {{ error }} </md-card-subtitle>
-      </md-card>
-      <md-card *ngIf="success === true" style="background-color: green">
-        <md-card-subtitle > key uploaded successfully </md-card-subtitle> 
+  <div class="flex flex-column" style="width:100%;">
+    <md-card style="width:85%; margin-top:2%; height:200vh;">
+      <div style="width: 50%; margin-left:25%; margin-right:25%;">
+        <md-card-title> ADD KEY </md-card-title>
+        <md-card-subtitle> Add a key to the backend</md-card-subtitle>
+        <md-card-content>
+          <md-input placeholder="key id" [(ngModel)]="id"></md-input>
+          <md-card-subtitle> key type</md-card-subtitle>
+          <md-radio-group [(ngModel)] = "type">
+            <md-radio-button value="number">number</md-radio-button>
+            <md-radio-button value="string">string</md-radio-button>
+            <md-radio-button value="boolean">boolean</md-radio-button>
+          </md-radio-group>
+        </md-card-content>
         <md-card-actions>
-          <a [routerLink]="['/editor/keys']">
-            <button button md-raised-button color="primary">OVERIVEW</button>
-          </a>
+          <button md-raised-button (click)="submit()">ADD</button>
         </md-card-actions>
-      </md-card>
+        <md-card *ngIf="error !== null" style="background-color: red">
+          <md-card-subtitle > {{ error }} </md-card-subtitle>
+        </md-card>
+        <md-card *ngIf="success === true" style="background-color: green">
+          <md-card-subtitle > key uploaded successfully </md-card-subtitle> 
+          <md-card-actions>
+            <a [routerLink]="['/editor/keys']">
+              <button button md-raised-button color="primary">OVERIVEW</button>
+            </a>
+          </md-card-actions>
+        </md-card>
+      </div>
     </md-card>
-    
+  </div>
   `,
   providers: [MdUniqueSelectionDispatcher],
   directives: [

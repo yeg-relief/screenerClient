@@ -415,6 +415,7 @@ export function MasterScreenerEditReducer(state = initialState, action: Action):
     
     case MasterScreenerEditActions.SET_INSPECT_QUESTION: {
       const questionIndex = findById(action.payload);
+      console.log(questionIndex);
       if(questionIndex > -1){
         state.previewQuestion = state.data.questions[questionIndex];
       }
@@ -446,12 +447,20 @@ export function MasterScreenerEditReducer(state = initialState, action: Action):
   
   function findById(questionID): number{
     let index = -1;
+
     state.data.questions.forEach( (stateQuestion, stateQuestionsIndex) => {
       if(stateQuestion.key === questionID){
         index = stateQuestionsIndex
+      } else if(stateQuestion.expandable.length > 0) {
+        stateQuestion.expandable.forEach( (expandableQuestion, expandableIndex) => {
+          if(expandableQuestion.key === questionID){
+            index = stateQuestionsIndex;
+          }
+        })
       }
     })
     return index;
+    
   }
 }
 

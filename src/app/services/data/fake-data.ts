@@ -31,7 +31,7 @@ export function fakeData():any{
       
     },
     {
-      key: 'dropdownQuestion',
+      key: 'dropDownQuestion',
       label: 'select an option',
       controlType: 'radio',
       value: 'optionOne',
