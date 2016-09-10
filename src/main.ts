@@ -8,8 +8,9 @@ import { provideStore } from '@ngrx/store';
 import { runEffects } from '@ngrx/effects';
 import { MasterScreenerEffects } from './app/effects/master-screener';
 import { MasterScreenerEditEffects } from './app/effects/master-screener-edit';
+import { ProgramEffects } from './app/effects/programs';
 import { KeyEffects } from './app/effects/keys'
-import { EditorService, KeyService, DataService } from './app/services/index';
+import { EditorService, KeyService, DataService, ProgramService } from './app/services/index';
 
 import actions from './app/actions/index'
 import reducer  from './app/reducers'
@@ -25,9 +26,10 @@ bootstrap(AppComponent, [
   APP_ROUTER_PROVIDERS,
   provideStore(reducer),
   actions,
-  runEffects(MasterScreenerEffects, MasterScreenerEditEffects, KeyEffects),
+  runEffects(MasterScreenerEffects, MasterScreenerEditEffects, KeyEffects, ProgramEffects),
   DataService,
   EditorService,
-  KeyService
+  KeyService,
+  ProgramService
 ])
 .catch((err: any) => console.error(err));
