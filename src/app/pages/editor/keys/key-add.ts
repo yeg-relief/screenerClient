@@ -15,7 +15,7 @@ import { ROUTER_DIRECTIVES } from '@angular/router';
 @Component({
   template: `
   <div class="flex flex-column" style="width:100%;">
-    <md-card style="width:85%; margin-top:2%; height:200vh;">
+    <md-card style="width:85%; margin-top:2%; height:95vh;">
       <div style="width: 50%; margin-left:25%; margin-right:25%;">
         <md-card-title> ADD KEY </md-card-title>
         <md-card-subtitle> Add a key to the backend</md-card-subtitle>

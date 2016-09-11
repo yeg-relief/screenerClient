@@ -81,7 +81,7 @@ class MasterScreenerQuestion{
 
 @Component({
   template: `
-  <div style="width:80vw;margin-top:5vh;height:200vh;">
+  <div style="width:80vw;margin-top:5vh;height:100vh;">
     <md-card>
       <md-card-title>Master Screener Edit Mode</md-card-title>
       <md-card-subtitle>delete, edit or reorder</md-card-subtitle>

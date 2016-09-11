@@ -6,7 +6,7 @@ import { MD_CARD_DIRECTIVES } from '@angular2-material/card';
 
 @Component({
   template: `
-  <md-card style="width:85%; margin-left:10%; margin-top:2%; height:200vh;">
+  <md-card style="width:85%; margin-left:10%; margin-top:2%; height:95vh;">
     <md-card-title> QUESTION PREVIEW </md-card-title>
     <md-card-subtitle> This question is related to the key TODO: list key name here </md-card-subtitle>
     <md-card-subtitle> note: if this is an expandable question, the key may be related to a 'hidden' question.</md-card-subtitle>

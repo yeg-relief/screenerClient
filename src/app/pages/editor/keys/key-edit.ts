@@ -15,7 +15,7 @@ import 'rxjs/add/operator/map'
 @Component({
   template: `
   <div class="flex flex-column" style="width:100%;">
-    <md-card style="width:85%; margin-top:2%; height:200vh;">
+    <md-card style="width:85%; margin-top:2%; height:95vh;">
       <div style="width: 50%; margin-left:25%; margin-right:25%;">
         <md-card-title> EDIT KEY </md-card-title>
         <md-card-subtitle> edit a key name and type</md-card-subtitle>

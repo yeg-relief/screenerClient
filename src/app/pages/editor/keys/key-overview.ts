@@ -11,7 +11,7 @@ import { KeyActions, MasterScreenerEditActions } from '../../../actions';
   selector: 'key-overview',
   template: `
     <div class="flex flex-column" style="width:100%;">
-      <md-card style="width:85%; margin-left:10%; margin-top:2%; height:200vh;">
+      <md-card style="width:85%; margin-left:10%; margin-top:2%; height:95vh;">
         <md-card-title>Question Keys</md-card-title>
         <md-card-subtitle>Inspect, edit and add question keys here</md-card-subtitle> 
         <md-card-content>

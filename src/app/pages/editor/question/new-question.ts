@@ -14,12 +14,12 @@ import 'rxjs/add/operator/map';
 
 @Component({
   template: `
-    <div class="flex flex-column" style="width:85vw;">
+    <div class="flex flex-column" style="width:80vw;">
       <md-tab-group>
         <md-tab>
           <template md-tab-label>Preview Question</template>
           <template md-tab-content>
-            <section style="width:65vw; margin-left:10vw; margin-top:5vh; height:200vh; margin-right:10vw">
+            <section style="width:65%; margin-left:10%; margin-top:5%; height:95vh; margin-right:5vw; overflow: hidden;">
               <ms-preview-tab [question]="(question$ | async)"></ms-preview-tab>
             </section>
           </template>
@@ -27,7 +27,7 @@ import 'rxjs/add/operator/map';
         <md-tab>
           <template md-tab-label>Main Question</template>
           <template md-tab-content>
-            <section style="width:85vw; padding-bottom:10vh; height:200vh;">
+            <section style="width:100%; padding-bottom:10vh; height:95vh; overflow: hidden;">
               <main-question 
                 [question]="(question$ | async)"
                 [keys]="(keys$ | async)">
@@ -38,7 +38,7 @@ import 'rxjs/add/operator/map';
         <md-tab>
           <template md-tab-label>Collapsable Section</template>
           <template md-tab-content>
-            <section style="width:85vw; padding-bottom:10vh; height:200vh;">
+            <section style="width:100%; padding-bottom:10vh; height:95vh; overflow: hidden;">
               <collapsable-question 
                 [question]="(question$ | async)"
                 [expandableQuestion]="(expandableQuestion$ | async)"
