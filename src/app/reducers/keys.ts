@@ -27,45 +27,46 @@ export function keyReducer(state = initialState, action: Action): KeyState{
         keys.push( (<any>Object).assign({}, key) )
       })
       
-      return{
-        keys: keys,
-        editKey: state.editKey,
-        originalKey: state.originalKey
-      }
+      return (<any>Object).assign({}, state, {
+        keys: keys
+      })
     }
     
     case KeyActions.SET_EDIT_KEY: {
-      return{
-        keys: state.keys,
-        editKey: action.payload,
+      return (<any>Object).assign({}, state, {
+        editKey: action.payload, 
         originalKey: action.payload
-      }
+      })
     }
     
     case KeyActions.UPDATE_EDIT_KEY: {
       const index = state.keys.indexOf(state.originalKey);
+      const keys = state.keys;
       if(index > -1){
-        state.keys.splice(index, 1, action.payload);
+        keys.splice(index, 1, action.payload);
       }
-      return state
+      return (<any>Object).assign({}, state, {
+        keys: keys
+      }) 
     }
     
     case KeyActions.ADD_KEY: {
       const keys = state.keys;
       keys.push(action.payload)
-      return{
-        keys: keys,
-        editKey: state.editKey, 
-        originalKey: state.originalKey
-      }
+      return (<any>Object).assign({}, state, {
+        keys: keys
+      }) 
     }
     
     case KeyActions.DELETE_KEY: {
       const index = state.keys.indexOf(action.payload);
+      const keys = state.keys;
       if(index > -1){
-        state.keys.splice(index, 1)
+        keys.splice(index, 1)
       }
-      return state;
+      return (<any>Object).assign({}, state, {
+        keys: keys
+      }) 
     }
     
     default: {

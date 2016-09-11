@@ -20,10 +20,13 @@ export function ProgramReducer(state = initialState, action: Action): ProgramSta
     }
     
     case ProgramActions.LOAD_PROGRAMS_SUCCESS: {
+      const programs: Program[] = new Array<Program>();
       action.payload.map( (program) => {
-        state.programs.push(program);
+        programs.push(program);
       })
-      return state;
+      return (<any>Object).assign({}, state, {
+        programs: programs  
+      })
     }
     
     default: {

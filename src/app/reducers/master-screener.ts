@@ -27,16 +27,7 @@ export function masterScreenerReducer(state = initialState, action: Action): Mas
     
     case MasterScreenerActions.LOAD_QUESTIONS_SUCCESS: {
       const questions: Question[] = action.payload;
-      const controls: {[key:string]:FormControl} = {};
-      
-      action.payload.map( question => {
-        controls[question.key] = new FormControl(question.value);
-        if(question.expandable.length !== 0){
-          question.expandable.map( collapsibleQuestion => {
-            controls[collapsibleQuestion.key] = new FormControl(collapsibleQuestion.value);
-          })
-        }
-      })
+      const controls: {[key:string]:FormControl} = controlsFromQuestions(questions);
       return {
         data: {
           questions: questions,
@@ -52,56 +43,35 @@ export function masterScreenerReducer(state = initialState, action: Action): Mas
     
     case MasterScreenerActions.NEXT_QUESTION: {
       if(state.currentIndex + 1 < state.data.questions.length){
-        return {
-          data: state.data,
-          currentQuestion: state.data.questions[state.currentIndex + 1],
-          currentIndex: state.currentIndex + 1, 
-          loaded: true,
-          results: state.results
-        }
+        return (<any>Object).assign({}, state, {
+          currentIndex: state.currentIndex + 1,
+          currentQuestion: state.data.questions[state.currentIndex + 1]
+        })
       } 
       return state;
     }
     
     case MasterScreenerActions.PREVIOUS_QUESTION: {
       if(state.currentIndex - 1 >= 0){
-        return {
-          data: state.data,
+        return (<any>Object).assign({}, state, {
           currentQuestion: state.data.questions[state.currentIndex - 1],
           currentIndex: state.currentIndex - 1, 
-          loaded: true,
-          results: state.results
-        }
+        })
       }
       return state;
     }
     
     case MasterScreenerActions.SUBMIT: {
       const questions: Question[] = state.data.questions;
-      const controls: {[key:string]:FormControl} = {};
-      
-      questions.map( (question:any) => {
-        controls[question.key] = new FormControl(question.value);
-        if(question.expandable.length !== 0){
-          question.expandable.map( collapsibleQuestion => {
-            controls[collapsibleQuestion.key] = new FormControl(collapsibleQuestion.value);
-          })
-        }
-      })
+      const controls: {[key:string]:FormControl} = controlsFromQuestions(questions);
       const form = new FormGroup(controls);
-      
-      
-      return {
+      return (<any>Object).assign({}, state, {
         data: {
           questions: state.data.questions,
           form: form,
           payload: JSON.stringify(form.value)
-        }, 
-        currentQuestion: state.currentQuestion,
-        currentIndex: state.currentIndex,
-        loaded: state.loaded,
-        results: state.results
-      }
+        }
+      })
     }
     
     case MasterScreenerActions.SUBMIT_SUCCESS: {
@@ -124,7 +94,7 @@ export function masterScreenerReducer(state = initialState, action: Action): Mas
     
     
     case MasterScreenerActions.UPDATE_QUESTIONS_SUCCESS: {
-      const controls: {[key:string]:FormControl} = {};
+      const controls: {[key:string]:FormControl} = controlsFromQuestions(action.payload)
       return (<any>Object).assign({}, state, {
         data: {
           questions: action.payload,
@@ -135,13 +105,25 @@ export function masterScreenerReducer(state = initialState, action: Action): Mas
         currentIndex: 0,
         loaded: true,
         results: []
-        
       })    
-      
-    }
+   }
     
     default: {
       return state;
     }
   }
+}
+
+
+function controlsFromQuestions(questions:Question[]):{[key:string]:FormControl}{
+  const controls: {[key:string]:FormControl} = {};
+  questions.map((question:any) => {
+    controls[question.key] = new FormControl(question.value);
+    if(question.expandable.length !== 0){
+      question.expandable.map( collapsibleQuestion => {
+        controls[collapsibleQuestion.key] = new FormControl(collapsibleQuestion.value);
+      })
+    }
+  })
+  return controls;
 }

@@ -13,7 +13,9 @@ const initialState: MediaState = {
 export function mediaReducer(state = initialState, action: Action): MediaState {
   switch(action.type){
     case MediaActions.SET_SIZE: {
-      return {width: action.payload.width};
+      return (<any>Object).assign({}, state, {
+        width: action.payload.width
+      })
     }
     
     default: {
