@@ -34,5 +34,5 @@ export class MasterScreenerEffects{
   @Effect() updateQuestions$ = this.updates$
     .whenAction(MasterScreenerActions.UPDATE_QUESTIONS)
     .switchMap( (update) => this.editorService.updateMasterScreener(update.action.payload) )
-    .map( (questions:Question[]) => {return this.masterScreenerActions.loadQuestionsSuccess(questions)})
+    .map( (questions:Question[]) => {return this.masterScreenerActions.updateQuestionsSuccess(questions)})
 }

@@ -116,9 +116,28 @@ export function masterScreenerReducer(state = initialState, action: Action): Mas
       }
     }
     
-    // could change state to isLoading or something here
     case MasterScreenerActions.UPDATE_QUESTIONS: {
-      return state;
+      return (<any>Object).assign({}, state, {
+        loaded: false
+      })
+    }
+    
+    
+    case MasterScreenerActions.UPDATE_QUESTIONS_SUCCESS: {
+      const controls: {[key:string]:FormControl} = {};
+      return (<any>Object).assign({}, state, {
+        data: {
+          questions: action.payload,
+          form: new FormGroup(controls),
+          payload: ''
+        }, 
+        currentQuestion: action.payload[0],
+        currentIndex: 0,
+        loaded: true,
+        results: []
+        
+      })    
+      
     }
     
     default: {
@@ -126,5 +145,3 @@ export function masterScreenerReducer(state = initialState, action: Action): Mas
     }
   }
 }
-
-
