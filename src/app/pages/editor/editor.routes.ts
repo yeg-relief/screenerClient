@@ -1,10 +1,11 @@
 import { RouterConfig } from '@angular/router';
-import { 
-  KeyEdit, MasterScreenerEdit, 
-  ProgramsEdit, NewQuestion, 
-  KeyEditorAdd, KeyOverview,
-  KeyDetailEdit, QuestionPreview,
-  ProgramOverview } from '../../components';
+import { MasterScreenerEdit } from './master-screener/master-screener';
+import {
+  KeyEdit, KeyEditorAdd,
+  KeyOverview, KeyDetailEdit, QuestionPreview
+} from './keys/index';
+import { NewQuestion } from './question/new-question'
+import { ProgramsEdit,  ProgramOverview } from './programs/index';
 import { Editor } from './editor.component';
 
 export const EditorRoutes: RouterConfig = [

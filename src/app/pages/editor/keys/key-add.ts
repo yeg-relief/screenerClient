@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core'
 import { Store } from '@ngrx/store';
-import { AppState } from '../../reducers';
+import { AppState } from '../../../reducers';
 import { MD_CARD_DIRECTIVES } from '@angular2-material/card';
 import { MD_INPUT_DIRECTIVES } from '@angular2-material/input';
 import {
@@ -9,7 +9,7 @@ import {
 } from '@angular2-material/radio';
 import { MD_BUTTON_DIRECTIVES } from '@angular2-material/button';
 import 'rxjs/add/operator/map'
-import { KeyActions } from '../../actions/keys';
+import { KeyActions } from '../../../actions/keys';
 import { ROUTER_DIRECTIVES } from '@angular/router';
 
 @Component({

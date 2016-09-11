@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Store } from '@ngrx/store';
-import { AppState } from '../../reducers';
-import { GenYcbQuestion } from '../question';
+import { AppState } from '../../../reducers';
+import { GenYcbQuestion } from '../../../components/question';
 import { MD_CARD_DIRECTIVES } from '@angular2-material/card';
 
 @Component({

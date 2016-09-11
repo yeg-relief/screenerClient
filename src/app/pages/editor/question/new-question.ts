@@ -1,25 +1,25 @@
 import { Component, OnInit } from '@angular/core';
 
-import { GenYcbQuestion } from '../question';
-import { MainQuestion } from './main-question';
-import { CollapsableQuestion } from './collapsable-question';
-import { MsPreviewTab } from './ms-preview-tab';
+import { GenYcbQuestion } from '../../../components/question';
+import { MainQuestion } from '../../../components/editor/main-question';
+import { CollapsableQuestion } from '../../../components/editor/collapsable-question';
+import { MsPreviewTab } from '../../../components/editor/ms-preview-tab';
 import { MD_TABS_DIRECTIVES } from '@angular2-material/tabs';
 
 import { Store } from '@ngrx/store';
-import { AppState } from '../../reducers';
+import { AppState } from '../../../reducers';
 
 import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/operator/map';
 
 @Component({
   template: `
-    <div class="flex flex-column" style="width:100%;">
+    <div class="flex flex-column" style="width:85vw;">
       <md-tab-group>
         <md-tab>
           <template md-tab-label>Preview Question</template>
           <template md-tab-content>
-            <section style="width:85%; margin-left:10%; margin-top:5%; height:200vh;">
+            <section style="width:65vw; margin-left:10vw; margin-top:5vh; height:200vh; margin-right:10vw">
               <ms-preview-tab [question]="(question$ | async)"></ms-preview-tab>
             </section>
           </template>
@@ -27,7 +27,7 @@ import 'rxjs/add/operator/map';
         <md-tab>
           <template md-tab-label>Main Question</template>
           <template md-tab-content>
-            <section style="width:85%; padding-bottom:10vh; height:200vh;">
+            <section style="width:85vw; padding-bottom:10vh; height:200vh;">
               <main-question 
                 [question]="(question$ | async)"
                 [keys]="(keys$ | async)">
@@ -38,7 +38,7 @@ import 'rxjs/add/operator/map';
         <md-tab>
           <template md-tab-label>Collapsable Section</template>
           <template md-tab-content>
-            <section style="width:85%; padding-bottom:10vh; height:200vh;">
+            <section style="width:85vw; padding-bottom:10vh; height:200vh;">
               <collapsable-question 
                 [question]="(question$ | async)"
                 [expandableQuestion]="(expandableQuestion$ | async)"

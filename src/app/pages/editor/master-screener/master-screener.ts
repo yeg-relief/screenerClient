@@ -2,12 +2,12 @@ import { Component, OnInit, OnDestroy, Input, Output, EventEmitter } from '@angu
 import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/operator/map';
 import { Store } from '@ngrx/store';
-import { AppState } from '../../reducers';
-import { GenYcbQuestion } from '../question';
+import { AppState } from '../../../reducers';
+import { GenYcbQuestion } from '../../../components/question';
 import { MD_CARD_DIRECTIVES } from '@angular2-material/card';
 import { MD_BUTTON_DIRECTIVES } from '@angular2-material/button';
-import { MasterScreenerEditActions } from '../../actions/master-screener-edit';
-import { MasterScreenerActions } from '../../actions/master-screener';
+import { MasterScreenerEditActions } from '../../../actions/master-screener-edit';
+import { MasterScreenerActions } from '../../../actions/master-screener';
 import { Router } from '@angular/router';
 
 @Component({
