@@ -14,6 +14,18 @@ const initialState: ProgramState = {
 
 export function ProgramReducer(state = initialState, action: Action): ProgramState{
   switch(action.type){
+    
+    case ProgramActions.LOAD_PROGRAMS: {
+      return state;
+    }
+    
+    case ProgramActions.LOAD_PROGRAMS_SUCCESS: {
+      action.payload.map( (program) => {
+        state.programs.push(program);
+      })
+      return state;
+    }
+    
     default: {
       return state;
     } 

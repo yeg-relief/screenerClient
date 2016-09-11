@@ -1,17 +1,9 @@
-import { Component, OnInit } from '@angular/core';
-import { MD_CARD_DIRECTIVES } from '@angular2-material/card';
-import { MD_INPUT_DIRECTIVES } from '@angular2-material/input';
-import {
-  MdUniqueSelectionDispatcher,
-  MD_RADIO_DIRECTIVES
-} from '@angular2-material/radio';
-import { Store } from '@ngrx/store';
-import { AppState } from '../../reducers';
+import { Component } from '@angular/core';
+import { ROUTER_DIRECTIVES } from '@angular/router';
 
 @Component({
-  template: '<h1>Programs</h1>'
+  template: '<router-outlet></router-outlet>',
+  directives: [ROUTER_DIRECTIVES]
 })
 export class ProgramsEdit{
-  
-  constructor(private store: Store<AppState>){}
 }

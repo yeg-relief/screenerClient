@@ -65,7 +65,7 @@ import { MasterScreenerEditActions } from '../../actions';
                       md-raised-button 
                       color="primary"
                       (click)="goToEdit(key)"> 
-                      EDIT 
+                        EDIT 
                     </button>
                   </td>
                   <td *ngIf="key.questionKey == null"> 

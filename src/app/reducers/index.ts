@@ -8,19 +8,22 @@ import * as fromMsEditor from './master-screener-edit';
 import * as fromMedia from './media';
 import * as fromMasterScreener from './master-screener'; 
 import * as fromKeys from './keys';
+import * as fromPrograms from './programs';
 
 export interface AppState {
   media: fromMedia.MediaState;
   masterScreener: fromMasterScreener.MasterScreenerState;
   masterScreenerEdit: fromMsEditor.MasterScreenerEditState;
   keys: fromKeys.KeyState;
+  programs: fromPrograms.ProgramState;
 }
 
 export default compose(storeLogger(), combineReducers)({
   media: fromMedia.mediaReducer,
   masterScreener: fromMasterScreener.masterScreenerReducer,
   masterScreenerEdit: fromMsEditor.MasterScreenerEditReducer,
-  keys: fromKeys.keyReducer
+  keys: fromKeys.keyReducer,
+  programs: fromPrograms.ProgramReducer
 });
 
 export function getMediaState() {

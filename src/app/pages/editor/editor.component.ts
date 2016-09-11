@@ -4,12 +4,12 @@ import { ROUTER_DIRECTIVES } from '@angular/router';
 
 @Component({
   template: `
-    <div class="flex" [style.width]="'100%'">
+    <div class="flex" [style.width]="'100vw'">
       <editor-sidenav
         class="flex flex-column flex-center" 
-        [style.width]="'15%'" 
-        [style.padding-top]="'5%'"
-        [style.padding-bottom]="'5%'"
+        [style.width]="'15vw'" 
+        [style.padding-top]="'5vh'"
+        [style.padding-bottom]="'5vh'"
         [style.background-color]="'lightblue'">
       </editor-sidenav>
       <div class="flex-grow">
