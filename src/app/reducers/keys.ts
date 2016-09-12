@@ -43,7 +43,11 @@ export function keyReducer(state = initialState, action: Action): KeyState{
       const index = state.keys.indexOf(state.originalKey);
       const keys = state.keys;
       if(index > -1){
-        keys.splice(index, 1, action.payload);
+        keys.splice(index, 1, {
+          id: action.payload.id,
+          type: action.payload.type,
+          questionKeys: new Array<string>()
+        });
       }
       return (<any>Object).assign({}, state, {
         keys: keys

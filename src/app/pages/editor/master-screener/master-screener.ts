@@ -81,7 +81,7 @@ class MasterScreenerQuestion{
 
 @Component({
   template: `
-  <div style="width:80vw;margin-top:5vh;height:100vh;">
+  <div style="width:80vw;margin-top:5vh;height:100vh;margin-left:3vw;margin-right:3vw">
     <md-card>
       <md-card-title>Master Screener Edit Mode</md-card-title>
       <md-card-subtitle>delete, edit or reorder</md-card-subtitle>
@@ -108,7 +108,7 @@ class MasterScreenerQuestion{
         </div>
       </md-card-content>
       <md-card-actions>
-        <button md-button (click)="submit()">SUBMIT</button>
+        <button md-raised-button color="primary" (click)="submit()">SUBMIT</button>
       </md-card-actions>
     </md-card>
   </div>
