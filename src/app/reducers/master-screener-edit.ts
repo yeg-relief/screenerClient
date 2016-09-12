@@ -1,6 +1,7 @@
 import { ActionReducer, Action } from '@ngrx/store';
-import { MasterScreenerEdit, Question } from '../models';
+import { MasterScreenerEdit, Question, Key } from '../models';
 import { MasterScreenerEditActions } from '../actions';
+
 
 export interface MasterScreenerEditState{
   data: MasterScreenerEdit;
@@ -8,7 +9,8 @@ export interface MasterScreenerEditState{
   originalQuestion: Question;
   expandableQuestion: Question;
   keys: {key:string, type:string}[];
-  previewQuestion: Question;
+  previewQuestions: Question[];
+  previewQuestionKeyID: Key;
 }
 
 const initialState: MasterScreenerEditState = {
@@ -17,7 +19,8 @@ const initialState: MasterScreenerEditState = {
   originalQuestion: undefined,
   expandableQuestion: undefined,
   keys: undefined,
-  previewQuestion: undefined
+  previewQuestions: undefined,
+  previewQuestionKeyID: undefined
 }
 
 export function MasterScreenerEditReducer(state = initialState, action: Action): MasterScreenerEditState{
@@ -83,16 +86,8 @@ export function MasterScreenerEditReducer(state = initialState, action: Action):
           options: []
         },
         keys: keys,
-        previewQuestion: {
-          value: '',
-          key: '',
-          label: '',
-          controlType: '',
-          type: '',
-          control: null,
-          expandable: null,
-          options: []
-        }
+        previewQuestions: new Array<Question>(),
+        previewQuestionKeyID: undefined
       }
     };
     
@@ -107,7 +102,8 @@ export function MasterScreenerEditReducer(state = initialState, action: Action):
         originalQuestion: state.originalQuestion,
         expandableQuestion: state.expandableQuestion,
         keys: state.keys,
-        previewQuestion: state.previewQuestion
+        previewQuestions: state.previewQuestions,
+        previewQuestionKeyID: undefined
       }
     }
     
@@ -121,7 +117,8 @@ export function MasterScreenerEditReducer(state = initialState, action: Action):
         originalQuestion: state.originalQuestion,
         expandableQuestion: state.expandableQuestion,
         keys: state.keys,
-        previewQuestion: state.previewQuestion
+        previewQuestions: state.previewQuestions,
+        previewQuestionKeyID: undefined
       }
     }
     
@@ -134,7 +131,8 @@ export function MasterScreenerEditReducer(state = initialState, action: Action):
         originalQuestion: state.originalQuestion,
         expandableQuestion: state.expandableQuestion,
         keys: state.keys,
-        previewQuestion: state.previewQuestion
+        previewQuestions: state.previewQuestions,
+        previewQuestionKeyID: undefined
       }
     }
     
@@ -147,7 +145,8 @@ export function MasterScreenerEditReducer(state = initialState, action: Action):
         originalQuestion: state.originalQuestion,
         expandableQuestion: state.expandableQuestion,
         keys: state.keys,
-        previewQuestion: state.previewQuestion
+        previewQuestions: state.previewQuestions,
+        previewQuestionKeyID: undefined
       }
     }
     
@@ -160,7 +159,8 @@ export function MasterScreenerEditReducer(state = initialState, action: Action):
         originalQuestion: state.originalQuestion,
         expandableQuestion: state.expandableQuestion,
         keys: state.keys,
-        previewQuestion: state.previewQuestion
+        previewQuestions: state.previewQuestions,
+        previewQuestionKeyID: undefined
       }
     }
     
@@ -173,7 +173,8 @@ export function MasterScreenerEditReducer(state = initialState, action: Action):
         originalQuestion: state.originalQuestion,
         expandableQuestion: state.expandableQuestion,
         keys: state.keys,
-        previewQuestion: state.previewQuestion
+        previewQuestions: state.previewQuestions,
+        previewQuestionKeyID: undefined
       }
     }
     
@@ -186,7 +187,8 @@ export function MasterScreenerEditReducer(state = initialState, action: Action):
         originalQuestion: state.originalQuestion,
         expandableQuestion: expandableQuestion,
         keys: state.keys,
-        previewQuestion: state.previewQuestion
+        previewQuestions: state.previewQuestions,
+        previewQuestionKeyID: undefined
       }
     }
     
@@ -199,7 +201,8 @@ export function MasterScreenerEditReducer(state = initialState, action: Action):
         originalQuestion: state.originalQuestion,
         expandableQuestion: expandableQuestion,
         keys: state.keys,
-        previewQuestion: state.previewQuestion
+        previewQuestions: state.previewQuestions,
+        previewQuestionKeyID: undefined
       }
     }
     
@@ -212,7 +215,8 @@ export function MasterScreenerEditReducer(state = initialState, action: Action):
         originalQuestion: state.originalQuestion,
         expandableQuestion: expandableQuestion,
         keys: state.keys,
-        previewQuestion: state.previewQuestion
+        previewQuestions: state.previewQuestions,
+        previewQuestionKeyID: undefined
       } 
     }
     
@@ -225,7 +229,8 @@ export function MasterScreenerEditReducer(state = initialState, action: Action):
         originalQuestion: state.originalQuestion,
         expandableQuestion: expandableQuestion,
         keys: state.keys,
-        previewQuestion: state.previewQuestion
+        previewQuestions: state.previewQuestions,
+        previewQuestionKeyID: undefined
       } 
     }    
     
@@ -248,7 +253,8 @@ export function MasterScreenerEditReducer(state = initialState, action: Action):
         originalQuestion: state.originalQuestion,
         expandableQuestion: clearExpandableQuestion,
         keys: state.keys,
-        previewQuestion: state.previewQuestion
+        previewQuestions: state.previewQuestions,
+        previewQuestionKeyID: undefined
       }
     }
     
@@ -261,7 +267,8 @@ export function MasterScreenerEditReducer(state = initialState, action: Action):
         originalQuestion: state.originalQuestion,
         expandableQuestion: state.expandableQuestion,
         keys: state.keys,
-        previewQuestion: state.previewQuestion
+        previewQuestions: state.previewQuestions,
+        previewQuestionKeyID: undefined
       }
     }
     
@@ -273,7 +280,8 @@ export function MasterScreenerEditReducer(state = initialState, action: Action):
         originalQuestion: state.originalQuestion,
         expandableQuestion: expandableQuestion,
         keys: state.keys,
-        previewQuestion: state.previewQuestion
+        previewQuestions: state.previewQuestions,
+        previewQuestionKeyID: undefined
       }
     }
     
@@ -294,7 +302,8 @@ export function MasterScreenerEditReducer(state = initialState, action: Action):
         originalQuestion: state.originalQuestion,
         expandableQuestion: clearExpandableQuestion,
         keys: state.keys,
-        previewQuestion: state.previewQuestion
+        previewQuestions: state.previewQuestions,
+        previewQuestionKeyID: undefined
       }
     }
     
@@ -309,7 +318,8 @@ export function MasterScreenerEditReducer(state = initialState, action: Action):
         originalQuestion: state.originalQuestion,
         expandableQuestion: state.expandableQuestion,
         keys: state.keys,
-        previewQuestion: state.previewQuestion
+        previewQuestions: state.previewQuestions,
+        previewQuestionKeyID: undefined
       }
     }
     
@@ -414,12 +424,20 @@ export function MasterScreenerEditReducer(state = initialState, action: Action):
     }
     
     case MasterScreenerEditActions.SET_INSPECT_QUESTION: {
-      const questionIndex = findById(action.payload);
-      console.log(questionIndex);
-      if(questionIndex > -1){
-        state.previewQuestion = state.data.questions[questionIndex];
+      const questions = state.data.questions;
+      const previewQuestions = new Array<Question>();
+      let index = -2;
+      while(index !== -1){
+        index = findById(action.payload,questions);
+        if(index > -1){
+          previewQuestions.push(questions[index]);
+          questions.splice(index, 1);
+        }
       }
-      return state;
+      return (<any>Object).assign({}, state, {
+        previewQuestions: previewQuestions,
+        previewQuestionKeyID: action.payload
+      });
     }
     
     default: {
@@ -445,10 +463,10 @@ export function MasterScreenerEditReducer(state = initialState, action: Action):
     return false;
   }
   
-  function findById(questionID): number{
+  function findById(questionID:string, questions:Question[]): number{
     let index = -1;
 
-    state.data.questions.forEach( (stateQuestion, stateQuestionsIndex) => {
+    questions.forEach( (stateQuestion, stateQuestionsIndex) => {
       if(stateQuestion.key === questionID){
         index = stateQuestionsIndex
       } else if(stateQuestion.expandable.length > 0) {

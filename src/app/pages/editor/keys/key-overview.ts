@@ -42,7 +42,7 @@ import { KeyActions, MasterScreenerEditActions } from '../../../actions';
                     <button md-raised-button (click)="delete(key)"> DELETE </button> 
                   </td>
                   <td *ngIf="key.questionKey != null"> 
-                    <button md-raised-button (click)="viewQuestion(key.questionKey)"> QUESTION </button> 
+                    <button md-raised-button (click)="viewQuestion(key.questionKey)"> QUESTIONS </button> 
                   </td> 
                 </tr>
               </table>
