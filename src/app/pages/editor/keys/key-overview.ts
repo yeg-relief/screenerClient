@@ -28,9 +28,9 @@ import { KeyActions, MasterScreenerEditActions } from '../../../actions';
                   <th></th>
                 </tr>
                 <tr *ngFor="let key of (keys$ | async)">
-                  <td *ngIf="key.questionKey != null">{{key.id}}</td>
-                  <td *ngIf="key.questionKey != null">{{key.type}}</td> 
-                  <td *ngIf="key.questionKey != null"> 
+                  <td *ngIf="key.questionKeys.length !== 0">{{key.id}}</td>
+                  <td *ngIf="key.questionKeys.length !== 0">{{key.type}}</td> 
+                  <td *ngIf="key.questionKeys.length !== 0"> 
                     <button 
                       md-raised-button 
                       color="primary"
@@ -38,10 +38,10 @@ import { KeyActions, MasterScreenerEditActions } from '../../../actions';
                       EDIT 
                     </button>
                   </td>
-                  <td *ngIf="key.questionKey != null"> 
+                  <td *ngIf="key.questionKeys.length !== 0"> 
                     <button md-raised-button (click)="delete(key)"> DELETE </button> 
                   </td>
-                  <td *ngIf="key.questionKey != null"> 
+                  <td *ngIf="key.questionKeys.length !== 0"> 
                     <button md-raised-button (click)="viewQuestion(key.questionKey)"> QUESTIONS </button> 
                   </td> 
                 </tr>
@@ -57,9 +57,9 @@ import { KeyActions, MasterScreenerEditActions } from '../../../actions';
                   <th>type</th> 
                 </tr>
                 <tr *ngFor="let key of (keys$ | async)">
-                  <td *ngIf="key.questionKey == null">{{key.id}}</td>
-                  <td *ngIf="key.questionKey == null">{{key.type}}</td> 
-                  <td *ngIf="key.questionKey == null"> 
+                  <td *ngIf="key.questionKeys.length === 0">{{key.id}}</td>
+                  <td *ngIf="key.questionKeys.length === 0">{{key.type}}</td> 
+                  <td *ngIf="key.questionKeys.length === 0"> 
                     <button 
                       md-raised-button 
                       color="primary"
@@ -67,7 +67,7 @@ import { KeyActions, MasterScreenerEditActions } from '../../../actions';
                         EDIT 
                     </button>
                   </td>
-                  <td *ngIf="key.questionKey == null"> 
+                  <td *ngIf="key.questionKeys.length === 0"> 
                     <button md-raised-button (click)="delete(key)"> DELETE </button> 
                   </td>
                 </tr>

@@ -10,47 +10,47 @@ export class KeyService{
     {
       id: 'children',
       type: 'boolean',
-      questionKey: null
+      questionKeys: []
     },
     {
       id: 'number_of_children',
       type: 'number',
-      questionKey: null
+      questionKeys: []
     },
     {
       id: 'yearly_personal_income',
       type: 'number',
-      questionKey: null
+      questionKeys: []
     },
     {
       id: 'married',
       type: 'boolean',
-      questionKey: null
+      questionKeys: []
     },
     {
       id: 'expand',
       type: 'boolean',
-      questionKey: 'expand'
+      questionKeys: ['expand']
     },
     {
       id: 'firstName',
       type: 'string',
-      questionKey: 'firstName'
+      questionKeys: ['firstName']
     },
     {
       id: 'emailAddress',
       type: 'string',
-      questionKey: 'emailAddress'
+      questionKeys: ['emailAddress']
     },
     {
       id: 'numberChildren',
       type: 'number',
-      questionKey: 'numberChildren'
+      questionKeys: ['numberChildren']
     },
     {
       id: 'dropDownQuestion',
       type: 'string',
-      questionKey: 'dropDownQuestion'
+      questionKeys: ['dropDownQuestion']
     }
   ]  
   
