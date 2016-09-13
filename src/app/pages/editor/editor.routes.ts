@@ -5,7 +5,7 @@ import {
   KeyOverview, KeyDetailEdit, QuestionPreview
 } from './keys/index';
 import { NewQuestion } from './question/new-question'
-import { ProgramsEdit,  ProgramOverview } from './programs/index';
+import { ProgramsEdit,  ProgramOverview, ProgramAdd } from './programs/index';
 import { Editor } from './editor.component';
 
 export const EditorRoutes: RouterConfig = [
@@ -26,7 +26,8 @@ export const EditorRoutes: RouterConfig = [
       {
         path: 'programs', component: ProgramsEdit,
         children: [
-          {path: '', component: ProgramOverview}
+          {path: '', component: ProgramOverview},
+          {path: 'add', component: ProgramAdd}
         ]
       },
       {path: 'new-question', component: NewQuestion},

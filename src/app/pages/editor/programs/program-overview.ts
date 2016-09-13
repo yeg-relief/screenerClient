@@ -23,7 +23,9 @@ interface ProgramDisplayControl{
       <md-card-title> PROGRAM OVERVIEW </md-card-title>
       <md-card-subtitle> Programs are the benefits available to the user </md-card-subtitle>
       <md-card-actions style="margin-left:2vw">
-        <button md-raised-button color="primary"> ADD PROGRAM </button>
+        <a [routerLink]="['/editor/programs/add']">
+          <button md-raised-button color="primary"> ADD PROGRAM </button>
+        </a>
       </md-card-actions>
       <md-card-content>
         <md-card *ngFor="let program of (programs$ | async); let i=index"
@@ -88,7 +90,8 @@ interface ProgramDisplayControl{
   directives: [
     MD_CARD_DIRECTIVES,
     MD_BUTTON_DIRECTIVES,
-    MD_CHECKBOX_DIRECTIVES
+    MD_CHECKBOX_DIRECTIVES, 
+    ROUTER_DIRECTIVES
   ]
 })
 export class ProgramOverview implements OnInit{
