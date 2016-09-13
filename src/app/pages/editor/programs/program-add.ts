@@ -5,7 +5,9 @@ import { MD_INPUT_DIRECTIVES } from '@angular2-material/input';
 import { MD_CHECKBOX_DIRECTIVES } from '@angular2-material/checkbox';
 import { Store } from '@ngrx/store';
 import { AppState } from '../../../reducers';
-import 'rxjs/add/operator/map'
+import { Key } from '../../../models';
+import { Observable } from 'rxjs/Observable';
+import 'rxjs/add/operator/map';
 
 @Component({
   template: `
@@ -20,11 +22,11 @@ import 'rxjs/add/operator/map'
             expand program details
           </md-checkbox>
           <md-card-content *ngIf="showProgramDetails">
-            <md-input placeholder="program title"></md-input>
+            <md-input placeholder="program title" [(ngModel)]="programDetails.title"></md-input>
             <div style="margin-top:2vh; margin-bottom:2vh"></div>
-            <textarea name="textarea" rows="10" cols="50">Program Description</textarea>
+            <textarea name="textarea" rows="10" cols="50" [(ngModel)]="programDetails.details">Edit Program Description</textarea>
             <div style="margin-top:2vh; margin-bottom:2vh"></div>
-            <md-input placeholder="link"></md-input>
+            <md-input placeholder="link" [(ngModel)]="programDetails.link"></md-input>
           </md-card-content>
         </md-card>
         <div style="margin-top: 3vh;"></div>
@@ -33,6 +35,49 @@ import 'rxjs/add/operator/map'
           <md-checkbox [(ngModel)]="showKeyDetails">
             expand key details
           </md-checkbox>
+          <md-card-content style="margin-top: 2vh" *ngIf="showKeyDetails">
+            <label for="keySelect">Select a key</label>
+            <select name="keySelect" [(ngModel)]="selectKey">
+              <option *ngFor="let key of (keys$ | async)">
+                {{key.id}}
+              </option>
+            </select>
+            <button md-raised-button color="primary" (click)="addSelectedKey()">ADD KEY</button>
+            <hr>
+            <div style="margin-top: 1vh"></div>
+            
+            <table *ngIf="selectKey !== ''" style='table-layout:fixed;'>
+              <caption><md-card-subtitle>Selected Key Information</md-card-subtitle></caption>
+              <tr>
+                <th>id</th>
+                <th>type</th> 
+              </tr>
+              <tr>
+                <td> {{getKeyID()}} </td>
+                <td> {{getKeyType()}} </td>
+              </tr>
+            </table>
+            <hr>
+            <div style="margin-top: 3vh"></div>
+            <table *ngIf="programKeys.length > 0">
+              <caption><md-card-subtitle>Associated Keys Summary</md-card-subtitle></caption>
+              <tr>
+                <th>id</th>
+                <th>type</th>
+                <th>remove key</th> 
+              </tr>
+              <tr *ngFor="let key of programKeys">
+                <td> {{key.id}} </td>
+                <td> {{key.type}} </td>
+                <td>
+                  <md-checkbox
+                    [checked]="false"
+                    (change)="removeKey(key, $event)">
+                  </md-checkbox>
+                </td>
+              </tr>
+            </table>
+          </md-card-content>
         </md-card>
         <div style="margin-top: 3vh;"></div>
         <md-card>
@@ -52,8 +97,102 @@ import 'rxjs/add/operator/map'
     MD_CHECKBOX_DIRECTIVES
   ]
 })
-export class ProgramAdd{
+export class ProgramAdd implements OnInit{
+  keys$: Observable<Key[]>
+  
+  // booleans for managing UI state 
   showProgramDetails: boolean = false;
   showKeyDetails: boolean = false;
   showConditions: boolean = false;
+  
+  // object containing program details -- reference models/programs.Program
+  // local model using push state to reducer only upon submit 
+  programDetails: Object = {
+    title: '',
+    details: '',
+    link: ''
+  }
+  
+  // the keys associated with the program
+  programKeys: Key[] = new Array<Key>();
+  // this is the key selected but not yet added to the programKeys
+  selectKey: string = '';
+  
+  constructor(private store: Store<AppState>){}
+  
+  ngOnInit(){
+    this.keys$ = this.store.select('keys').map( (store:any) => store.keys)
+  }
+  
+  addSelectedKey(){
+    const searchID  = this.selectKey;
+    const findById = (key:Key):boolean => {
+      for(let i = 0; i < this.programKeys.length; i++){
+        const key = this.programKeys[i];
+        if(key.id === searchID){
+          return true;
+        }
+      }
+      return false;
+    }
+    
+    const sub = this.keys$
+                .map( (keys:Key[]) => {
+                  let key = null;
+                  const filtered = keys.filter( (key:Key) => {
+                    return key.id === searchID;
+                  })
+                  if(filtered.length === 1 && findById(filtered[0]) === false){
+                    key = filtered[0];
+                  }
+                  return key;
+                })
+                .subscribe(
+                  (key) => {
+                    if(key != null){
+                      this.programKeys.push(key)
+                    }
+                    
+                  },
+                  (error) => console.log(error)
+                )
+    sub.unsubscribe();
+  }
+  
+  removeKey(key:Key, $event){
+    let index: number;
+    if($event.checked === true){
+      index = this.programKeys.indexOf(key);
+    }
+    if(index !== -1){
+      this.programKeys.splice(index, 1);
+    }
+  }
+  
+  getKeyID(){
+    return this.selectKey;
+  }
+  
+  getKeyType(){
+    const searchID:string = this.selectKey;
+    let discoveredType = '';
+    const sub = this.keys$
+                .map( (keys:Key[]) => {
+                  let type:string = '';
+                  for(let i = 0; i < keys.length; i++){
+                    if(keys[i].id === searchID){
+                      type = keys[i].type;
+                      break;
+                    }                    
+                  }
+                  return type
+                }).subscribe(
+                  (type:string) => {
+                    discoveredType = type;
+                  },
+                  (error) => console.log(error)
+                )
+    sub.unsubscribe();
+    return discoveredType;
+  }
 }
