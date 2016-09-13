@@ -53,8 +53,8 @@ import 'rxjs/add/operator/map';
                 <th>type</th> 
               </tr>
               <tr>
-                <td> {{getKeyID()}} </td>
-                <td> {{getKeyType()}} </td>
+                <td> {{selectKey}} </td>
+                <td> {{getKeyType(selectKey)}} </td>
               </tr>
             </table>
             <hr>
@@ -80,11 +80,71 @@ import 'rxjs/add/operator/map';
           </md-card-content>
         </md-card>
         <div style="margin-top: 3vh;"></div>
+        
+        <!-- conditions -->
+        
         <md-card>
           <md-card-subtitle> constrain a key with a condition </md-card-subtitle>
           <md-checkbox [(ngModel)]="showConditions">
             expand condition details
           </md-checkbox> 
+          <md-card-content style="margin-top: 2vh" *ngIf="showConditions">
+            <table style='table-layout:fixed; margin-top: 2vh;'>
+              <caption><md-card-subtitle>new condition</md-card-subtitle></caption>
+              <tr>
+                <th>key</th>
+                <th>value</th>
+                <th>qualifier</th>
+              </tr>
+              <tr>
+                <td>
+                  <select [value]="''" (change)="setKeyType($event.target.value)">
+                    <option *ngFor="let key of programKeys">
+                      {{key.id}}
+                    </option>
+                  </select>
+                </td>
+                <td>
+                  <md-input [(ngModel)]="condition.condition.value"></md-input>
+                </td>
+                <td *ngIf="condition.type === 'number'">
+                  <select [value]="lessThan" (change)="qualifierChange($event.target.value)">
+                    <option> LESS THAN </option>
+                    <option> EQUAL </option>
+                    <option> GREATER THAN </option>
+                  </select>
+                </td>
+              </tr>
+            </table>
+          
+            <table style='table-layout:fixed; margin-top: 2vh;'>
+              <caption><md-card-subtitle>current conditions</md-card-subtitle></caption>
+              <tr>
+                <th>key</th>
+                <th>type</th>
+                <th>value</th>
+                <th>qualifier</th>
+                <th>edit</th>
+              </tr>
+              <tr *ngFor="let _condition of conditions">
+                <td>{{_condition.condition.key}}</td>
+                <td>{{_condition.type}}</td>
+                <td>{{_condition.condition.type}}</td>
+                <td *ngIf="condition.condition.qualifier.greaterThan === true">
+                  GREATER THAN
+                </td>
+                <td *ngIf="condition.condition.qualifier.equal === true">
+                  EQUAL
+                </td>
+                <td *ngIf="condition.condition.qualifier.lessThan === true">
+                  LESS THAN
+                </td>
+                <td><md-checkbox></md-checkbox></td>
+              </tr>
+            </table> 
+            
+             
+          </md-card-content>
         </md-card>
       </md-card-content>
     </md-card>
@@ -98,6 +158,7 @@ import 'rxjs/add/operator/map';
   ]
 })
 export class ProgramAdd implements OnInit{
+  // all available keys
   keys$: Observable<Key[]>
   
   // booleans for managing UI state 
@@ -117,6 +178,22 @@ export class ProgramAdd implements OnInit{
   programKeys: Key[] = new Array<Key>();
   // this is the key selected but not yet added to the programKeys
   selectKey: string = '';
+  
+  // the conditions associated with the program 
+  conditions: Array<any> = new Array<any>();
+  // reference models/programs 
+  condition = {
+    type: '',
+    condition: {
+      keyID: '',
+      value: '',
+      qualifier: {
+        greaterThan: false,
+        equal: false,
+        lessThan: false
+      }
+    }
+  }
   
   constructor(private store: Store<AppState>){}
   
@@ -173,8 +250,7 @@ export class ProgramAdd implements OnInit{
     return this.selectKey;
   }
   
-  getKeyType(){
-    const searchID:string = this.selectKey;
+  getKeyType(searchID:string){
     let discoveredType = '';
     const sub = this.keys$
                 .map( (keys:Key[]) => {
@@ -194,5 +270,26 @@ export class ProgramAdd implements OnInit{
                 )
     sub.unsubscribe();
     return discoveredType;
+  }
+  
+  qualifierChange(value){
+    for(const key in this.condition.condition.qualifier){
+      if(key === value){
+        this.condition.condition.qualifier[key] = true;
+      } else {
+        this.condition.condition.qualifier[key] = false;
+      }
+    }
+  }
+  
+  keyType(key:Key){
+    return this.getKeyType(key.id);
+  }
+  
+  setKeyType(keyID){
+    console.log(`in setKeyType(${keyID})`)
+    console.log(keyID)
+    this.condition.type = this.getKeyType(keyID)
+    console.log(this.condition.type);
   }
 }
