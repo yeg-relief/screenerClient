@@ -6,7 +6,7 @@ import { ROUTER_DIRECTIVES } from '@angular/router';
   selector: 'editor-sidenav',
   template: `
 
-      <md-card [style.width]="'50%'">
+      <md-card [style.width]="'7.5vw'">
         <md-card-subtitle>
            <a [routerLink]="['/editor/master-screener']">
             Master Screener
@@ -14,7 +14,7 @@ import { ROUTER_DIRECTIVES } from '@angular/router';
         </md-card-subtitle>
       </md-card>
       <span class="spacer"></span>
-      <md-card [style.width]="'50%'">
+      <md-card [style.width]="'7.5vw'">
         <md-card-subtitle>
            <a [routerLink]="['/editor/new-question']">
             New Question
@@ -22,7 +22,7 @@ import { ROUTER_DIRECTIVES } from '@angular/router';
         </md-card-subtitle>
       </md-card>
       <span class="spacer"></span>
-      <md-card [style.width]="'50%'">
+      <md-card [style.width]="'7.5vw'">
         <md-card-subtitle>
           <a [routerLink]="['/editor/programs']">
             Programs
@@ -30,7 +30,7 @@ import { ROUTER_DIRECTIVES } from '@angular/router';
         </md-card-subtitle>
       </md-card>
       <span class="spacer"></span>
-      <md-card [style.width]="'50%'">
+      <md-card [style.width]="'7.5vw'">
         <md-card-subtitle>
           <a [routerLink]="['/editor/keys']">
             Keys
@@ -40,7 +40,7 @@ import { ROUTER_DIRECTIVES } from '@angular/router';
   `,
   styles: [`
     .spacer{
-      height:5%;
+      height:5vh;
     }
   `],
   directives: [MD_CARD_DIRECTIVES, ROUTER_DIRECTIVES]

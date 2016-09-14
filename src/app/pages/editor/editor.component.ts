@@ -6,7 +6,7 @@ import { ROUTER_DIRECTIVES } from '@angular/router';
   template: `
     <div class="flex" [style.width]="'100vw'">
       <editor-sidenav
-        class="flex flex-column flex-center" 
+        class="flex flex-column flex-center flex-grow" 
         [style.width]="'15vw'" 
         [style.padding-top]="'5vh'"
         [style.padding-bottom]="'5vh'"
