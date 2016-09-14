@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { MD_CARD_DIRECTIVES } from '@angular2-material/card';
 import { MD_BUTTON_DIRECTIVES } from '@angular2-material/button';
-import { MD_INPUT_DIRECTIVES } from '@angular2-material/input';
 import { MD_CHECKBOX_DIRECTIVES } from '@angular2-material/checkbox';
 import { Store } from '@ngrx/store';
 import { AppState } from '../../../reducers';
@@ -11,7 +10,7 @@ import 'rxjs/add/operator/map';
 
 import { 
   EditProgramMeta, DisplayProgramMeta, ProgramKeyDisplay,
-  ProgramKeyAdd 
+  ProgramKeyAdd, ProgramConditionsDisplay 
 } from '../../../components';
 
 @Component({
@@ -21,7 +20,8 @@ import {
              margin-left:5vw; 
              margin-top:2%;  
              margin-right:5vw; 
-             background-color:lightyellow;"
+             background-color:lightyellow;
+             min-height:100vh"
          
        class="flex flex-column flex-grow">
       <md-card-title> ADD PROGRAM </md-card-title>
@@ -30,6 +30,7 @@ import {
         <md-card-actions> 
           <md-checkbox [(ngModel)]="expandMetaData">show meta data</md-checkbox> 
           <md-checkbox class="ml1" [(ngModel)]="expandProgramKeys">show program keys</md-checkbox>
+          <md-checkbox class="ml1" [(ngModel)]="expandProgramConditions">show program conditions</md-checkbox>
         </md-card-actions>
         <md-card-actions>
           <button md-raised-button color="primary">upload</button>
@@ -65,18 +66,27 @@ import {
           class="mt2">
         </key-add>
         
+        
+        <!-- CONDITIONS --> 
+        
+        <conditions-display
+          *ngIf="expandProgramConditions && !editConditions"
+          [programConditions] = "programConditions">
+        </conditions-display>
+        
+        
       </md-card-content>
     </md-card>
   `,
   directives: [
     MD_CARD_DIRECTIVES,
     MD_BUTTON_DIRECTIVES,
-    MD_INPUT_DIRECTIVES,
     MD_CHECKBOX_DIRECTIVES,
     EditProgramMeta,
     DisplayProgramMeta,
     ProgramKeyDisplay,
-    ProgramKeyAdd
+    ProgramKeyAdd, 
+    ProgramConditionsDisplay
   ]
 })
 export class ProgramAdd implements OnInit{
@@ -90,6 +100,9 @@ export class ProgramAdd implements OnInit{
   expandProgramKeys: boolean = false;
   editProgramKeys: boolean = false;
   
+  expandProgramConditions: boolean = false;
+  editConditions: boolean = false;
+  
   // object containing program details -- reference models/programs.Program
   // local model using push state to reducer only upon submit 
   programDetails = {
@@ -99,6 +112,8 @@ export class ProgramAdd implements OnInit{
   }
   
   programKeys: Key[] = new Array<Key>();
+  
+  programConditions = new Array<any>();
   
   constructor(private store: Store<AppState>){}
   
