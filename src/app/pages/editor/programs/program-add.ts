@@ -6,11 +6,12 @@ import { Store } from '@ngrx/store';
 import { AppState } from '../../../reducers';
 import { Key } from '../../../models';
 import { Observable } from 'rxjs/Observable';
+import { Subject } from 'rxjs/Subject';
 import 'rxjs/add/operator/map';
 
 import { 
   EditProgramMeta, DisplayProgramMeta, ProgramKeyDisplay,
-  ProgramKeyAdd, ProgramConditionsDisplay 
+  ProgramKeyAdd, ProgramConditionsDisplay, ProgramAddConditions 
 } from '../../../components';
 
 @Component({
@@ -71,9 +72,16 @@ import {
         
         <conditions-display
           *ngIf="expandProgramConditions && !editConditions"
-          [programConditions] = "programConditions">
+          [programConditions] = "programConditions"
+          (toggleDisplay)="toggleConditionsEdit()">
         </conditions-display>
         
+        <conditions-add 
+          *ngIf="expandProgramConditions && editConditions"
+          [programConditions] = "programConditions"
+          [programKeys] = "programKeys"
+          (conditionsConfirmed)="confirmedConditions()">
+        </conditions-add>
         
       </md-card-content>
     </md-card>
@@ -86,7 +94,8 @@ import {
     DisplayProgramMeta,
     ProgramKeyDisplay,
     ProgramKeyAdd, 
-    ProgramConditionsDisplay
+    ProgramConditionsDisplay, 
+    ProgramAddConditions
   ]
 })
 export class ProgramAdd implements OnInit{
@@ -132,6 +141,14 @@ export class ProgramAdd implements OnInit{
   
   displayAddKey(){
     this.editProgramKeys = true;
+  }
+  
+  toggleConditionsEdit(){
+    this.editConditions = true;
+  }
+  
+  confirmedConditions(){
+    this.editConditions = false;
   }
   
   ngOnInit(){
