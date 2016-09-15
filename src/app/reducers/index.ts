@@ -7,6 +7,7 @@ import * as fromMedia from './media';
 import * as fromMasterScreener from './master-screener'; 
 import * as fromKeys from './keys';
 import * as fromPrograms from './programs';
+import * as fromAddProgram from './add-program';
 
 export interface AppState {
   media: fromMedia.MediaState;
@@ -14,6 +15,7 @@ export interface AppState {
   masterScreenerEdit: fromMsEditor.MasterScreenerEditState;
   keys: fromKeys.KeyState;
   programs: fromPrograms.ProgramState;
+  addProgram: fromAddProgram.AddProgramState;
 }
 
 export default compose(storeLogger(), combineReducers)({
@@ -21,5 +23,6 @@ export default compose(storeLogger(), combineReducers)({
   masterScreener: fromMasterScreener.masterScreenerReducer,
   masterScreenerEdit: fromMsEditor.MasterScreenerEditReducer,
   keys: fromKeys.keyReducer,
-  programs: fromPrograms.ProgramReducer
+  programs: fromPrograms.ProgramReducer,
+  addProgram: fromAddProgram.addProgramReducer
 });

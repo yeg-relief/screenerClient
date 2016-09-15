@@ -3,13 +3,15 @@ import { MasterScreenerActions } from './master-screener';
 import { MasterScreenerEditActions } from './master-screener-edit';
 import { KeyActions } from './keys';
 import { ProgramActions } from './programs';
+import { AddProgramActions } from './add-program';
 
 export {
   MediaActions,
   MasterScreenerActions,
   MasterScreenerEditActions,
   KeyActions,
-  ProgramActions
+  ProgramActions,
+  AddProgramActions
 };
 
 export default [
@@ -17,5 +19,6 @@ export default [
   MasterScreenerActions,
   MasterScreenerEditActions,
   KeyActions,
-  ProgramActions
+  ProgramActions,
+  AddProgramActions
 ];

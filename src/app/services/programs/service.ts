@@ -6,7 +6,15 @@ import { Program } from '../../models';
 
 @Injectable()
 export class ProgramService{
-  private mockPrograms: Program[] = [
+  private mockPrograms: Program[] = new Array<Program>();
+  
+  loadPrograms():Observable<any>{
+    return <Observable<any>>Observable.from(this.mockPrograms).toArray();
+  }
+}
+
+/*
+private mockPrograms: Program[] = [
     {
       conditions: [
         {
@@ -63,8 +71,4 @@ export class ProgramService{
       link: 'https://last.fake.link'
     }
   ]
-  
-  loadPrograms():Observable<any>{
-    return <Observable<any>>Observable.from(this.mockPrograms).toArray();
-  }
-}
+*/

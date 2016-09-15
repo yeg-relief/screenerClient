@@ -2,14 +2,13 @@ import { KeyService } from '../services/index';
 import { KeyActions } from '../actions';
 import { Key } from '../models';
 import { Injectable } from '@angular/core';
-import { Effect, StateUpdates, toPayload } from '@ngrx/effects';
+import { Effect, StateUpdates } from '@ngrx/effects';
 import { AppState } from '../reducers';
 
 import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/operator/switchMapTo';
 import 'rxjs/add/operator/map';
 import 'rxjs/add/observable/of';
-import 'rxjs/add/operator/switchMap';
 
 @Injectable()
 export class KeyEffects{

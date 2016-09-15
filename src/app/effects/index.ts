@@ -1,10 +1,5 @@
-import { MasterScreenerEffects } from './master-screener';
-import { MasterScreenerEditEffects } from './master-screener-edit';
-import { KeyEffects } from './keys';
-import { ProgramEffects } from './programs';
-
-export default [
-  MasterScreenerEffects,
-  MasterScreenerEditEffects,
-  KeyEffects
-]
+export * from './master-screener';
+export * from './master-screener-edit';
+export * from'./keys';
+export * from './add-program';
+export * from './programs';

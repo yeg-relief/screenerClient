@@ -22,14 +22,18 @@ interface StringCondition{
   value: string;
 }
 
-interface Condition{
-  condition: StringCondition | NumberCondition | BooleanCondition;
+export interface ProgramDetails{
+  title: string;
+  description: string;
+  link: string;
+}
+
+export interface GeneralCondition{
+  concreteCondition: StringCondition | NumberCondition | BooleanCondition;
   type: string;
 }
 
 export interface Program{
-  conditions: Condition[];
-  title: string;
-  details: string;
-  link: string;
+  conditions: GeneralCondition[];
+  details: ProgramDetails;
 }
