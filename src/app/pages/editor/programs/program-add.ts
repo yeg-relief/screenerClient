@@ -57,6 +57,7 @@ import {
           [programKeys]="programKeys" 
           *ngIf="expandProgramKeys && !editProgramKeys"
           (toggleAdd)="displayAddKey()"
+          (removedKeys)="removeKeys($event)"
           class="mt2">
         </key-display>
         
@@ -80,6 +81,7 @@ import {
           *ngIf="expandProgramConditions && editConditions"
           [programConditions] = "programConditions"
           [programKeys] = "programKeys"
+          [addKeysSubject] = "addKeysSubject"
           (conditionsConfirmed)="confirmedConditions()">
         </conditions-add>
         
@@ -121,6 +123,8 @@ export class ProgramAdd implements OnInit{
   }
   
   programKeys: Key[] = new Array<Key>();
+  addKeysSubject: Subject<Key[]> = new Subject<Key[]>();
+  
   
   programConditions = new Array<any>();
   
@@ -130,9 +134,17 @@ export class ProgramAdd implements OnInit{
     this.editProgramMetaData = false;
   }
   
-  saveKeys(keys){
+  saveKeys(keys: Key[]){
     this.programKeys = this.programKeys.concat(keys);
+    this.addKeysSubject.next(keys);
     this.editProgramKeys = false;
+  }
+  
+  removeKeys(keys){
+    keys.map( (key:Key) => {
+      this.programKeys.indexOf(key);
+      
+    })
   }
   
   toggleEditMeta(){

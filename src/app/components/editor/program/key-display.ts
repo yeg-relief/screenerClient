@@ -48,6 +48,7 @@ import { Key } from '../../../models';
 export class ProgramKeyDisplay{
   @Input() programKeys: Key[];
   @Output() toggleAdd = new EventEmitter<boolean>();
+  @Output() removedKeys = new EventEmitter<Key[]>();
   
   stagedRemoval: Key[] = new Array<Key>();
   
@@ -69,6 +70,8 @@ export class ProgramKeyDisplay{
       const index = this.programKeys.indexOf(key);
       this.programKeys.splice(index, 1);
     })
+    this.removedKeys.emit(this.stagedRemoval);
+    this.stagedRemoval = new Array<Key>();
   }
   
 }

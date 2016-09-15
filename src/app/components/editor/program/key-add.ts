@@ -55,7 +55,6 @@ import { MD_CHECKBOX_DIRECTIVES } from '@angular2-material/checkbox';
   ]
 })
 export class ProgramKeyAdd implements OnInit{
-  
   @Input() programKeys: Key[];
   @Output() saveKeys = new EventEmitter<Key[]>();
   

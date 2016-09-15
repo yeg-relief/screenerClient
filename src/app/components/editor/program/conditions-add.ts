@@ -1,7 +1,9 @@
-import { Component, Input, Output, EventEmitter, OnInit } from '@angular/core';
+import { Component, Input, Output, EventEmitter, OnInit, OnDestroy } from '@angular/core';
 import { MD_CARD_DIRECTIVES } from '@angular2-material/card';
 import { MD_BUTTON_DIRECTIVES } from '@angular2-material/button';
 import { Key } from '../../../models';
+import { Subject } from 'rxjs/Subject';
+import { Subscription } from 'rxjs/Subscription';
 
 @Component({
   selector: 'conditions-add',
@@ -14,7 +16,7 @@ import { Key } from '../../../models';
           <table class="table-light overflow-hidden bg-white border rounded">
             <thead class="bg-darken-1">
               <tr>
-                <th>key</th> <th>type</th> <th>constrain</th>
+                <th>key</th> <th>type</th> <th></th>
               </tr>
             </thead>
             <tbody>
@@ -22,7 +24,7 @@ import { Key } from '../../../models';
                 <td>{{key.id}}</td> 
                 <td>{{key.type}}</td>
                 <td>
-                  <button md-button (click)="constrainKey(key)"></button>
+                  <button md-button  (click)="constrainKey(key)">select</button>
                 </td> 
               </tr>
             </tbody>
@@ -44,13 +46,15 @@ import { Key } from '../../../models';
     MD_BUTTON_DIRECTIVES
   ]
 })
-export class ProgramAddConditions implements OnInit{
+export class ProgramAddConditions implements OnInit, OnDestroy{
   @Input() programKeys: Key[];
   // this is an array, but build error occurs wrt the find call
   @Input() programConditions: any;
+  @Input() addKeysSubject: Subject<Key[]>;
   @Output() conditionsConfirmed = new EventEmitter<boolean>();
   
   unassignedKeys: Key[] = new Array<Key>();
+  newlyAdded: Subscription;
   
   pushConditions(){
     this.conditionsConfirmed.emit(true);
@@ -60,15 +64,42 @@ export class ProgramAddConditions implements OnInit{
     // find the keys that are unconstrained, ie in programKeys, but the keys are not in programConditions
     // these are the keys that are available to be constrained  
     this.programKeys.map( (key: Key) => {
-      // predicate to test if the key is constrained
-      const findKey = (condition:any):boolean => {
-        return key.id === condition.condition.keyID;
-      }
-      // if true then the key is not constrained 
-      if(typeof this.programConditions.find(findKey) === 'undefined'){
+      // if false then the key is not constrained 
+      if(!this.find(key)){
         this.unassignedKeys.push(key);
       }
       
     })
+    
+    this.newlyAdded = this.addKeysSubject.subscribe(
+      (keys:Key[]) => {
+        keys.map( (key:Key) => {
+          if(!this.find(key)){
+            this.unassignedKeys.push(key);
+          }
+        })
+        
+      },
+      (error) => console.log(error)
+    ); 
+    
+    
+  }
+  
+  ngOnDestroy(){
+    this.newlyAdded.unsubscribe();
+  }
+  
+  find(key:Key):boolean{
+    const findKey = (condition:any):boolean => {
+      return key.id === condition.condition.keyID;
+    }
+    
+    this.programConditions.map( (condition:any) => {
+      if(findKey(condition)){
+        return true;
+      }
+    })
+    return false;
   }
 }
