@@ -36,11 +36,14 @@ import {
               </tr>
             </thead>
             <tbody>
-              <tr *ngFor="let key of (freeKeys$ | async) " class="py1"> 
+              <tr 
+               *ngFor="let key of (freeKeys$ | async); let i = index;" 
+               [ngClass]="{'field': i === selectedIndex}"
+               class="py1"> 
                 <td>{{key.id}}</td> 
                 <td>{{key.type}}</td>
                 <td>
-                  <button md-button  (click)="constrainKey(key)">select</button>
+                  <button md-raised-button  color="primary" (click)="constrainKey(key, i)">select</button>
                 </td> 
               </tr>
             </tbody>
@@ -51,34 +54,68 @@ import {
           <md-card-subtitle class="center"> All program keys are constrained </md-card-subtitle>
         </div>
         
-        <md-card class="mt2" *ngIf="selectedKey !== null">
-          <md-card-title class="center mt1"> 
-            constrain {{selectedKey.id}} of type: {{selectedKey.type}} 
-          </md-card-title>
-          <div class="center" [ngSwitch]="selectedKey.type">
+        <div *ngIf="!showFreeConditions && selectedKey != null">
+          <md-card-subtitle class="center"> selected key information </md-card-subtitle>
+          <table class="table-light overflow-hidden bg-white border rounded">
+            <thead class="bg-darken-1">
+              <tr>
+                <th>key</th> <th>type</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr class="py1"> 
+                <td>{{selectedKey.id}}</td> 
+                <td>{{selectedKey.type}}</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        
+        
+        <md-card class="mt2" *ngIf="selectedKey != null" 
+         style="min-height:15vh;" 
+         class="border-top mt3">
+          <md-card-subtitle class="center">  </md-card-subtitle>
+          <div class="mt3 flex flex-column flex-center" 
+            [ngSwitch]="selectedKey.type">
           
-            <!-- NUMBER KEY TYPE --> 
-            <md-input  
-              *ngSwitchCase="'number'" 
-              placeholder="enter number"
-              [(ngModel)]="constraintSettings.number.value"> 
-            </md-input>
-            
-            <!-- STRING KEY TYPE --> 
-            <md-input 
-              *ngSwitchCase="'string'" 
-              placeholder="enter text"
-              [(ngModel)]="constraintSettings.string.value"> 
-            </md-input>
+            <div style="min-height: 2vh;"></div>
+          
+            <div [ngSwitch]="selectedKey.type" style="min-height: 11vh" >
+              <!-- NUMBER KEY TYPE --> 
+              <div *ngSwitchCase="'number'" class="flex flex-center flex-justify">
+                <md-input  
+                 placeholder="enter number"
+                 [(ngModel)]="constraintSettings.number.value"> 
+                </md-input>
+                <div style="width:2vw"></div>
+                <select 
+                 (change)="selectChange($event.target.value)"
+                  [value]="lessThan">
+                  <option *ngFor="let i of selectOptions">{{i}}</option>
+                </select>
+              </div>
               
-            <!-- BOOLEAN KEY TYPE --> 
-            <md-radio-group [(ngModel)]="constraintSettings.boolean.value" *ngSwitchCase="'boolean'">
-              <md-radio-button value="true">true</md-radio-button>
-              <md-radio-button value="false">false</md-radio-button>
-            </md-radio-group>
+              <!-- STRING KEY TYPE --> 
+              <md-input 
+               *ngSwitchCase="'string'" 
+               placeholder="enter text"
+               [(ngModel)]="constraintSettings.string.value"> 
+              </md-input>
+                
+              <!-- BOOLEAN KEY TYPE --> 
+              <md-radio-group 
+               *ngSwitchCase="'boolean'"
+               [(ngModel)]="constraintSettings.boolean.value">
+                <md-radio-button value="true">true</md-radio-button>
+                <md-radio-button value="false">false</md-radio-button>
+              </md-radio-group>
+              
+              <!-- MALFORMED KEY --> 
+              <md-card-title *ngSwitchDefault> No Key Type Found </md-card-title>
+            </div>
             
-            <!-- MALFORMED KEY --> 
-            <md-card-title *ngSwitchDefault> No Key Type Found </md-card-title>
+            <div style="min-height: 2vh;"></div>
           </div>
           
         </md-card>
@@ -105,6 +142,7 @@ export class AddConditions implements OnInit{
   freeKeys$: Observable<Key[]>;
   showFreeConditions = true;
   selectedKey: Key = null;
+  selectedIndex: number = -1;
   
   constraintSettings = this.setConstraintSettings();
  
@@ -119,6 +157,8 @@ export class AddConditions implements OnInit{
     this.freeKeys$ = this.store.select('addProgram')
                      .map( (addProgram:AddProgramState) => addProgram.freeKeys)
   }
+  
+  selectOptions = ['lessThan', 'equal', 'greaterThan'];
   
   setConstraintSettings(){
     return {
@@ -135,9 +175,14 @@ export class AddConditions implements OnInit{
     }
   }
   
-  constrainKey(key:Key){
+  selectChange(value){
+    this.constraintSettings.number.qualifier = value;
+  }
+  
+  constrainKey(key:Key, index: number){
     this.selectedKey = key;
     this.constraintSettings = this.setConstraintSettings();
+    this.selectedIndex = index;
   }
   
   toggleFreeKeyDisplay(){
@@ -146,6 +191,7 @@ export class AddConditions implements OnInit{
   
   toggleDisplay(){
     this.constraintSettings = this.setConstraintSettings();
+    this.selectedIndex = -1;
     this.onToggleDisplay.emit(true);
   }
   
@@ -156,6 +202,10 @@ export class AddConditions implements OnInit{
     
     switch(this.selectedKey.type){
       case 'number': {
+        if(this.constraintSettings.number.qualifier === ''){
+          this.constraintSettings.number.qualifier = 'lessThan';
+        }
+        
         (<any>Object).assign(payload, {
           condition: {
             concreteCondition: {
@@ -204,7 +254,9 @@ export class AddConditions implements OnInit{
       type: AddProgramActions.ADD_CONDITION,
       payload: payload
     })
-    
+    // perhaps unnecessary 
+    this.constraintSettings = this.setConstraintSettings();
+    this.selectedIndex = -1;
     this.onToggleDisplay.emit(true);
     
   }
