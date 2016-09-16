@@ -201,7 +201,7 @@ export class AddConditions implements OnInit{
     }
     
     this.store.dispatch({
-      type: AddProgramActions.CONSTRAIN_KEY,
+      type: AddProgramActions.ADD_CONDITION,
       payload: payload
     })
     

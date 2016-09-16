@@ -35,10 +35,10 @@ export class AddProgramActions{
     }
   }
   
-  static CONSTRAIN_KEY = '[ADD_PROGRAM] CONSTRAIN_KEY';
+  static ADD_CONDITION = '[ADD_PROGRAM] ADD_CONDITION';
   constrainKey(key:Key, condition:GeneralCondition):Action{
     return{
-      type: AddProgramActions.CONSTRAIN_KEY,
+      type: AddProgramActions.ADD_CONDITION,
       payload: {
         key: key, 
         condition: condition
