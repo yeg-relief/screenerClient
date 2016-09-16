@@ -6,8 +6,8 @@ import { Store } from '@ngrx/store';
 import { AppState } from '../../../reducers';
 import { AddProgramActions } from '../../../actions';
 import { 
-  DetailDisplay, EditDetails, RemoveKeys, 
-  AddKeys, RemoveConditions, AddConditions 
+  DetailDisplay, EditDetails,  
+  RemoveConditions, AddConditions 
 } from '../../../components';
 
 
@@ -29,9 +29,6 @@ import {
           <md-checkbox [checked]="showDetails" (change)="expandDetails($event)">
             show program details
           </md-checkbox>
-          <md-checkbox [checked]="showKeys" (change)="expandKeys($event)" class="ml1">
-            show key details
-          </md-checkbox>
           <md-checkbox [checked]="showConditions" (change)="expandConditions($event)" class="ml1">
             show condition details
           </md-checkbox>
@@ -51,22 +48,7 @@ import {
         
         <div 
           class="mt2 mb2 border-top border-bottom bg-darken-1"
-          *ngIf="showDetails && showKeys">
-        </div>
-        
-        <!-- KEYS --> 
-        <remove-keys 
-         *ngIf="!addKeys && removeKeys && showKeys"
-         (onToggleDisplay)="removeKeysDisplay($event)">
-        </remove-keys>  
-        <add-keys
-          *ngIf="addKeys && !removeKeys && showKeys"
-          (onToggleDisplay)="addKeysDisplay($event)">
-        </add-keys>
-        
-        <div 
-          class="mt2 mb2 border-top border-bottom bg-darken-1"
-          *ngIf="showConditions && showKeys">
+          *ngIf="showDetails && showConditions">
         </div>
         
         <!-- CONDITIONS -->
@@ -87,8 +69,6 @@ import {
     MD_CHECKBOX_DIRECTIVES,
     DetailDisplay, 
     EditDetails, 
-    RemoveKeys, 
-    AddKeys, 
     RemoveConditions, 
     AddConditions
   ]
@@ -99,10 +79,6 @@ export class ProgramAdd implements OnInit{
   displayDetails = true;
   editDetails = false;
   
-  // key display booleans 
-  showKeys = true;
-  removeKeys = true;
-  addKeys = false;
   
   // condition display booleans 
   showConditions = true;
@@ -121,10 +97,7 @@ export class ProgramAdd implements OnInit{
     this.showDetails = $event.checked;
   }
   
-  expandKeys($event){
-    this.showKeys = $event.checked;
-  }
-  
+
   expandConditions($event){
     this.showConditions = $event.checked;
   }
@@ -140,17 +113,7 @@ export class ProgramAdd implements OnInit{
     this.displayDetails = $event;
     this.editDetails = !$event;
   }
-  
-  removeKeysDisplay($event){
-    this.removeKeys = !$event;
-    this.addKeys = $event;
-  }
-  
-  addKeysDisplay($event){
-    this.addKeys = !$event;
-    this.removeKeys = $event;
-  }
-  
+
   removeConditionsDisplay($event){
     this.addConditions = $event;
     this.removeConditions = !$event;

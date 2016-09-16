@@ -27,22 +27,6 @@ export class AddProgramActions{
     }
   }
   
-  static REMOVE_PROGRAM_KEYS = '[ADD_PROGRAM] REMOVE_PROGRAM_KEYS';
-  removeProgramKeys(keys:Key[]):Action{
-    return{
-      type: AddProgramActions.REMOVE_PROGRAM_KEYS,
-      payload: keys
-    }
-  }
-  
-  static ADD_PROGRAM_KEYS = '[ADD_PROGRAM] ADD_PROGRAM_KEYS';
-  addProgramKeys(keys:Key[]):Action{
-    return{
-      type: AddProgramActions.ADD_PROGRAM_KEYS,
-      payload: keys
-    }
-  }
-  
   static REMOVE_CONDITIONS = '[ADD_PROGRAM] REMOVE_CONDITIONS';
   removeConditions(conditions:GeneralCondition[]):Action{
     return{

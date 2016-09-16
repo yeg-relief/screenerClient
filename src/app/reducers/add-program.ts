@@ -52,32 +52,6 @@ export function addProgramReducer(state = initialState, action: Action): AddProg
       })
     }
     
-    case AddProgramActions.REMOVE_PROGRAM_KEYS: {
-      const keysToRemove: Key[] = [].concat(action.payload);
-      // these are the programKeys that are not in the payload
-      const newKeys = state.programKeys.filter( (key:Key) => {
-        return keysToRemove.indexOf(key) < 0;
-      })
-      
-      return (<any>Object).assign({}, state, {
-        programKeys: [].concat(newKeys), 
-        freeKeys: state.freeKeys.concat(keysToRemove)
-      })
-    }
-    
-    case AddProgramActions.ADD_PROGRAM_KEYS: {
-      const keysToAdd: Key[] = [].concat(action.payload);
-      // these are the freeKeys that are not in the payload
-      const newKeys = state.freeKeys.filter( (key:Key)=> {
-        return keysToAdd.indexOf(key) < 0;
-      })
-      
-      return (<any>Object).assign({}, state, {
-        programKeys: state.programKeys.concat(keysToAdd),
-        freeKeys: [].concat(newKeys)
-      })
-    }
-    
     case AddProgramActions.REMOVE_CONDITIONS: {
       const conditionsToRemove: GeneralCondition[] = [].concat(action.payload);
       const newConditions = state.conditions.filter( (condition:GeneralCondition) => {
