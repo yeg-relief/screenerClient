@@ -55,7 +55,7 @@ import 'rxjs/add/operator/map';
         </div>
         
         <md-card-actions class="py1 ml1">
-          <button md-raised-button color="primary" (click)="hide()">edit</button>
+          <button md-raised-button color="primary" (click)="toggleDisplay()">edit</button>
         </md-card-actions >
       </md-card-content>
     </md-card>
@@ -66,7 +66,7 @@ import 'rxjs/add/operator/map';
   ]
 })
 export class DetailDisplay implements OnInit{
-  @Output() hideDetails = new EventEmitter<boolean>();
+  @Output() onToggleDisplay = new EventEmitter<boolean>();
   details$: Observable<ProgramDetails>;
   
   constructor(private store: Store<AppState>){}
@@ -76,7 +76,7 @@ export class DetailDisplay implements OnInit{
                     .map( (addProgram:AddProgramState) => addProgram.details)
   }
   
-  hide(){
-    this.hideDetails.emit(true);
+  toggleDisplay(){
+    this.onToggleDisplay.emit(true);
   }
 }

@@ -3,9 +3,9 @@ import { AddProgramActions } from '../actions';
 import { Key, GeneralCondition, ProgramDetails } from '../models';
 
 export interface AddProgramState{
-  keys: Key[];
   programKeys: Key[];
   boundKeys: Key[];
+  freeKeys: Key[];
   conditions: GeneralCondition[];
   details: ProgramDetails;
   loadingKeys: boolean;
@@ -13,9 +13,9 @@ export interface AddProgramState{
 }
 
 const initialState: AddProgramState = {
-  keys: new Array<Key>(),
   programKeys: new Array<Key>(),
   boundKeys: new Array<Key>(),
+  freeKeys: new Array<Key>(),
   conditions: new Array<GeneralCondition>(),
   details: {
     title: '',
@@ -38,7 +38,7 @@ export function addProgramReducer(state = initialState, action: Action): AddProg
       return (<any>Object).assign({}, state, {
         loadingKeys: false,
         loadedKeys: true,
-        keys: action.payload
+        freeKeys: [].concat(action.payload)
       })
     }
     
@@ -50,6 +50,62 @@ export function addProgramReducer(state = initialState, action: Action): AddProg
           link: new String(action.payload.details.link)
         }
       })
+    }
+    
+    case AddProgramActions.REMOVE_PROGRAM_KEYS: {
+      const keysToRemove: Key[] = [].concat(action.payload);
+      // these are the programKeys that are not in the payload
+      const newKeys = state.programKeys.filter( (key:Key) => {
+        return keysToRemove.indexOf(key) < 0;
+      })
+      
+      return (<any>Object).assign({}, state, {
+        programKeys: [].concat(newKeys), 
+        freeKeys: state.freeKeys.concat(keysToRemove)
+      })
+    }
+    
+    case AddProgramActions.ADD_PROGRAM_KEYS: {
+      const keysToAdd: Key[] = [].concat(action.payload);
+      // these are the freeKeys that are not in the payload
+      const newKeys = state.freeKeys.filter( (key:Key)=> {
+        return keysToAdd.indexOf(key) < 0;
+      })
+      
+      return (<any>Object).assign({}, state, {
+        programKeys: state.programKeys.concat(keysToAdd),
+        freeKeys: [].concat(newKeys)
+      })
+    }
+    
+    case AddProgramActions.REMOVE_CONDITIONS: {
+      const conditionsToRemove: GeneralCondition[] = [].concat(action.payload);
+      const newConditions = state.conditions.filter( (condition:GeneralCondition) => {
+        return conditionsToRemove.indexOf(condition) < 0;
+      })
+      
+      return (<any>Object).assign({}, state, {
+        conditions: [].concat(newConditions)
+      })
+    }
+    
+    case AddProgramActions.CONSTRAIN_KEY: {
+      const constrainKey = action.payload.key;
+      const condition = action.payload.condition;
+      
+      const updatedFreeKeys = state.freeKeys.filter( (key: Key) => {
+        return key.id !== constrainKey.id;
+      })
+      
+      
+      
+      
+      return (<any>Object).assign({}, state, {
+        conditions: state.conditions.concat(condition),
+        freeKeys: updatedFreeKeys,
+        boundKeys: state.boundKeys.concat(constrainKey)
+      })
+      
     }
     
     default: {

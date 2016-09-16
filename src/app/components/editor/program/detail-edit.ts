@@ -39,6 +39,7 @@ import 'rxjs/add/operator/map';
 
         <md-card-actions class="py1 ml1">
           <button md-raised-button color="primary" (click)="save()">save</button>
+          <button md-raised-button color="primary" (click)="cancel()">cancel</button>
         </md-card-actions>
       </md-card-content>
     </md-card>
@@ -50,7 +51,7 @@ import 'rxjs/add/operator/map';
   ]
 })
 export class EditDetails implements OnInit{
-  @Output() onSave = new EventEmitter<boolean>()
+  @Output() onToggleDisplay = new EventEmitter<boolean>()
   details$: Observable<ProgramDetails>;
   
   // local mutating variables
@@ -66,13 +67,17 @@ export class EditDetails implements OnInit{
       description: this.description,
       link: this.link
     }
-    this.onSave.emit(true);
     this.store.dispatch({
       type: AddProgramActions.UPDATE_DETAILS,
       payload: {
         details: details
       }
     })
+    this.onToggleDisplay.emit(true);
+  }
+  
+  cancel(){
+    this.onToggleDisplay.emit(true);
   }
   
   ngOnInit(){

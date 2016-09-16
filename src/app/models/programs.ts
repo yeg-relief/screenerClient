@@ -5,15 +5,9 @@ interface BooleanCondition{
   value: boolean;
 }
 
-interface NumberQualifier{
-  greaterThan: boolean;
-  equal: boolean;
-  lessThan: boolean;
-}
-
 interface NumberCondition{
   keyID: string;
-  qualifier: NumberQualifier;
+  qualifier: string;
   value: number;
 }
 
