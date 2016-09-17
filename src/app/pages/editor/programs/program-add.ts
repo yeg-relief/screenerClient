@@ -9,7 +9,9 @@ import {
   DetailDisplay, EditDetails,  
   RemoveConditions, AddConditions 
 } from '../../../components';
-
+import { AddProgramState } from '../../../reducers/add-program';
+import { Observable } from 'rxjs/Observable';
+import 'rxjs/add/operator/map';
 
 @Component({
   template: `
@@ -38,8 +40,20 @@ import {
       <!-- upload or save program --> 
       <md-card-actions class="ml2 mr2 mb2 bg-darken-1">
         <div class="ml1 mr1 p1">
-          <button md-raised-button color="primary" (click)="uploadProgram()">upload</button>
-          <button md-raised-button color="primary">save</button>
+          <button 
+           md-raised-button color="primary" 
+           (click)="uploadProgram()"
+           *ngIf="!(uploaded$ | async)">
+            upload
+          </button>
+          <button 
+           md-raised-button color="primary" 
+           disabled
+           *ngIf="(uploaded$ | async)">
+            upload
+          </button>
+          
+          <button disabled md-raised-button color="primary">save</button>
         </div>
       </md-card-actions>
       
@@ -99,10 +113,18 @@ export class ProgramAdd implements OnInit{
   removeConditions = true;
   addConditions = false;
   
+  uploaded$: Observable<boolean>;
+  
+  
   constructor(private store: Store<AppState>){}
   
   ngOnInit(){
     this.store.dispatch({type: AddProgramActions.LOAD_KEYS})
+    
+    this.uploaded$ = this.store.select('addProgram')
+                     .map( (addProgramState:AddProgramState) => addProgramState.uploadedProgram)
+                     
+    
   }
   
  

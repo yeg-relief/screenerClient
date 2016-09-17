@@ -120,7 +120,6 @@ export function addProgramReducer(state = initialState, action: Action): AddProg
       
     }
     
-    
     case AddProgramActions.UPLOAD_PROGRAM: {
       const program: Program = (<any>Object).assign({}, {
         details: {

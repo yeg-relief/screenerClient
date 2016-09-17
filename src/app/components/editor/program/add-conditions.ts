@@ -14,7 +14,7 @@ import { MD_RADIO_DIRECTIVES } from '@angular2-material/radio';
 import {
   MdUniqueSelectionDispatcher
 } from '@angular2-material/core/coordination/unique-selection-dispatcher';
-
+import { SetConditionNumber } from './set-condition-number';
 
 @Component({
   selector: 'add-conditions',
@@ -83,18 +83,7 @@ import {
           
             <div [ngSwitch]="selectedKey.type" style="min-height: 11vh" >
               <!-- NUMBER KEY TYPE --> 
-              <div *ngSwitchCase="'number'" class="flex flex-center flex-justify">
-                <md-input  
-                 placeholder="enter number"
-                 [(ngModel)]="constraintSettings.number.value"> 
-                </md-input>
-                <div style="width:2vw"></div>
-                <select 
-                 (change)="selectChange($event.target.value)"
-                  [value]="lessThan">
-                  <option *ngFor="let i of selectOptions">{{i}}</option>
-                </select>
-              </div>
+              <set-condition-number></set-condition-number>
               
               <!-- STRING KEY TYPE --> 
               <md-input 
@@ -132,7 +121,8 @@ import {
     MD_BUTTON_DIRECTIVES,
     MD_CHECKBOX_DIRECTIVES, 
     MD_RADIO_DIRECTIVES, 
-    MD_INPUT_DIRECTIVES
+    MD_INPUT_DIRECTIVES, 
+    SetConditionNumber
   ], 
   viewProviders: [MdUniqueSelectionDispatcher]
 })
@@ -144,9 +134,7 @@ export class AddConditions implements OnInit{
   selectedKey: Key = null;
   selectedIndex: number = -1;
   
-  constraintSettings = this.setConstraintSettings();
- 
-  
+  constraintSettings = this.setConstraintSettings();  
   constructor(private store: Store<AppState>){};
   
   
@@ -174,6 +162,11 @@ export class AddConditions implements OnInit{
       }
     }
   }
+  
+  
+  
+  
+  
   
   selectChange(value){
     this.constraintSettings.number.qualifier = value;
@@ -263,6 +256,5 @@ export class AddConditions implements OnInit{
     this.selectedIndex = -1;
     this.selectedKey = null;
     this.onToggleDisplay.emit(true);
-    
   }
 }

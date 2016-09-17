@@ -59,4 +59,11 @@ export class AddProgramActions{
       type: AddProgramActions.UPLOAD_PROGRAM_SUCCESS
     }
   }
+  
+  static UPLOAD_PROGRAM_FAILURE = '[ADD_PROGRAM] UPLOAD_PROGRAM_FAILURE';
+  uploadProgramFailure():Action{
+    return {
+      type: AddProgramActions.UPLOAD_PROGRAM_FAILURE
+    }
+  }
 }
