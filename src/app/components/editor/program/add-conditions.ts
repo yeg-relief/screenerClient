@@ -114,8 +114,8 @@ import {
               <!-- MALFORMED KEY --> 
               <md-card-title *ngSwitchDefault> No Key Type Found </md-card-title>
             </div>
-            
             <div style="min-height: 2vh;"></div>
+            
           </div>
           
         </md-card>

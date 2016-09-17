@@ -102,18 +102,6 @@ export class ProgramOverview implements OnInit{
   
   ngOnInit(){
     this.programs$ = this.store.select('programs').map( (store:any) => store.programs)
-    const sub = this.programs$.subscribe(
-      (programs) => {
-        programs.map( () => {
-          this.displayControls.push({
-            showConditions: false,
-            showKeys: false
-          })
-        })
-        
-      }
-    )
-    sub.unsubscribe();
   }
   
   

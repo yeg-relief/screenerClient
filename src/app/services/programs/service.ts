@@ -2,14 +2,20 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/observable/from';
 import 'rxjs/add/operator/toArray';
+import 'rxjs/add/operator/delay';
 import { Program } from '../../models';
 
 @Injectable()
 export class ProgramService{
   private mockPrograms: Program[] = new Array<Program>();
   
-  loadPrograms():Observable<any>{
-    return <Observable<any>>Observable.from(this.mockPrograms).toArray();
+  loadPrograms():Observable<Program[]>{
+    return <Observable<Program[]>>Observable.from(this.mockPrograms).toArray();
+  }
+  
+  uploadProgram(program, time):Observable<Program[]>{
+    this.mockPrograms = this.mockPrograms.concat(program);
+    return <Observable<Program[]>>Observable.from(this.mockPrograms).toArray().delay(time);
   }
 }
 

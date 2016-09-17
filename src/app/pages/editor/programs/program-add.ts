@@ -24,7 +24,7 @@ import {
       <md-card-subtitle class="center mb1"> create a new benefit program </md-card-subtitle>  
       
       <!-- expand or hide input and display sections -->
-      <md-card-actions class="ml2 mr2 border bg-darken-1">
+      <md-card-actions class="ml2 mr2  bg-darken-1">
         <div class="ml1 mr1 p1">
           <md-checkbox [checked]="showDetails" (change)="expandDetails($event)">
             show program details
@@ -34,6 +34,20 @@ import {
           </md-checkbox>
         </div>
       </md-card-actions>
+      
+      <!-- upload or save program --> 
+      <md-card-actions class="ml2 mr2 mb2 bg-darken-1">
+        <div class="ml1 mr1 p1">
+          <button md-raised-button color="primary" (click)="uploadProgram()">upload</button>
+          <button md-raised-button color="primary">save</button>
+        </div>
+      </md-card-actions>
+      
+      <md-card-content class="ml2 mr2 border bg-darken-1 mb1 mt1" style="boder-color:red">
+        
+      </md-card-content>
+      
+      
       <md-card-content>
         
         <!-- DETAILS -->
@@ -122,5 +136,11 @@ export class ProgramAdd implements OnInit{
   addConditionsDisplay($event){
     this.removeConditions = $event;
     this.addConditions = !$event;
+  }
+  
+  uploadProgram(){
+    this.store.dispatch({
+      type: AddProgramActions.UPLOAD_PROGRAM
+    })
   }
 }

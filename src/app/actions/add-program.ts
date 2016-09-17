@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Action } from '@ngrx/store';
-import { Key, ProgramDetails, GeneralCondition } from '../models';
+import { Key, ProgramDetails, GeneralCondition, Program } from '../models';
 
 @Injectable()
 export class AddProgramActions{
@@ -43,6 +43,20 @@ export class AddProgramActions{
         key: key, 
         condition: condition
       }
+    }
+  }
+  
+  static UPLOAD_PROGRAM = '[ADD_PROGRAM] UPLOAD_PROGRAM';
+  uploadProgram():Action{
+    return{
+      type: AddProgramActions.UPLOAD_PROGRAM
+    }
+  }
+  
+  static UPLOAD_PROGRAM_SUCCESS = '[ADD_PROGRAM] UPLOAD_PROGRAM_SUCCESS';
+  uploadProgramSuccess():Action{
+    return {
+      type: AddProgramActions.UPLOAD_PROGRAM_SUCCESS
     }
   }
 }
