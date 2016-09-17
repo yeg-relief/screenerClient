@@ -196,6 +196,10 @@ export class AddConditions implements OnInit{
   }
   
   addCondition(){
+    if(this.selectedKey == null){
+      return;
+    }
+    
     const payload = {
       key: this.selectedKey,
     }
@@ -257,6 +261,7 @@ export class AddConditions implements OnInit{
     // perhaps unnecessary 
     this.constraintSettings = this.setConstraintSettings();
     this.selectedIndex = -1;
+    this.selectedKey = null;
     this.onToggleDisplay.emit(true);
     
   }
