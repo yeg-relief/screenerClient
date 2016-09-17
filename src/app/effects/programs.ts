@@ -2,7 +2,7 @@ import { ProgramService } from '../services/index';
 import { ProgramActions } from '../actions/index';
 import { Program } from '../models/index';
 import { Injectable } from '@angular/core';
-import { Effect, StateUpdates, toPayload } from '@ngrx/effects';
+import { Effect, StateUpdates } from '@ngrx/effects';
 import { AppState } from '../reducers';
 import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/operator/switchMapTo';
@@ -14,10 +14,8 @@ export class ProgramEffects{
     private updates$: StateUpdates<AppState>,
     private programActions: ProgramActions,
     private dataService: ProgramService
-  ){ }
-  
-  @Effect() loadProgramsOnInit$ = Observable.of(this.programActions.loadPrograms());
-  
+  ){}
+   
   @Effect() loadPrograms = this.updates$ 
     .whenAction(ProgramActions.LOAD_PROGRAMS)
     .switchMapTo( this.dataService.loadPrograms())

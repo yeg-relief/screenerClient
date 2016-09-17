@@ -2,7 +2,7 @@ import { DataService, EditorService } from '../services/index';
 import { MasterScreenerActions } from '../actions';
 import { MasterScreener, Question } from '../models';
 import { Injectable } from '@angular/core';
-import { Effect, StateUpdates, toPayload } from '@ngrx/effects';
+import { Effect, StateUpdates } from '@ngrx/effects';
 import { AppState } from '../reducers';
 
 import { Observable } from 'rxjs/Observable';

@@ -32,9 +32,9 @@ interface ProgramDisplayControl{
           style=" border: 1px dashed #ddd;
 	                box-shadow: 0 0 0 3px #fff, 0 0 0 5px #ddd, 0 0 0 10px #fff, 0 0 2px 10px #eee;
                   margin-bottom: 5vh;">
-          <md-card-title> {{ program.title }} </md-card-title>
-          <md-card-subtitle style="flex"> <div>{{ program.details }} </div></md-card-subtitle>
-          <a href="{{ program.link }}"> link to program </a>
+          <md-card-title> {{ program.details.title }} </md-card-title>
+          <md-card-subtitle> <p>{{ program.details.description }} </p></md-card-subtitle>
+          <md-card-subtitle> {{ program.details.link }} </md-card-subtitle>
           <md-card-actions> 
             <button md-raised-button> EDIT </button>
             <md-checkbox [(ngModel)]="displayControls[i].showKeys">
@@ -47,8 +47,8 @@ interface ProgramDisplayControl{
           <md-card-content  style="width:50%; margin-top:1vh;" *ngIf="displayControls[i].showKeys">
             <md-card-subtitle>KEYS</md-card-subtitle>
             <ul>
-              <li *ngFor="let key of program.conditions">
-                {{key.condition.keyID}}
+              <li *ngFor="let condition of program.conditions">
+                {{condition.concreteCondition.keyID}}
               </li>
             </ul>
             <hr>
@@ -63,21 +63,26 @@ interface ProgramDisplayControl{
                 <th>qualifier</th>
               </tr>
               <tr *ngFor="let condition of program.conditions">
-                <td>{{condition.condition.keyID}}</td>
+                <td>{{condition.concreteCondition.keyID}}</td>
                 <td>{{condition.type}}</td>
-                <td>{{condition.condition.value}}</td>
+                <td>{{condition.concreteCondition.value}}</td>
                 <!-- sloppy model -->
                 <div *ngIf="condition.type === 'number'">
-                  <div *ngIf="condition.condition.qualifier.lessThan === true">
-                    <td> LESS THAN </td>
+                  <div [ngSwitch]="condition.concreteCondition.qualifier">
+                    <td *ngSwitchCase="'lessThan'">
+                      LESS THAN
+                    </td>
+                    <td *ngSwitchCase="'equal'">
+                      EQUAL
+                    </td>
+                    <td *ngSwitchCase="'greaterThan'">
+                      GREATER THAN
+                    </td>
+                    <td *ngSwitchDefault>
+                      ERROR: no qualifier
+                    </td>
                   </div>
-                  <div *ngIf="condition.condition.qualifier.equal === true">
-                    <td> EQUAL </td>
-                  </div>
-                  <div *ngIf="condition.condition.qualifier.greaterThan === true">
-                    <td> GREATER THAN </td>
-                  </div>
-                </div> 
+                </div>
               </tr>
             </table>
             <hr>
@@ -101,7 +106,23 @@ export class ProgramOverview implements OnInit{
   constructor(private store: Store<AppState>){}
   
   ngOnInit(){
+    this.store.dispatch({
+      type: ProgramActions.LOAD_PROGRAMS
+    })
+    
     this.programs$ = this.store.select('programs').map( (store:any) => store.programs)
+    const sub = this.programs$.subscribe(
+      (programs) => {
+        programs.map( () => {
+          this.displayControls.push({
+            showConditions: false,
+            showKeys: false
+          })
+        })
+        
+      }
+    )
+    sub.unsubscribe();
   }
   
   
