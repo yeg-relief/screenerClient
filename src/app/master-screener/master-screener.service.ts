@@ -162,13 +162,6 @@ export class MasterScreenerService {
   ];
 
   private results = new Array<UserFacingProgram>();
-
-/*
-  generated GUIDs 
-  f41608cb-09aa-4e5b-a050-75d9166fbf6b
-  86959ea1-7e27-461c-b274-c08cdcffc193
-  ee4ee200-9c8e-4e2c-9b1f-b9e6b0b330e0
-*/
   private mockResults: UserFacingProgram[] = [
     {
       guid: 'f41608cb-09aa-4e5b-a050-75d9166fbf6b',
@@ -182,7 +175,8 @@ export class MasterScreenerService {
                   'sit amet iaculis sapien condimentum. Aenean scelerisque eros vel tellus fermentum, sed tempor ' +
                   'neque pellentesque. Morbi scelerisque dolor massa, facilisis suscipit dolor interdum a.',
         externalLink: 'http://www.humanservices.alberta.ca/financial-support/2085.html'
-      }
+      },
+      tags: ['adult', 'health']
     },
     {
       guid: '86959ea1-7e27-461c-b274-c08cdcffc193',
@@ -196,7 +190,8 @@ export class MasterScreenerService {
                   'sit amet iaculis sapien condimentum. Aenean scelerisque eros vel tellus fermentum, sed tempor ' +
                   'neque pellentesque. Morbi scelerisque dolor massa, facilisis suscipit dolor interdum a.',
         externalLink: 'http://www.humanservices.alberta.ca/financial-support/2076.html'
-      }
+      },
+      tags: ['child', 'health']
     },
     {
       guid: 'ee4ee200-9c8e-4e2c-9b1f-b9e6b0b330e0',
@@ -210,7 +205,8 @@ export class MasterScreenerService {
                   'sit amet iaculis sapien condimentum. Aenean scelerisque eros vel tellus fermentum, sed tempor ' +
                   'neque pellentesque. Morbi scelerisque dolor massa, facilisis suscipit dolor interdum a.',
         externalLink: 'http://www.cra-arc.gc.ca/rdsp/'
-      }
+      },
+      tags: ['tax', 'savings', 'disabled']
     }
   ];
 

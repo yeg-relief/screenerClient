@@ -13,5 +13,4 @@ export class UserFacingProgramComponent implements OnInit {
 
   ngOnInit() {
   }
-
 }

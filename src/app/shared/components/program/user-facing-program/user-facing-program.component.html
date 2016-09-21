@@ -10,4 +10,14 @@
   <a href="{{ program.description.externalLink }}" target="_blank">
     {{ program.description.externalLink }}
   </a>
+  <div class="p1"></div>
+  <div class="clearfix flex">
+    <div 
+      class="col col-1 border bg-silver black center rounded mr1" 
+      style="cursor: pointer;"
+      *ngFor="let tag of program.tags"
+      routerLink="/browse/tags/{{tag}}">
+      {{tag}}
+    </div>
+  </div>
 </md-card>
