@@ -1,0 +1,50 @@
+<div class="py2">
+</div>
+
+<md-card [formGroup]="form">
+  <div *ngIf="!conditional" class="clearfix flex">
+    <div class="col col-2 border rounded flex-grow">
+      question {{index}} of {{length}}
+    </div>
+    <span class="col col-10 md-show"></span>
+  </div>
+  <div class="p1"></div>
+  <md-card-title> {{ question.label}} </md-card-title>
+  <div [ngSwitch]="question.controlType">
+    <!-- BOOLEAN TYPE -->
+    <div *ngSwitchCase="'radio'">
+      <div class="ml1" *ngIf="question.expandable">
+        <md-radio-group [formControlName]="question.key" (change)="handleChange($event)">
+          <md-radio-button *ngFor="let d of question.options" [value]="d.value">
+            <div class="mr1"> {{ d.display }} </div>
+          </md-radio-button>
+        </md-radio-group>
+      </div>
+      <div class="ml1" *ngIf="!question.expandable">
+        <md-radio-group [formControlName]="question.key">
+          <md-radio-button *ngFor="let d of question.options" [value]="d.value">
+            <div class="mr1"> {{ d.display }} </div>
+          </md-radio-button>
+        </md-radio-group>
+      </div>
+      <div class="ml1" *ngIf="question.expandable && expanded">
+        <div *ngFor="let expandedQuestion of question.conditonalQuestions">
+          <app-question 
+            [question]="expandedQuestion" 
+            [conditional]="true"
+            [form]="form">
+          </app-question>
+        </div>
+      </div>
+    </div>
+
+    <div *ngSwitchCase="'input'">
+      <md-input [formControlName]="question.key" placeholder="input here"></md-input>
+    </div>
+
+    <div *ngSwitchDefault>
+      <md-card-title> invalid question.controlType </md-card-title>
+      <md-card-subtitle> {{question.controlType}} </md-card-subtitle>
+    </div>
+  </div>
+</md-card>

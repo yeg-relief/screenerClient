@@ -1,0 +1,17 @@
+<div>
+  <div *ngFor="let response of (responses$ | async)" class="clearfix flex">
+    <!-- responsive side spacing -->
+    <div class="px1 sm-hide"></div>
+    <div class="col col-2 lg-show"></div>
+    <div class="col col-1 sm-show lg-hide"></div>
+
+    <div class="col col-8 flex-grow">
+      <app-user-facing-program [program]="response"></app-user-facing-program>
+    </div>
+
+    <!-- responsive side spacing -->
+    <div class="col col-2 lg-show"></div>
+    <div class="col col-1 sm-show lg-hide"></div>
+    <div class="px1 sm-hide"></div>
+  </div>
+</div>

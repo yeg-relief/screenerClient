@@ -1,0 +1,52 @@
+<!-- LARGE SCREENS -->
+<md-toolbar color="primary" class="app-navbar lg-show">
+  <div class="flex-grow"></div>
+  <input type="text" class="block col-6 field app-input" placeholder="Search Programs...">
+  <div class="flex-grow"></div>
+  <a routerLink="/admin">
+    <button md-raised-button class="navbar-button">ADMIN</button>
+  </a>
+  <span class="px2"></span>
+  <a routerLink="/about">
+    <button md-raised-button class="navbar-button">ABOUT</button>
+  </a>
+  <span class="px2"></span>
+  <a routerLink="">
+    <button md-raised-button class="navbar-button">HOME</button>
+  </a>
+  <span class="px1"></span>
+</md-toolbar>
+
+<!-- MEDIUM SCREENS -->
+<md-toolbar color="primary" class="app-navbar sm-show lg-hide">
+  <md-toolbar-row>
+    <input type="text" class="block col-12 field app-input" placeholder="Search Programs...">
+  </md-toolbar-row>
+  <div class="px1"></div>
+  <a routerLink="/admin">
+    <button md-raised-button class="navbar-button">ADMIN</button>
+  </a>
+  <div class="px2"></div>
+  <a routerLink="/about">
+    <button md-raised-button class="navbar-button">ABOUT</button>
+  </a>
+  <div class="px2"></div>
+  <a routerLink="">
+    <button md-raised-button class="navbar-button">HOME</button>
+  </a>
+</md-toolbar>
+
+<!-- SMALL SCREENS -->
+<md-toolbar color="primary" class="app-navbar sm-hide">
+  <md-toolbar-row>
+    <input type="text" class="block col-12 field app-input" placeholder="Search Programs...">
+  </md-toolbar-row>
+  <div class="px1"></div>
+  <a routerLink="/about">
+    <button md-raised-button class="navbar-button">ABOUT</button>
+  </a>
+  <div class="px1"></div>
+  <a routerLink="">
+    <button md-raised-button class="navbar-button">HOME</button>
+  </a>
+</md-toolbar>

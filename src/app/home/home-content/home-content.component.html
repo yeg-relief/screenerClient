@@ -1,0 +1,123 @@
+<!-- LARGE SCREEN -->
+<div class="lg-show">
+  <div class="p2"></div>
+  <div class="flex">
+    <span class="flex-grow"></span>
+    <md-card class="col col-8" style="height:50vh">
+      <div class="p2"></div>
+      <div class="flex">
+        <span class="flex-grow"></span>
+        <img src="assets/logo.bmp" width="460" height="160">
+        <span class="flex-grow"></span>
+      </div>
+      <div class="p2"></div>
+      <md-card-subtitle class="center"> A free public website dedicated to making benefit programs discoverable. </md-card-subtitle>
+      <md-card-content>
+        <div class="container">
+          <p>
+            a description explaining that the users can take the master screener, but we can't promise they qualify or they can simply
+            browse the programs in the database. Also, that we don't store their private data, or require a login/signup.
+            Wording should be made by city hall folks.
+          </p>
+        </div>
+      </md-card-content>
+      <div class="p2"></div>
+      <div class="container">
+        <md-card-actions class="clearfix flex">
+          <span class="col col-1 flex-grow"></span>
+          <div class="col col-4">
+            <a routerLink="/master-screener/questions">
+              <button md-raised-button color="primary" class="col col-12">START</button>
+            </a>
+          </div>
+
+          <span class="col col-2"></span>
+          <div class="col col-4">
+            <a routerLink="/browse-programs">
+              <button md-raised-button color="primary" class="col col-12">BROWSE</button>
+            </a>
+          </div>
+          <span class="col col-1 flex-grow"></span>
+        </md-card-actions>
+      </div>
+    </md-card>
+    <span class="flex-grow"></span>
+  </div>
+</div>
+<!-- MEDIUM SCREEN -->
+<div class="sm-show lg-hide">
+  <div class="p2"></div>
+  <div class="flex">
+    <span class="flex-grow"></span>
+    <md-card class="col col-10" style="height:50vh">
+      <div class="p2"></div>
+      <div class="flex">
+        <span class="flex-grow"></span>
+        <img src="assets/logo.bmp" width="460" height="160">
+        <span class="flex-grow"></span>
+      </div>
+      <div class="p2"></div>
+      <md-card-subtitle class="center"> A free public website dedicated to making benefit programs discoverable. </md-card-subtitle>
+      <md-card-content>
+        <p>
+          a description explaining that the users can take the master screener, but we can't promise they qualify or they can simply
+          browse the programs in the database. Also, that we don't store their private data, or require a login/signup. Wording
+          should be made by city hall folks.
+        </p>
+      </md-card-content>
+      <div class="p2"></div>
+      <div class="container">
+        <md-card-actions class="clearfix flex">
+          <span class="col col-1 flex-grow"></span>
+          <div class="col col-4">
+            <a routerLink="/master-screener/questions">
+              <button md-raised-button color="primary" class="col col-12">START</button>
+            </a>
+          </div>
+
+          <span class="col col-2"></span>
+          <div class="col col-4">
+            <a routerLink="/browse-programs">
+              <button md-raised-button color="primary" class="col col-12">BROWSE</button>
+            </a>
+          </div>
+          <span class="col col-1 flex-grow"></span>
+        </md-card-actions>
+      </div>
+    </md-card>
+    <span class="flex-grow"></span>
+  </div>
+</div>
+<!-- SMALL SCREEN -->
+<div class="sm-hide">
+  <md-card>
+    <div class="p1"></div>
+    <img md-card-image src="assets/logo.bmp">
+    <md-card-subtitle class="center"> A free public website dedicated to making benefit programs discoverable. </md-card-subtitle>
+    <md-card-content>
+      <p>
+        a description explaining that the users can take the master screener, but we can't promise they qualify or they can simply
+        browse the programs in the database. Also, that we don't store their private data, or require a login/signup. Wording
+        should be made by city hall folks.
+      </p>
+    </md-card-content>
+    <md-card-actions class="flex flex-column container">
+      <div class="clearfix flex">
+        <span class="col col-1"></span>
+        <a routerLink="/master-screener/questions" class="col col-10">
+          <button md-raised-button color="primary" class="col col-12">START</button>
+        </a>
+        <span class="col col-1"></span>
+      </div>
+      <span class="py2"></span>
+      <div class="clearfix flex">
+        <span class="col col-1"></span>
+        <a routerLink="/browse-programs" class="col col-10">
+          <button md-raised-button color="primary" class="col col-12">BROWSE</button>
+        </a>
+        <span class="col col-1"></span>
+      </div>
+    </md-card-actions>
+    <div class="p1"></div>
+  </md-card>
+</div>
