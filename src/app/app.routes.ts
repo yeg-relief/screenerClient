@@ -5,6 +5,8 @@ import { HomeContentComponent } from './home/home-content/home-content.component
 import { PageNotFoundComponent } from './shared/components/page-not-found/page-not-found.component';
 import { ResultsComponent } from './master-screener/results/results.component';
 import { QuestionsComponent } from './master-screener/questions/questions.component';
+import { BrowseComponent } from './browse/browse.component';
+import { CategoryComponent } from './browse/category/category.component';
 
 const appRoutes: Routes = [
   { path: 'master-screener', component: MasterScreenerComponent,
@@ -17,6 +19,16 @@ const appRoutes: Routes = [
       },
       {
         path: '', pathMatch: 'full', redirectTo: '/master-screener/questions'
+      },
+      {
+        path: '**', component: PageNotFoundComponent
+      }
+    ]
+  },
+  { path: 'browse-programs', component: BrowseComponent,
+    children: [
+      {
+        path: ':category', component: CategoryComponent
       },
       {
         path: '**', component: PageNotFoundComponent

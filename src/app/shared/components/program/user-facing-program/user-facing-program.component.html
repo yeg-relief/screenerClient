@@ -8,12 +8,19 @@
     <p>{{ program.description.details }} </p>
   </md-card-content>
   <a href="{{ program.description.externalLink }}" target="_blank">
-    {{ program.description.externalLink }}
+    more information
   </a>
   <div class="p1"></div>
   <div class="clearfix flex">
     <div 
-      class="col col-1 border bg-silver black center rounded mr1" 
+      class="col col-2 border bg-silver black center rounded mr1 md-show" 
+      style="cursor: pointer;"
+      *ngFor="let tag of program.tags"
+      routerLink="/browse/tags/{{tag}}">
+      {{tag}}
+    </div>
+    <div 
+      class="col col-3 border bg-silver black center rounded mr1 md-hide" 
       style="cursor: pointer;"
       *ngFor="let tag of program.tags"
       routerLink="/browse/tags/{{tag}}">

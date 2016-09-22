@@ -13,6 +13,8 @@ import { MdCheckboxModule } from '@angular2-material/checkbox';
 import { MdRadioModule } from '@angular2-material/radio';
 import { MdInputModule } from '@angular2-material/input';
 
+
+
 import { ToolbarComponent } from './shared/components/toolbar/toolbar.component';
 import { HomeContentComponent } from './home/home-content/home-content.component';
 import { MasterScreenerComponent } from './master-screener/master-screener/master-screener.component';
@@ -21,6 +23,8 @@ import { QuestionComponent } from './shared/components/question/question.compone
 import { UserFacingProgramComponent } from './shared/components/program/user-facing-program/user-facing-program.component';
 import { ResultsComponent } from './master-screener/results/results.component';
 import { QuestionsComponent } from './master-screener/questions/questions.component';
+import { BrowseComponent } from './browse/browse.component';
+import { CategoryComponent } from './browse/category/category.component';
 
 @NgModule({
   declarations: [
@@ -32,7 +36,9 @@ import { QuestionsComponent } from './master-screener/questions/questions.compon
     QuestionComponent,
     UserFacingProgramComponent,
     ResultsComponent,
-    QuestionsComponent
+    QuestionsComponent,
+    BrowseComponent,
+    CategoryComponent
   ],
   imports: [
     BrowserModule,
