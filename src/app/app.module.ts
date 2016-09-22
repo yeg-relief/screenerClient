@@ -1,6 +1,6 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
-import { ReactiveFormsModule } from '@angular/forms';
+import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { routing,
          appRoutingProviders }  from './app.routes';
 
@@ -12,7 +12,6 @@ import { MdButtonModule } from '@angular2-material/button';
 import { MdCheckboxModule } from '@angular2-material/checkbox';
 import { MdRadioModule } from '@angular2-material/radio';
 import { MdInputModule } from '@angular2-material/input';
-
 
 
 import { ToolbarComponent } from './shared/components/toolbar/toolbar.component';
@@ -43,6 +42,7 @@ import { CategoryComponent } from './browse/category/category.component';
   imports: [
     BrowserModule,
     ReactiveFormsModule,
+    FormsModule,
     routing,
     MdToolbarModule.forRoot(),
     MdCoreModule.forRoot(),

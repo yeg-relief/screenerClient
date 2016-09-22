@@ -5,12 +5,26 @@
   <div class="col col-2 lg-show"></div>
   <div class="col col-1 sm-show lg-hide"></div>
   <div class="col col-8 flex-grow">
-    <div class="border p1 col col-12 center flex flex-justify" style="border-color: #009688">
-      <div routerLink="/browse-programs/{{ category }}" class="border rounded bg-silver black col col-1 flex-grow ml1 mr1 unselectable"
-      style="cursor: pointer;" routerLinkActive="active" *ngFor="let category of ( categories$ | async)">
-        {{ category }}
+    
+    <!-- categories display for screens >= medium -->
+    <div class="sm-show">
+      <div class="border p1 clearfix center flex flex-justify" style="border-color: #009688">
+        <div routerLink="/browse-programs/{{ category }}" class="border rounded bg-silver black col col-1 flex-grow ml1 mr1 unselectable"
+        style="cursor: pointer;" routerLinkActive="active" *ngFor="let category of ( categories$ | async)">
+          {{ category }}
+        </div>
       </div>
     </div>
+    
+    <!-- categories display for screens <= small -->
+    <div class="sm-hide">
+      <select name="category"  (change)="selectChange($event)" class="block col-12 field">
+        <option 
+          *ngFor="let category of ( categories$ | async )"
+          [selected]="category === initialCategory">{{category}}</option>
+      </select>
+    </div>
+    
     <div class="col col-12">
       <router-outlet></router-outlet>
     </div>
