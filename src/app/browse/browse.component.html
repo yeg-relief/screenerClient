@@ -21,7 +21,7 @@
       <select name="category"  (change)="selectChange($event)" class="block col-12 field">
         <option 
           *ngFor="let category of ( categories$ | async )"
-          [selected]="category === initialCategory">{{category}}</option>
+          [selected]="category === currCategory()">{{category}}</option>
       </select>
     </div>
     

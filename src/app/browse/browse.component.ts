@@ -14,7 +14,6 @@ import { ActivatedRoute, Router } from '@angular/router';
 })
 export class BrowseComponent implements OnInit {
   categories$: Observable<string[]>;
-  initialCategory: string;
   constructor(
     private browseService: BrowseService,
     private route: ActivatedRoute,
@@ -22,16 +21,18 @@ export class BrowseComponent implements OnInit {
   ) { }
 
   ngOnInit() {
-    const category = this.extractCategoryFromRoute();
-    if ( category !== false) {
-      this.initialCategory = <string>category;
-    } else {
-      this.initialCategory = 'undefined';
-    }
-
     this.categories$ = this.browseService.getCategories();
   }
 
+
+  currCategory(): string {
+    console.log('called');
+    const category = this.extractCategoryFromRoute();
+    if ( category !== false) {
+      return <string>category;
+    }
+    return 'undefined';
+  }
 
   selectChange($event) {
     const category = $event.target.value;
