@@ -16,14 +16,14 @@
       class="col col-2 border bg-silver black center rounded mr1 md-show" 
       style="cursor: pointer;"
       *ngFor="let tag of program.tags"
-      routerLink="/browse/tags/{{tag}}">
+      routerLink="/browse-programs/{{tag}}">
       {{tag}}
     </div>
     <div 
       class="col col-3 border bg-silver black center rounded mr1 md-hide" 
       style="cursor: pointer;"
       *ngFor="let tag of program.tags"
-      routerLink="/browse/tags/{{tag}}">
+      routerLink="/browse-programs/{{tag}}">
       {{tag}}
     </div>
   </div>
