@@ -1,0 +1,30 @@
+<div class="p2"></div>
+<div class="clearfix container flex">
+  <div class="px1 sm-hide"></div>
+  <div class="col col-2 lg-show"></div>
+  <div class="col col-1 sm-show lg-hide"></div>
+  <div class="col col-8 flex-grow">
+    <md-card>
+      <md-card-title class="center">LOGIN </md-card-title>
+      <md-card-subtitle>this is a mock login... any values result in successful login</md-card-subtitle>
+      <md-card-content>
+        <div class="p1"></div>
+        <label>Username</label>
+        <input required type="text" class="block col-12 field" [(ngModel)]="credentials.username">
+        <div class="p2"></div>
+        <label>Password</label>
+        <input required type="password" class="block col-12 field" [(ngModel)]="credentials.password">
+        <div class="p1"></div>
+      </md-card-content>
+      <div *ngIf="credentials.username.length === 0 || credentials.password.length === 0">
+        <button disabled md-raised-button color="primary">LOGIN</button>
+      </div>
+      <div *ngIf="credentials.username.length > 0 && credentials.password.length > 0">
+        <button md-raised-button color="primary" (click)="login()">LOGIN</button>
+      </div>
+    </md-card>
+  </div>
+  <div class="px1 sm-hide"></div>
+  <div class="col col-2 lg-show"></div>
+  <div class="col col-1 sm-show lg-hide"></div>
+</div>
