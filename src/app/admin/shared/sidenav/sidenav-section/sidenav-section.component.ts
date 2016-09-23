@@ -19,8 +19,6 @@ export class SidenavSectionComponent implements OnInit {
   }
 
   expand() {
-    console.log('expand clicked');
     this.expanded = !this.expanded;
-    console.log(this.expanded);
   }
 }

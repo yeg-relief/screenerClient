@@ -6,9 +6,12 @@
   </div>
   <div class="center bg-silver py2 subsection" *ngIf="expanded">
     <div *ngFor="let subsection of section.subsections" class="center">
-      <button class="btn btn-outline mb1 blue col-10">
-        {{subsection}}
-      </button>
+      <a routerLink="/admin/{{section.heading}}/{{subsection}}"
+        routerLinkActive="active">
+        <button class="btn btn-outline mb1 blue col-10">
+          {{subsection}}
+        </button>
+      </a>
     </div>
   </div>
 </div>

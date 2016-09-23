@@ -13,7 +13,7 @@ interface AdminSection {
 export class SidenavComponent implements OnInit {
   private content: AdminSection[] = [
     {
-      heading: 'master screener',
+      heading: 'master-screener',
       subsections: [
         'overview',
         'edit'

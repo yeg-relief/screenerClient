@@ -5,15 +5,15 @@ import { AdminComponent } from './admin.component';
 import { routing } from './admin.routes';
 import { AuthGuardService } from './auth-guard.service';
 import { AuthService } from './auth.service';
+import { MasterScreenerDataService } from './master-screener/master-screener-data.service';
 import { LoginComponent } from './login/login.component';
 import { MdCardModule } from '@angular2-material/card';
 import { MdButtonModule } from '@angular2-material/button';
-import { SidenavComponent } from './sidenav/sidenav.component';
-import { SidenavSectionComponent } from './sidenav/sidenav-section/sidenav-section.component';
-
+import { SharedModule } from './shared/shared.module';
 
 @NgModule({
   imports: [
+    SharedModule,
     CommonModule,
     FormsModule,
     MdCardModule.forRoot(),
@@ -23,9 +23,7 @@ import { SidenavSectionComponent } from './sidenav/sidenav-section/sidenav-secti
   declarations: [
     AdminComponent,
     LoginComponent,
-    SidenavComponent,
-    SidenavSectionComponent
   ],
-  providers: [AuthGuardService, AuthService]
+  providers: [AuthGuardService, AuthService, MasterScreenerDataService]
 })
 export class AdminModule { }
