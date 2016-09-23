@@ -1,0 +1,14 @@
+<div class="border-bottom border-top admin-section py2">
+  <div class="center">
+    <button class="btn btn-outline mb1 blue col-10" (click)="expand()">
+      {{ section.heading }}
+    </button>
+  </div>
+  <div class="center bg-silver py2 subsection" *ngIf="expanded">
+    <div *ngFor="let subsection of section.subsections" class="center">
+      <button class="btn btn-outline mb1 blue col-10">
+        {{subsection}}
+      </button>
+    </div>
+  </div>
+</div>

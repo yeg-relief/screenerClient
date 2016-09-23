@@ -5,6 +5,8 @@ import { AuthGuardService } from './auth-guard.service';
 import { LoginComponent } from './login/login.component';
 
 export const routing: ModuleWithProviders = RouterModule.forChild([
-  { path: '', component: AdminComponent, canActivate: [AuthGuardService] },
+   // commented out for development cycle
+  //{ path: '', component: AdminComponent, canActivate: [AuthGuardService] },
+  { path: '', component: AdminComponent  },
   { path: 'login', component: LoginComponent }
 ]);

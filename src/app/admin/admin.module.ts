@@ -8,6 +8,9 @@ import { AuthService } from './auth.service';
 import { LoginComponent } from './login/login.component';
 import { MdCardModule } from '@angular2-material/card';
 import { MdButtonModule } from '@angular2-material/button';
+import { SidenavComponent } from './sidenav/sidenav.component';
+import { SidenavSectionComponent } from './sidenav/sidenav-section/sidenav-section.component';
+
 
 @NgModule({
   imports: [
@@ -17,7 +20,12 @@ import { MdButtonModule } from '@angular2-material/button';
     MdButtonModule.forRoot(),
     routing
   ],
-  declarations: [AdminComponent, LoginComponent],
+  declarations: [
+    AdminComponent,
+    LoginComponent,
+    SidenavComponent,
+    SidenavSectionComponent
+  ],
   providers: [AuthGuardService, AuthService]
 })
 export class AdminModule { }

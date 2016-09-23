@@ -24,9 +24,9 @@ export class BrowseComponent implements OnInit {
     this.categories$ = this.browseService.getCategories();
   }
 
-
+  // called 12 times per render on my home machine :((
+  // this feels like a hack...
   currCategory(): string {
-    console.log('called');
     const category = this.extractCategoryFromRoute();
     if ( category !== false) {
       return <string>category;

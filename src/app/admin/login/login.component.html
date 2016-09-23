@@ -7,6 +7,7 @@
     <md-card>
       <md-card-title class="center">LOGIN </md-card-title>
       <md-card-subtitle>this is a mock login... any values result in successful login</md-card-subtitle>
+      
       <md-card-content>
         <div class="p1"></div>
         <label>Username</label>
@@ -21,8 +22,10 @@
       </div>
       <div *ngIf="credentials.username.length > 0 && credentials.password.length > 0">
         <button md-raised-button color="primary" (click)="login()">LOGIN</button>
-      </div>
+      </div>   
+      <md-card-subtitle>{{ message }}</md-card-subtitle> 
     </md-card>
+    
   </div>
   <div class="px1 sm-hide"></div>
   <div class="col col-2 lg-show"></div>

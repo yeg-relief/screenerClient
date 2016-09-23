@@ -8,6 +8,7 @@ import { AuthService } from '../auth.service';
   styleUrls: ['./login.component.css']
 })
 export class LoginComponent implements OnInit {
+  message: string = '';
   credentials = {
     username: '',
     password: ''
@@ -19,6 +20,7 @@ export class LoginComponent implements OnInit {
   }
 
   login() {
+    this.message = 'pretending it takes time to log in...';
     this.authService.login().subscribe(
       () => {
         if (this.authService.isLoggedIn) {
