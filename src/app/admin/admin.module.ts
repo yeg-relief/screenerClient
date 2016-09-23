@@ -9,11 +9,11 @@ import { MasterScreenerDataService } from './master-screener/master-screener-dat
 import { LoginComponent } from './login/login.component';
 import { MdCardModule } from '@angular2-material/card';
 import { MdButtonModule } from '@angular2-material/button';
-import { SharedModule } from './shared/shared.module';
+import { SidenavComponent } from './components/sidenav/sidenav.component';
+import { SidenavSectionComponent }from './components/sidenav/sidenav-section/sidenav-section.component';
 
 @NgModule({
   imports: [
-    SharedModule,
     CommonModule,
     FormsModule,
     MdCardModule.forRoot(),
@@ -23,6 +23,8 @@ import { SharedModule } from './shared/shared.module';
   declarations: [
     AdminComponent,
     LoginComponent,
+    SidenavSectionComponent,
+    SidenavComponent
   ],
   providers: [AuthGuardService, AuthService, MasterScreenerDataService]
 })

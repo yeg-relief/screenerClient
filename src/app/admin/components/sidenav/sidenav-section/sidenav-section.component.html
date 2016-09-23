@@ -4,14 +4,15 @@
       {{ section.heading }}
     </button>
   </div>
-  <div class="center bg-silver py2 subsection" *ngIf="expanded">
+  <div class="center bg-silver subsection" *ngIf="expanded">
     <div *ngFor="let subsection of section.subsections" class="center">
-      <a routerLink="/admin/{{section.heading}}/{{subsection}}"
-        routerLinkActive="active">
-        <button class="btn btn-outline mb1 blue col-10">
+      <div routerLink="/admin/{{section.heading}}/{{subsection}}"
+        routerLinkActive="active"
+        class="p1">
+        <button class="btn blue btn-outline mb1 col-10">
           {{subsection}}
         </button>
-      </a>
+      </div>
     </div>
   </div>
 </div>
