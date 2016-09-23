@@ -23,27 +23,27 @@ export class SidenavComponent implements OnInit {
       heading: 'keys',
       subsections: [
         'overview',
-        'add key',
-        'remove key',
-        'edit key'
+        'add-key',
+        'remove-key',
+        'edit-key'
       ]
     },
     {
       heading: 'question',
       subsections: [
         'overview',
-        'edit question',
-        'add question',
-        'remove question'
+        'edit-question',
+        'add-question',
+        'remove-question'
       ]
     },
     {
       heading: 'program',
       subsections: [
         'overview',
-        'edit program',
-        'add program',
-        'remove program'
+        'edit-program',
+        'add-program',
+        'remove-program'
       ]
     }
   ];

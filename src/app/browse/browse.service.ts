@@ -9,7 +9,7 @@ import 'rxjs/add/operator/toArray';
 @Injectable()
 export class BrowseService {
 
-  categories = ['adult', 'health', 'tax', 'savings', 'disabled', 'all'];
+  categories = ['adult', 'health', 'tax', 'savings', 'disabled', 'child', 'all'];
 
   private mockPrograms: UserFacingProgram[] = [
     {
