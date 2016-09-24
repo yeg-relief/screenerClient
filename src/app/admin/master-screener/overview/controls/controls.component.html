@@ -11,15 +11,19 @@
   </select>
   <div class="col-1"></div>
   <md-checkbox [checked]="true" (change)="keyChange($event.checked)">
-    <div class="unselectable tooltip" my-title="toggle displaying used keys">keys</div>
+    <div class="unselectable tooltip" my-title="toggle key display">keys</div>
   </md-checkbox>
   <div class="col-1"></div>
   <md-checkbox [checked]="true" (change)="questionChange($event.checked)">
-    <div class="unselectable tooltip" my-title="toggle displaying questions in screener">questions</div>
+    <div class="unselectable tooltip" my-title="toggle question display">questions</div>
   </md-checkbox>
   <div class="col-1 flex-grow"></div>
   <!-- version number shouldn't be hardcoded only for prototype -->
   <button md-raised-button
     title="edit master screener" 
     routerLink="/admin/master-screener/edit/version/8"> EDIT </button>
+  <div class="px1"></div>
+  <button md-raised-button
+    title="edit master screener" 
+    routerLink="/admin/master-screener/preview/version/8"> PREVIEW </button>
 </div>
