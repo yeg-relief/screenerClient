@@ -3,14 +3,17 @@ import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { AdminComponent } from './admin.component';
 import { routing } from './admin.routes';
-import { AuthGuardService } from './auth-guard.service';
-import { AuthService } from './auth.service';
+import { AuthGuardService } from './core/services/auth-guard.service';
+import { AuthService } from './core/services/auth.service';
 import { MasterScreenerDataService } from './master-screener/master-screener-data.service';
-import { LoginComponent } from './login/login.component';
+import { LoginComponent } from './core/login/login.component';
 import { MdCardModule } from '@angular2-material/card';
 import { MdButtonModule } from '@angular2-material/button';
-import { SidenavComponent } from './components/sidenav/sidenav.component';
-import { SidenavSectionComponent }from './components/sidenav/sidenav-section/sidenav-section.component';
+import { SidenavComponent } from './core/sidenav/sidenav.component';
+import { SidenavSectionComponent }from './core/sidenav/sidenav-section/sidenav-section.component';
+import { BreadCrumbComponent } from './core/bread-crumb/bread-crumb.component';
+import { MdCheckboxModule } from '@angular2-material/checkbox';
+
 
 @NgModule({
   imports: [
@@ -18,13 +21,15 @@ import { SidenavSectionComponent }from './components/sidenav/sidenav-section/sid
     FormsModule,
     MdCardModule.forRoot(),
     MdButtonModule.forRoot(),
+    MdCheckboxModule.forRoot(),
     routing
   ],
   declarations: [
     AdminComponent,
     LoginComponent,
     SidenavSectionComponent,
-    SidenavComponent
+    SidenavComponent,
+    BreadCrumbComponent
   ],
   providers: [AuthGuardService, AuthService, MasterScreenerDataService]
 })

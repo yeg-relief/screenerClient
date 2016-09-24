@@ -16,7 +16,8 @@ export class SidenavComponent implements OnInit {
       heading: 'master-screener',
       subsections: [
         'overview',
-        'edit'
+        'edit',
+        'select'
       ]
     },
     {

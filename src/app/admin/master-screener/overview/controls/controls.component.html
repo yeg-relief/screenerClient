@@ -1,0 +1,22 @@
+<div class="flex flex-center clearfix ml1">
+  <select name="version" class="col-3 rounded">
+    <option disabled>version 1</option>
+    <option disabled>version 2</option>
+    <option disabled>version 3</option>
+    <option disabled>version 4</option>
+    <option disabled>version 5</option>
+    <option disabled>version 6</option>
+    <option disabled>version 7</option>
+    <option selected>version 8</option>
+  </select>
+  <div class="col-1"></div>
+  <md-checkbox [checked]="true" (change)="keyChange($event.checked)">
+    <div class="unselectable tooltip" my-title="toggle displaying used keys">keys</div>
+  </md-checkbox>
+  <div class="col-1"></div>
+  <md-checkbox [checked]="true" (change)="questionChange($event.checked)">
+    <div class="unselectable tooltip" my-title="toggle displaying questions in screener">questions</div>
+  </md-checkbox>
+  <div class="col-1 flex-grow"></div>
+  <button md-raised-button> EDIT </button>
+</div>

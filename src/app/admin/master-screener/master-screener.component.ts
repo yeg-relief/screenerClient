@@ -2,8 +2,7 @@ import { Component, OnInit } from '@angular/core';
 
 @Component({
   selector: 'app-master-screener',
-  templateUrl: './master-screener.component.html',
-  styleUrls: ['./master-screener.component.css']
+  template: `<router-outlet></router-outlet>`
 })
 export class MasterScreenerComponent implements OnInit {
 

@@ -1,16 +1,17 @@
-<div class="border-bottom border-top admin-section py2">
+<div class="admin-section py2">
   <div class="center">
-    <button class="btn btn-outline mb1 blue col-10" (click)="expand()">
+    <button class="btn btn-outline mb1 col-10 section-heading" (click)="expand()">
       {{ section.heading }}
     </button>
   </div>
-  <div class="center bg-silver subsection" *ngIf="expanded">
+  <div class="center subsection rounded ml3 mr3 mt1" *ngIf="expanded">
+    <div class="p1"></div>
     <div *ngFor="let subsection of section.subsections" class="center">
       <div routerLink="/admin/{{section.heading}}/{{subsection}}"
         routerLinkActive="active"
         class="p1">
-        <button class="btn blue btn-outline mb1 col-10">
-          {{subsection}}
+        <button class="btn black btn-outline mb1 col-10">
+          {{subsection}} 
         </button>
       </div>
     </div>

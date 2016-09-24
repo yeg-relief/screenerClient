@@ -145,7 +145,7 @@ export class MasterScreenerDataService {
       type: 'boolean',
       key: 'survivedSpouse',
       label: 'has your spouse or common-law partner has died' +
-             ' and you have not remarried or entered into a common-law relationship?',
+      ' and you have not remarried or entered into a common-law relationship?',
       value: '',
       controlType: 'radio',
       options: [
@@ -162,18 +162,24 @@ export class MasterScreenerDataService {
     }
   ];
 
+  private mockMetaData = {
+    creationDate: '10-26-2016',
+    versionNumber: 8
+  };
+
   private mockScreener$: Observable<Question> = Observable.from(this.mockScreener);
+  private mockMetaData$: Observable<any> = Observable.of(this.mockMetaData);
 
   constructor() { }
 
   private flattenMockScreener(): Observable<Question> {
-    return this.mockScreener$.switchMap( (question: Question) => {
+    return this.mockScreener$.switchMap((question: Question) => {
       if (!question.expandable) {
         return Observable.of(question);
       }
       const questions: Question[] = [];
       questions.push(question);
-      question.conditonalQuestions.forEach( (conditionalQuestion: Question) => {
+      question.conditonalQuestions.forEach((conditionalQuestion: Question) => {
         questions.push(conditionalQuestion);
       });
       return Observable.from(questions);
@@ -182,5 +188,27 @@ export class MasterScreenerDataService {
 
   questionCount(): Observable<number> {
     return this.flattenMockScreener().count();
+  }
+
+  creationDate(): Observable<string> {
+    return this.mockMetaData$.map(data => data.creationDate);
+  }
+
+  version(): Observable<number> {
+    return this.mockMetaData$.map(data => data.versionNumber);
+  }
+
+  extractKeys(): Observable<any> {
+    return this.flattenMockScreener().switchMap((question: Question) => {
+      return Observable.of({
+        name: question.key,
+        type: question.type
+      });
+    })
+      .toArray();
+  }
+
+  questions(): Observable<Question[]> {
+    return this.flattenMockScreener().toArray();
   }
 }

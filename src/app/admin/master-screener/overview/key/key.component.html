@@ -1,0 +1,25 @@
+<div class="border-left border-right border-top p2 clearfix flex flex-center">
+  <div class="col-4 flex-grow"></div>
+  <div class="tooltip bg-silver border center rounded p1 unselectable col-2" my-title="these keys are used in the screener">
+    key overview
+  </div>
+  <div class="col-4 flex-grow"></div>
+</div>
+<div class="clearfix" *ngIf="toggled">
+  <div class="overflow-auto">
+    <table class="table-light overflow-hidden bg-white border rounded">
+      <thead class="bg-darken-1">
+        <tr>
+          <th>key name</th>
+          <th>key type</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let key of (keys$ | async)" class="unselectable" style="pointer-events:none">
+          <td>{{ key.name }}</td>
+          <td>{{ key.type }}</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
