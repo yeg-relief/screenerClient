@@ -18,7 +18,7 @@
     
     <!-- categories display for screens <= small -->
     <div class="sm-hide">
-      <select name="category"  (change)="selectChange($event)" class="block col-12 field">
+      <select name="category"  (change)="selectChange($event)" class="block col-12 field rounded">
         <option 
           *ngFor="let category of ( categories$ | async )"
           [selected]="category === currCategory()">{{category}}</option>

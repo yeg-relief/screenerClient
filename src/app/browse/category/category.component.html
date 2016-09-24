@@ -1,9 +1,11 @@
 <div class="p2"></div>
 
 <div *ngFor="let program of (programs$ | async)" class="clearfix flex">
-  <div class="col col-1"></div>
-  <app-user-facing-program [program]="program" class="col col-10 flex-grow"></app-user-facing-program>
-  <div class="col col-1"></div>
+  <div class="col-1 md-show"></div>
+  <div class="px1 sm-hide"></div>
+  <app-user-facing-program [program]="program" class="col-10 flex-grow"></app-user-facing-program>
+  <div class="col-1 md-show"></div>
+  <div class="px1 sm-hide"></div>
 </div>
 
 <div class="p2"></div>

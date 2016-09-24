@@ -13,14 +13,16 @@
   <div class="p1"></div>
   <div class="clearfix flex">
     <div 
-      class="col col-2 border bg-silver black center rounded mr1 md-show" 
+      class="col-2 border bg-silver black center rounded mr1 md-show" 
       style="cursor: pointer;"
       *ngFor="let tag of program.tags"
       routerLink="/browse-programs/{{tag}}">
       {{tag}}
     </div>
+  </div>
+  <div class="clearfix flex flex-column flex-center">
     <div 
-      class="col col-3 border bg-silver black center rounded mr1 md-hide" 
+      class="col-6 border bg-silver black center rounded mr1 sm-hide mt1 mb1" 
       style="cursor: pointer;"
       *ngFor="let tag of program.tags"
       routerLink="/browse-programs/{{tag}}">
