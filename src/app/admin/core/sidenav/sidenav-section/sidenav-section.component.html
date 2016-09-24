@@ -1,18 +1,35 @@
 <div class="admin-section py2">
   <div class="center">
-    <button class="btn btn-outline mb1 col-10 section-heading" (click)="expand()">
-      {{ section.heading }}
-    </button>
+    <div *ngIf="isRoot$ | async">
+      <button class="btn white btn-outline mb1 col-10" (click)="toggleExpansion()">
+        {{ section.heading }}
+      </button>
+    </div>
+    <div *ngIf="!(isRoot$ | async)">
+      <button class="btn black btn-outline mb1 col-10" (click)="toggleExpansion()">
+        {{ section.heading }}
+      </button>
+    </div>
   </div>
-  <div class="center subsection rounded ml3 mr3 mt1" *ngIf="expanded">
+  <div class="center subsection rounded ml3 mr3 mt1" *ngIf="(expand$ | async)">
     <div class="p1"></div>
-    <div *ngFor="let subsection of section.subsections" class="center">
-      <div routerLink="/admin/{{section.heading}}/{{subsection}}"
+    <div *ngFor="let subsection of section.subsections;let i = index" class="center">
+      <div *ngIf="i === 0" routerLink="/admin/{{section.heading}}/{{subsection}}"
         routerLinkActive="active"
         class="p1">
         <button class="btn black btn-outline mb1 col-10">
           {{subsection}} 
         </button>
+      </div>
+      <div *ngIf="i !== 0" 
+        routerLink="/admin/{{section.heading}}/{{subsection}}"
+        routerLinkActive="active"
+        class="p1"
+        title="you can not navigate to this section; go to overview">
+        <button disabled class="btn black btn-outline mb1 col-10">
+          {{subsection}} 
+        </button>
+        
       </div>
     </div>
   </div>

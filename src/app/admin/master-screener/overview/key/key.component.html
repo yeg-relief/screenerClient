@@ -1,6 +1,8 @@
-<div class="border-left border-right border-top p2 clearfix flex flex-center">
+<div class="border-left border-right border-top p2 clearfix flex flex-center" *ngIf="toggled">
   <div class="col-4 flex-grow"></div>
-  <div class="tooltip bg-silver border center rounded p1 unselectable col-2" my-title="these keys are used in the screener">
+  <div  
+    class="tooltip bg-silver border center rounded p1 unselectable col-2" 
+    my-title="these keys are used in the screener">
     key overview
   </div>
   <div class="col-4 flex-grow"></div>
@@ -12,12 +14,17 @@
         <tr>
           <th>key name</th>
           <th>key type</th>
+          <th></th>
+          <th></th>
         </tr>
       </thead>
       <tbody>
-        <tr *ngFor="let key of (keys$ | async)" class="unselectable" style="pointer-events:none">
+        <tr *ngFor="let key of (keys$ | async)">
           <td>{{ key.name }}</td>
           <td>{{ key.type }}</td>
+          <td>
+            <button title="view key details" md-button routerLink="/admin/key/detail/{{key.name}}">VIEW</button>
+          </td>
         </tr>
       </tbody>
     </table>

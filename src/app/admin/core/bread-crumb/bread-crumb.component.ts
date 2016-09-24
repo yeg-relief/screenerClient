@@ -1,7 +1,8 @@
 import { Component, OnInit } from '@angular/core';
-import { LocationService } from './location.service';
+import { LocationService } from '../services/location.service';
 import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/operator/map';
+import 'rxjs/add/observable/from';
 
 @Component({
   selector: 'app-bread-crumb',

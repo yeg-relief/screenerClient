@@ -10,6 +10,6 @@ export class LocationService {
 
   getUrl(): Observable<string[]> {
     return Observable.of(this.router.routerState.snapshot.url)
-      .map((url: string) => url.split('/').splice(2, 2));
+      .map((url: string) => url.split('/').splice(2));
   }
 }

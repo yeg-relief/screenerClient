@@ -9,6 +9,7 @@ import { ControlsComponent } from './overview/controls/controls.component';
 import { MdCheckboxModule } from '@angular2-material/checkbox';
 import { KeyComponent } from './overview/key/key.component';
 import { QuestionComponent } from './overview/question/question.component';
+import { EditComponent } from './edit/edit.component';
 
 @NgModule({
   imports: [
@@ -22,7 +23,8 @@ import { QuestionComponent } from './overview/question/question.component';
     ScreenerStatsComponent,
     ControlsComponent,
     KeyComponent,
-    QuestionComponent
+    QuestionComponent,
+    EditComponent
   ],
   providers: [
     MasterScreenerDataService

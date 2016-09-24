@@ -1,4 +1,4 @@
-<div class="border-left border-right border-top p2 clearfix flex flex-center">
+<div class="border-left border-right border-top p2 clearfix flex flex-center" *ngIf="toggled">
   <div class="col-4 flex-grow"></div>
   <div class="tooltip bg-silver border center rounded p1 unselectable col-2" 
     my-title="these questions are in this screener">
@@ -14,13 +14,22 @@
           <th>key</th>
           <th>control type</th>
           <th>label</th>
+          <th></th>
         </tr>
       </thead>
       <tbody>
-        <tr *ngFor="let question of (questions$ | async)" class="unselectable" style="pointer-events:none">
+        <tr *ngFor="let question of (questions$ | async)">
           <td>{{ question.key }}</td>
           <td>{{ question.controlType }}</td>
           <td>{{ question.label }}</td>
+          <td>
+            <button
+              title="view question details"
+              md-button 
+              routerLink="/admin/question/detail/{{question.key}}">
+              VIEW
+             </button> 
+          </td>
         </tr>
       </tbody>
     </table>

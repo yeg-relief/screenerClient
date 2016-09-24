@@ -26,7 +26,7 @@ export class SidenavComponent implements OnInit {
         'overview',
         'add-key',
         'remove-key',
-        'edit-key'
+        'detail'
       ]
     },
     {
