@@ -1,18 +1,22 @@
 <!-- LARGE SCREENS -->
 <md-toolbar color="primary" class="app-navbar lg-show">
   <div class="flex-grow"></div>
-  <input type="text" class="block col-6 field app-input" placeholder="Search Programs...">
+  <input type="text" class="block col-4 field app-input" placeholder="Search Programs...">
   <div class="flex-grow"></div>
   <a routerLink="/admin/master-screener/overview">
-    <button md-raised-button class="navbar-button">ADMIN</button>
+    <div class="border-left border-right rounded-left">
+      <button md-button >ADMIN</button>
+    </div>
   </a>
-  <span class="px2"></span>
   <a routerLink="/about">
-    <button md-raised-button class="navbar-button">ABOUT</button>
+    <div>
+      <button md-button >ABOUT</button>
+    </div>
   </a>
-  <span class="px2"></span>
   <a routerLink="">
-    <button md-raised-button class="navbar-button">HOME</button>
+    <div class="border-left border-right rounded-right">
+      <button md-button >HOME</button>
+    </div>
   </a>
   <span class="px1"></span>
 </md-toolbar>

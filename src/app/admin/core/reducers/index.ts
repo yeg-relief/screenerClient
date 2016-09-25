@@ -14,8 +14,10 @@ const reducers = {
   masterScreener: fromMasterScreener.reducer
 };
 
+const productionReducer = combineReducers(reducers);
+
 export function reducer(state: any, action: any) {
-  return reducers.masterScreener;
+  return productionReducer(state, action);
 }
 
 export function getMasterScreenerState(state$: Observable<State>) {
@@ -24,6 +26,9 @@ export function getMasterScreenerState(state$: Observable<State>) {
 
 export const getMeta = share(compose(fromMasterScreener.getMeta, getMasterScreenerState));
 export const getVersions = share(compose(fromMasterScreener.getVersions, getMasterScreenerState));
+
+
+
 
 /* https://github.com/ngrx/example-app/blob/final/src/util.ts */
 interface SelectorFn<T, V> {

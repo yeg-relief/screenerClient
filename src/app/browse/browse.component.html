@@ -8,7 +8,7 @@
     
     <!-- categories display for screens >= medium -->
     <div class="sm-show">
-      <div class="border p1 clearfix center flex flex-justify" style="border-color: #009688">
+      <div class="border p1 clearfix center flex flex-justify rounded">
         <div routerLink="/browse-programs/{{ category }}" class="border rounded bg-silver black col col-1 flex-grow ml1 mr1 unselectable"
         style="cursor: pointer;" routerLinkActive="active" *ngFor="let category of ( categories$ | async)">
           {{ category }}

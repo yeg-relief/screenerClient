@@ -1,5 +1,6 @@
 .large-admin-wrapper {
-  height: calc(100% - 64px);
+  margin-top: 1px;
+  height: calc(100% - 66px);
   overflow: hidden;
 }
 

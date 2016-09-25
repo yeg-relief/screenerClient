@@ -1,9 +1,10 @@
 .navbar-button {
-  background-color: lightseagreen;
+  background-color: blanchedalmond;
 }
 
 .app-navbar {
-  box-shadow: 0 2px 5px 0 rgba(0,0,0,0.24);
+  box-shadow: 0 2px 5px 0 rgba(0,0,0,0.1);
+  background: transparent;
 }
 
 

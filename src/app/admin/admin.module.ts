@@ -14,7 +14,7 @@ import { SidenavSectionComponent }from './core/sidenav/sidenav-section/sidenav-s
 import { BreadCrumbComponent } from './core/bread-crumb/bread-crumb.component';
 import { MdCheckboxModule } from '@angular2-material/checkbox';
 import { StoreModule } from '@ngrx/store';
-import { reducer, initialState } from './core/reducers/master-screener.reducer';
+import { reducer } from './core/reducers';
 import { MasterScreenerEffects } from './core/effects/master-screener.effects';
 import { EffectsModule } from '@ngrx/effects';
 
@@ -26,7 +26,7 @@ import { EffectsModule } from '@ngrx/effects';
     MdButtonModule.forRoot(),
     MdCheckboxModule.forRoot(),
     routing,
-    StoreModule.provideStore({ masterScreener: reducer }, initialState),
+    StoreModule.provideStore(reducer),
     EffectsModule.run(MasterScreenerEffects)
   ],
   declarations: [

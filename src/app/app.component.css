@@ -1,6 +1,11 @@
 .app-wrapper {
    width:  100vw; 
    height: 100vh;
-   background: linear-gradient(to bottom, darkslategrey , #434343);
-   overflow-x: hidden;
+   background: whitesmoke;
+   overflow: hidden;
 }
+
+.app-content {
+  font-family: 'Roboto', sans-serif;
+}
+
