@@ -1,4 +1,12 @@
-<div>
+<main>
+  <div class="p1"></div>
+  <div class="center">
+    <h1> RESULTS </h1>
+    <div id="result-preface" class="border p2" style="margin-left:25%; width:50%;">
+      <p><strong>NOTE: </strong> These results do <strong>NOT</strong> mean you're qualified for 
+      <i>any</i> of these programs. <br>They are meant to help you find programs that can help you. 
+    </div>
+  </div>
   <div *ngFor="let response of (responses$ | async)" class="clearfix flex">
     <!-- responsive side spacing -->
     <div class="px1 sm-hide"></div>
@@ -14,5 +22,6 @@
     <div class="col col-1 sm-show lg-hide"></div>
     <div class="px1 sm-hide"></div>
   </div>
-</div>
-<div class="p3"></div>
+  <div class="p3"></div>
+</main>
+

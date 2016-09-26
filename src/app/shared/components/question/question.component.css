@@ -1,0 +1,6 @@
+md-card {
+  font-family: 'Roboto Mono', monospace;
+  width: 100%;
+  background-color: lightgray;
+  overflow: hidden;
+}

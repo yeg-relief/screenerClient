@@ -2,11 +2,11 @@
 </div>
 
 <md-card [formGroup]="form">
-  <div *ngIf="!conditional" class="clearfix flex">
-    <div class="col col-2 border rounded flex-grow">
+  <div *ngIf="!conditional" class="clearfix">
+    <div class="col-4 border-left px1">
       question {{index}} of {{length}}
     </div>
-    <span class="col col-10 md-show"></span>
+    <span class="col-6"></span>
   </div>
   <div class="p1"></div>
   <md-card-title> {{ question.label}} </md-card-title>
@@ -27,14 +27,11 @@
           </md-radio-button>
         </md-radio-group>
       </div>
-      <div class="ml1" *ngIf="question.expandable && expanded">
-        <div *ngFor="let expandedQuestion of question.conditonalQuestions">
-          <app-question 
-            [question]="expandedQuestion" 
-            [conditional]="true"
-            [form]="form">
-          </app-question>
-        </div>
+      <div *ngIf="question.expandable && expanded" class="col-10 flex flex-column">
+        <app-question 
+          *ngFor="let expandedQuestion of question.conditonalQuestions" 
+          [question]="expandedQuestion" [conditional]="true" [form]="form">
+        </app-question>
       </div>
     </div>
 

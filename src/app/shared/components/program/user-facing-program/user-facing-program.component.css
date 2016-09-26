@@ -1,0 +1,10 @@
+md-card-title {
+  font-family: 'Comfortaa', cursive;
+}
+
+md-card {
+  font-family: 'Roboto Mono', monospace;
+  display: inline-block;
+  background-color: lightgray;
+  overflow: hidden;
+}

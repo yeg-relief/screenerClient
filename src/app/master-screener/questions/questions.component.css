@@ -1,0 +1,109 @@
+main {
+  height: 95vh;
+  width: 100vw;
+  overflow-x: hidden;
+  background-image: url(assets/city-skyline-greyscale.svg);
+  background-position: bottom right;
+  background-repeat: no-repeat;
+  background-size: cover;
+  margin-left: 1%;
+  margin-right: 1%;
+}
+
+/* MEDIUM AND GREATER */
+@media(min-width: 40em) {
+  main {
+    height: 95vh;
+    width: 100vw;
+    background-image: url(assets/city-skyline-greyscale.svg);
+    background-position: bottom right;
+    background-repeat: no-repeat;
+    background-size: cover;
+  }
+}
+
+/* SMALL TO MEDIUM */
+@media(max-width: 40em){
+  main {
+    height: 95vh;
+    width: 100vw;
+    background-image: url(assets/city-skyline-greyscale.svg);
+    background-position: center bottom;
+    background-repeat: no-repeat;
+    background-size: contain;
+  }
+}
+
+h1 {
+  font-family: 'Comfortaa', cursive;
+}
+
+.questions {
+  width: 100%;
+}
+
+button {
+  font-family: 'Roboto Mono', monospace;
+}
+
+/* extra large screens */
+@media(min-width: 64em) {
+  .questions {
+   width: 60%;
+   margin: 0% 20%;
+  }
+  .submit-wrapper {
+    width: 60%;
+    margin: 0% 20%;
+  }
+}
+
+/* large screens */
+@media(min-width: 52em) and (max-width:64em) {
+  .questions {
+    width: 70%;
+    margin: 0% 15%;
+  }
+  
+  .submit-wrapper {
+    width: 70%;
+    margin: 0% 15%;
+  }
+}
+
+/* medium screens */
+@media(min-width: 40em) and (max-width: 52em) {
+  .questions {
+    width: 80%;
+    margin: 0% 10%;
+  }
+  
+  .submit-wrapper {
+    width: 80%;
+    margin: 0% 10%;
+  }
+}
+
+/* small screens */
+@media(min-width: 30em) and (max-width: 40em){
+  .questions {
+    width: 90%;
+    margin: 0% 2%;
+  }
+  
+  .submit-wrapper {
+    width: 90%;
+    margin: 0% 2%;
+  }
+}
+
+/* extra small screens */
+@media(max-width: 30em){
+  .questions {
+    width: 90%;
+  }
+  
+  .submit-wrapper {
+    width: 90%;
+  }
+}

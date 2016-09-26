@@ -1,0 +1,42 @@
+h1 {
+  font-family: 'Comfortaa', cursive;
+}
+
+p {
+  font-family: 'Roboto Mono', monospace;
+  display: inline-block;
+}
+
+main {
+  height: 95vh;
+  width: 100vw;
+  overflow-x: hidden;
+  background-image: url(assets/city-skyline-greyscale.svg);
+  background-position: bottom right;
+  background-repeat: no-repeat;
+  background-size: cover;
+}
+
+/* MEDIUM AND GREATER */
+@media(min-width: 40em) {
+  main {
+    height: 95vh;
+    width: 100vw;
+    background-image: url(assets/city-skyline-greyscale.svg);
+    background-position: bottom right;
+    background-repeat: no-repeat;
+    background-size: cover;
+  }
+}
+
+/* SMALL TO MEDIUM */
+@media(max-width: 40em){
+  main {
+    height: 95vh;
+    width: 100vw;
+    background-image: url(assets/city-skyline-greyscale.svg);
+    background-position: center bottom;
+    background-repeat: no-repeat;
+    background-size: contain;
+  }
+}
