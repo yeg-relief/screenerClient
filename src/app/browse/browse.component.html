@@ -9,7 +9,7 @@
       <!-- categories display for screens >= medium -->
       <div class="lg-show">
         <div class="border p1 clearfix flex flex-wrap flex-center rounded">
-          <div routerLink="/browse-programs/{{ category }}" class=" col col-1 m1 flex  unselectable"
+          <div routerLink="/browse-programs/category/{{ category }}" class=" col col-1 m1 flex  unselectable"
           style="cursor: pointer;" routerLinkActive="active" *ngFor="let category of ( categories$ | async)">
             <div class="category center border rounded bg-silver flex-grow">{{ category }}</div>
           </div>

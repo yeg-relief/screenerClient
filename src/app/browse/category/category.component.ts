@@ -6,6 +6,7 @@ import { UserFacingProgram } from '../../shared';
 import 'rxjs/add/operator/switchMap';
 import 'rxjs/add/observable/of';
 
+
 @Component({
   selector: 'app-category',
   templateUrl: './category.component.html',

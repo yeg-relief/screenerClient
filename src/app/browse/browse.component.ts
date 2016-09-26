@@ -22,6 +22,7 @@ export class BrowseComponent implements OnInit {
 
   ngOnInit() {
     this.categories$ = this.browseService.getCategories();
+    console.log('here 1');
   }
 
   // called 12 times per render on my home machine :((
@@ -36,14 +37,14 @@ export class BrowseComponent implements OnInit {
 
   selectChange($event) {
     const category = $event.target.value;
-    this.router.navigate([`/browse-programs/${category}`]);
+    this.router.navigate([`/browse-programs/category/${category}`]);
   }
 
   extractCategoryFromRoute(): string | boolean {
     let category = null;
     // i'm scared
     if ( this.router.routerState.snapshot.url ) {
-      category = this.router.routerState.snapshot.url.split('/')[2];
+      category = this.router.routerState.snapshot.url.split('/')[3];
     }
     if (category) {
       return category;
