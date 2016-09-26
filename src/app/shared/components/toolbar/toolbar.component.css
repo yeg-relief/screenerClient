@@ -1,13 +1,19 @@
-.navbar-button {
-  background-color: blanchedalmond;
-}
-
-.app-navbar {
-  box-shadow: 0 2px 5px 0 rgba(0,0,0,0.1);
+nav {
+  height: 5vh;
   background: transparent;
+  width: 100vw;
+  overflow: hidden;
+  background-color: rgba(248,248,255, 0.5);
 }
 
+.link {
+  font-family: 'Roboto Mono', monospace;
+  display: inline-block;
+  vertical-align: middle;
+  line-height: normal;    
+}
 
-.app-input {
-  box-shadow: 0 2px 5px 0 rgba(0,0,0,0.24);
+.active {
+  color: black;
+  pointer-events: none;
 }

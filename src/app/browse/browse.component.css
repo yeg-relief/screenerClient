@@ -1,4 +1,4 @@
-.active {
+.active > div{
   background-color: lightblue;
 }
 
@@ -10,3 +10,38 @@
   -ms-user-select: none;
   user-select: none;
 }
+
+.browse {
+  min-height: 95vh;
+  width: 100vw;
+}
+
+section {
+  min-height: 95vh;
+  width: 100vw;
+  background-image: url(assets/city-skyline-greyscale.svg);
+  background-position: center bottom;
+  background-repeat: no-repeat;
+  background-size: contain;
+  overflow-x: hidden;
+}
+
+.category {
+  font-family: 'Roboto Mono', monospace;
+  display: inline-block;
+}
+
+select > option {
+  font-family: 'Roboto Mono', monospace;
+}
+
+select {
+  font-family: 'Roboto Mono', monospace;
+  padding-bottom: 4px;
+}
+
+/*
+section {
+  background-color: rgba(211, 211, 211, 0.4);
+}
+*/

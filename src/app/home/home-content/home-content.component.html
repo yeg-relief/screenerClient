@@ -1,121 +1,73 @@
-<!-- LARGE SCREEN -->
-<div class="lg-show">
+<main class="home">
   <div class="p2"></div>
-  <div class="flex">
-    <span class="flex-grow"></span>
-    <md-card class="col col-8 bg-silver" style="height:50vh;">
-      <div class="p2"></div>
-      <div class="flex">
-        <span class="flex-grow"></span>
-        <img src="assets/logo.bmp" width="460" height="160">
-        <span class="flex-grow"></span>
+  <header class="center">
+    <div class="header-title">You Can Benefit</div>
+    <div class="header-description clearfix flex">
+      <!-- LARGE SCREENS  -->
+      <div class="lg-show col-1"></div>
+      <div class="lg-show col-6 flex-grow">
+        <p>A free and open sourced website designed to make it easier to find available benefits.
       </div>
-      <div class="p2"></div>
-      <md-card-subtitle class="center"> A free public website dedicated to making benefit programs discoverable. </md-card-subtitle>
-        <div class="container">
-          <p id="test" class="navy content">
-            a description explaining that the users can take the master screener, but we can't promise they qualify or they can simply
-            browse the programs in the database. Also, that we don't store their private data, or require a login/signup.
-            Wording should be made by city hall folks.
-          </p>
+      <div class="lg-show col-1"></div>
+
+      <!-- LESS THAN LARGE SCREENS -->
+      <div class="lg-hide col-1"></div>
+      <div class="lg-hide col-6 flex-grow">
+        <p>A free and open sourced website designed to make it easier to find available benefits.
+      </div>
+      <div class="lg-hide col-1"></div>
+    </div>
+  </header>
+  <div class="p2"></div>
+  <!-- MEDIUM AND LARGER SCREENS -->
+  <section class="clearfix md-show">
+    <div class="flex">
+      <div class="col-3"></div>
+      <div class="program-details col-2 flex flex-column">
+        <div>
+          <p> Our team has compiled information on various benefits available to Albertans. Take a look at what we've found!
         </div>
-      <div class="p2"></div>
-      <div class="container">
-        <md-card-actions class="clearfix flex">
-          <span class="col col-1 flex-grow"></span>
-          <div class="col col-4">
-            <a routerLink="/master-screener/questions">
-              <button md-raised-button color="primary" class="col col-12">START</button>
-            </a>
-          </div>
-
-          <span class="col col-2"></span>
-          <div class="col col-4">
-            <a routerLink="/browse-programs/all">
-              <button md-raised-button color="primary" class="col col-12">BROWSE</button>
-            </a>
-          </div>
-          <span class="col col-1 flex-grow"></span>
-        </md-card-actions>
-      </div>
-    </md-card>
-    <span class="flex-grow"></span>
-  </div>
-</div>
-<!-- MEDIUM SCREEN -->
-<div class="sm-show lg-hide">
-  <div class="p2"></div>
-  <div class="flex">
-    <span class="flex-grow"></span>
-    <md-card class="col col-10" style="height:50vh">
-      <div class="p2"></div>
-      <div class="flex">
-        <span class="flex-grow"></span>
-        <img src="assets/logo.bmp" width="460" height="160">
-        <span class="flex-grow"></span>
-      </div>
-      <div class="p2"></div>
-      <md-card-subtitle class="center"> A free public website dedicated to making benefit programs discoverable. </md-card-subtitle>
-      <md-card-content>
-        <p>
-          a description explaining that the users can take the master screener, but we can't promise they qualify or they can simply
-          browse the programs in the database. Also, that we don't store their private data, or require a login/signup. Wording
-          should be made by city hall folks.
-        </p>
-      </md-card-content>
-      <div class="p2"></div>
-      <div class="container">
-        <md-card-actions class="clearfix flex">
-          <span class="col col-1 flex-grow"></span>
-          <div class="col col-4">
-            <a routerLink="/master-screener/questions">
-              <button md-raised-button color="primary" class="col col-12">START</button>
-            </a>
-          </div>
-
-          <span class="col col-2"></span>
-          <div class="col col-4">
-            <a routerLink="/browse-programs/all">
-              <button md-raised-button color="primary" class="col col-12">BROWSE</button>
-            </a>
-          </div>
-          <span class="col col-1 flex-grow"></span>
-        </md-card-actions>
-      </div>
-    </md-card>
-    <span class="flex-grow"></span>
-  </div>
-</div>
-<!-- SMALL SCREEN -->
-<div class="sm-hide">
-  <md-card>
-    <div class="p1"></div>
-    <img md-card-image src="assets/logo.bmp">
-    <md-card-subtitle class="center"> A free public website dedicated to making benefit programs discoverable. </md-card-subtitle>
-    <md-card-content>
-      <p>
-        a description explaining that the users can take the master screener, but we can't promise they qualify or they can simply
-        browse the programs in the database. Also, that we don't store their private data, or require a login/signup. Wording
-        should be made by city hall folks.
-      </p>
-    </md-card-content>
-    <md-card-actions class="flex flex-column container">
-      <div class="clearfix flex">
-        <span class="col col-1"></span>
-        <a routerLink="/master-screener/questions" class="col col-10">
-          <button md-raised-button color="primary" class="col col-12">START</button>
+        <a routerLink="/browse-programs/all">
+          <button class="btn btn-outline mb1 blue">Browse</button>
         </a>
-        <span class="col col-1"></span>
       </div>
-      <span class="py2"></span>
-      <div class="clearfix flex">
-        <span class="col col-1"></span>
-        <a routerLink="/browse-programs/all" class="col col-10">
-          <button md-raised-button color="primary" class="col col-12">BROWSE</button>
+      <div class="col-1 flex-grow"></div>
+      <div class="program-details col-2 flex flex-column">
+        <div>
+          <p> We've also compiled a questionnaire that can help you find programs that should interest you.
+        </div>
+        <a routerLink="/master-screener/questions">
+          <button class="btn btn-outline mb1 blue">Start</button>
         </a>
-        <span class="col col-1"></span>
       </div>
-    </md-card-actions>
-    <div class="p1"></div>
-  </md-card>
-</div>
+      <div class="col-3"></div>
+    </div>
+  </section>
+  <!-- MEDIUM AND SMALLER SCREEN -->
+  <section class="md-hide">
+    <div class="flex">
+      <div class="col-1 flex-shrink"></div>
+      <section class="col-10 flex-grow">
+        <div class="program-details col-12 flex flex-column">
+          <div>
+            <p> Our team has compiled information on various benefits available to Albertans. Take a look at what we've found!
+          </div>
+          <a routerLink="/browse-programs/all">
+            <button class="btn btn-outline mb1 blue">Browse</button>
+          </a>
+        </div>
+        <div class="py2 xs-hide"></div>
+        <div class="program-details col-12 flex flex-column">
+          <div>
+            <p> We've also developed a questionnaire that can help you find programs that should interest you.
+          </div>
+          <a routerLink="/master-screener/questions">
+            <button class="btn btn-outline mb1 blue">Start</button>
+          </a>
+        </div>
+      </section>
+      <div class="col-1 flex-shrink"></div>
+    </div>
+  </section>
+
+</main>

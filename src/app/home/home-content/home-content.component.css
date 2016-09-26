@@ -1,3 +1,118 @@
-.content {
-  font-family: 'Monda', sans-serif;
+.home {
+  background-image: url(assets/city-skyline-greyscale.svg);
+  background-position: bottom right;
+  background-repeat: no-repeat;
+  background-size: cover;
+}
+
+/* MEDIUM AND GREATER */
+@media(min-width: 40em) {
+  .home {
+    background-image: url(assets/city-skyline-greyscale.svg);
+    background-position: bottom right;
+    background-repeat: no-repeat;
+    background-size: cover;
+  }
+}
+
+/* SMALL TO MEDIUM */
+@media(max-width: 40em){
+  .home {
+    background-image: url(assets/city-skyline-greyscale.svg);
+    background-position: center bottom;
+    background-repeat: no-repeat;
+    background-size: contain;
+  }
+}
+
+main > header > .header-title {
+  font-family: 'Comfortaa', cursive;
+}
+
+.program-details {
+  background-color: rgba(248,248,255, 0.5);
+}
+
+p {
+  font-family: 'Roboto Mono', monospace;
+  display: inline-block;
+}
+
+button {
+  font-family: 'Comfortaa', cursive;
+  width: 100%;
+}
+
+button:hover {
+  background-color: pink;
+}
+
+/* extra large screens */
+@media(min-width: 64em) {
+  main > header > .header-title {
+    font-size: 80px;
+  }
+  
+  main > section > div > .program-details {
+    min-width: 25em;
+  }
+}
+
+/* large screens */
+@media(min-width: 52em) and (max-width:64em) {
+  main > header > .header-title {
+    font-size: 80px;
+  }
+  
+  main > header > .header-description > div > p {
+    max-width: 28em;
+  }
+  
+  main > section > div > .program-details {
+    min-width: 20em;
+    min-height: 10vh;
+  }
+}
+
+/* medium screens */
+@media(min-width: 40em) and (max-width: 52em) {
+  main > header > .header-title {
+    font-size: 65px;
+  }
+  
+  main > header > .header-description > div > p {
+    max-width: 28em;
+  }
+  
+  main > section > div > .program-details {
+    min-width: 20em;
+    min-height: 10vh;
+  }
+}
+
+/* small screens */
+@media(min-width: 30em) and (max-width: 40em){
+  main > header > .header-title {
+    font-size: 60px;
+  }
+  main > header > .header-description > div > p {
+    max-width: 28em;
+    font-size: 90%;
+  }
+}
+
+/* extra small screens */
+@media(max-width: 30em){
+  main > header > .header-title {
+    font-size: 40px;
+  }
+  main > header > .header-description > div > p {
+    max-width: 28em;
+    font-size: 80%;
+  }
+}
+
+
+.home {
+  min-height: 95vh;
 }

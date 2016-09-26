@@ -1,56 +1,14 @@
-<!-- LARGE SCREENS -->
-<md-toolbar color="primary" class="app-navbar lg-show">
-  <div class="flex-grow"></div>
-  <input type="text" class="block col-4 field app-input" placeholder="Search Programs...">
-  <div class="flex-grow"></div>
-  <a routerLink="/admin/master-screener/overview">
-    <div class="border-left border-right rounded-left">
-      <button md-button >ADMIN</button>
+<nav class="clearfix flex">
+  <div class="col-4 mr1 flex flex-center">
+    <div class="link col-4 center flex ml1 mr1 px1">
+      <a  routerLink="/about" routerLinkActive="active">ABOUT</a>
     </div>
-  </a>
-  <a routerLink="/about">
-    <div>
-      <button md-button >ABOUT</button>
+    <div class="link col-4 center ml2 mr2 px1">
+      <a  routerLink="/home" routerLinkActive="active">HOME</a>
     </div>
-  </a>
-  <a routerLink="">
-    <div class="border-left border-right rounded-right">
-      <button md-button >HOME</button>
+    <div class="link col-4 center ml1 px1 md-show">
+      <a routerLink="/admin/master-screener/overview" routerLinkActive="active">ADMIN</a>
     </div>
-  </a>
-  <span class="px1"></span>
-</md-toolbar>
-
-<!-- MEDIUM SCREENS -->
-<md-toolbar color="primary" class="app-navbar sm-show lg-hide">
-  <md-toolbar-row>
-    <input type="text" class="block col-12 field app-input" placeholder="Search Programs...">
-  </md-toolbar-row>
-  <div class="px1"></div>
-  <a routerLink="/admin/master-screener/overview">
-    <button md-raised-button class="navbar-button">ADMIN</button>
-  </a>
-  <div class="px2"></div>
-  <a routerLink="/about">
-    <button md-raised-button class="navbar-button">ABOUT</button>
-  </a>
-  <div class="px2"></div>
-  <a routerLink="">
-    <button md-raised-button class="navbar-button">HOME</button>
-  </a>
-</md-toolbar>
-
-<!-- SMALL SCREENS -->
-<md-toolbar color="primary" class="app-navbar sm-hide">
-  <md-toolbar-row>
-    <input type="text" class="block col-12 field app-input" placeholder="Search Programs...">
-  </md-toolbar-row>
-  <div class="px1"></div>
-  <a routerLink="/about">
-    <button md-raised-button class="navbar-button">ABOUT</button>
-  </a>
-  <div class="px1"></div>
-  <a routerLink="">
-    <button md-raised-button class="navbar-button">HOME</button>
-  </a>
-</md-toolbar>
+  </div>
+  <div class="col-8"></div>
+</nav>

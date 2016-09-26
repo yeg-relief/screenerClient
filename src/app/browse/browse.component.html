@@ -1,37 +1,38 @@
-<div class="p2"></div>
-<section class="clearfix flex" style="overflow-x:hidden">
-  <!-- responsive side spacing -->
-  <div class="px1 sm-hide"></div>
-  <div class="col col-2 lg-show"></div>
-  <div class="col col-1 sm-show lg-hide"></div>
-  <div class="col col-8 flex-grow">
-    
-    <!-- categories display for screens >= medium -->
-    <div class="sm-show">
-      <div class="border p1 clearfix center flex flex-justify rounded">
-        <div routerLink="/browse-programs/{{ category }}" class="border rounded bg-silver black col col-1 flex-grow ml1 mr1 unselectable"
-        style="cursor: pointer;" routerLinkActive="active" *ngFor="let category of ( categories$ | async)">
-          {{ category }}
+<div class="browse">
+  <section class="clearfix flex py2" style="overflow-x:hidden">
+    <!-- responsive side spacing -->
+    <div class="px1 sm-hide"></div>
+    <div class="col col-2 lg-show"></div>
+    <div class="col col-1 sm-show lg-hide"></div>
+    <div class="col col-8 flex-grow">
+      
+      <!-- categories display for screens >= medium -->
+      <div class="lg-show">
+        <div class="border p1 clearfix flex flex-wrap flex-center rounded">
+          <div routerLink="/browse-programs/{{ category }}" class=" col col-1 m1 flex  unselectable"
+          style="cursor: pointer;" routerLinkActive="active" *ngFor="let category of ( categories$ | async)">
+            <div class="category center border rounded bg-silver flex-grow">{{ category }}</div>
+          </div>
         </div>
       </div>
+      
+      <!-- categories display for screens <= small -->
+      <div class="lg-hide">
+        <select name="category"  (change)="selectChange($event)" class="block col-12 field rounded center">
+          <option 
+            *ngFor="let category of ( categories$ | async )"
+            [selected]="category === currCategory()">{{category}}</option>
+        </select>
+      </div>
+      
+      <div class="col col-12">
+        <router-outlet></router-outlet>
+      </div>
     </div>
-    
-    <!-- categories display for screens <= small -->
-    <div class="sm-hide">
-      <select name="category"  (change)="selectChange($event)" class="block col-12 field rounded">
-        <option 
-          *ngFor="let category of ( categories$ | async )"
-          [selected]="category === currCategory()">{{category}}</option>
-      </select>
-    </div>
-    
-    <div class="col col-12">
-      <router-outlet></router-outlet>
-    </div>
-  </div>
 
-  <!-- responsive side spacing -->
-  <div class="px1 sm-hide"></div>
-  <div class="col col-2 lg-show"></div>
-  <div class="col col-1 sm-show lg-hide"></div>
-</section>
+    <!-- responsive side spacing -->
+    <div class="px1 sm-hide"></div>
+    <div class="col col-2 lg-show"></div>
+    <div class="col col-1 sm-show lg-hide"></div>
+  </section>
+</div>

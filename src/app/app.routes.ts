@@ -38,7 +38,8 @@ const appRoutes: Routes = [
   {
     path: 'admin', loadChildren: 'app/admin/admin.module#AdminModule'
   },
-  { path: '', component: HomeContentComponent },
+  { path: 'home', component: HomeContentComponent },
+  { path: '', pathMatch: 'full', redirectTo: '/home'},
   { path: '**', component: PageNotFoundComponent }
 ];
 

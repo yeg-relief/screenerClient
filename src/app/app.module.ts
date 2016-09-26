@@ -5,7 +5,6 @@ import { routing,
          appRoutingProviders }  from './app.routes';
 
 import { AppComponent } from './app.component';
-import { MdToolbarModule } from '@angular2-material/toolbar';
 import { MdCoreModule } from '@angular2-material/core';
 import { MdCardModule } from '@angular2-material/card';
 import { MdButtonModule } from '@angular2-material/button';
@@ -44,7 +43,6 @@ import { CategoryComponent } from './browse/category/category.component';
     ReactiveFormsModule,
     FormsModule,
     routing,
-    MdToolbarModule.forRoot(),
     MdCoreModule.forRoot(),
     MdButtonModule.forRoot(),
     MdCardModule.forRoot(),

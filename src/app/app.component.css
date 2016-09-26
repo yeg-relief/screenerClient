@@ -1,11 +1,6 @@
 .app-wrapper {
-   width:  100vw; 
-   height: 100vh;
-   background: whitesmoke;
-   overflow: hidden;
-}
-
-.app-content {
-  font-family: 'Roboto', sans-serif;
+  width:  100vw; 
+  height: 100vh;
+  overflow-x: hidden;
 }
 
