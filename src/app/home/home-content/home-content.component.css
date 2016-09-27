@@ -29,6 +29,10 @@ main > header > .header-title {
   font-family: 'Comfortaa', cursive;
 }
 
+main {
+  overflow: hidden;
+}
+
 .program-details {
   background-color: rgba(248,248,255, 0.5);
 }
@@ -56,6 +60,10 @@ button:hover {
   main > section > div > .program-details {
     min-width: 25em;
   }
+  
+  main {
+    overflow: hidden;
+  }
 }
 
 /* large screens */
@@ -71,6 +79,10 @@ button:hover {
   main > section > div > .program-details {
     min-width: 20em;
     min-height: 10vh;
+  }
+  
+  main {
+    overflow: hidden;
   }
 }
 
@@ -88,6 +100,10 @@ button:hover {
     min-width: 20em;
     min-height: 10vh;
   }
+  main {
+    overflow-x: hidden;
+    overflow-y: auto;
+  }
 }
 
 /* small screens */
@@ -99,6 +115,11 @@ button:hover {
     max-width: 28em;
     font-size: 90%;
   }
+  
+  main {
+    overflow-x: hidden;
+    overflow-y: auto;
+  }
 }
 
 /* extra small screens */
@@ -109,6 +130,11 @@ button:hover {
   main > header > .header-description > div > p {
     max-width: 28em;
     font-size: 80%;
+  }
+  
+  main {
+    overflow-x: hidden;
+    overflow-y: auto;
   }
 }
 

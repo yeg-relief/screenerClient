@@ -3,24 +3,6 @@ import { Routes, RouterModule } from '@angular/router';
 import { PageNotFoundComponent } from './shared/components/page-not-found/page-not-found.component';
 
 const appRoutes: Routes = [
-  /*
-  { path: 'master-screener', component: MasterScreenerComponent,
-    children: [
-      {
-        path: 'questions', component: QuestionsComponent
-      },
-      {
-        path: 'results', component: ResultsComponent
-      },
-      {
-        path: '', pathMatch: 'full', redirectTo: '/master-screener/questions'
-      },
-      {
-        path: '**', component: PageNotFoundComponent
-      }
-    ]
-  },
-  */
   { path: 'master-screener', loadChildren: 'app/master-screener/master-screener.module#MasterScreenerModule'},
   { path: 'browse-programs', loadChildren: 'app/browse/browse.module#BrowseModule' },
   {
