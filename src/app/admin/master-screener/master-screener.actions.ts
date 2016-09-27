@@ -1,5 +1,5 @@
 import { Action } from '@ngrx/store';
-import { MasterScreener, MasterScreenerMetaData } from '../models';
+import { MasterScreener, MasterScreenerMetaData } from './master-screener.model';
 
 export const MasterScreenerActionsTypes = {
   CHANGE_VERSION: '[MASTER_SCREENER] CHANGE_VERSION',
@@ -17,19 +17,7 @@ export const MasterScreenerActionsTypes = {
 export class ChangeScreenerVersion implements Action {
   type = MasterScreenerActionsTypes.CHANGE_VERSION;
 
-  constructor(public payload: number) { }
-}
-
-export class ChangeScreenerVersionSuccess implements Action {
-  type = MasterScreenerActionsTypes.CHANGE_VERSION_SUCCESS;
-
-  constructor(public payload: number) {}
-}
-
-export class ChangeScreenerVersionFailure implements Action {
-  type = MasterScreenerActionsTypes.CHANGE_VERSION_FAILURE;
-
-  constructor(public payload: number) {}
+  constructor(public payload: MasterScreener) { }
 }
 /***********************************************************************************/
 
@@ -51,7 +39,7 @@ export class LoadScreenerVersionSuccess implements Action {
 export class LoadScreenerVersionFailure implements Action {
   type = MasterScreenerActionsTypes.LOAD_VERSION_FAILURE;
 
-  constructor(public payload: number) { }
+  constructor(public payload: boolean) { }
 }
 /******************************************************************* */
 
@@ -78,8 +66,6 @@ export class LoadMetaDataFailure implements Action {
 
 export type MasterScreenerActions =
     ChangeScreenerVersion
-  | ChangeScreenerVersionSuccess
-  | ChangeScreenerVersionFailure
   | LoadScreenerVersion
   | LoadScreenerVersionSuccess
   | LoadScreenerVersionFailure

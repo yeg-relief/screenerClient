@@ -23,7 +23,6 @@ export class QuestionComponent implements OnInit, OnDestroy {
       (event: boolean) => this.toggled = event,
       (error) => console.log(error)
     );
-    this.questions$ = this.data.questions();
   }
 
   ngOnDestroy() {

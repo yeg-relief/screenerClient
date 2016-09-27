@@ -22,7 +22,6 @@ export class KeyComponent implements OnInit, OnDestroy {
       (event: boolean) => this.toggled = event,
       (error) => console.log(error)
     );
-    this.keys$ = this.data.extractKeys();
   }
 
   ngOnDestroy() {

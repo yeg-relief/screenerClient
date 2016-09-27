@@ -1,6 +1,9 @@
 import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
-import { MasterScreenerDataService } from '../../master-screener-data.service';
+import { Store } from '@ngrx/store';
+import * as fromRoot from '../../../reducer';
+import { MasterScreenerActionsTypes } from '../../master-screener.actions';
 import { Observable } from 'rxjs/Observable';
+import 'rxjs/add/operator/let';
 
 @Component({
   selector: 'app-screener-stats',
@@ -12,12 +15,12 @@ export class ScreenerStatsComponent implements OnInit {
   questionCount$: Observable<number>;
   creationDate$: Observable<string>;
   versionNumber$: Observable<number>;
-  constructor(private data: MasterScreenerDataService) { }
+  constructor(private store: Store<fromRoot.State>) { }
 
   ngOnInit() {
-    this.questionCount$ = this.data.questionCount();
-    this.creationDate$ = this.data.creationDate();
-    this.versionNumber$ = this.data.version();
+    this.questionCount$ = this.store.let(fromRoot.getWorkingQuestionCount);
+    this.creationDate$ = this.store.let(fromRoot.getWorkingCreationDate);
+    this.versionNumber$ = this.store.let(fromRoot.getWorkingNumber);
   }
 
 }

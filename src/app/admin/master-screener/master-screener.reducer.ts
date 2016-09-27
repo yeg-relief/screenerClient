@@ -1,33 +1,37 @@
 import '@ngrx/core/add/operator/select';
 import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/filter';
+import 'rxjs/add/operator/count';
+import 'rxjs/add/operator/catch';
+import 'rxjs/add/operator/do';
 import { Observable } from 'rxjs/Observable';
-import { MasterScreenerActions, MasterScreenerActionsTypes } from '../actions/master-screener.actions';
-import { MasterScreener, MasterScreenerMetaData } from '../models';
+import { MasterScreenerActions, MasterScreenerActionsTypes } from './master-screener.actions';
+import { MasterScreener, MasterScreenerMetaData } from './master-screener.model';
 
 export interface State {
   loaded: boolean;
   loading: boolean;
-  masterScreeners: MasterScreener[];
+  masterScreeners: Map<number, MasterScreener>;
   workingVersion: number;
+  questionCount: number;
+  created: string;
   error: string;
   meta: MasterScreenerMetaData;
 }
 
 const ERROR_TYPES = {
   failedVersionLoad: (version: number) => {return `failed to load version:${version} of master screener`; },
-  failedToChangeVersion: (version: number) => {
-    return `failed to change to version:${version} of master screener`;
-  },
   failedMetaDataLoad: () => {return 'unable to load meta data on available screeners'; }
 };
 
 export const initialState: State = {
   loaded: false,
   loading: false,
-  masterScreeners: [],
+  masterScreeners: new Map<number, MasterScreener>(),
   workingVersion: undefined,
   error: '',
+  questionCount: undefined,
+  created: '',
   meta: {
     versions: []
   }
@@ -55,24 +59,27 @@ export function reducer(state = initialState, action: MasterScreenerActions): St
       return Object.assign({}, state, {
         loading: false,
         loaded: true,
-        masterScreeners: state.masterScreeners.concat(action.payload)
+        masterScreeners: state.masterScreeners.set(action.payload.version, action.payload)
       });
     }
 
-    // change current working version to a loaded version
+
     case MasterScreenerActionsTypes.CHANGE_VERSION: {
-      return state;
-    }
-
-    case MasterScreenerActionsTypes.CHANGE_VERSION_SUCCESS: {
-      return Object.assign({}, state, {
-        workingVersion: action.payload
+      const masterScreener: MasterScreener = action.payload;
+      const newMap = new Map<number, MasterScreener>();
+      // stupid way to clone?
+      state.masterScreeners.forEach( (masterScreener: MasterScreener) => {
+        newMap.set(masterScreener.version, masterScreener);
       });
-    }
+      newMap.set(masterScreener.version, masterScreener);
+      const questionCount = [].concat.apply([], masterScreener.questions).length;
 
-    case MasterScreenerActionsTypes.CHANGE_VERSION_FAILURE: {
+
       return Object.assign({}, state, {
-        error: ERROR_TYPES.failedToChangeVersion(action.payload)
+        workingVersion: masterScreener.version,
+        masterScreeners: newMap,
+        created: masterScreener.created,
+        questionCount: questionCount
       });
     }
 
@@ -115,6 +122,23 @@ export function getMeta(state$: Observable<State>) {
   return state$.select(s => s.meta);
 }
 
+export function getWorkingVersionNumber(state$: Observable<State>) {
+  return state$.select(s => s.workingVersion);
+}
+
+export function getWorkingVersion(state$: Observable<State>) {
+  return state$.select(s => s.masterScreeners.get(s.workingVersion));
+}
+
 export function getVersions(state$: Observable<State>) {
   return state$.select(s => s.meta).map(meta => meta.versions);
 }
+
+export function getQuestionCount(state$: Observable<State>) {
+  return state$.select(s => s.questionCount);
+}
+
+export function getCreatedDate(state$: Observable<State>) {
+  return state$.select(s => s.created);
+}
+

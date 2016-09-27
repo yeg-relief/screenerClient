@@ -1,11 +1,7 @@
 .large-admin-wrapper {
-  margin-top: 1px;
-  height: calc(100% - 66px);
+  height: 100%;
+  width: 100vw;
   overflow: hidden;
-}
-
-.medium-admin-wrapper {
-  height: calc(100% - 128px);
 }
 
 .large-sidenav-wrapper {

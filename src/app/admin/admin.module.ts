@@ -14,8 +14,8 @@ import { SidenavSectionComponent }from './core/sidenav/sidenav-section/sidenav-s
 import { BreadCrumbComponent } from './core/bread-crumb/bread-crumb.component';
 import { MdCheckboxModule } from '@angular2-material/checkbox';
 import { StoreModule } from '@ngrx/store';
-import { reducer } from './core/reducers';
-import { MasterScreenerEffects } from './core/effects/master-screener.effects';
+import { reducer } from './reducer';
+import { MasterScreenerEffects } from './master-screener/master-screener.effects';
 import { EffectsModule } from '@ngrx/effects';
 
 @NgModule({

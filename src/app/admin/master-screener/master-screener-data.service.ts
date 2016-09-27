@@ -1,12 +1,14 @@
 import { Injectable } from '@angular/core';
 import { Question } from '../../shared';
-import { MasterScreener, MasterScreenerMetaData } from '../core/models';
+import { MasterScreener, MasterScreenerMetaData } from './master-screener.model';
 import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/observable/from';
 import 'rxjs/add/observable/of';
 import 'rxjs/add/operator/switchMap';
 import 'rxjs/add/operator/count';
 import 'rxjs/add/observable/range';
+import 'rxjs/add/operator/do';
+import 'rxjs/add/operator/toArray';
 
 @Injectable()
 export class MasterScreenerDataService {
@@ -353,58 +355,10 @@ export class MasterScreenerDataService {
       });
   }
 
-  // load number of versions
   loadVersionMetaData(): Observable<MasterScreenerMetaData> {
     return Observable.range(1, 8)
-      .delay(100).toArray()
+      .toArray()
+      .delay(100)
       .map(versions => {return {versions: versions}; });
-  }
-  /*
-  ************* previous code starts here *************
-  */
-
-  private mockScreener$: Observable<Question> = Observable.from(this.mockScreener);
-  private mockMetaData$: Observable<any> = Observable.of(this.mockMetaData);
-
-  constructor() { }
-
-  private flattenMockScreener(): Observable<Question> {
-    return this.mockScreener$.switchMap((question: Question) => {
-      if (!question.expandable) {
-        return Observable.of(question);
-      }
-      const questions: Question[] = [];
-      questions.push(question);
-      question.conditonalQuestions.forEach((conditionalQuestion: Question) => {
-        questions.push(conditionalQuestion);
-      });
-      return Observable.from(questions);
-    });
-  }
-
-  questionCount(): Observable<number> {
-    return this.flattenMockScreener().count();
-  }
-
-  creationDate(): Observable<string> {
-    return this.mockMetaData$.map(data => data.creationDate);
-  }
-
-  version(): Observable<number> {
-    return this.mockMetaData$.map(data => data.versionNumber);
-  }
-
-  extractKeys(): Observable<any> {
-    return this.flattenMockScreener().switchMap((question: Question) => {
-      return Observable.of({
-        name: question.key,
-        type: question.type
-      });
-    })
-      .toArray();
-  }
-
-  questions(): Observable<Question[]> {
-    return this.flattenMockScreener().toArray();
   }
 }

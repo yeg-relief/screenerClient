@@ -1,9 +1,9 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { Subject } from 'rxjs/Subject';
 import { Store } from '@ngrx/store';
-import * as fromRoot from '../../../core/reducers';
-import { MasterScreenerActionsTypes } from '../../../core/actions';
-import { MasterScreenerMetaData } from '../../../core/models';
+import * as fromRoot from '../../../reducer';
+import { MasterScreenerActionsTypes } from '../../master-screener.actions';
+import { MasterScreenerMetaData } from '../../master-screener.model';
 import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/operator/let';
 import 'rxjs/add/operator/do';
