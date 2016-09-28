@@ -9,11 +9,19 @@ import { ControlsComponent } from './overview/controls/controls.component';
 import { KeyComponent } from './overview/key/key.component';
 import { QuestionComponent } from './overview/question/question.component';
 import { EditComponent } from './edit/edit.component';
+import { MdProgressCircleModule } from '@angular/material';
+import { MdCheckboxModule } from '@angular/material';
+import { MdCardModule } from '@angular/material';
+import { MdButtonModule } from '@angular/material';
 
 @NgModule({
   imports: [
     CommonModule,
     routing,
+    MdProgressCircleModule.forRoot(),
+    MdCheckboxModule.forRoot(),
+    MdCardModule.forRoot(),
+    MdButtonModule.forRoot()
   ],
   declarations: [
     MasterScreenerComponent,

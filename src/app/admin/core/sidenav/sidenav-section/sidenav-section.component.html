@@ -1,7 +1,7 @@
 <div class="admin-section py2">
   <div class="center">
     <div routerLink="/admin/{{section.title}}/overview" [ngClass]="{'active': getRoot() === section.title}" class="p1">
-        <button class="btn black btn-outline mb1 col-10">
+        <button md-raised-button color="primary" class="col-10">
           {{section.title}} 
         </button>
     </div>

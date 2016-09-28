@@ -1,10 +1,3 @@
-<section class="border-left border-right border-top clearfix flex flex-center" *ngIf="(toggled | async)">
-  <div class="col-4 flex-grow"></div>
-  <div class="center col-2" >
-    <h3>key overview</h3>
-  </div>
-  <div class="col-4 flex-grow"></div>
-</section>
 <div class="clearfix" *ngIf="(toggled | async) && keys?.length > 0">
   <div class="overflow-auto">
     <table class="table-light overflow-hidden bg-white border rounded">
@@ -28,6 +21,6 @@
     </table>
   </div>
 </div>
-<div class="clearfix center" *ngIf="(toggled | async) && keys?.length === 0">
+<md-card-subtitle class="clearfix center" *ngIf="(toggled | async) && keys?.length === 0">
   <h3> There are no keys associated with this screener </h3>
-</div>
+</md-card-subtitle>

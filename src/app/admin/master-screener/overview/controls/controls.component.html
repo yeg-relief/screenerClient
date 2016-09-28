@@ -17,13 +17,13 @@
     <md-checkbox 
       [checked]="true" 
       (change)="keyChange($event.checked)">
-      <div class="unselectable tooltip" my-title="toggle key display"><p class="mt2">keys</div>
+      <div class="unselectable"><p class="mt2">keys</div>
     </md-checkbox>
     <div class="col-2"></div>
     <md-checkbox 
       [checked]="true" 
       (change)="questionChange($event.checked)">
-      <div class="unselectable tooltip" my-title="toggle question display"><p class="mt2">questions</div>
+      <div class="unselectable"><p class="mt2">questions</div>
     </md-checkbox>
     <div class="col-2"></div>
   </div>
@@ -35,15 +35,16 @@
       [checked]="false"
       [indeterminate]="true"
       (change)="keyChange($event.checked)">
-      <div class="unselectable tooltip" my-title="toggle key display"><p class="mt2">keys</div>
+      <div class="unselectable"><p class="mt2">keys</div>
     </md-checkbox>
     <div class="col-2"></div>
     <md-checkbox 
       style="pointer-events:none"
       [checked]="false"
-      [indeterminate]="true" 
+      [indeterminate]="true"
+      color="primary" 
       (change)="questionChange($event.checked)">
-      <div class="unselectable tooltip" my-title="toggle question display"><p class="mt2">questions</div>
+      <div class="unselectable"><p class="mt2">questions</div>
     </md-checkbox>
     <div class="col-2"></div>
   </div>
@@ -51,13 +52,12 @@
   <div class="col-4 flex flex-justify">
     <!-- version number shouldn't be hardcoded only for prototype -->
     <div class="col-1"></div>
-    <button class="btn btn-outline mb1 col-5 mr1"
+    <button md-raised-button color="primary" class="col-4"
       [attr.disabled]="loading ? true : null"
-      title="edit master screener" 
       routerLink="/admin/master-screener/edit/version/8"> edit </button>
-    <button class="btn btn-outline mb1 col-5 ml1"
-      [attr.disabled]="loading ? true : null"
-      title="live preview of screener" 
+    <div class="col-1"></div>
+    <button md-raised-button color="primary" class="col-4"
+      [attr.disabled]="loading ? true : null" 
       routerLink="/admin/master-screener/preview/version/8"> preview </button>
     <div class="col-1"></div>
   </div>

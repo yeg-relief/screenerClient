@@ -1,14 +1,14 @@
 .large-admin-wrapper {
-  height: 100%;
+  height: 94vh;
   width: 100vw;
-  overflow: hidden;
+  position: fixed;
   background-color: linen;
-  border: 1px solid black; 
+  border-style: solid;
+  border-width: 2px 0 0 0;
 }
 
 .large-sidenav-wrapper {
   width: 240px;
-  overflow-y: auto;
   height: 100%;
 }
 

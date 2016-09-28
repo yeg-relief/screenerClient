@@ -4,3 +4,11 @@
 body {
   font-family: 'Roboto Mono', monospace;
 }
+
+input[type=submit]{
+  font-family: 'Roboto Mono', monospace;
+}
+
+button[md-raised-button] {
+  font-family: 'Roboto Mono', monospace;
+}

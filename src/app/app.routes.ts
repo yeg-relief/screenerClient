@@ -9,7 +9,7 @@ const appRoutes: Routes = [
     path: 'admin', loadChildren: 'app/admin/admin.module#AdminModule'
   },
   { path: 'home', loadChildren: 'app/home/home.module#HomeModule'},
-  { path: '', pathMatch: 'full', redirectTo: '/home'},
+  { path: '', pathMatch: 'full', redirectTo: '/home/content'},
   { path: '**', component: PageNotFoundComponent }
 ];
 
