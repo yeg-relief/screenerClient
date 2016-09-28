@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Actions, Effect } from '@ngrx/effects';
-import { MasterScreenerMetaData, MasterScreener } from './master-screener.model';
+import { MasterScreenerMetaData, MasterScreener } from '../models/master-screener';
 import { MasterScreenerDataService } from './master-screener-data.service';
 import { MasterScreenerActionsTypes } from './master-screener.actions';
 import { Observable } from 'rxjs/Observable';
@@ -28,7 +28,8 @@ export class MasterScreenerEffects {
     .switchMap( (masterScreener: MasterScreener | boolean) => {
       if (typeof masterScreener === 'boolean') {
         return Observable.of({
-          type: MasterScreenerActionsTypes.LOAD_VERSION_FAILURE
+          type: MasterScreenerActionsTypes.LOAD_VERSION_FAILURE,
+          payload: false
         });
       }
       return Observable.of({

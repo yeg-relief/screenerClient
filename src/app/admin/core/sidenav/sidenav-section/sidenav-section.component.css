@@ -1,5 +1,5 @@
 .active > button {
-  color: white;
+  color: black;
 }
 
 .admin-section{
@@ -14,4 +14,16 @@
   -moz-user-select: none;
   -ms-user-select: none;
   user-select: none;
+}
+
+button {
+  font-family: 'Comfortaa', cursive;
+}
+
+button {
+  color: darkblue
+}
+
+button:hover {
+  background-color: pink;
 }

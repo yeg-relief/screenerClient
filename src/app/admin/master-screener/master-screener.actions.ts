@@ -1,10 +1,8 @@
 import { Action } from '@ngrx/store';
-import { MasterScreener, MasterScreenerMetaData } from './master-screener.model';
+import { MasterScreener, MasterScreenerMetaData } from '../models/master-screener';
 
 export const MasterScreenerActionsTypes = {
   CHANGE_VERSION: '[MASTER_SCREENER] CHANGE_VERSION',
-  CHANGE_VERSION_SUCCESS: '[MASTER_SCREENER] CHANGE_VERSION_SUCCESS',
-  CHANGE_VERSION_FAILURE: '[MASTER_SCREENER] CHANGE_VERSION_FAILURE',
   LOAD_VERSION: '[MASTER_SCREENER] LOAD_VERSION',
   LOAD_VERSION_SUCCESS: '[MASTER_SCREENER] LOAD_VERSION_SUCCESS',
   LOAD_VERSION_FAILURE: '[MASTER_SCREENER] LOAD_VERSION_FAILURE',

@@ -9,10 +9,11 @@ export const routing: ModuleWithProviders = RouterModule.forChild([
   //{ path: '', component: AdminComponent, canActivate: [AuthGuardService] },
   {
     path: '', component: AdminComponent,
-      children: [ {
-        path: 'master-screener',
-        loadChildren: 'app/admin/master-screener/master-screener.module#MasterScreenerModule'
-      }
+      children: [
+        {
+          path: 'master-screener',
+          loadChildren: 'app/admin/master-screener/master-screener.module#MasterScreenerModule'
+        }
     ]
   },
   { path: 'login', component: LoginComponent },

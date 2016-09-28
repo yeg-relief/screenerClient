@@ -1,14 +1,17 @@
 <div class="col-12 flex">
   <div class="border-left border-right bg-silver col-12 py1">
     <div class="clearfix flex ml1">
-      <div class="col-2 flex-grow border-right unselectable" style="pointer-events:none"> 
-        question count: {{ questionCount$ | async }} 
+      <div class="col-1"></div>
+      <div class="col-2 flex-grow border-right unselectable mt1" style="pointer-events:none"> 
+        <p>question count: {{ questionCount$ | async }} 
       </div>
-      <div class= "col-2 flex-grow border-right ml1 unselectable" style="pointer-events:none"> 
-        created on: {{ creationDate$ | async }} 
+      <div class="col-1"></div>
+      <div class= "col-2 flex-grow border-right ml1 unselectable mt1" style="pointer-events:none"> 
+        <p>created on: {{ creationDate$ | async }} 
       </div>
-      <div class= "col-2 flex-grow ml1 unselectable" style="pointer-events:none"> 
-        version: {{ versionNumber$ | async }} 
+      <div class="col-1"></div>
+      <div class= "col-2 flex-grow ml1 unselectable mt1" style="pointer-events:none"> 
+        <p>version: {{ versionNumber$ | async }} 
       </div>
      </div>
   </div>

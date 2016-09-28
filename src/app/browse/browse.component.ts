@@ -22,7 +22,6 @@ export class BrowseComponent implements OnInit {
 
   ngOnInit() {
     this.categories$ = this.browseService.getCategories();
-    console.log('here 1');
   }
 
   // called 12 times per render on my home machine :((

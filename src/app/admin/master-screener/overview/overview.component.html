@@ -1,15 +1,38 @@
-<section class="col col-12 flex flex-column" style="overflow-y: auto; overflow-x: hidden">
-  <div class="p2"></div>
-  <app-controls [keyToggle]="keyToggle" [questionToggle]="questionToggle"></app-controls>
-  <div class="ml1 mt2">
+<section class="col col-12 flex flex-column">
+  <div class="p1"></div>
+  <app-controls 
+      [keyToggle]="keyToggle" 
+      [questionToggle]="questionToggle" 
+      [versions]="(versions$ | async)"
+      [workingVersion]="(workingVersion$ | async)"
+      [loading]="(loading$ | async)">
+  </app-controls>
+  <div class="p1"></div>
+  <div>
     <app-screener-stats></app-screener-stats>
   </div>
   <div class="p1"></div>
-  <div class="ml1 mt2">
-    <app-key [toggle]="keyToggle"></app-key>
+  <div *ngIf="!(loading$ | async)">
+    <app-key 
+        [toggled]="keyToggle"
+        [keys]="keys">
+    </app-key>
   </div>
-  <div class="lm1 mt2">
-    <app-question [toggle]="questionToggle" ></app-question>
+  <div class="p2"></div>
+  <div *ngIf="!(loading$ | async)">
+    <app-question 
+        [toggled]="questionToggle"
+        [questions]="questions">
+    </app-question>
+  </div>
+  <div class="clearfix flex">
+    <div class="col-4"></div>
+    <md-progress-circle class="flex-grow"
+        color="accent"
+        mode="indeterminate" 
+        *ngIf="(loading$ | async)">
+    </md-progress-circle>
+    <div class="col-4"></div>
   </div>
   <div class="p2"></div>
 </section>

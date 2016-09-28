@@ -6,26 +6,24 @@ import 'rxjs/add/operator/catch';
 import 'rxjs/add/operator/do';
 import { Observable } from 'rxjs/Observable';
 import { MasterScreenerActions, MasterScreenerActionsTypes } from './master-screener.actions';
-import { MasterScreener, MasterScreenerMetaData } from './master-screener.model';
+import { MasterScreener, MasterScreenerMetaData } from '../models/master-screener';
 
 export interface State {
-  loaded: boolean;
   loading: boolean;
   masterScreeners: Map<number, MasterScreener>;
-  workingVersion: number;
-  questionCount: number;
+  workingVersion: number | string;
+  questionCount: number | string;
   created: string;
   error: string;
   meta: MasterScreenerMetaData;
 }
 
 const ERROR_TYPES = {
-  failedVersionLoad: (version: number) => {return `failed to load version:${version} of master screener`; },
+  failedVersionLoad: () => {return `failed to load master screener`; },
   failedMetaDataLoad: () => {return 'unable to load meta data on available screeners'; }
 };
 
 export const initialState: State = {
-  loaded: false,
   loading: false,
   masterScreeners: new Map<number, MasterScreener>(),
   workingVersion: undefined,
@@ -37,34 +35,27 @@ export const initialState: State = {
   }
 };
 
-
+const loadingString = '. . .';
 
 export function reducer(state = initialState, action: MasterScreenerActions): State {
   switch (action.type) {
     // load a version from the api server
     case MasterScreenerActionsTypes.LOAD_VERSION: {
       return Object.assign({}, state, {
-        loading: true
+        loading: true,
+        workingVersion: loadingString,
+        created: loadingString,
+        questionCount: loadingString
       });
     }
-
-    case MasterScreenerActionsTypes.LOAD_VERSION_FAILURE: {
-      return Object.assign({}, state, {
-        loading: false,
-        error: ERROR_TYPES.failedVersionLoad(action.payload)
-      });
-    }
-
-    case MasterScreenerActionsTypes.LOAD_VERSION_SUCCESS: {
-      return Object.assign({}, state, {
-        loading: false,
-        loaded: true,
-        masterScreeners: state.masterScreeners.set(action.payload.version, action.payload)
-      });
-    }
-
 
     case MasterScreenerActionsTypes.CHANGE_VERSION: {
+      if (typeof action.payload === 'boolean') {
+        return Object.assign({}, state, {
+          loading: false,
+          errors: ERROR_TYPES.failedVersionLoad()
+        });
+      }
       const masterScreener: MasterScreener = action.payload;
       const newMap = new Map<number, MasterScreener>();
       // stupid way to clone?
@@ -72,10 +63,23 @@ export function reducer(state = initialState, action: MasterScreenerActions): St
         newMap.set(masterScreener.version, masterScreener);
       });
       newMap.set(masterScreener.version, masterScreener);
-      const questionCount = [].concat.apply([], masterScreener.questions).length;
+      const questionCount = masterScreener.questions.reduce( (prev, curr) => {
+        // if its not expandable add just 1
+        if (!curr.expandable) {
+          return prev + 1;
+        }
+        // if its expandable add 1 + the conditional questions 
+        const combinedCount = curr.conditonalQuestions.reduce( (acc, next) => {
+
+          return acc + 1;
+        }, 1);
+        return prev + combinedCount;
+      }, 0);
 
 
       return Object.assign({}, state, {
+        loading: false,
+        loaded: true,
         workingVersion: masterScreener.version,
         masterScreeners: newMap,
         created: masterScreener.created,
@@ -106,10 +110,6 @@ export function reducer(state = initialState, action: MasterScreenerActions): St
   }
 }
 
-export function getLoaded(state$: Observable<State>) {
-  return state$.select(s => s.loaded);
-}
-
 export function getLoading(state$: Observable<State>) {
   return state$.select(s => s.loading);
 }
@@ -127,7 +127,12 @@ export function getWorkingVersionNumber(state$: Observable<State>) {
 }
 
 export function getWorkingVersion(state$: Observable<State>) {
-  return state$.select(s => s.masterScreeners.get(s.workingVersion));
+  return state$.select(s => {
+    if (typeof s.workingVersion === 'number') {
+      return s.masterScreeners.get(s.workingVersion);
+    }
+    return null;
+  });
 }
 
 export function getVersions(state$: Observable<State>) {
@@ -142,3 +147,12 @@ export function getCreatedDate(state$: Observable<State>) {
   return state$.select(s => s.created);
 }
 
+export function getKeys(state$: Observable<State>) {
+  return getWorkingVersion(state$)
+    .map( (version: MasterScreener | null) => {
+      if ( version === null) {
+        return [];
+      }
+      
+    })
+}

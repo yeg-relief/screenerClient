@@ -32,8 +32,8 @@ export const getWorkingCreationDate =
   share(compose(fromMasterScreener.getCreatedDate, getMasterScreenerState));
 export const getWorkingNumber =
   share(compose(fromMasterScreener.getWorkingVersionNumber, getMasterScreenerState));
-
-
+export const getLoading =
+  share(compose(fromMasterScreener.getLoading, getMasterScreenerState));
 
 /* https://github.com/ngrx/example-app/blob/final/src/util.ts */
 interface SelectorFn<T, V> {

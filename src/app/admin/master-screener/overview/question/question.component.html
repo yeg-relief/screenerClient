@@ -1,14 +1,13 @@
-<div class="border-left border-right border-top p2 clearfix flex flex-center" *ngIf="toggled">
+<section class="border-left border-right border-top clearfix flex flex-center" *ngIf="toggled | async">
   <div class="col-4 flex-grow"></div>
-  <div class="tooltip bg-silver border center rounded p1 unselectable col-2" 
-    my-title="these questions are in this screener">
-    question overview
+  <div class="center col-2" >
+    <h3>question overview</h3>
   </div>
   <div class="col-4 flex-grow"></div>
-</div>
-<div class="clearfix" *ngIf="toggled">
+</section>
+<div class="clearfix" *ngIf="(toggled | async) && questions?.length > 0">
   <div class="overflow-auto">
-    <table class="table-light bg-white border rounded">
+    <table class="table-light overflow-hidden bg-white border rounded">
       <thead class="bg-darken-1">
         <tr>
           <th>key</th>
@@ -18,7 +17,7 @@
         </tr>
       </thead>
       <tbody>
-        <tr *ngFor="let question of (questions$ | async)">
+        <tr *ngFor="let question of questions">
           <td>{{ question.key }}</td>
           <td>{{ question.controlType }}</td>
           <td>{{ question.label }}</td>
@@ -34,4 +33,7 @@
       </tbody>
     </table>
   </div>
+</div>
+<div class="clearfix center" *ngIf="(toggled | async) && questions?.length === 0">
+  <h3> There are no questions associated with this screener </h3>
 </div>
