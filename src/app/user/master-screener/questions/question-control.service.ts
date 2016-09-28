@@ -4,7 +4,7 @@ import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/operator/reduce';
 import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/mergeMap';
-import { Question } from '../../shared';
+import { Question } from '../../../shared';
 
 @Injectable()
 export class QuestionControlService {

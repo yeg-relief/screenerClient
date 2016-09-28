@@ -3,7 +3,7 @@ import { Router } from '@angular/router';
 import { FormGroup  } from '@angular/forms';
 import { MasterScreenerService } from '../master-screener.service';
 import { QuestionControlService } from './question-control.service';
-import { Question } from '../../shared';
+import { Question } from '../../../shared';
 import { Observable } from 'rxjs/Observable';
 
 @Component({

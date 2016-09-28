@@ -3,7 +3,7 @@ import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/observable/from';
 import 'rxjs/add/operator/toArray';
 import 'rxjs/add/operator/delay';
-import { Question, UserFacingProgram } from '../shared';
+import { Question, UserFacingProgram } from '../../shared';
 
 @Injectable()
 export class MasterScreenerService {

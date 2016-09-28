@@ -1,4 +1,4 @@
-.active {
+button[md-button].active {
   background-color: #ff4081;
 }
 
@@ -41,14 +41,17 @@ select {
   padding-bottom: 4px;
 }
 
-button:hover {
+button[md-button]:not(.active):hover {
   background-color: pink;
   color: black;
 }
 
-button {
+button[md-button] {
   font-family: 'Roboto Mono', monospace;
+  font-size: 110%;
 }
+
+
 
 .browse {
   overflow: auto !important;

@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { BrowseService } from '../browse.service';
 import { Observable } from 'rxjs/Observable';
-import { UserFacingProgram } from '../../shared';
+import { UserFacingProgram } from '../../../shared';
 import 'rxjs/add/operator/switchMap';
 import 'rxjs/add/observable/of';
 

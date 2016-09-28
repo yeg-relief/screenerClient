@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { MasterScreenerService } from '../master-screener.service';
 import { Observable } from 'rxjs/Observable';
-import { UserFacingProgram } from '../../shared';
+import { UserFacingProgram } from '../../../shared';
 
 @Component({
   selector: 'app-results',
