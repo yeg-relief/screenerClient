@@ -25,6 +25,7 @@
     "@angular2-material/checkbox": "^2.0.0-alpha.8-2",
     "@angular2-material/core": "^2.0.0-alpha.8-2",
     "@angular2-material/input": "^2.0.0-alpha.8-2",
+    "@angular2-material/progress-circle": "^2.0.0-alpha.8-2",
     "@angular2-material/radio": "^2.0.0-alpha.8-2",
     "@angular2-material/toolbar": "^2.0.0-alpha.8-2",
     "@ngrx/core": "^1.2.0",

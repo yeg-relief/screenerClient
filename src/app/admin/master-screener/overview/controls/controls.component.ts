@@ -1,29 +1,22 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, ChangeDetectionStrategy } from '@angular/core';
 import { Subject } from 'rxjs/Subject';
-import { Store } from '@ngrx/store';
-import * as fromRoot from '../../../core/reducers';
-import { MasterScreenerActionsTypes } from '../../../core/actions';
-import { MasterScreenerMetaData } from '../../../core/models';
-import { Observable } from 'rxjs/Observable';
-import 'rxjs/add/operator/let';
-import 'rxjs/add/operator/do';
-import 'rxjs/add/operator/map';
 
 @Component({
   selector: 'app-controls',
   templateUrl: './controls.component.html',
-  styleUrls: ['./controls.component.css']
+  styleUrls: ['./controls.component.css'],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ControlsComponent implements OnInit {
   @Input() keyToggle: Subject<boolean>;
   @Input() questionToggle: Subject<boolean>;
-  versions$: Observable<number[]>;
+  @Input() versions: number[];
+  @Input() workingVersion: number;
+  @Input() loading: boolean;
 
-  constructor(private store: Store<fromRoot.State>) { }
+  constructor() { }
 
-  ngOnInit() {
-    this.versions$ = this.store.let(fromRoot.getVersions);
-  }
+  ngOnInit() {}
 
   keyChange(change) {
     this.keyToggle.next(change);
@@ -33,7 +26,7 @@ export class ControlsComponent implements OnInit {
     this.questionToggle.next(change);
   }
 
-  notEight(version: number) {
-    return version !== 8 ? 'anything' : 'false';
+  isSelected(version: number) {
+    return version === this.workingVersion;
   }
 }

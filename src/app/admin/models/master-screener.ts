@@ -1,4 +1,4 @@
-import { Question } from '../../../shared/models';
+import { Question } from '../../shared/models';
 
 export interface MasterScreener {
   version: number;

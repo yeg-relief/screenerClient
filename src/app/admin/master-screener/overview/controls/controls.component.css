@@ -1,3 +1,23 @@
 button {
-  background-color: lightseagreen;
+  font-family: 'Comfortaa', cursive;
+  color: navy;
+}
+
+p {
+  font-family: 'Roboto Mono', monospace;
+}
+
+select > option {
+  font-family: 'Roboto Mono', monospace;
+}
+
+select {
+  font-family: 'Roboto Mono', monospace;
+  cursor: pointer; 
+  padding-bottom: 5px;
+  width: 83%;
+}
+
+button:hover {
+  background-color: pink;
 }

@@ -1,11 +1,9 @@
 .large-admin-wrapper {
-  margin-top: 1px;
-  height: calc(100% - 66px);
+  height: 100%;
+  width: 100vw;
   overflow: hidden;
-}
-
-.medium-admin-wrapper {
-  height: calc(100% - 128px);
+  background-color: linen;
+  border: 1px solid black; 
 }
 
 .large-sidenav-wrapper {
@@ -15,24 +13,8 @@
 }
 
 .large-admin-content-wrapper {
-  height: calc(100% - 8vh);
+  height: 100%;
   overflow-y: auto;
-}
-
-::-webkit-scrollbar
-{
-  width: 8px;  /* for vertical scrollbars */
-  height: 8px; /* for horizontal scrollbars */
-}
-
-::-webkit-scrollbar-track
-{
-  background: rgba(0, 0, 0, 0.1);
-}
-
-::-webkit-scrollbar-thumb
-{
-  background: rgba(0, 0, 0, 0.2);
 }
 
 .tooltip{
@@ -74,3 +56,4 @@
   -ms-user-select: none;
   user-select: none;
 }
+

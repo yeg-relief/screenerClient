@@ -1,29 +1,65 @@
-<div class="flex flex-center clearfix ml1 p1">
-  <select name="version" class="col-3 rounded tooltip" my-title="this is disabled during demo">
-    <option disabled>version 1</option>
-    <option disabled>version 2</option>
-    <option disabled>version 3</option>
-    <option disabled>version 4</option>
-    <option disabled>version 5</option>
-    <option disabled>version 6</option>
-    <option disabled>version 7</option>
-    <option selected>version 8</option>
-  </select>
-  <div class="col-1"></div>
-  <md-checkbox [checked]="true" (change)="keyChange($event.checked)">
-    <div class="unselectable tooltip" my-title="toggle key display">keys</div>
-  </md-checkbox>
-  <div class="col-1"></div>
-  <md-checkbox [checked]="true" (change)="questionChange($event.checked)">
-    <div class="unselectable tooltip" my-title="toggle question display">questions</div>
-  </md-checkbox>
-  <div class="col-1 flex-grow"></div>
-  <!-- version number shouldn't be hardcoded only for prototype -->
-  <button md-raised-button
-    title="edit master screener" 
-    routerLink="/admin/master-screener/edit/version/8"> EDIT </button>
-  <div class="px1"></div>
-  <button md-raised-button
-    title="live preview of screener" 
-    routerLink="/admin/master-screener/preview/version/8"> PREVIEW </button>
+<div class="flex flex-center flex-justify clearfix">
+  <div class="col-4 flex flex-justify">
+    <div class="col-1"></div>
+    <select class="rounded" [attr.disabled]="loading ? true : null">
+      <option disabled
+        [attr.selected]="isSelected(version) ? true : null"
+        [attr.disabled]="loading ? true : null"
+        *ngFor="let version of versions">version {{version}}</option>
+    </select>
+    <div class="col-1"></div>
+  </div>
+  
+  
+<!-- having trouble binding disabled/readonly/pointer events ... just going to change what's rendered -->
+  <div class="col-4 flex flex-justify" *ngIf="!loading">
+    <div class="col-2"></div>
+    <md-checkbox 
+      [checked]="true" 
+      (change)="keyChange($event.checked)">
+      <div class="unselectable tooltip" my-title="toggle key display"><p class="mt2">keys</div>
+    </md-checkbox>
+    <div class="col-2"></div>
+    <md-checkbox 
+      [checked]="true" 
+      (change)="questionChange($event.checked)">
+      <div class="unselectable tooltip" my-title="toggle question display"><p class="mt2">questions</div>
+    </md-checkbox>
+    <div class="col-2"></div>
+  </div>
+  
+  <div class="col-4 flex flex-justify" *ngIf="loading">
+    <div class="col-2"></div>
+    <md-checkbox 
+      style="pointer-events:none"
+      [checked]="false"
+      [indeterminate]="true"
+      (change)="keyChange($event.checked)">
+      <div class="unselectable tooltip" my-title="toggle key display"><p class="mt2">keys</div>
+    </md-checkbox>
+    <div class="col-2"></div>
+    <md-checkbox 
+      style="pointer-events:none"
+      [checked]="false"
+      [indeterminate]="true" 
+      (change)="questionChange($event.checked)">
+      <div class="unselectable tooltip" my-title="toggle question display"><p class="mt2">questions</div>
+    </md-checkbox>
+    <div class="col-2"></div>
+  </div>
+  
+  <div class="col-4 flex flex-justify">
+    <!-- version number shouldn't be hardcoded only for prototype -->
+    <div class="col-1"></div>
+    <button class="btn btn-outline mb1 col-5 mr1"
+      [attr.disabled]="loading ? true : null"
+      title="edit master screener" 
+      routerLink="/admin/master-screener/edit/version/8"> edit </button>
+    <button class="btn btn-outline mb1 col-5 ml1"
+      [attr.disabled]="loading ? true : null"
+      title="live preview of screener" 
+      routerLink="/admin/master-screener/preview/version/8"> preview </button>
+    <div class="col-1"></div>
+  </div>
+  
 </div>

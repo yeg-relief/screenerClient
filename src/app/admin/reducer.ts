@@ -4,7 +4,7 @@ import { ReplaySubject } from 'rxjs/ReplaySubject';
 import { Observable } from 'rxjs/Observable';
 import { combineReducers } from '@ngrx/store';
 import { compose } from '@ngrx/core/compose';
-import * as fromMasterScreener from './master-screener.reducer';
+import * as fromMasterScreener from './master-screener/master-screener.reducer';
 
 export interface State {
   masterScreener: fromMasterScreener.State;
@@ -26,9 +26,14 @@ export function getMasterScreenerState(state$: Observable<State>) {
 
 export const getMeta = share(compose(fromMasterScreener.getMeta, getMasterScreenerState));
 export const getVersions = share(compose(fromMasterScreener.getVersions, getMasterScreenerState));
-
-
-
+export const getWorkingQuestionCount =
+  share(compose(fromMasterScreener.getQuestionCount, getMasterScreenerState));
+export const getWorkingCreationDate =
+  share(compose(fromMasterScreener.getCreatedDate, getMasterScreenerState));
+export const getWorkingNumber =
+  share(compose(fromMasterScreener.getWorkingVersionNumber, getMasterScreenerState));
+export const getLoading =
+  share(compose(fromMasterScreener.getLoading, getMasterScreenerState));
 
 /* https://github.com/ngrx/example-app/blob/final/src/util.ts */
 interface SelectorFn<T, V> {
