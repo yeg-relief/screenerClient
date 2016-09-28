@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Actions, Effect } from '@ngrx/effects';
 import { MasterScreenerMetaData, MasterScreener } from '../models/master-screener';
-import { MasterScreenerDataService } from './master-screener-data.service';
+import { DataService } from '../data.service';
 import { MasterScreenerActionsTypes } from './master-screener.actions';
 import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/observable/of';
@@ -44,7 +44,8 @@ export class MasterScreenerEffects {
     );
 
   constructor(
-    private data: MasterScreenerDataService,
+    // DataService is provided via the admin module
+    private data: DataService,
     private actions$: Actions
   ) { }
 }

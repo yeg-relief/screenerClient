@@ -7,10 +7,11 @@ import 'rxjs/add/operator/do';
 import { Observable } from 'rxjs/Observable';
 import { MasterScreenerActions, MasterScreenerActionsTypes } from './master-screener.actions';
 import { MasterScreener, MasterScreenerMetaData } from '../models/master-screener';
+import { Question } from '../../shared/models';
 
 export interface State {
   loading: boolean;
-  masterScreeners: Map<number, MasterScreener>;
+  questions: Question[];
   workingVersion: number | string;
   questionCount: number | string;
   created: string;
@@ -25,7 +26,7 @@ const ERROR_TYPES = {
 
 export const initialState: State = {
   loading: false,
-  masterScreeners: new Map<number, MasterScreener>(),
+  questions: [],
   workingVersion: undefined,
   error: '',
   questionCount: undefined,
@@ -57,12 +58,6 @@ export function reducer(state = initialState, action: MasterScreenerActions): St
         });
       }
       const masterScreener: MasterScreener = action.payload;
-      const newMap = new Map<number, MasterScreener>();
-      // stupid way to clone?
-      state.masterScreeners.forEach( (masterScreener: MasterScreener) => {
-        newMap.set(masterScreener.version, masterScreener);
-      });
-      newMap.set(masterScreener.version, masterScreener);
       const questionCount = masterScreener.questions.reduce( (prev, curr) => {
         // if its not expandable add just 1
         if (!curr.expandable) {
@@ -81,7 +76,7 @@ export function reducer(state = initialState, action: MasterScreenerActions): St
         loading: false,
         loaded: true,
         workingVersion: masterScreener.version,
-        masterScreeners: newMap,
+        questions: [].concat(masterScreener.questions),
         created: masterScreener.created,
         questionCount: questionCount
       });
@@ -126,15 +121,6 @@ export function getWorkingVersionNumber(state$: Observable<State>) {
   return state$.select(s => s.workingVersion);
 }
 
-export function getWorkingVersion(state$: Observable<State>) {
-  return state$.select(s => {
-    if (typeof s.workingVersion === 'number') {
-      return s.masterScreeners.get(s.workingVersion);
-    }
-    return null;
-  });
-}
-
 export function getVersions(state$: Observable<State>) {
   return state$.select(s => s.meta).map(meta => meta.versions);
 }
@@ -145,14 +131,4 @@ export function getQuestionCount(state$: Observable<State>) {
 
 export function getCreatedDate(state$: Observable<State>) {
   return state$.select(s => s.created);
-}
-
-export function getKeys(state$: Observable<State>) {
-  return getWorkingVersion(state$)
-    .map( (version: MasterScreener | null) => {
-      if ( version === null) {
-        return [];
-      }
-      
-    })
 }

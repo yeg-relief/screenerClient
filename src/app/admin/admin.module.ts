@@ -5,7 +5,6 @@ import { AdminComponent } from './admin.component';
 import { routing } from './admin.routes';
 import { AuthGuardService } from './core/services/auth-guard.service';
 import { AuthService } from './core/services/auth.service';
-import { MasterScreenerDataService } from './master-screener/master-screener-data.service';
 import { LoginComponent } from './core/login/login.component';
 import { SidenavComponent } from './core/sidenav/sidenav.component';
 import { SidenavSectionComponent }from './core/sidenav/sidenav-section/sidenav-section.component';
@@ -16,6 +15,7 @@ import { MasterScreenerEffects } from './master-screener/master-screener.effects
 import { EffectsModule } from '@ngrx/effects';
 import { MdCardModule } from '@angular/material';
 import { MdButtonModule } from '@angular/material';
+import { DataService } from './data.service';
 
 @NgModule({
   imports: [
@@ -34,6 +34,6 @@ import { MdButtonModule } from '@angular/material';
     SidenavComponent,
     BreadCrumbComponent
   ],
-  providers: [AuthGuardService, AuthService, MasterScreenerDataService]
+  providers: [AuthGuardService, AuthService, DataService]
 })
 export class AdminModule { }
