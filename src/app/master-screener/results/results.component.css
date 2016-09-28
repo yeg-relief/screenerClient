@@ -1,5 +1,5 @@
 h1 {
-  font-family: 'Comfortaa', cursive;
+  font-family: 'Roboto Mono', monospace;
 }
 
 p {
@@ -11,6 +11,7 @@ main {
   height: 95vh;
   width: 100vw;
   overflow-x: hidden;
+  position: fixed;
   background-image: url(assets/city-skyline-greyscale.svg);
   background-position: bottom right;
   background-repeat: no-repeat;

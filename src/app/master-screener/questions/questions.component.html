@@ -15,12 +15,17 @@
     </div>
 
     <!-- submit controls for screens >= md -->
-    <section>
+    <section class="clearfix">
       <div class="p2"></div>
       <div class="container">
         <!-- submit/clear (TODO) buttons -->
         <div class="submit-wrapper rounded flex p2">
-          <button class="flex-grow btn btn-primary p2" type="submit" [disabled]="form.untouched">SUBMIT</button>
+          <button 
+              class="flex-grow" 
+              md-raised-button color="primary"
+              type="submit" [disabled]="form.untouched">
+            Start
+          </button>
         </div>
       </div> 
       <div class="p2"></div>

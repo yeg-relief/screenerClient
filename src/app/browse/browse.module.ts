@@ -4,12 +4,14 @@ import { routing } from './browse.routes';
 import { BrowseComponent } from './browse.component';
 import { CategoryComponent } from './category/category.component';
 import { UserFacingProgramModule } from '../shared/modules/user-facing-program.module';
+import { MdButtonModule } from '@angular/material';
 
 @NgModule({
   imports: [
     CommonModule,
     routing,
-    UserFacingProgramModule
+    UserFacingProgramModule,
+    MdButtonModule.forRoot()
   ],
   declarations: [
     BrowseComponent,

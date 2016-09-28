@@ -16,7 +16,7 @@
       <div class="ml1" *ngIf="question.expandable">
         <md-radio-group [formControlName]="question.key" (change)="handleChange($event)">
           <md-radio-button *ngFor="let d of question.options" [value]="d.value">
-            <div class="mr1"> {{ d.display }} </div>
+            {{ d.display }}
           </md-radio-button>
         </md-radio-group>
       </div>

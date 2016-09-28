@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { UserFacingProgramComponent } from
   '../components/program/user-facing-program/user-facing-program.component';
-import { MdCardModule } from '@angular2-material/card';
+import { MdCardModule } from '@angular/material';
 
 @NgModule({
   imports: [

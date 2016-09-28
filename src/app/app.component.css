@@ -1,46 +1,4 @@
-.app-wrapper {
-  width:  100vw; 
+main {
   height: 100vh;
-  overflow-x: hidden;
-  overflow-y: auto;
-}
-
-/* extra large screens */
-@media(min-width: 64em) {
-  .app-wrapper {
-    overflow-x: hidden;
-    overflow-y: hidden;
-  }
-}
-
-/* large screens */
-@media(min-width: 52em) and (max-width:64em) {
-  .app-wrapper {
-    overflow-x: hidden;
-    overflow-y: hidden;
-  }
-}
-
-/* medium screens */
-@media(min-width: 40em) and (max-width: 52em) {
-  .app-wrapper {
-    overflow-x: hidden;
-    overflow-y: hidden;
-  }
-}
-
-/* small screens */
-@media(min-width: 30em) and (max-width: 40em){
-  .app-wrapper {
-    overflow-x: hidden;
-    overflow-y: auto;
-  }
-}
-
-/* extra small screens */
-@media(max-width: 30em){
-  .app-wrapper {
-    overflow-x: hidden;
-    overflow-y: auto;
-  }
+  width: 100vw;
 }

@@ -1,8 +1,8 @@
 .home {
-  background-image: url(assets/city-skyline-greyscale.svg);
-  background-position: bottom right;
-  background-repeat: no-repeat;
-  background-size: cover;
+  height: 100%;
+  width: 100%;
+  overflow: auto;
+  position: fixed;
 }
 
 /* MEDIUM AND GREATER */
@@ -19,18 +19,14 @@
 @media(max-width: 40em){
   .home {
     background-image: url(assets/city-skyline-greyscale.svg);
-    background-position: center bottom;
+    background-position: center center;
     background-repeat: no-repeat;
-    background-size: contain;
+    background-size: cover;
   }
 }
 
 main > header > .header-title {
-  font-family: 'Comfortaa', cursive;
-}
-
-main {
-  overflow: hidden;
+  background-color: rgba(248,248,255, 0.5);
 }
 
 .program-details {
@@ -40,15 +36,16 @@ main {
 p {
   font-family: 'Roboto Mono', monospace;
   display: inline-block;
+  background-color: rgba(248,248,255, 0.5);
 }
 
 button {
-  font-family: 'Comfortaa', cursive;
   width: 100%;
 }
 
 button:hover {
   background-color: pink;
+  color: black;
 }
 
 /* extra large screens */
@@ -62,7 +59,8 @@ button:hover {
   }
   
   main {
-    overflow: hidden;
+    overflow-x: hidden;
+    overflow-y: hidden;
   }
 }
 
@@ -83,6 +81,7 @@ button:hover {
   
   main {
     overflow: hidden;
+    overflow-y: hidden;
   }
 }
 
@@ -109,7 +108,7 @@ button:hover {
 /* small screens */
 @media(min-width: 30em) and (max-width: 40em){
   main > header > .header-title {
-    font-size: 60px;
+    font-size: 40px;
   }
   main > header > .header-description > div > p {
     max-width: 28em;
@@ -125,7 +124,7 @@ button:hover {
 /* extra small screens */
 @media(max-width: 30em){
   main > header > .header-title {
-    font-size: 40px;
+    font-size: 30px;
   }
   main > header > .header-description > div > p {
     max-width: 28em;

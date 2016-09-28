@@ -6,18 +6,14 @@ import { routing } from './master-screener.routes';
 import { ScreenerStatsComponent } from './overview/screener-stats/screener-stats.component';
 import { MasterScreenerDataService } from './master-screener-data.service';
 import { ControlsComponent } from './overview/controls/controls.component';
-import { MdCheckboxModule } from '@angular2-material/checkbox';
 import { KeyComponent } from './overview/key/key.component';
 import { QuestionComponent } from './overview/question/question.component';
 import { EditComponent } from './edit/edit.component';
-import { MdProgressCircleModule } from '@angular2-material/progress-circle';
 
 @NgModule({
   imports: [
     CommonModule,
     routing,
-    MdCheckboxModule.forRoot(),
-    MdProgressCircleModule.forRoot(),
   ],
   declarations: [
     MasterScreenerComponent,

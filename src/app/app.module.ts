@@ -1,11 +1,8 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { routing, appRoutingProviders }  from './app.routes';
-
 import { AppComponent } from './app.component';
-import { MdCoreModule } from '@angular2-material/core';
-import { MdCardModule } from '@angular2-material/card';
-
+import { MdCardModule } from '@angular/material';
 import { ToolbarComponent } from './shared/components/toolbar/toolbar.component';
 import { PageNotFoundComponent } from './shared/components/page-not-found/page-not-found.component';
 
@@ -18,8 +15,7 @@ import { PageNotFoundComponent } from './shared/components/page-not-found/page-n
   imports: [
     BrowserModule,
     routing,
-    MdCoreModule.forRoot(),
-    MdCardModule.forRoot()
+    MdCardModule.forRoot(),
   ],
   providers: [
     appRoutingProviders

@@ -1,9 +1,9 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule } from '@angular/forms';
-import { MdCardModule } from '@angular2-material/card';
-import { MdRadioModule } from '@angular2-material/radio';
-import { MdInputModule } from '@angular2-material/input';
+import { MdCardModule } from '@angular/material/card';
+import { MdRadioModule } from '@angular/material/radio';
+import { MdInputModule } from '@angular/material/input';
 import { QuestionComponent } from
   '../components/question/question.component';
 
@@ -20,6 +20,6 @@ import { QuestionComponent } from
   ],
   exports: [
     QuestionComponent
-  ]
+  ],
 })
 export class QuestionModule {};

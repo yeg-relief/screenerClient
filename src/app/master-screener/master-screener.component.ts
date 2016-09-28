@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { MasterScreenerService } from '../master-screener.service';
+import { MasterScreenerService } from './master-screener.service';
 
 @Component({
   template: '<router-outlet></router-outlet>',
