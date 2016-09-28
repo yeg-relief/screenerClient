@@ -8,7 +8,6 @@ import { AuthService } from './core/services/auth.service';
 import { MasterScreenerDataService } from './master-screener/master-screener-data.service';
 import { LoginComponent } from './core/login/login.component';
 import { MdCardModule } from '@angular2-material/card';
-import { MdButtonModule } from '@angular2-material/button';
 import { SidenavComponent } from './core/sidenav/sidenav.component';
 import { SidenavSectionComponent }from './core/sidenav/sidenav-section/sidenav-section.component';
 import { BreadCrumbComponent } from './core/bread-crumb/bread-crumb.component';
@@ -23,7 +22,6 @@ import { EffectsModule } from '@ngrx/effects';
     CommonModule,
     FormsModule,
     MdCardModule.forRoot(),
-    MdButtonModule.forRoot(),
     MdCheckboxModule.forRoot(),
     routing,
     StoreModule.provideStore(reducer),
