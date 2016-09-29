@@ -51,10 +51,19 @@ button[md-button] {
   font-size: 110%;
 }
 
-
-
 .browse {
-  overflow: auto !important;
   height: 94vh;
   position: fixed;
+}
+
+@media(min-width: 40em) {
+  .browse {
+    overflow-x: hidden;
+  } 
+}
+
+@media(max-width: 40em) {
+  .browse {
+    overflow-x: auto;
+  } 
 }

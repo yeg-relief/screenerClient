@@ -10,10 +10,10 @@ export class AuthService {
   isLoggedIn: boolean = false;
 
   // store the URL so we can redirect after logging in
-  redirectUrl: string;
+  redirectUrl = 'admin/master-screener/overview';
 
   login(): Observable<boolean> {
-    return Observable.of(true).delay(1000).do(val => this.isLoggedIn = val);
+    return Observable.of(true).delay(2000).do(val => this.isLoggedIn = val);
   }
 
   logout(): void {

@@ -15,6 +15,8 @@ import { MasterScreenerEffects } from './master-screener/master-screener.effects
 import { EffectsModule } from '@ngrx/effects';
 import { MdCardModule } from '@angular/material';
 import { MdButtonModule } from '@angular/material';
+import { MdInputModule } from '@angular/material';
+import { MdProgressBarModule } from '@angular/material';
 import { DataService } from './data.service';
 
 @NgModule({
@@ -24,6 +26,8 @@ import { DataService } from './data.service';
     routing,
     MdCardModule.forRoot(),
     MdButtonModule.forRoot(),
+    MdInputModule.forRoot(),
+    MdProgressBarModule.forRoot(),
     StoreModule.provideStore(reducer),
     EffectsModule.run(MasterScreenerEffects)
   ],

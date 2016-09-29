@@ -1,33 +1,36 @@
 <div class="p2"></div>
-<div class="clearfix container flex">
+<main class="clearfix flex">
   <div class="px1 sm-hide"></div>
-  <div class="col col-2 lg-show"></div>
-  <div class="col col-1 sm-show lg-hide"></div>
-  <div class="col col-8 flex-grow">
-    <md-card>
+  <div class="col-3 sm-show"></div>
+  <div class="col-6">
+    <md-card class="bg-silver">
       <md-card-title class="center">LOGIN </md-card-title>
       <md-card-subtitle>this is a mock login... any values result in successful login</md-card-subtitle>
       
       <md-card-content>
         <div class="p1"></div>
-        <label>Username</label>
-        <input required type="text" class="block col-12 field" [(ngModel)]="credentials.username">
-        <div class="p2"></div>
-        <label>Password</label>
-        <input required type="password" class="block col-12 field" [(ngModel)]="credentials.password">
+         <md-input class="col-6" 
+            style="margin-left:25%; margin-right:25%;" 
+            placeholder="username" [(ngModel)]="credentials.username">
+         </md-input>
+        <div class="p1"></div>
+        <md-input class="col-6" 
+            style="margin-left:25%; margin-right:25%;" 
+            placeholder="password" type="password" [(ngModel)]="credentials.password">
+        </md-input>
         <div class="p1"></div>
       </md-card-content>
       <div *ngIf="credentials.username.length === 0 || credentials.password.length === 0">
-        <button disabled md-raised-button color="primary">LOGIN</button>
+        <button style="margin-left:25%; margin-right:25%;" disabled md-raised-button color="primary">LOGIN</button>
       </div>
       <div *ngIf="credentials.username.length > 0 && credentials.password.length > 0">
-        <button md-raised-button color="primary" (click)="login()">LOGIN</button>
+        <button style="margin-left:25%; margin-right:25%;"  md-raised-button color="primary" (click)="login()">LOGIN</button>
       </div>   
-      <md-card-subtitle>{{ message }}</md-card-subtitle> 
+      <div class="p3"></div>
+      <md-progress-bar *ngIf="active" mode="indeterminate" color="accent"></md-progress-bar>
     </md-card>
     
   </div>
   <div class="px1 sm-hide"></div>
-  <div class="col col-2 lg-show"></div>
-  <div class="col col-1 sm-show lg-hide"></div>
-</div>
+  <div class="col-3 sm-show"></div>
+</main>
