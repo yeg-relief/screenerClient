@@ -13,7 +13,6 @@ export interface MasterScreener {
 }
 
 export interface MasterScreenerMetaData {
-  versions: number[];
   questions: QuestionMeta;
   screener: {
     version: number;

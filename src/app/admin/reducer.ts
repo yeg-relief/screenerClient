@@ -25,15 +25,26 @@ export function getMasterScreenerState(state$: Observable<State>) {
 }
 
 export const getVersions = share(compose(fromMasterScreener.getVersions, getMasterScreenerState));
+
 export const getWorkingQuestionCount =
   share(compose(fromMasterScreener.getQuestionCount, getMasterScreenerState));
+
 export const getWorkingCreationDate =
   share(compose(fromMasterScreener.getCreatedDate, getMasterScreenerState));
+
 export const getWorkingNumber =
   share(compose(fromMasterScreener.getWorkingVersionNumber, getMasterScreenerState));
+
 export const getLoading =
   share(compose(fromMasterScreener.getLoading, getMasterScreenerState));
+
 export const getErrors = share(compose(fromMasterScreener.getErrors, getMasterScreenerState));
+
+export const getKeys = share(compose(fromMasterScreener.getKeys, getMasterScreenerState));
+
+export const flattenedQuestions =
+  share(compose(fromMasterScreener.getFlattenedQuestions, getMasterScreenerState));
+
 
 
 /* https://github.com/ngrx/example-app/blob/final/src/util.ts */

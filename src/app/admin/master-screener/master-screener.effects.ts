@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Actions, Effect } from '@ngrx/effects';
-import { MasterScreenerMetaData, MasterScreener } from '../models/master-screener';
+import { MasterScreener } from '../models/master-screener';
 import { DataService } from '../data.service';
 import { MasterScreenerActionsTypes } from './master-screener.actions';
 import { Observable } from 'rxjs/Observable';
@@ -12,34 +12,28 @@ import 'rxjs/add/operator/do';
 export class MasterScreenerEffects {
 
   @Effect() loadMeta$ = this.actions$
-    .ofType(MasterScreenerActionsTypes.LOAD_META_DATA)
+    .ofType(MasterScreenerActionsTypes.LOAD_VERSIONS_INFO)
     .switchMap( () => this.data.loadVersionMetaData())
-    .switchMap( (res: MasterScreenerMetaData ) => {
-      return Observable.of({
-        type: MasterScreenerActionsTypes.LOAD_META_DATA_SUCCESS,
+    .switchMap( (res: number[] ) =>
+      Observable.of({
+        type: MasterScreenerActionsTypes.CHANGE_VERSIONS_INFO,
         payload: res
-      });
-    });
+      })
+    );
 
   @Effect() loadVersion$ = this.actions$
-    .ofType(MasterScreenerActionsTypes.LOAD_VERSION)
+    .ofType(MasterScreenerActionsTypes.LOAD_MASTER_SCREENER_VERSION)
     .map<number>(action => action.payload)
     .switchMap(version => this.data.loadScreener(version))
     .switchMap( (masterScreener: MasterScreener | boolean) => {
       if (typeof masterScreener === 'boolean') {
-        return Observable.of({
-          type: MasterScreenerActionsTypes.LOAD_VERSION_FAILURE,
-          payload: false
-        });
+        return Observable.of(false);
       }
-      return Observable.of({
-        type: MasterScreenerActionsTypes.LOAD_VERSION_SUCCESS,
-        payload: masterScreener
-      });
+      return Observable.of(masterScreener);
     })
-    .switchMap(action => Observable.of({
-        type: MasterScreenerActionsTypes.CHANGE_VERSION,
-        payload: action.payload
+    .switchMap(res => Observable.of({
+        type: MasterScreenerActionsTypes.CHANGE_MASTER_SCREENER_VERSION,
+        payload: res
       })
     );
 

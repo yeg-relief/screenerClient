@@ -1,7 +1,7 @@
 import { QuestionOption } from './question-option';
 
 export interface Question {
-  type: 'boolean' | 'number' | 'string';
+  type: 'boolean' | 'number' | 'text';
   value?: string | number | boolean;
   label: string;
   expandable: boolean;

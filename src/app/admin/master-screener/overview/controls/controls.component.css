@@ -15,4 +15,5 @@ select {
 
 button:hover {
   background-color: pink;
+  color: black;
 }

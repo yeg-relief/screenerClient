@@ -4,8 +4,8 @@
       <table class="table-light overflow-hidden bg-white border rounded">
         <thead class="bg-darken-1">
           <tr>
-            <th>name</th>
-            <th>type</th>
+            <th>key name</th>
+            <th>key type</th>
             <th></th>
             <th></th>
           </tr>
@@ -15,7 +15,7 @@
             <td>{{ key.name }}</td>
             <td>{{ key.type }}</td>
             <td>
-              <button title="view key details" md-button routerLink="/admin/key/detail/{{key.name}}">VIEW</button>
+              <button md-button routerLink="/admin/key/detail/{{key.name}}">VIEW</button>
             </td>
           </tr>
         </tbody>

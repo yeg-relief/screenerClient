@@ -38,11 +38,10 @@ export class DataService {
       });
   }
 
-  loadVersionMetaData(): Observable<MasterScreenerMetaData> {
+  loadVersionMetaData(): Observable<number[]> {
     return Observable.range(1, 3)
       .toArray()
-      .delay(100)
-      .map(versions => { return { versions: versions }; });
+      .delay(100);
   }
 }
 
@@ -52,7 +51,6 @@ const mockVersionEight: MasterScreener = {
       version: 3,
       created: '14-10-2016'
     },
-    versions: [1, 2, 3 ],
     questions: {
       totalCount: 8,
       staticCount: 5,

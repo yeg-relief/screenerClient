@@ -17,7 +17,7 @@
   <div *ngIf="!(loading$ | async)">
     <app-key 
         [toggled]="keyToggle"
-        [keys]="keys"
+        [keys]="(keys$ | async)"
         [error]="(error$ | async)">
     </app-key>
   </div>
@@ -25,7 +25,7 @@
   <div *ngIf="!(loading$ | async)">
     <app-question 
         [toggled]="questionToggle"
-        [questions]="questions"
+        [questions]="(questions$ | async)"
         [error]="(error$ | async)">
     </app-question>
   </div>

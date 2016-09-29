@@ -5,6 +5,8 @@ import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 import { Store } from '@ngrx/store';
 import * as fromRoot from '../../reducer';
 import { MasterScreenerActionsTypes } from '../master-screener.actions';
+import { Key } from '../../models/key';
+import { Question } from '../../../shared/models';
 
 @Component({
   selector: 'app-overview',
@@ -18,8 +20,9 @@ export class OverviewComponent implements OnInit {
   workingVersion$: Observable<number>;
   loading$: Observable<boolean>;
   error$: Observable<string>;
-  keys = [];
-  questions = [];
+  keys$: Observable<Key[]>;
+  // flattened array of all questions in screener
+  questions$: Observable<Question[]>;
   constructor(private store: Store<fromRoot.State>) { }
 
   ngOnInit() {
@@ -31,13 +34,16 @@ export class OverviewComponent implements OnInit {
     this.workingVersion$ = this.store.let(fromRoot.getWorkingNumber);
     this.loading$ = this.store.let(fromRoot.getLoading);
     this.error$ = this.store.let(fromRoot.getErrors);
+    this.keys$ = this.store.let(fromRoot.getKeys);
+    this.questions$ = this.store.let(fromRoot.flattenedQuestions);
 
     this.store.dispatch({
-      type: MasterScreenerActionsTypes.LOAD_VERSION,
+      type: MasterScreenerActionsTypes.LOAD_MASTER_SCREENER_VERSION,
+      // shouldn't be hardcoded
       payload: 3
     });
     this.store.dispatch({
-      type: MasterScreenerActionsTypes.LOAD_META_DATA
+      type: MasterScreenerActionsTypes.LOAD_VERSIONS_INFO
     });
   }
 

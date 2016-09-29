@@ -1,20 +1,26 @@
 import '@ngrx/core/add/operator/select';
-import 'rxjs/add/operator/map';
-import 'rxjs/add/operator/filter';
-import 'rxjs/add/operator/count';
-import 'rxjs/add/operator/catch';
-import 'rxjs/add/operator/do';
+import 'rxjs/add/operator/switchMap';
+import 'rxjs/add/operator/scan';
+import 'rxjs/add/observable/from';
 import { Observable } from 'rxjs/Observable';
 import { MasterScreenerActions, MasterScreenerActionsTypes } from './master-screener.actions';
 import { MasterScreener } from '../models/master-screener';
+import { Key } from '../models/key';
+import { Question } from '../../shared/models';
+
+// for debugging remove after
+import 'rxjs/add/operator/do';
+
 
 export interface State {
   loading: boolean;
+  // i'm not sure if this is the right place for the versions of the master screener 
+  // but i dont want to make a reducer solely for it
+  versions: Array<number>;
   masterScreener: MasterScreener;
   error: string;
 }
 
-const loadingString = '. . .';
 const ERROR_TYPES = {
   failedVersionLoad: () => {return `failed to load master screener`; },
   failedMetaDataLoad: () => {return 'unable to load meta data on available screeners'; }
@@ -23,6 +29,7 @@ const ERROR_TYPES = {
 export const initialState: State = {
   loading: false,
   error: '',
+  versions: [],
   masterScreener: {
     questions: [],
     meta: {
@@ -32,7 +39,6 @@ export const initialState: State = {
         staticCount: undefined,
         dynamicCount: undefined
       },
-      versions: [],
       screener: {
         version: undefined,
         created: undefined,
@@ -46,16 +52,13 @@ export const initialState: State = {
 export function reducer(state = initialState, action: MasterScreenerActions): State {
   switch (action.type) {
     // load a version from the api server
-    case MasterScreenerActionsTypes.LOAD_VERSION: {
+    case MasterScreenerActionsTypes.LOAD_MASTER_SCREENER_VERSION: {
       return Object.assign({}, state, {
-        loading: true,
-        workingVersion: loadingString,
-        created: loadingString,
-        questionCount: loadingString
+        loading: true
       });
     }
 
-    case MasterScreenerActionsTypes.CHANGE_VERSION: {
+    case MasterScreenerActionsTypes.CHANGE_MASTER_SCREENER_VERSION: {
       if (typeof action.payload === 'boolean') {
         const error = ERROR_TYPES.failedVersionLoad();
         return Object.assign({}, state, {
@@ -69,6 +72,17 @@ export function reducer(state = initialState, action: MasterScreenerActions): St
         loading: false,
         errors: '',
         masterScreener: masterScreener
+      });
+    }
+
+    case MasterScreenerActionsTypes.LOAD_VERSIONS_INFO: {
+      return state;
+    }
+
+    case MasterScreenerActionsTypes.CHANGE_VERSIONS_INFO: {
+      const versions: number[] = [].concat(action.payload);
+      return Object.assign({}, state, {
+        versions: versions
       });
     }
 
@@ -91,7 +105,7 @@ export function getWorkingVersionNumber(state$: Observable<State>) {
 }
 
 export function getVersions(state$: Observable<State>) {
-  return state$.select(s => s.masterScreener.meta.versions);
+  return state$.select(s => s.versions);
 }
 
 export function getQuestionCount(state$: Observable<State>) {
@@ -100,4 +114,37 @@ export function getQuestionCount(state$: Observable<State>) {
 
 export function getCreatedDate(state$: Observable<State>) {
   return state$.select(s => s.masterScreener.meta.screener.created);
+}
+
+export function getKeys(state$: Observable<State>) {
+  return state$.select(s => s.masterScreener.questions)
+    .switchMap<Key[]>( (questions: Question[]) => {
+      const keys: Key[] = questions.reduce( (acc: Key[], curr: Question) => {
+        // push the question key doesn't matter if expandable or not
+        acc.push({name: curr.key, type: curr.type});
+        if (!curr.expandable) {
+          return acc;
+        }
+        curr.conditonalQuestions.forEach( question => acc.push({name: question.key, type: question.type}));
+        return acc;
+      }, []);
+      return Observable.of(keys);
+    });
+}
+
+export function getFlattenedQuestions(state$: Observable<State>) {
+  return state$.select(s => s.masterScreener.questions)
+    .do(() => console.log('called'))
+    .switchMap<Question[]>( (questions: Question[]) => {
+      const q: Question[] = questions.reduce( (acc: Question[], curr: Question) => {
+        acc.push(curr);
+        if (!curr.expandable) {
+          return acc;
+        }
+        curr.conditonalQuestions.forEach( question => acc.push(question));
+        return acc;
+      }, []);
+      return Observable.of(q);
+    })
+    .do(thing => console.log(thing));
 }
