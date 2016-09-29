@@ -1,12 +1,22 @@
 import { Question } from '../../shared/models';
 
-export interface MasterScreener {
-  version: number;
-  created: string;
-  questions: Question[];
+export interface QuestionMeta {
+  totalCount: number;
+  collapsableCount: number;
+  staticCount: number;
+  dynamicCount: number;
 }
 
-// information about master screeners... like how many versions exist etc.
+export interface MasterScreener {
+  questions: Question[];
+  meta: MasterScreenerMetaData;
+}
+
 export interface MasterScreenerMetaData {
   versions: number[];
+  questions: QuestionMeta;
+  screener: {
+    version: number;
+    created: string;
+  };
 }

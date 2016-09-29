@@ -28,45 +28,6 @@ export class LoadScreenerVersion implements Action {
   constructor(public payload: number) { }
 }
 
-export class LoadScreenerVersionSuccess implements Action {
-  type = MasterScreenerActionsTypes.LOAD_VERSION_SUCCESS;
-
-  constructor(public payload: MasterScreener) { }
-}
-
-export class LoadScreenerVersionFailure implements Action {
-  type = MasterScreenerActionsTypes.LOAD_VERSION_FAILURE;
-
-  constructor(public payload: boolean) { }
-}
-/******************************************************************* */
-
-/* LOAD META DATA ABOUT VERSIONS ON SERVER... VERSION NUMBERS ETC. */
-export class LoadMetaData implements Action {
-  type = MasterScreenerActionsTypes.LOAD_META_DATA;
-
-  constructor(public payload: any) {}
-}
-
-export class LoadMetaDataSuccess implements Action {
-  type = MasterScreenerActionsTypes.LOAD_META_DATA_SUCCESS;
-
-  constructor(public payload: MasterScreenerMetaData) {}
-}
-
-export class LoadMetaDataFailure implements Action {
-  type = MasterScreenerActionsTypes.LOAD_META_DATA_FAILURE;
-
-  constructor(public payload: boolean) {}
-}
-
-/******************************************************************* */
-
 export type MasterScreenerActions =
     ChangeScreenerVersion
   | LoadScreenerVersion
-  | LoadScreenerVersionSuccess
-  | LoadScreenerVersionFailure
-  | LoadMetaData
-  | LoadMetaDataSuccess
-  | LoadMetaDataFailure

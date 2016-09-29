@@ -8,3 +8,11 @@ md-progress-circle {
   overflow-y: auto;
   overflow-x: auto;
 }
+
+.error {
+  border: 1px solid red;
+  font-family: 'Roboto Mono', monospace;
+  font-size: 130%;
+  background-color: black;
+  color: white;
+}

@@ -11,6 +11,7 @@ import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 export class KeyComponent implements OnInit {
   @Input() toggled: BehaviorSubject<boolean>;
   @Input() keys: Array<any>;
+  @Input() error: string;
   constructor() { }
   ngOnInit() {}
 }

@@ -1,26 +1,28 @@
-<div class="clearfix" *ngIf="(toggled | async) && keys?.length > 0">
-  <div class="overflow-auto">
-    <table class="table-light overflow-hidden bg-white border rounded">
-      <thead class="bg-darken-1">
-        <tr>
-          <th>name</th>
-          <th>type</th>
-          <th></th>
-          <th></th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr *ngFor="let key of keys">
-          <td>{{ key.name }}</td>
-          <td>{{ key.type }}</td>
-          <td>
-            <button title="view key details" md-button routerLink="/admin/key/detail/{{key.name}}">VIEW</button>
-          </td>
-        </tr>
-      </tbody>
-    </table>
+<div *ngIf="error.length === 0">
+  <div class="clearfix" *ngIf="(toggled | async) && keys?.length > 0">
+    <div class="overflow-auto">
+      <table class="table-light overflow-hidden bg-white border rounded">
+        <thead class="bg-darken-1">
+          <tr>
+            <th>name</th>
+            <th>type</th>
+            <th></th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let key of keys">
+            <td>{{ key.name }}</td>
+            <td>{{ key.type }}</td>
+            <td>
+              <button title="view key details" md-button routerLink="/admin/key/detail/{{key.name}}">VIEW</button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
   </div>
+  <md-card-subtitle class="clearfix center" *ngIf="(toggled | async) && keys?.length === 0">
+    <h3> There are no keys associated with this screener </h3>
+  </md-card-subtitle>
 </div>
-<md-card-subtitle class="clearfix center" *ngIf="(toggled | async) && keys?.length === 0">
-  <h3> There are no keys associated with this screener </h3>
-</md-card-subtitle>

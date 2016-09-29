@@ -24,7 +24,6 @@ export function getMasterScreenerState(state$: Observable<State>) {
   return state$.select(state => state.masterScreener);
 }
 
-export const getMeta = share(compose(fromMasterScreener.getMeta, getMasterScreenerState));
 export const getVersions = share(compose(fromMasterScreener.getVersions, getMasterScreenerState));
 export const getWorkingQuestionCount =
   share(compose(fromMasterScreener.getQuestionCount, getMasterScreenerState));
@@ -34,6 +33,8 @@ export const getWorkingNumber =
   share(compose(fromMasterScreener.getWorkingVersionNumber, getMasterScreenerState));
 export const getLoading =
   share(compose(fromMasterScreener.getLoading, getMasterScreenerState));
+export const getErrors = share(compose(fromMasterScreener.getErrors, getMasterScreenerState));
+
 
 /* https://github.com/ngrx/example-app/blob/final/src/util.ts */
 interface SelectorFn<T, V> {

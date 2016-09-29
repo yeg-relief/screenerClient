@@ -11,6 +11,7 @@ import { Question } from '../../../../shared';
 export class QuestionComponent implements OnInit {
   @Input() toggled: BehaviorSubject<boolean>;
   @Input() questions: Question[];
+  @Input() error: string;
   constructor() { }
   ngOnInit() {}
 }

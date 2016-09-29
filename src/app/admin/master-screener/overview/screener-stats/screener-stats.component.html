@@ -1,4 +1,4 @@
-<div class="col-12 flex">
+<div *ngIf="($error | async)?.length === 0" class="col-12 flex">
   <div class="border-left border-right bg-silver col-12 py1">
     <div class="clearfix flex ml1">
       <div class="col-1"></div>

@@ -1,32 +1,34 @@
-<div class="clearfix" *ngIf="(toggled | async) && questions?.length > 0">
-  <div class="overflow-auto">
-    <table class="table-light overflow-hidden bg-white border rounded">
-      <thead class="bg-darken-1">
-        <tr>
-          <th>key</th>
-          <th>control type</th>
-          <th>label</th>
-          <th></th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr *ngFor="let question of questions">
-          <td>{{ question.key }}</td>
-          <td>{{ question.controlType }}</td>
-          <td>{{ question.label }}</td>
-          <td>
-            <button
-              title="view question details"
-              md-button 
-              routerLink="/admin/question/detail/{{question.key}}">
-              VIEW
-             </button> 
-          </td>
-        </tr>
-      </tbody>
-    </table>
+<div *ngIf="error.length === 0">
+  <div class="clearfix" *ngIf="(toggled | async) && questions?.length > 0">
+    <div class="overflow-auto">
+      <table class="table-light overflow-hidden bg-white border rounded">
+        <thead class="bg-darken-1">
+          <tr>
+            <th>key</th>
+            <th>control type</th>
+            <th>label</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let question of questions">
+            <td>{{ question.key }}</td>
+            <td>{{ question.controlType }}</td>
+            <td>{{ question.label }}</td>
+            <td>
+              <button
+                title="view question details"
+                md-button 
+                routerLink="/admin/question/detail/{{question.key}}">
+                VIEW
+              </button> 
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
   </div>
+  <md-card-subtitle class="clearfix center" *ngIf="(toggled | async) && questions?.length === 0">
+    <h3> There are no questions associated with this screener </h3>
+  </md-card-subtitle>
 </div>
-<md-card-subtitle class="clearfix center" *ngIf="(toggled | async) && questions?.length === 0">
-  <h3> There are no questions associated with this screener </h3>
-</md-card-subtitle>

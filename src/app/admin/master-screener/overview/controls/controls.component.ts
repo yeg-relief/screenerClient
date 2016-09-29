@@ -13,6 +13,7 @@ export class ControlsComponent implements OnInit {
   @Input() versions: number[];
   @Input() workingVersion: number;
   @Input() loading: boolean;
+  @Input() error: string;
 
   constructor() { }
 

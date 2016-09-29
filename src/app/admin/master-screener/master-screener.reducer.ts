@@ -6,19 +6,15 @@ import 'rxjs/add/operator/catch';
 import 'rxjs/add/operator/do';
 import { Observable } from 'rxjs/Observable';
 import { MasterScreenerActions, MasterScreenerActionsTypes } from './master-screener.actions';
-import { MasterScreener, MasterScreenerMetaData } from '../models/master-screener';
-import { Question } from '../../shared/models';
+import { MasterScreener } from '../models/master-screener';
 
 export interface State {
   loading: boolean;
-  questions: Question[];
-  workingVersion: number | string;
-  questionCount: number | string;
-  created: string;
+  masterScreener: MasterScreener;
   error: string;
-  meta: MasterScreenerMetaData;
 }
 
+const loadingString = '. . .';
 const ERROR_TYPES = {
   failedVersionLoad: () => {return `failed to load master screener`; },
   failedMetaDataLoad: () => {return 'unable to load meta data on available screeners'; }
@@ -26,17 +22,26 @@ const ERROR_TYPES = {
 
 export const initialState: State = {
   loading: false,
-  questions: [],
-  workingVersion: undefined,
   error: '',
-  questionCount: undefined,
-  created: '',
-  meta: {
-    versions: []
+  masterScreener: {
+    questions: [],
+    meta: {
+      questions: {
+        totalCount: undefined,
+        collapsableCount: undefined,
+        staticCount: undefined,
+        dynamicCount: undefined
+      },
+      versions: [],
+      screener: {
+        version: undefined,
+        created: undefined,
+      }
+    }
   }
 };
 
-const loadingString = '. . .';
+
 
 export function reducer(state = initialState, action: MasterScreenerActions): State {
   switch (action.type) {
@@ -52,50 +57,18 @@ export function reducer(state = initialState, action: MasterScreenerActions): St
 
     case MasterScreenerActionsTypes.CHANGE_VERSION: {
       if (typeof action.payload === 'boolean') {
+        const error = ERROR_TYPES.failedVersionLoad();
         return Object.assign({}, state, {
           loading: false,
-          errors: ERROR_TYPES.failedVersionLoad()
+          error: error
         });
       }
-      const masterScreener: MasterScreener = action.payload;
-      const questionCount = masterScreener.questions.reduce( (prev, curr) => {
-        // if its not expandable add just 1
-        if (!curr.expandable) {
-          return prev + 1;
-        }
-        // if its expandable add 1 + the conditional questions 
-        const combinedCount = curr.conditonalQuestions.reduce( (acc, next) => {
-
-          return acc + 1;
-        }, 1);
-        return prev + combinedCount;
-      }, 0);
-
+      const masterScreener: MasterScreener = <MasterScreener>action.payload;
 
       return Object.assign({}, state, {
         loading: false,
-        loaded: true,
-        workingVersion: masterScreener.version,
-        questions: [].concat(masterScreener.questions),
-        created: masterScreener.created,
-        questionCount: questionCount
-      });
-    }
-
-    case MasterScreenerActionsTypes.LOAD_META_DATA: {
-      return state;
-    }
-
-    case MasterScreenerActionsTypes.LOAD_META_DATA_SUCCESS: {
-      const meta = action.payload;
-      return Object.assign({}, state, {
-        meta: meta
-      });
-    }
-
-    case MasterScreenerActionsTypes.LOAD_META_DATA_FAILURE: {
-      return Object.assign({}, state, {
-        errors: ERROR_TYPES.failedMetaDataLoad()
+        errors: '',
+        masterScreener: masterScreener
       });
     }
 
@@ -113,22 +86,18 @@ export function getErrors(state$: Observable<State>) {
   return state$.select(s => s.error);
 }
 
-export function getMeta(state$: Observable<State>) {
-  return state$.select(s => s.meta);
-}
-
 export function getWorkingVersionNumber(state$: Observable<State>) {
-  return state$.select(s => s.workingVersion);
+  return state$.select(s => s.masterScreener.meta.screener.version);
 }
 
 export function getVersions(state$: Observable<State>) {
-  return state$.select(s => s.meta).map(meta => meta.versions);
+  return state$.select(s => s.masterScreener.meta.versions);
 }
 
 export function getQuestionCount(state$: Observable<State>) {
-  return state$.select(s => s.questionCount);
+  return state$.select(s => s.masterScreener.meta.questions.totalCount);
 }
 
 export function getCreatedDate(state$: Observable<State>) {
-  return state$.select(s => s.created);
+  return state$.select(s => s.masterScreener.meta.screener.created);
 }

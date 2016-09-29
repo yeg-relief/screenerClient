@@ -11,7 +11,7 @@ export class DataService {
   private screenerCache = new Map<number, MasterScreener>();
   constructor() { }
   private requestScreener(version: number): Observable<MasterScreener> | Observable<boolean> {
-    const MOCK_VALID_VERSION = 8;
+    const MOCK_VALID_VERSION = 3;
     const valid: boolean = version === MOCK_VALID_VERSION;
     return Observable.of(valid)
       .switchMap<boolean | MasterScreener>((res: boolean) => {
@@ -39,7 +39,7 @@ export class DataService {
   }
 
   loadVersionMetaData(): Observable<MasterScreenerMetaData> {
-    return Observable.range(1, 8)
+    return Observable.range(1, 3)
       .toArray()
       .delay(100)
       .map(versions => { return { versions: versions }; });
@@ -47,8 +47,19 @@ export class DataService {
 }
 
 const mockVersionEight: MasterScreener = {
-  created: '10-26-2016',
-  version: 8,
+  meta: {
+    screener: {
+      version: 3,
+      created: '14-10-2016'
+    },
+    versions: [1, 2, 3 ],
+    questions: {
+      totalCount: 8,
+      staticCount: 5,
+      collapsableCount: 3,
+      dynamicCount: 1
+    }
+  },
   questions: [
     {
       type: 'number',

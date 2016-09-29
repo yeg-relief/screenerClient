@@ -17,6 +17,7 @@ export class OverviewComponent implements OnInit {
   versions$: Observable<number[]>;
   workingVersion$: Observable<number>;
   loading$: Observable<boolean>;
+  error$: Observable<string>;
   keys = [];
   questions = [];
   constructor(private store: Store<fromRoot.State>) { }
@@ -29,10 +30,11 @@ export class OverviewComponent implements OnInit {
     this.versions$ = this.store.let(fromRoot.getVersions);
     this.workingVersion$ = this.store.let(fromRoot.getWorkingNumber);
     this.loading$ = this.store.let(fromRoot.getLoading);
+    this.error$ = this.store.let(fromRoot.getErrors);
 
     this.store.dispatch({
       type: MasterScreenerActionsTypes.LOAD_VERSION,
-      payload: 8
+      payload: 3
     });
     this.store.dispatch({
       type: MasterScreenerActionsTypes.LOAD_META_DATA
