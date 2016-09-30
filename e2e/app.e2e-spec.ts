@@ -1,10 +1,10 @@
-import { ScreenerVersionTwoPage } from './app.po';
+import { ScreenerClientPage } from './app.po';
 
-describe('screener-version-two App', function() {
-  let page: ScreenerVersionTwoPage;
+describe('screener-client App', function() {
+  let page: ScreenerClientPage;
 
   beforeEach(() => {
-    page = new ScreenerVersionTwoPage();
+    page = new ScreenerClientPage();
   });
 
   it('should display message saying app works', () => {
