@@ -8,6 +8,7 @@ import { ResultsComponent } from './results/results.component';
 import { UserFacingProgramModule } from '../../shared/modules/user-facing-program.module';
 import { MasterScreenerService } from './master-screener.service';
 import { MdButtonModule } from '@angular/material';
+import { MasterScreenerComponent } from './master-screener.component'
 
 @NgModule({
   imports: [
@@ -20,7 +21,8 @@ import { MdButtonModule } from '@angular/material';
   ],
   declarations: [
     QuestionsComponent,
-    ResultsComponent
+    ResultsComponent,
+    MasterScreenerComponent
   ],
   providers: [ MasterScreenerService ]
 })
