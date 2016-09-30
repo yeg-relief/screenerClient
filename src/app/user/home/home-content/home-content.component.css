@@ -15,7 +15,7 @@
   }
 }
 
-/* SMALL TO MEDIUM */
+/* XTRA-SMALL TO MEDIUM */
 @media(max-width: 40em){
   .home {
     background-image: url(assets/city-skyline-greyscale.svg);

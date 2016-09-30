@@ -1,6 +1,7 @@
 import { ModuleWithProviders } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 import { PageNotFoundComponent } from './shared/components/page-not-found/page-not-found.component';
+import { AboutComponent } from './user/about/about.component';
 
 const appRoutes: Routes = [
   { path: 'master-screener', loadChildren: 'app/user/master-screener/master-screener.module#MasterScreenerModule'},
@@ -9,6 +10,7 @@ const appRoutes: Routes = [
     path: 'admin', loadChildren: 'app/admin/admin.module#AdminModule'
   },
   { path: 'home', loadChildren: 'app/user/home/home.module#HomeModule'},
+  { path: 'about', component: AboutComponent},
   { path: '', pathMatch: 'full', redirectTo: '/home/content'},
   { path: '**', component: PageNotFoundComponent }
 ];

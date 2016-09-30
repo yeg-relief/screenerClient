@@ -1,0 +1,58 @@
+main {
+  height: 94vh;
+  width: 100vw;
+  overflow: auto;
+  position: fixed;
+}
+
+section {
+  background-color: rgba(248,248,255, 0.2);
+  height: 30vh;
+}
+
+/* MEDIUM AND GREATER */
+@media(min-width: 52em) {
+  main {
+    background-image: url(assets/city-skyline-greyscale.svg);
+    background-position: bottom right;
+    background-repeat: no-repeat;
+    background-size: cover;
+  }
+  
+  section {
+    margin-left: 25%;
+    margin-right: 25%;
+    width: 50%;
+  }
+}
+
+@media(min-width: 40em) and (max-width: 52em) {
+  main {
+    background-image: url(assets/city-skyline-greyscale.svg);
+    background-position: bottom right;
+    background-repeat: no-repeat;
+    background-size: contain;
+  }
+  
+  section {
+    margin-left: 15%;
+    margin-right: 15%;
+    width: 70%;
+  }
+}
+
+/* XTRA-SMALL TO MEDIUM */
+@media(max-width: 40em){
+  main {
+    background-image: url(assets/city-skyline-greyscale.svg);
+    background-position: center center;
+    background-repeat: no-repeat;
+    background-size: cover;
+  }
+  
+  section {
+    margin-left: 5%;
+    margin-right: 5%;
+    width: 90%;
+  }
+}

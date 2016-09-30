@@ -1,0 +1,40 @@
+main {
+  height: 94vh;
+  width: 100vw;
+  position: fixed;
+}
+
+md-card {
+  background-color: silver;
+  font-family: 'Roboto Mono', monospace;
+}
+
+/* MEDIUM AND GREATER */
+@media(min-width: 40em) {
+  main {
+    background-image: url(assets/city-skyline-greyscale.svg);
+    background-position: bottom right;
+    background-repeat: no-repeat;
+    background-size: cover;
+  }
+  
+  md-card {
+    height: 50vh;
+    
+  }
+}
+
+/* XTRA-SMALL TO MEDIUM */
+@media(max-width: 40em){
+  main {
+    background-image: url(assets/city-skyline-greyscale.svg);
+    background-position: center center;
+    background-repeat: no-repeat;
+    background-size: cover;
+  }
+  
+  md-card {
+    height: 40vh;
+    margin-top: 5%;
+  }
+}

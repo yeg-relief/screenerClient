@@ -6,12 +6,14 @@ import { MdCardModule } from '@angular/material';
 import { MdCoreModule } from '@angular/material';
 import { ToolbarComponent } from './shared/components/toolbar/toolbar.component';
 import { PageNotFoundComponent } from './shared/components/page-not-found/page-not-found.component';
+import { AboutComponent } from './user/about/about.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     ToolbarComponent,
     PageNotFoundComponent,
+    AboutComponent,
   ],
   imports: [
     BrowserModule,
