@@ -8,18 +8,19 @@ import 'rxjs/add/operator/toArray';
 
 @Injectable()
 export class DataService {
-  private screenerCache = new Map<number, MasterScreener>();
+  private screenerCache = new Map<string, MasterScreener>();
   constructor() { }
   private requestScreener(version: number): Observable<MasterScreener> | Observable<boolean> {
     const MOCK_VALID_VERSION = 3;
     const valid: boolean = version === MOCK_VALID_VERSION;
+    console.log(`request validity: ${valid}`);
     return Observable.of(valid)
       .switchMap<boolean | MasterScreener>((res: boolean) => {
         if (!res) {
           return Observable.of(res);
         }
         // tslint:disable-next-line
-        this.screenerCache.set(version, mockVersionEight);
+        this.screenerCache.set(version.toString(), mockVersionEight);
         // tslint:disable-next-line
         return Observable.of(mockVersionEight);
       })
@@ -27,11 +28,12 @@ export class DataService {
   }
 
   loadScreener(version: number): Observable<MasterScreener> | Observable<boolean> {
-    return Observable.of(this.screenerCache.has(version))
+    console.log(`screener version request service pov: ${version}`);
+    return Observable.of(this.screenerCache.has(version.toString()))
       .switchMap<boolean | MasterScreener>((res: boolean) => {
         if (res) {
           console.log(`loading master-screener version ${version} from cache.`);
-          return Observable.of(this.screenerCache.get(version));
+          return Observable.of(this.screenerCache.get(version.toString()));
         }
         console.log(`requesting master-screener version ${version} from network`);
         return this.requestScreener(version);

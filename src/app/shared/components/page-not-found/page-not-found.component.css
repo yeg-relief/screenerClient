@@ -9,7 +9,7 @@ md-card {
   font-family: 'Roboto Mono', monospace;
 }
 
-/* MEDIUM AND GREATER */
+
 @media(min-width: 40em) {
   main {
     background-image: url(assets/city-skyline-greyscale.svg);
@@ -24,7 +24,7 @@ md-card {
   }
 }
 
-/* XTRA-SMALL TO MEDIUM */
+
 @media(max-width: 40em){
   main {
     background-image: url(assets/city-skyline-greyscale.svg);

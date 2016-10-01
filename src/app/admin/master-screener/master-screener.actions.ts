@@ -25,7 +25,6 @@ export class LoadScreenerVersion implements Action {
   constructor(public payload: number) { }
 }
 
-
 export class LoadScreenerVersionsInfo implements Action {
   type = MasterScreenerActionsTypes.LOAD_VERSIONS_INFO;
 

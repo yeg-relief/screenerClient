@@ -5,7 +5,7 @@ main {
   position: fixed;
 }
 
-/* MEDIUM AND GREATER */
+
 @media(min-width: 40em) {
   main {
     background-image: url(assets/city-skyline-greyscale.svg);
@@ -15,7 +15,7 @@ main {
   }
 }
 
-/* SMALL TO MEDIUM */
+
 @media(max-width: 40em){
   main {
     background-image: url(assets/city-skyline-greyscale.svg);
@@ -37,7 +37,7 @@ button {
   font-family: 'Roboto Mono', monospace;
 }
 
-/* extra large screens */
+
 @media(min-width: 64em) {
   .questions {
    width: 60%;
@@ -49,7 +49,7 @@ button {
   }
 }
 
-/* large screens */
+
 @media(min-width: 52em) and (max-width:64em) {
   .questions {
     width: 70%;
@@ -62,7 +62,7 @@ button {
   }
 }
 
-/* medium screens */
+
 @media(min-width: 40em) and (max-width: 52em) {
   .questions {
     width: 80%;
@@ -75,7 +75,7 @@ button {
   }
 }
 
-/* small screens */
+
 @media(min-width: 30em) and (max-width: 40em){
   .questions {
     width: 90%;
@@ -88,7 +88,7 @@ button {
   }
 }
 
-/* extra small screens */
+
 @media(max-width: 30em){
   .questions {
     width: 90%;

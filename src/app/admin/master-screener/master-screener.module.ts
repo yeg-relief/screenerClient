@@ -12,6 +12,7 @@ import { MdProgressCircleModule } from '@angular/material';
 import { MdCheckboxModule } from '@angular/material';
 import { MdCardModule } from '@angular/material';
 import { MdButtonModule } from '@angular/material';
+import { EditGuardService } from './edit/edit-guard.service';
 
 @NgModule({
   imports: [
@@ -31,6 +32,8 @@ import { MdButtonModule } from '@angular/material';
     QuestionComponent,
     EditComponent
   ],
-  providers: []
+  providers: [
+    EditGuardService
+  ]
 })
 export class MasterScreenerModule { }
