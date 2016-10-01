@@ -35,9 +35,6 @@ export const initialState: State = {
     meta: {
       questions: {
         totalCount: undefined,
-        collapsableCount: undefined,
-        staticCount: undefined,
-        dynamicCount: undefined
       },
       screener: {
         version: undefined,
@@ -112,7 +109,8 @@ export function getVersions(state$: Observable<State>) {
 }
 
 export function getQuestionCount(state$: Observable<State>) {
-  return state$.select(s => s.masterScreener.meta.questions.totalCount);
+  return state$.select(s => s.masterScreener.meta.questions.totalCount)
+    .do(s => console.log(s));
 }
 
 export function getCreatedDate(state$: Observable<State>) {

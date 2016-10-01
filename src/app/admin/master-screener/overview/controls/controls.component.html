@@ -54,18 +54,12 @@
     </md-checkbox>
     <div class="col-2"></div>
   </div>
-  
-  <div class="col-4 flex flex-justify" *ngIf="error.length === 0">
-    <!-- version number shouldn't be hardcoded only for prototype -->
-    <div class="col-1"></div>
-    <button md-raised-button color="primary" class="col-4"
-      [attr.disabled]="loading ? true : null"
-      (click)="editSelectedVersion()"> edit </button>
-    <div class="col-1"></div>
-    <button md-raised-button color="primary" class="col-4"
-      [attr.disabled]="loading ? true : null" 
-      routerLink="/admin/master-screener/preview/version/..invalid test.."> preview </button>
-    <div class="col-1"></div>
+  <div class="col-1"></div>
+  <div class="col-1" *ngIf="error.length === 0">
+    <button md-mini-fab 
+      (click)="editSelectedVersion()"
+      color="primary">
+      <i class="material-icons">create</i>
+    </button>
   </div>
-  
 </div>

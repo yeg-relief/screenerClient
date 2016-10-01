@@ -8,7 +8,6 @@ import { AuthService } from './core/services/auth.service';
 import { LoginComponent } from './core/login/login.component';
 import { SidenavComponent } from './core/sidenav/sidenav.component';
 import { SidenavSectionComponent }from './core/sidenav/sidenav-section/sidenav-section.component';
-import { BreadCrumbComponent } from './core/bread-crumb/bread-crumb.component';
 import { StoreModule } from '@ngrx/store';
 import { reducer } from './reducer';
 import { MasterScreenerEffects } from './master-screener/master-screener.effects';
@@ -38,7 +37,6 @@ import { DataService } from './data.service';
     LoginComponent,
     SidenavSectionComponent,
     SidenavComponent,
-    BreadCrumbComponent
   ],
   providers: [AuthGuardService, AuthService, DataService]
 })

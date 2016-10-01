@@ -7,12 +7,12 @@ import * as fromRoot from '../../../reducer';
 import { MasterScreenerActionsTypes } from '../../master-screener.actions';
 
 @Component({
-  selector: 'app-controls',
+  selector: 'app-overview-controls',
   templateUrl: './controls.component.html',
   styleUrls: ['./controls.component.css'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class ControlsComponent implements OnInit, OnDestroy {
+export class OverviewControlsComponent implements OnInit, OnDestroy {
   @Input() keyToggle: Subject<boolean>;
   @Input() questionToggle: Subject<boolean>;
   @Input() versions: number[];

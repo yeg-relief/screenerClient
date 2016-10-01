@@ -1,4 +1,15 @@
-<p>
-  edit works!
-</p>
-{{workingScreener$ | async | json }}
+<app-bread-crumb class="col col-12">
+  <app-edit-controls class="col-12"></app-edit-controls>
+</app-bread-crumb>
+<md-card class="col col-12 flex flex-column overview-wrapper">
+  <app-screener-stats
+    [questionCount]="(workingScreener$ | async)?.questions?.length"
+    [creationDate]="(workingScreener$ | async)?.meta.screener.created"
+    [versionNumber]="(workingScreener$ | async)?.meta.screener.version"
+    [error]="''">
+  </app-screener-stats>
+  <div class="p2"></div>
+  <app-edit-questions [questions]="(workingScreener$ | async)?.questions">
+  </app-edit-questions>
+  <div class="p2"></div>
+</md-card>

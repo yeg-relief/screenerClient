@@ -54,10 +54,7 @@ const mockVersionEight: MasterScreener = {
       created: '14-10-2016'
     },
     questions: {
-      totalCount: 8,
-      staticCount: 5,
-      collapsableCount: 3,
-      dynamicCount: 1
+      totalCount: 5,
     }
   },
   questions: [

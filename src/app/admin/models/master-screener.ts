@@ -2,9 +2,6 @@ import { Question } from '../../shared/models';
 
 export interface QuestionMeta {
   totalCount: number;
-  collapsableCount: number;
-  staticCount: number;
-  dynamicCount: number;
 }
 
 export interface MasterScreener {

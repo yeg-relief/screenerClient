@@ -1,18 +1,25 @@
+<app-bread-crumb class="col col-12">
+  <app-overview-controls 
+    [keyToggle]="keyToggle" 
+    [questionToggle]="questionToggle" 
+    [versions]="(versions$ | async)"
+    [loading]="(loading$ | async)"
+    [error]="(error$ | async)"
+    class="col col-12">
+  </app-overview-controls>
+</app-bread-crumb>
 <md-card class="col col-12 flex flex-column overview-wrapper">
   <div class="p1">
   </div>
   <div *ngIf="!(loading$ | async)">
-    <app-controls 
-        [keyToggle]="keyToggle" 
-        [questionToggle]="questionToggle" 
-        [versions]="(versions$ | async)"
-        [loading]="(loading$ | async)"
+    <app-screener-stats
+        [questionCount]="(questionCount$ | async)"
+        [creationDate]="(creationDate$ | async)"
+        [versionNumber]="(workingVersion$ | async)"
         [error]="(error$ | async)">
-    </app-controls>
+    </app-screener-stats>
+    
     <div class="p1"></div>
-    <div>
-      <app-screener-stats></app-screener-stats>
-    </div>
     <div class="p1"></div>
     <div *ngIf="!(loading$ | async)">
       <app-key 
@@ -23,11 +30,11 @@
     </div>
     <div class="p2"></div>
     <div *ngIf="!(loading$ | async)">
-      <app-question 
+      <app-overview-question 
           [toggled]="questionToggle"
           [questions]="(questions$ | async)"
           [error]="(error$ | async)">
-      </app-question>
+      </app-overview-question>
     </div>
     <div *ngIf="(error$ | async).length !== 0" class="clearfix border center error rounded">
       {{error$ | async}} <br>

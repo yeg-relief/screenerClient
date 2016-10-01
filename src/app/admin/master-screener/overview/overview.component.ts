@@ -20,6 +20,8 @@ export class OverviewComponent implements OnInit {
   loading$: Observable<boolean>;
   error$: Observable<string>;
   keys$: Observable<Key[]>;
+  creationDate$: Observable<string>;
+  questionCount$: Observable<number>;
   // flattened array of all questions in screener
   questions$: Observable<Question[]>;
   constructor(private store: Store<fromRoot.State>) { }
@@ -30,12 +32,13 @@ export class OverviewComponent implements OnInit {
     this.keyToggle.next(true);
     this.questionToggle.next(true);
     this.versions$ = this.store.let(fromRoot.getVersions);
-
+    this.workingVersion$ = this.store.let(fromRoot.getWorkingNumber);
     this.loading$ = this.store.let(fromRoot.getLoading);
     this.error$ = this.store.let(fromRoot.getErrors);
     this.keys$ = this.store.let(fromRoot.getKeys);
     this.questions$ = this.store.let(fromRoot.flattenedQuestions);
-
+    this.questionCount$ = this.store.let(fromRoot.getWorkingQuestionCount);
+    this.creationDate$ = this.store.let(fromRoot.getWorkingCreationDate);
     // move these calls into an activate route guard 
     this.store.dispatch({
       type: MasterScreenerActionsTypes.LOAD_MASTER_SCREENER_VERSION,

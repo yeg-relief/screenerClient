@@ -1,8 +1,4 @@
-import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
-import { Store } from '@ngrx/store';
-import * as fromRoot from '../../../reducer';
-import { Observable } from 'rxjs/Observable';
-import 'rxjs/add/operator/let';
+import { Component, OnInit, Input, ChangeDetectionStrategy } from '@angular/core';
 
 @Component({
   selector: 'app-screener-stats',
@@ -11,17 +7,13 @@ import 'rxjs/add/operator/let';
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ScreenerStatsComponent implements OnInit {
-  questionCount$: Observable<number>;
-  creationDate$: Observable<string>;
-  versionNumber$: Observable<number>;
-  error$: Observable<string>;
-  constructor(private store: Store<fromRoot.State>) { }
+  @Input() questionCount: number;
+  @Input() creationDate: string;
+  @Input() versionNumber: number;
+  @Input() error: string;
+  constructor() { }
 
   ngOnInit() {
-    this.questionCount$ = this.store.let(fromRoot.getWorkingQuestionCount);
-    this.creationDate$ = this.store.let(fromRoot.getWorkingCreationDate);
-    this.versionNumber$ = this.store.let(fromRoot.getWorkingNumber);
-    this.error$ = this.store.let(fromRoot.getErrors);
   }
 
 }
