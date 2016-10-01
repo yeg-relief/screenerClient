@@ -1,7 +1,5 @@
 import '@ngrx/core/add/operator/select';
 import 'rxjs/add/operator/switchMap';
-import 'rxjs/add/operator/scan';
-import 'rxjs/add/observable/from';
 import { Observable } from 'rxjs/Observable';
 import { MasterScreenerActions, MasterScreenerActionsTypes } from './master-screener.actions';
 import { MasterScreener } from '../models/master-screener';
@@ -19,6 +17,7 @@ export interface State {
   versions: Array<number>;
   masterScreener: MasterScreener;
   error: string;
+  workingVersion: number;
 }
 
 const ERROR_TYPES = {
@@ -30,6 +29,7 @@ export const initialState: State = {
   loading: false,
   error: '',
   versions: [],
+  workingVersion: undefined,
   masterScreener: {
     questions: [],
     meta: {
@@ -54,7 +54,8 @@ export function reducer(state = initialState, action: MasterScreenerActions): St
     // load a version from the api server
     case MasterScreenerActionsTypes.LOAD_MASTER_SCREENER_VERSION: {
       return Object.assign({}, state, {
-        loading: true
+        loading: true,
+        error: ''
       });
     }
 
@@ -63,15 +64,17 @@ export function reducer(state = initialState, action: MasterScreenerActions): St
         const error = ERROR_TYPES.failedVersionLoad();
         return Object.assign({}, state, {
           loading: false,
-          error: error
+          error: error,
+          workingVersion: 0
         });
       }
       const masterScreener: MasterScreener = <MasterScreener>action.payload;
 
       return Object.assign({}, state, {
         loading: false,
-        errors: '',
-        masterScreener: masterScreener
+        error: '',
+        masterScreener: masterScreener,
+        workingVersion: masterScreener.meta.screener.version
       });
     }
 
@@ -101,7 +104,7 @@ export function getErrors(state$: Observable<State>) {
 }
 
 export function getWorkingVersionNumber(state$: Observable<State>) {
-  return state$.select(s => s.masterScreener.meta.screener.version);
+  return state$.select(s => s.workingVersion);
 }
 
 export function getVersions(state$: Observable<State>) {
@@ -134,7 +137,6 @@ export function getKeys(state$: Observable<State>) {
 
 export function getFlattenedQuestions(state$: Observable<State>) {
   return state$.select(s => s.masterScreener.questions)
-    .do(() => console.log('called'))
     .switchMap<Question[]>( (questions: Question[]) => {
       const q: Question[] = questions.reduce( (acc: Question[], curr: Question) => {
         acc.push(curr);
@@ -145,6 +147,5 @@ export function getFlattenedQuestions(state$: Observable<State>) {
         return acc;
       }, []);
       return Observable.of(q);
-    })
-    .do(thing => console.log(thing));
+    });
 }

@@ -24,7 +24,9 @@ export class MasterScreenerEffects {
   @Effect() loadVersion$ = this.actions$
     .ofType(MasterScreenerActionsTypes.LOAD_MASTER_SCREENER_VERSION)
     .map<number>(action => action.payload)
+    .do(version => console.log(`requesting version number: ${version}`))
     .switchMap(version => this.data.loadScreener(version))
+    .do(resp => console.log(`data service response: ${resp}`))
     .switchMap( (masterScreener: MasterScreener | boolean) => {
       if (typeof masterScreener === 'boolean') {
         return Observable.of(false);

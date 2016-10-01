@@ -9,7 +9,6 @@ import { Key } from '../../models/key';
 import { Question } from '../../../shared/models';
 
 @Component({
-  selector: 'app-overview',
   templateUrl: './overview.component.html',
   styleUrls: ['./overview.component.css'],
 })
@@ -31,15 +30,16 @@ export class OverviewComponent implements OnInit {
     this.keyToggle.next(true);
     this.questionToggle.next(true);
     this.versions$ = this.store.let(fromRoot.getVersions);
-    this.workingVersion$ = this.store.let(fromRoot.getWorkingNumber);
+
     this.loading$ = this.store.let(fromRoot.getLoading);
     this.error$ = this.store.let(fromRoot.getErrors);
     this.keys$ = this.store.let(fromRoot.getKeys);
     this.questions$ = this.store.let(fromRoot.flattenedQuestions);
 
+    // move these calls into an activate route guard 
     this.store.dispatch({
       type: MasterScreenerActionsTypes.LOAD_MASTER_SCREENER_VERSION,
-      // shouldn't be hardcoded
+      // shouldn't be hardcoded just doing it for now
       payload: 3
     });
     this.store.dispatch({

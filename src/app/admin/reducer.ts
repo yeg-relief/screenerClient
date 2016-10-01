@@ -5,13 +5,16 @@ import { Observable } from 'rxjs/Observable';
 import { combineReducers } from '@ngrx/store';
 import { compose } from '@ngrx/core/compose';
 import * as fromMasterScreener from './master-screener/master-screener.reducer';
+import * as fromEditScreener from './master-screener/edit/edit.reducer';
 
 export interface State {
   masterScreener: fromMasterScreener.State;
+  editScreener: fromEditScreener.State;
 }
 
 const reducers = {
-  masterScreener: fromMasterScreener.reducer
+  masterScreener: fromMasterScreener.reducer,
+  editScreener: fromEditScreener.reducer
 };
 
 const productionReducer = combineReducers(reducers);
@@ -22,6 +25,10 @@ export function reducer(state: any, action: any) {
 
 export function getMasterScreenerState(state$: Observable<State>) {
   return state$.select(state => state.masterScreener);
+}
+
+export function getEditScreenerState(state$: Observable<State>) {
+  return state$.select(state => state.editScreener);
 }
 
 export const getVersions = share(compose(fromMasterScreener.getVersions, getMasterScreenerState));
@@ -45,6 +52,8 @@ export const getKeys = share(compose(fromMasterScreener.getKeys, getMasterScreen
 export const flattenedQuestions =
   share(compose(fromMasterScreener.getFlattenedQuestions, getMasterScreenerState));
 
+export const getPresentEditScreener =
+  share(compose(fromEditScreener.getPresentScreener, getEditScreenerState));
 
 
 /* https://github.com/ngrx/example-app/blob/final/src/util.ts */

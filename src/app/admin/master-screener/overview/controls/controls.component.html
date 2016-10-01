@@ -1,11 +1,17 @@
 <div class="flex flex-center flex-justify clearfix">
   <div class="col-4 flex flex-justify">
     <div class="col-1"></div>
-    <select class="rounded" [attr.disabled]="loading ? true : null">
-      <option disabled
-        [attr.selected]="isSelected(version) ? true : null"
-        [attr.disabled]="loading ? true : null"
-        *ngFor="let version of versions">version {{version}}</option>
+    <select class="rounded" 
+      *ngIf="!checkForUndefined()"
+      [attr.disabled]="loading ? true : null" 
+      (change)="selectChange($event.target.value)">
+        <option disabled
+          [attr.disabled]="loading ? true : null"
+          *ngFor="let version of versions"
+          [attr.selected]="isSelected(version) ? true : null"
+          [value]="version">
+            version {{version}}
+        </option>
     </select>
     <div class="col-1"></div>
   </div>
@@ -54,11 +60,11 @@
     <div class="col-1"></div>
     <button md-raised-button color="primary" class="col-4"
       [attr.disabled]="loading ? true : null"
-      routerLink="/admin/master-screener/edit/version/8"> edit </button>
+      (click)="editSelectedVersion()"> edit </button>
     <div class="col-1"></div>
     <button md-raised-button color="primary" class="col-4"
       [attr.disabled]="loading ? true : null" 
-      routerLink="/admin/master-screener/preview/version/8"> preview </button>
+      routerLink="/admin/master-screener/preview/version/..invalid test.."> preview </button>
     <div class="col-1"></div>
   </div>
   

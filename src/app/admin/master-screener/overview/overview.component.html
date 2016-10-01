@@ -1,36 +1,38 @@
 <md-card class="col col-12 flex flex-column overview-wrapper">
   <div class="p1">
   </div>
-  <app-controls 
-      [keyToggle]="keyToggle" 
-      [questionToggle]="questionToggle" 
-      [versions]="(versions$ | async)"
-      [workingVersion]="(workingVersion$ | async)"
-      [loading]="(loading$ | async)"
-      [error]="(error$ | async)">
-  </app-controls>
-  <div class="p1"></div>
-  <div>
-    <app-screener-stats></app-screener-stats>
-  </div>
-  <div class="p1"></div>
   <div *ngIf="!(loading$ | async)">
-    <app-key 
-        [toggled]="keyToggle"
-        [keys]="(keys$ | async)"
+    <app-controls 
+        [keyToggle]="keyToggle" 
+        [questionToggle]="questionToggle" 
+        [versions]="(versions$ | async)"
+        [loading]="(loading$ | async)"
         [error]="(error$ | async)">
-    </app-key>
-  </div>
-  <div class="p2"></div>
-  <div *ngIf="!(loading$ | async)">
-    <app-question 
-        [toggled]="questionToggle"
-        [questions]="(questions$ | async)"
-        [error]="(error$ | async)">
-    </app-question>
-  </div>
-  <div *ngIf="(error$ | async).length !== 0" class="clearfix border center error rounded">
-    {{error$ | async}}
+    </app-controls>
+    <div class="p1"></div>
+    <div>
+      <app-screener-stats></app-screener-stats>
+    </div>
+    <div class="p1"></div>
+    <div *ngIf="!(loading$ | async)">
+      <app-key 
+          [toggled]="keyToggle"
+          [keys]="(keys$ | async)"
+          [error]="(error$ | async)">
+      </app-key>
+    </div>
+    <div class="p2"></div>
+    <div *ngIf="!(loading$ | async)">
+      <app-question 
+          [toggled]="questionToggle"
+          [questions]="(questions$ | async)"
+          [error]="(error$ | async)">
+      </app-question>
+    </div>
+    <div *ngIf="(error$ | async).length !== 0" class="clearfix border center error rounded">
+      {{error$ | async}} <br>
+      <p> this is expected... merely to show what an error looks like, select version 3 above.
+    </div>
   </div>
   
   <div class="clearfix flex">
