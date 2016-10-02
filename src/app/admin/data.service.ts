@@ -27,13 +27,14 @@ export class DataService {
       .delay(1000);
   }
 
-  loadScreener(version: number): Observable<MasterScreener> | Observable<boolean> {
+  loadScreener(version: number): Observable<MasterScreener> {
     console.log(`screener version request service pov: ${version}`);
     return Observable.of(this.screenerCache.has(version.toString()))
       .switchMap<boolean | MasterScreener>((res: boolean) => {
         if (res) {
           console.log(`loading master-screener version ${version} from cache.`);
-          return Observable.of(this.screenerCache.get(version.toString()));
+          const versionA = this.screenerCache.get(version.toString());
+          return Observable.of(versionA);
         }
         console.log(`requesting master-screener version ${version} from network`);
         return this.requestScreener(version);

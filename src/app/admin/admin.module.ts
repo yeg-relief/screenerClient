@@ -18,6 +18,8 @@ import { MdButtonModule } from '@angular/material';
 import { MdInputModule } from '@angular/material';
 import { MdProgressBarModule } from '@angular/material';
 import { DataService } from './data.service';
+import { StoreDevtoolsModule } from '@ngrx/store-devtools';
+import { StoreLogMonitorModule, useLogMonitor } from '@ngrx/store-log-monitor';
 
 @NgModule({
   imports: [

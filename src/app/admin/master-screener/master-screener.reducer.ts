@@ -5,7 +5,7 @@ import { MasterScreenerActions, MasterScreenerActionsTypes } from './master-scre
 import { MasterScreener } from '../models/master-screener';
 import { Key } from '../models/key';
 import { Question } from '../../shared/models';
-
+import { cloneDeep } from 'lodash';
 // for debugging remove after
 import 'rxjs/add/operator/do';
 
@@ -50,29 +50,28 @@ export function reducer(state = initialState, action: MasterScreenerActions): St
   switch (action.type) {
     // load a version from the api server
     case MasterScreenerActionsTypes.LOAD_MASTER_SCREENER_VERSION: {
-      return Object.assign({}, state, {
-        loading: true,
-        error: ''
-      });
+      const newState = cloneDeep(state);
+      newState.loading = true;
+      newState.error = '';
+      return newState;
     }
 
     case MasterScreenerActionsTypes.CHANGE_MASTER_SCREENER_VERSION: {
+      /*
       if (typeof action.payload === 'boolean') {
-        const error = ERROR_TYPES.failedVersionLoad();
-        return Object.assign({}, state, {
-          loading: false,
-          error: error,
-          workingVersion: 0
-        });
-      }
-      const masterScreener: MasterScreener = <MasterScreener>action.payload;
-
-      return Object.assign({}, state, {
-        loading: false,
-        error: '',
-        masterScreener: masterScreener,
-        workingVersion: masterScreener.meta.screener.version
-      });
+        const newState = cloneDeep(state);
+        newState.error = ERROR_TYPES.failedVersionLoad();
+        newState.loading = false;
+        newState.workingVersion = 0;
+        return newState;
+      }*/
+      const masterScreener = <MasterScreener>cloneDeep(action.payload);
+      const newState = cloneDeep(state);
+      newState.masterScreener = masterScreener;
+      newState.loading = false;
+      newState.error = '';
+      newState.workingVersion = masterScreener.meta.screener.version;
+      return newState;
     }
 
     case MasterScreenerActionsTypes.LOAD_VERSIONS_INFO: {
@@ -81,9 +80,9 @@ export function reducer(state = initialState, action: MasterScreenerActions): St
 
     case MasterScreenerActionsTypes.CHANGE_VERSIONS_INFO: {
       const versions: number[] = [].concat(action.payload);
-      return Object.assign({}, state, {
-        versions: versions
-      });
+      const newState = cloneDeep(state);
+      newState.versions = versions;
+      return newState;
     }
 
     default: {

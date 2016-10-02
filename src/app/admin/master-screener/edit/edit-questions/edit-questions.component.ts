@@ -30,5 +30,4 @@ export class EditQuestionsComponent implements OnInit {
   removeControls(questions) {
     this.questionControlService.removeQuestions(questions, this.form);
   }
-
 }

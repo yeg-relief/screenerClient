@@ -2,26 +2,20 @@ import { Injectable } from '@angular/core';
 import { Actions, Effect } from '@ngrx/effects';
 import { MasterScreener } from '../../models/master-screener';
 import { DataService } from '../../data.service';
-import { EditScreenerActionsTypes } from './edit.actions';
+import  * as editScreener from './edit.actions';
 import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/operator/switchMap';
 import 'rxjs/add/observable/of';
+import 'rxjs/add/operator/let';
 
 @Injectable()
 export class EditScreenerEffects {
 
   @Effect() initEdit$ = this.actions$
-    .ofType(EditScreenerActionsTypes.INIT_EDIT)
+    .ofType(editScreener.EditScreenerActionsTypes.INIT_EDIT)
     .map<number>(action => action.payload)
-    .switchMap<MasterScreener>( (version: number) => {
-      return <Observable<MasterScreener>>this.data.loadScreener(version);
-    })
-    .switchMap((screener: MasterScreener) => {
-      return Observable.of({
-        type: EditScreenerActionsTypes.LOAD_SCREENER,
-        payload: screener
-      });
-    });
+    .switchMap( (version: number) => this.data.loadScreener(version))
+    .map((screener: MasterScreener) => new editScreener.LoadScreener(screener));
 
 
   constructor(

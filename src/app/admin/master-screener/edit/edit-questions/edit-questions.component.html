@@ -2,16 +2,23 @@
   <div class="questions">
     <div class="question-preview">
       <div class="col-12 flex flex-center mt1">
-        <app-question [question]="question" 
+        <div class="col-2"></div>
+        <app-question 
+          [question]="question" 
           [index]="i + 1" 
           [length]="questions.length" 
-          [conditional]="false" [form]="form"
-          (onExpand)="addControls($event)" (onHide)="removeControls($event)"
+          [conditional]="false" 
+          [form]="form" 
+          (onExpand)="addControls($event)"
+          (onHide)="removeControls($event)" 
           class="col-8 ml1">
         </app-question>
         <div class="col-1"></div>
-        <app-edit-question-controls class="col-1 mt2"></app-edit-question-controls>
+        <app-edit-question-controls 
+          [question]="question" 
+          class="col-1 mt2">
+        </app-edit-question-controls>
       </div>
     </div>
   </div>
- </div>
+</div>

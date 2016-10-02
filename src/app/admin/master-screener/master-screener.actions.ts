@@ -12,7 +12,7 @@ export const MasterScreenerActionsTypes = {
 export class ChangeScreenerVersion implements Action {
   type = MasterScreenerActionsTypes.CHANGE_MASTER_SCREENER_VERSION;
 
-  constructor(public payload: MasterScreener | boolean) { }
+  constructor(public payload: MasterScreener) { }
 }
 /***********************************************************************************/
 
@@ -34,7 +34,7 @@ export class LoadScreenerVersionsInfo implements Action {
 export class ChangeScreenerVersionInfo implements Action {
   type = MasterScreenerActionsTypes.CHANGE_VERSIONS_INFO;
 
-  constructor(public payload: number[] | boolean) {}
+  constructor(public payload: number[]) {}
 }
 
 export type MasterScreenerActions =

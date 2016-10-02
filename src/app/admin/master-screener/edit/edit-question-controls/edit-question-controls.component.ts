@@ -1,4 +1,8 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
+import { Question } from '../../../../shared/models';
+import { Store } from '@ngrx/store';
+import * as fromRoot from '../../../reducer';
+import { EditScreenerActionsTypes } from '../edit.actions';
 
 @Component({
   selector: 'app-edit-question-controls',
@@ -6,10 +10,16 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./edit-question-controls.component.css']
 })
 export class EditQuestionControlsComponent implements OnInit {
-
-  constructor() { }
+  @Input() question: Question;
+  constructor(private store: Store<fromRoot.State>) { }
 
   ngOnInit() {
   }
 
+  onDelete() {
+    this.store.dispatch({
+      type: EditScreenerActionsTypes.REMOVE_QUESTION,
+      payload: this.question
+    });
+  }
 }

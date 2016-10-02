@@ -6,7 +6,7 @@ import {
 } from '@angular/router';
 import { Store } from '@ngrx/store';
 import * as fromRoot from '../../reducer';
-import { EditScreenerActionsTypes } from './edit.actions';
+import * as editScreener  from './edit.actions';
 
 @Injectable()
 export class EditGuardService implements CanActivate {
@@ -21,10 +21,18 @@ export class EditGuardService implements CanActivate {
   }
 
   loadScreener(version: number): boolean {
-    this.store.dispatch({
-      type: EditScreenerActionsTypes.INIT_EDIT,
-      payload: version
-    });
+    this.store.dispatch(new editScreener.InitEdit(version));
+    let loaded = false;
+    const sub = this.store.select('editScreener').map( (store: any) => store.present)
+      .subscribe(
+        (val) => {
+          if (typeof val !== 'undefined'){
+            loaded = true;
+          }
+        }
+      );
+    while (!loaded) {}
+    sub.unsubscribe();
     return true;
   }
 }

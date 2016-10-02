@@ -41,11 +41,6 @@ export class OverviewComponent implements OnInit {
     this.creationDate$ = this.store.let(fromRoot.getWorkingCreationDate);
     // move these calls into an activate route guard 
     this.store.dispatch({
-      type: MasterScreenerActionsTypes.LOAD_MASTER_SCREENER_VERSION,
-      // shouldn't be hardcoded just doing it for now
-      payload: 3
-    });
-    this.store.dispatch({
       type: MasterScreenerActionsTypes.LOAD_VERSIONS_INFO
     });
   }

@@ -20,7 +20,7 @@ import { UserFacingProgramModule } from '../../shared/modules/user-facing-progra
 import { QuestionModule } from '../../shared/modules/question.module';
 import { EditQuestionControlsComponent } from './edit/edit-question-controls/edit-question-controls.component';
 import { BreadCrumbComponent } from '../core/bread-crumb/bread-crumb.component';
-
+import { MasterScreenerGuardService } from './master-screener.guard.service';
 @NgModule({
   imports: [
     CommonModule,
@@ -47,7 +47,8 @@ import { BreadCrumbComponent } from '../core/bread-crumb/bread-crumb.component';
     BreadCrumbComponent
   ],
   providers: [
-    EditGuardService
+    EditGuardService,
+    MasterScreenerGuardService
   ]
 })
 export class MasterScreenerModule { }

@@ -11,6 +11,8 @@ export const EditScreenerActionsTypes = {
   EDIT_QUESTION: '[EDIT_SCREENER] EDIT_QUESTION',
   SWAP_QUESTIONS: '[EDIT_SCREENER] SWAP_QUESTIONS',
   CLEAR_QUESTIONS: '[EDIT_SCREENER] CLEAR_QUESTIONS',
+  UNDO: '[EDIT_SCREENER] UNDO_EDIT',
+  REDO: '[EDIT_SCREENER] REDO_EDIT'
 };
 
 export class InitEdit implements Action {
@@ -62,6 +64,16 @@ export class SwapQuestions implements Action {
   constructor(public payload: Question[]) { }
 }
 
+export class UndoEdit implements Action {
+  type = EditScreenerActionsTypes.UNDO;
+  constructor(public payload: any) {}
+}
+
+export class RedoEdit implements Action {
+  type = EditScreenerActionsTypes.REDO;
+  constructor(public payload: any) {}
+}
+
 export type EditScreenerActions =
     LoadScreener
   | SaveScreener
@@ -71,3 +83,5 @@ export type EditScreenerActions =
   | SwapQuestions
   | ClearQuestions
   | InitEdit
+  | UndoEdit
+  | RedoEdit
