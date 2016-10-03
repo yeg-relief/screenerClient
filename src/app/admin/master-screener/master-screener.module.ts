@@ -12,6 +12,8 @@ import { MdProgressCircleModule } from '@angular/material';
 import { MdCheckboxModule } from '@angular/material';
 import { MdCardModule } from '@angular/material';
 import { MdButtonModule } from '@angular/material';
+import { MdRadioModule } from '@angular/material';
+import { MdInputModule } from '@angular/material';
 import { EditGuardService } from './edit/edit-guard.service';
 import { EditControlsComponent } from './edit/controls/controls.component';
 import { EditQuestionsComponent } from './edit/edit-questions/edit-questions.component';
@@ -25,6 +27,9 @@ import { EditQuestionComponent } from './edit-question/edit-question.component';
 import { EditQuestionGuardService } from './edit-question/edit-question.guard.service';
 import { EditQuestionToolbarControlsComponent }
   from './edit-question/edit-question-toolbar-controls/edit-question-toolbar-controls.component';
+import { EditQuestionTypeComponent } from './edit-question/edit-question-type/edit-question-type.component';
+import { EditQuestionLabelComponent } from './edit-question/edit-question-label/edit-question-label.component';
+import { EditQuestionKeyComponent } from './edit-question/edit-question-key/edit-question-key.component';
 
 @NgModule({
   imports: [
@@ -34,6 +39,8 @@ import { EditQuestionToolbarControlsComponent }
     MdCheckboxModule.forRoot(),
     MdCardModule.forRoot(),
     MdButtonModule.forRoot(),
+    MdRadioModule.forRoot(),
+    MdInputModule.forRoot(),
     ReactiveFormsModule,
     UserFacingProgramModule,
     QuestionModule
@@ -51,7 +58,10 @@ import { EditQuestionToolbarControlsComponent }
     EditQuestionControlsComponent,
     BreadCrumbComponent,
     EditQuestionComponent,
-    EditQuestionToolbarControlsComponent
+    EditQuestionToolbarControlsComponent,
+    EditQuestionTypeComponent,
+    EditQuestionLabelComponent,
+    EditQuestionKeyComponent
   ],
   providers: [
     EditGuardService,

@@ -1,19 +1,19 @@
 import { Injectable } from '@angular/core';
 import { Actions, Effect } from '@ngrx/effects';
-import { MasterScreener } from '../../models/master-screener';
+import { Key } from '../../models/key';
 import { DataService } from '../../data.service';
-import * as editScreener from './edit.actions';
+import  * as key from './key.actions';
 import 'rxjs/add/operator/switchMap';
 import 'rxjs/add/operator/map';
 
 @Injectable()
-export class EditScreenerEffects {
+export class KeyEffects {
 
   @Effect() initEdit$ = this.actions$
-    .ofType(editScreener.EditScreenerActionsTypes.INIT_EDIT)
-    .map<number>(action => action.payload)
-    .switchMap( (version: number) => this.data.loadScreener(version))
-    .map((screener: MasterScreener) => new editScreener.LoadScreener(screener));
+    .ofType(key.KeyActionsTypes.LOAD_KEYS)
+    .switchMap( () => this.data.loadKeys() )
+    .map((keys: Key[]) => new key.LoadKeysSuccess(keys));
+
 
   constructor(
     // DataService is provided via the admin module

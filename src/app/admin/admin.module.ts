@@ -19,6 +19,7 @@ import { MdInputModule } from '@angular/material';
 import { MdProgressBarModule } from '@angular/material';
 import { DataService } from './data.service';
 import { EditQuestionEffects } from './master-screener/edit-question/edit-question.effects';
+import { KeyEffects } from './master-screener/keys/key.effects';
 import { StoreDevtoolsModule } from '@ngrx/store-devtools';
 import { StoreLogMonitorModule, useLogMonitor } from '@ngrx/store-log-monitor';
 
@@ -34,7 +35,8 @@ import { StoreLogMonitorModule, useLogMonitor } from '@ngrx/store-log-monitor';
     StoreModule.provideStore(reducer),
     EffectsModule.run(MasterScreenerEffects),
     EffectsModule.run(EditScreenerEffects),
-    EffectsModule.run(EditQuestionEffects)
+    EffectsModule.run(EditQuestionEffects),
+    EffectsModule.run(KeyEffects)
   ],
   declarations: [
     AdminComponent,

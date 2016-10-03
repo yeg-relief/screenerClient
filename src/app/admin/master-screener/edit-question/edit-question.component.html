@@ -1,6 +1,8 @@
+{{ editQuestion$ | async | json }}
 <app-bread-crumb class="col col-12">
   <app-edit-question-toolbar-controls class="col col-12"></app-edit-question-toolbar-controls>
 </app-bread-crumb>
 <md-card class="col col-12 flex flex-column overview-wrapper">
-  {{ editQuestion$ | async | json }}
+  <app-edit-question-type></app-edit-question-type>
+  <app-edit-question-label></app-edit-question-label>
 </md-card>

@@ -8,20 +8,25 @@ import { compose } from '@ngrx/core/compose';
 import * as fromMasterScreener from './master-screener/master-screener.reducer';
 import * as fromEditScreener from './master-screener/edit/edit.reducer';
 import * as fromEditQuestion from './master-screener/edit-question/edit-question.reducer';
+import * as fromKeys from './master-screener/keys/key.reducer';
 import { Question } from '../shared/models';
+import { Key } from './models/key';
 import 'rxjs/add/operator/mergeMap';
 import 'rxjs/add/operator/do';
+import { cloneDeep } from 'lodash';
 
 export interface State {
   masterScreener: fromMasterScreener.State;
   editScreener: fromEditScreener.State;
   editQuestion: fromEditQuestion.State;
+  keys: fromKeys.State;
 }
 
 const reducers = {
   masterScreener: fromMasterScreener.reducer,
   editScreener: fromEditScreener.reducer,
-  editQuestion: fromEditQuestion.reducer
+  editQuestion: fromEditQuestion.reducer,
+  keys: fromKeys.reducer
 };
 
 const productionReducer = combineReducers(reducers);
@@ -40,6 +45,10 @@ export function getEditScreenerState(state$: Observable<State>) {
 
 export function getEditQuestionState(state$: Observable<State>) {
   return state$.select(state => state.editQuestion);
+}
+
+export function getKeysState(state$: Observable<State>) {
+  return state$.select(state => state.keys);
 }
 
 /* for master-screener overview */
@@ -79,6 +88,10 @@ export const getPresentQuestionEdit =
 export const getOriginalKeyQuestionEdit =
   share(compose(fromEditQuestion.getEditQuestionKey, getEditQuestionState));
 
+/* for keys */
+export const getPresentKeys =
+  share(compose(fromKeys.getPresentKeys, getKeysState));
+
 /*
 export const isSelectedBookInCollection = function (state$: Observable<State>) {
   return combineLatest<string[], Book>(
@@ -107,11 +120,37 @@ export const findEditQuestion = function (state$: Observable<State>) {
         controlType: undefined
       };
     }
-    return q;
+    return cloneDeep(q);
   });
 };
 
-
+export const findUnusedKeys = function (state$: Observable<State>) {
+  return Observable.combineLatest<Question[], Key[]>(
+    state$.let(getPresentEditQuestions),
+    state$.let(getPresentKeys)
+  )
+  .map<Key[]>(([questions, keys]) => {
+    console.log(questions);
+    console.log(keys);
+    const usedKeyNames: string[] = [];
+    questions.forEach( question => {
+      usedKeyNames.push(question.key);
+      if (question.expandable) {
+        question.conditonalQuestions.forEach(conditionalQuestion => {
+          usedKeyNames.push(conditionalQuestion.key);
+        });
+      }
+    });
+    const unusedKeys: Key[] = keys.reduce( (acc: Key[], present: Key) => {
+      const presentIndex = usedKeyNames.findIndex(keyName => keyName === present.name);
+      if (presentIndex < 0) {
+        acc = acc.concat(present);
+      }
+      return acc;
+    }, []);
+    return unusedKeys;
+  });
+};
 
 
 /* https://github.com/ngrx/example-app/blob/final/src/util.ts */

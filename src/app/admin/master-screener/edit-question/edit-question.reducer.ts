@@ -1,14 +1,17 @@
 import '@ngrx/core/add/operator/select';
 import { Observable } from 'rxjs/Observable';
 import { EditQuestionActions, EditQuestionActionTypes } from './edit-question.actions';
-import { MasterScreener } from '../../models/master-screener';
 import { Question } from '../../../shared/models';
+import { Key } from '../../models/key';
 import { cloneDeep } from 'lodash';
 
 export interface State {
   originalQuestionKey: string;
   past: Question[];
-  present: Question;
+  present: {
+    question: Question,
+    unusedKeys: Key[]
+  };
   future: Question[];
 }
 
@@ -27,7 +30,10 @@ function blankQuestion(): Question {
 export const initialState: State = {
   originalQuestionKey: '',
   past: [],
-  present: blankQuestion(),
+  present: {
+    question: blankQuestion(),
+    unusedKeys: []
+  },
   future: []
 };
 
@@ -40,7 +46,10 @@ export function reducer(state = initialState, action: EditQuestionActions): Stat
       const newState: State = {
         originalQuestionKey: questionKey,
         past: [],
-        present: blankQuestion(),
+        present: {
+          question: blankQuestion(),
+          unusedKeys: []
+        },
         future: []
       };
       return newState;
@@ -49,7 +58,14 @@ export function reducer(state = initialState, action: EditQuestionActions): Stat
     case EditQuestionActionTypes.LOAD_QUESTION: {
       const questionToEdit = <Question>cloneDeep(action.payload);
       const newState: State = cloneDeep(state);
-      newState.present = questionToEdit;
+      newState.present.question = questionToEdit;
+      return newState;
+    }
+
+    case EditQuestionActionTypes.LOAD_UNUSED_KEYS: {
+      const unusedKeys = <Key[]>cloneDeep(action.payload);
+      const newState: State = cloneDeep(state);
+      newState.present.unusedKeys = unusedKeys;
       return newState;
     }
 

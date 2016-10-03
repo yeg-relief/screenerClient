@@ -3,6 +3,7 @@ import { Store } from '@ngrx/store';
 import * as fromRoot from '../../reducer';
 import { Observable } from 'rxjs/Observable';
 import { Question } from '../../../shared/models';
+import { Key } from '../../models/key';
 
 @Component({
   selector: 'app-edit-question',
@@ -10,7 +11,7 @@ import { Question } from '../../../shared/models';
   styleUrls: ['./edit-question.component.css']
 })
 export class EditQuestionComponent implements OnInit {
-  editQuestion$: Observable<Question>;
+  editQuestion$: Observable<{question: Question, unusedKeys: Key[]}>;
   constructor(private store: Store<fromRoot.State>) { }
 
   ngOnInit() {

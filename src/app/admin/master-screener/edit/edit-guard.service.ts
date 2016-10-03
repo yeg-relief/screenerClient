@@ -7,6 +7,7 @@ import {
 import { Store } from '@ngrx/store';
 import * as fromRoot from '../../reducer';
 import * as editScreener  from './edit.actions';
+import * as keys from '../keys/key.actions';
 
 @Injectable()
 export class EditGuardService implements CanActivate {
@@ -22,6 +23,7 @@ export class EditGuardService implements CanActivate {
 
   loadScreener(version: number): boolean {
     this.store.dispatch(new editScreener.InitEdit(version));
+    this.store.dispatch(new keys.LoadKeys({}));
     return true;
   }
 }

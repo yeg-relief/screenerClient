@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { MasterScreener, MasterScreenerMetaData } from './models/master-screener';
+import { Key } from './models/key';
 import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/observable/of';
 import 'rxjs/add/operator/switchMap';
@@ -46,7 +47,49 @@ export class DataService {
       .toArray()
       .delay(100);
   }
+
+  loadKeys(): Observable<Key[]> {
+    // tslint:disable-next-line
+    return Observable.of(mockKeys)
+      .delay(300);
+  }
 }
+
+const mockKeys: Key[] = [
+  {
+    name: 'age', type: 'number'
+  },
+  {
+    name: 'income', type: 'number'
+  },
+  {
+    name: 'hasChildren', type: 'boolean'
+  },
+  {
+    name: 'singleParent', type: 'boolean'
+  },
+  {
+    name: 'nationalChildHealthBenefit', type: 'boolean'
+  },
+  {
+    name: 'childBornAfter_2004', type: 'boolean'
+  },
+  {
+    name: 'betweenSixty_and_SixtyFour', type: 'boolean'
+  },
+  {
+    name: 'survivedSpouse', type: 'boolean'
+  },
+  {
+    name: 'unused_number_key', type: 'number'
+  },
+  {
+    name: 'unused_boolean_key', type: 'boolean'
+  },
+  {
+    name: 'unused_text_key', type: 'text'
+  },
+];
 
 const mockVersionEight: MasterScreener = {
   meta: {
