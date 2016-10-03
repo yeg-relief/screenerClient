@@ -5,8 +5,7 @@ import { DataService } from '../../data.service';
 import  * as editScreener from './edit.actions';
 import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/operator/switchMap';
-import 'rxjs/add/observable/of';
-import 'rxjs/add/operator/let';
+import 'rxjs/add/operator/map';
 
 @Injectable()
 export class EditScreenerEffects {

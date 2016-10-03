@@ -1,0 +1,6 @@
+<app-bread-crumb class="col col-12">
+  <app-edit-question-toolbar-controls class="col col-12"></app-edit-question-toolbar-controls>
+</app-bread-crumb>
+<md-card class="col col-12 flex flex-column overview-wrapper">
+  {{ editQuestion$ | async | json }}
+</md-card>

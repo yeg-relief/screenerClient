@@ -176,3 +176,9 @@ export function reducer(state = initialState, action: EditScreenerActions): Stat
 export function getPresentScreener(state$: Observable<State>) {
   return state$.select(s => s.present);
 }
+
+
+export function getPresentQuestions(state$: Observable<State>) {
+  return getPresentScreener(state$)
+    .map(screener => screener.questions);
+}

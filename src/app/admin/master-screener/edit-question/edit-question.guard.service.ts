@@ -6,10 +6,10 @@ import {
 } from '@angular/router';
 import { Store } from '@ngrx/store';
 import * as fromRoot from '../../reducer';
-import * as editScreener  from './edit.actions';
+import * as editQuestion from './edit-question.actions';
 
 @Injectable()
-export class EditGuardService implements CanActivate {
+export class EditQuestionGuardService implements CanActivate {
 
   constructor(private store: Store<fromRoot.State>) {}
 
@@ -17,11 +17,11 @@ export class EditGuardService implements CanActivate {
     const splitUrl = state.url.split('/');
     // the version number
     const last = splitUrl.length - 1;
-    return this.loadScreener(parseInt(splitUrl[last], 10));
+    return this.loadScreener(splitUrl[last]);
   }
 
-  loadScreener(version: number): boolean {
-    this.store.dispatch(new editScreener.InitEdit(version));
+  loadScreener(key: string): boolean {
+    this.store.dispatch(new editQuestion.EditQuestionInit(key));
     return true;
   }
 }

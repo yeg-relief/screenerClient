@@ -1,4 +1,5 @@
 import 'rxjs/add/operator/publishReplay';
+import 'rxjs/add/observable/combineLatest';
 import { multicast } from 'rxjs/operator/multicast';
 import { ReplaySubject } from 'rxjs/ReplaySubject';
 import { Observable } from 'rxjs/Observable';
@@ -6,15 +7,21 @@ import { combineReducers } from '@ngrx/store';
 import { compose } from '@ngrx/core/compose';
 import * as fromMasterScreener from './master-screener/master-screener.reducer';
 import * as fromEditScreener from './master-screener/edit/edit.reducer';
+import * as fromEditQuestion from './master-screener/edit-question/edit-question.reducer';
+import { Question } from '../shared/models';
+import 'rxjs/add/operator/mergeMap';
+import 'rxjs/add/operator/do';
 
 export interface State {
   masterScreener: fromMasterScreener.State;
   editScreener: fromEditScreener.State;
+  editQuestion: fromEditQuestion.State;
 }
 
 const reducers = {
   masterScreener: fromMasterScreener.reducer,
-  editScreener: fromEditScreener.reducer
+  editScreener: fromEditScreener.reducer,
+  editQuestion: fromEditQuestion.reducer
 };
 
 const productionReducer = combineReducers(reducers);
@@ -31,6 +38,11 @@ export function getEditScreenerState(state$: Observable<State>) {
   return state$.select(state => state.editScreener);
 }
 
+export function getEditQuestionState(state$: Observable<State>) {
+  return state$.select(state => state.editQuestion);
+}
+
+/* for master-screener overview */
 export const getVersions = share(compose(fromMasterScreener.getVersions, getMasterScreenerState));
 
 export const getWorkingQuestionCount =
@@ -52,8 +64,54 @@ export const getKeys = share(compose(fromMasterScreener.getKeys, getMasterScreen
 export const flattenedQuestions =
   share(compose(fromMasterScreener.getFlattenedQuestions, getMasterScreenerState));
 
+/* for master-screener edit */
 export const getPresentEditScreener =
   share(compose(fromEditScreener.getPresentScreener, getEditScreenerState));
+
+// the following two questions have confusing names #REFACTOR
+export const getPresentEditQuestions =
+  share(compose(fromEditScreener.getPresentQuestions, getEditScreenerState));
+
+/* for question edit */
+export const getPresentQuestionEdit =
+  share(compose(fromEditQuestion.getPresentQuestion, getEditQuestionState));
+
+export const getOriginalKeyQuestionEdit =
+  share(compose(fromEditQuestion.getEditQuestionKey, getEditQuestionState));
+
+/*
+export const isSelectedBookInCollection = function (state$: Observable<State>) {
+  return combineLatest<string[], Book>(
+    state$.let(getCollectionBookIds),
+    state$.let(getSelectedBook)
+  )
+  .map(([ ids, selectedBook ]) => ids.indexOf(selectedBook.id) > -1);
+};
+*/
+
+export const findEditQuestion = function (state$: Observable<State>) {
+  return Observable.combineLatest<string, Question[]>(
+    state$.let(getOriginalKeyQuestionEdit),
+    state$.let(getPresentEditQuestions)
+  )
+  .map<Question>(([key, questions]) => {
+    const q: Question = questions.find((question: Question) => question.key === key);
+    if (typeof q === 'undefined') {
+      return {
+        type: undefined,
+        label: undefined,
+        expandable: undefined,
+        conditonalQuestions: undefined,
+        options: undefined,
+        key: undefined,
+        controlType: undefined
+      };
+    }
+    return q;
+  });
+};
+
+
 
 
 /* https://github.com/ngrx/example-app/blob/final/src/util.ts */

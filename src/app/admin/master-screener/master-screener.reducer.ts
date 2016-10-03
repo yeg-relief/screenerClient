@@ -57,14 +57,13 @@ export function reducer(state = initialState, action: MasterScreenerActions): St
     }
 
     case MasterScreenerActionsTypes.CHANGE_MASTER_SCREENER_VERSION: {
-      /*
       if (typeof action.payload === 'boolean') {
         const newState = cloneDeep(state);
         newState.error = ERROR_TYPES.failedVersionLoad();
         newState.loading = false;
         newState.workingVersion = 0;
         return newState;
-      }*/
+      }
       const masterScreener = <MasterScreener>cloneDeep(action.payload);
       const newState = cloneDeep(state);
       newState.masterScreener = masterScreener;
