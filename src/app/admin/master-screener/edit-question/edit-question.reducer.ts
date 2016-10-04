@@ -5,14 +5,18 @@ import { Question } from '../../../shared/models';
 import { Key } from '../../models/key';
 import { cloneDeep } from 'lodash';
 
+// I think we don't need to keep a history of unused keys
+export type StateType = {
+  question: Question;
+  unusedKeys: Key[]
+}
+
+
 export interface State {
   originalQuestionKey: string;
-  past: Question[];
-  present: {
-    question: Question,
-    unusedKeys: Key[]
-  };
-  future: Question[];
+  past: StateType[];
+  present: StateType;
+  future: StateType[];
 }
 
 function blankQuestion(): Question {
@@ -66,6 +70,61 @@ export function reducer(state = initialState, action: EditQuestionActions): Stat
       const unusedKeys = <Key[]>cloneDeep(action.payload);
       const newState: State = cloneDeep(state);
       newState.present.unusedKeys = unusedKeys;
+      return newState;
+    }
+
+    case EditQuestionActionTypes.CHANGE_CONTROL_TYPE: {
+      const newControlType = <'radio' | 'input'>action.payload;
+      const newPresent = cloneDeep(state.present);
+      const newState = cloneDeep(state);
+      const newPast = state.past.concat(state.present);
+      newPresent.question.controlType = newControlType;
+      newState.present = newPresent;
+      newState.past = newPast;
+      return newState;
+    }
+
+    case EditQuestionActionTypes.CHANGE_QUESTION_TYPE: {
+      const newQuestionType = <'boolean' | 'number' | 'text'>action.payload;
+      const newPresent = cloneDeep(state.present);
+      const newState = cloneDeep(state);
+      const newPast = state.past.concat(state.present);
+      newPresent.question.type = newQuestionType;
+      newState.present = newPresent;
+      newState.past = newPast;
+      return newState;
+    }
+
+    case EditQuestionActionTypes.CHANGE_LABEL: {
+      const newLabel = <string>action.payload;
+      const newPresent = cloneDeep(state.present);
+      const newState = cloneDeep(state);
+      const newPast = state.past.concat(state.present);
+      newPresent.question.label = newLabel;
+      newState.present = newPresent;
+      newState.past = newPast;
+      return newState;
+    }
+
+    case EditQuestionActionTypes.CHANGE_KEY: {
+      const newKeyName = <string>action.payload;
+      const newPresent = cloneDeep(state.present);
+      const newState = cloneDeep(state);
+      const newPast = state.past.concat(state.present);
+      newPresent.question.key = newKeyName;
+      newState.present = newPresent;
+      newState.past = newPast;
+      return newState;
+    }
+
+    case EditQuestionActionTypes.CHANGE_EXPANDABLE: {
+      const newExpandable = <boolean>action.payload;
+      const newPresent = cloneDeep(state.present);
+      const newState = cloneDeep(state);
+      const newPast = state.past.concat(state.present);
+      newPresent.question.expandable = newExpandable;
+      newState.present = newPresent;
+      newState.past = newPast;
       return newState;
     }
 

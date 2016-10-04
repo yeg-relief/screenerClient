@@ -1,4 +1,7 @@
-import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
+import { Store } from '@ngrx/store';
+import * as fromRoot from '../../../reducer';
+import * as editQuestion from '../edit-question.actions';
 
 @Component({
   selector: 'app-edit-question-label',
@@ -7,13 +10,12 @@ import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 })
 export class EditQuestionLabelComponent implements OnInit {
   @Input() label: string;
-  @Output() labelChange = new EventEmitter<string>();
-  constructor() { }
+  constructor(private store: Store<fromRoot.State>) { }
 
   ngOnInit() {
   }
 
   changeLabel($event) {
-    console.log($event);
+    this.store.dispatch(new editQuestion.EditQuestionChangeLabel($event));
   }
 }

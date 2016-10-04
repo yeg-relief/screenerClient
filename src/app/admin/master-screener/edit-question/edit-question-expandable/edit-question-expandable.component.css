@@ -1,0 +1,10 @@
+md-card,
+md-card-subtitle,
+md-card-title,
+md-checkbox {
+  font-family: 'Roboto Mono', monospace;
+}
+
+main {
+  height: 20vh;
+}

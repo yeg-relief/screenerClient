@@ -130,8 +130,6 @@ export const findUnusedKeys = function (state$: Observable<State>) {
     state$.let(getPresentKeys)
   )
   .map<Key[]>(([questions, keys]) => {
-    console.log(questions);
-    console.log(keys);
     const usedKeyNames: string[] = [];
     questions.forEach( question => {
       usedKeyNames.push(question.key);

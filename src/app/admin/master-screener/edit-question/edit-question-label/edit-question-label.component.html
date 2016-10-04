@@ -5,7 +5,11 @@
     <div class="col-8 flex flex-column bg-silver center py2">
       <md-card-title>Question Label</md-card-title>
       <md-card-subtitle>The question for the user</md-card-subtitle>
-      <md-input [value]="label" placeholder="type question" (change)="changeLabel($event)"></md-input>
+      <md-input 
+        [value]="label" 
+        placeholder="type question" 
+        (change)="changeLabel($event.target.value)">
+      </md-input>
     </div>
     <div class="col-2"></div>
   </div>

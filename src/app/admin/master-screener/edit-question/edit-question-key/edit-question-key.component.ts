@@ -1,4 +1,8 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
+import { Key } from '../../../models/key';
+import { Store } from '@ngrx/store';
+import * as fromRoot from '../../../reducer';
+import * as editQuestion from '../edit-question.actions';
 
 @Component({
   selector: 'app-edit-question-key',
@@ -6,10 +10,16 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./edit-question-key.component.css']
 })
 export class EditQuestionKeyComponent implements OnInit {
-
-  constructor() { }
+  @Input() unusedKeys: Key[];
+  @Input() currentKey: any;
+  selectValue: string;
+  constructor(private store: Store<fromRoot.State>) { }
 
   ngOnInit() {
   }
 
+  selectChange(value) {
+    this.store.dispatch(new editQuestion.EditQuestionChangeKey(value));
+    this.selectValue = value;
+  }
 }

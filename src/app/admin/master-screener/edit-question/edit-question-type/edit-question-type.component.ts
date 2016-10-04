@@ -1,4 +1,7 @@
-import { Component, OnInit, Input , Output, EventEmitter} from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
+import { Store } from '@ngrx/store';
+import * as fromRoot from '../../../reducer';
+import * as editQuestion from '../edit-question.actions';
 
 @Component({
   selector: 'app-edit-question-type',
@@ -7,20 +10,19 @@ import { Component, OnInit, Input , Output, EventEmitter} from '@angular/core';
 })
 export class EditQuestionTypeComponent implements OnInit {
   @Input() type: string;
-  @Output() typeChange = new EventEmitter<string>();
   private options = [
     {display: 'true/false', value: 'boolean'},
     {display: 'number', value: 'number'},
     {display: 'text', value: 'text'}
   ];
 
-  constructor() { }
+  constructor(private store: Store<fromRoot.State>) { }
 
   ngOnInit() {
   }
 
   changeType($event) {
-    console.log($event);
+    this.store.dispatch(new editQuestion.EditQuestionChangeQuestionType($event));
   }
 
 }
