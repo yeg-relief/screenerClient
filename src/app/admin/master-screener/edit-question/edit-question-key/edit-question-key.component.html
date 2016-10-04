@@ -8,10 +8,13 @@
       <div class="flex">
         <div class="col-2"></div>
         <select class="rounded col-8" 
-          (change)="selectChange($event.target.value)"
-          [value]="selectValue">
+          (change)="selectChange($event.target.value)">
+            <option *ngIf="isEmpty()" selected disabled>
+              select a key
+            </option>
             <option
               *ngFor="let key of unusedKeys"
+              [attr.selected]="isSelected(key.name) ? true : null"
               [value]="key.name">
                 {{key.name}}
             </option>

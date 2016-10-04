@@ -11,8 +11,8 @@ import * as editQuestion from '../edit-question.actions';
 })
 export class EditQuestionKeyComponent implements OnInit {
   @Input() unusedKeys: Key[];
-  @Input() currentKey: any;
-  selectValue: string;
+  @Input() currentKey: string;
+
   constructor(private store: Store<fromRoot.State>) { }
 
   ngOnInit() {
@@ -20,6 +20,14 @@ export class EditQuestionKeyComponent implements OnInit {
 
   selectChange(value) {
     this.store.dispatch(new editQuestion.EditQuestionChangeKey(value));
-    this.selectValue = value;
+
+  }
+
+  isSelected(key: string) {
+    return key === this.currentKey;
+  }
+
+  isEmpty() {
+    return this.currentKey === 'empty';
   }
 }

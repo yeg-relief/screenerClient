@@ -13,7 +13,7 @@
   <app-edit-question-label *ngIf="showLabel"></app-edit-question-label>
   <app-edit-question-key 
     [unusedKeys]="(editQuestion$ | async).unusedKeys"
-    [currentKey]="'empty'"
+    [currentKey]="(editQuestion$ | async).question.key"
     *ngIf="showKeys">
   </app-edit-question-key>
   <app-edit-question-expandable *ngIf="showExpand"></app-edit-question-expandable>

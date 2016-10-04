@@ -5,6 +5,7 @@ import { FormGroup  } from '@angular/forms';
 import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/observable/of';
 import { Question } from '../../../../shared/models';
+import 'rxjs/add/operator/do';
 
 @Component({
   selector: 'app-edit-questions',

@@ -116,7 +116,7 @@ export const findEditQuestion = function (state$: Observable<State>) {
         expandable: undefined,
         conditonalQuestions: undefined,
         options: undefined,
-        key: undefined,
+        key: 'empty',
         controlType: undefined
       };
     }
