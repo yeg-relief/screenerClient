@@ -9,8 +9,18 @@ import 'rxjs/add/operator/do';
 // I think we don't need to keep a history of unused keys
 export type StateType = {
   question: Question;
-  unusedKeys: Key[]
+  unusedKeys: Key[];
+  details: QuestionDetails;
+};
+
+export type QuestionDetail = {
+  msg: string;
+  open: string[];
+  label: string;
 }
+
+// this will be hints and or errors
+export type QuestionDetails = QuestionDetail[];
 
 
 export interface State {
@@ -18,7 +28,7 @@ export interface State {
   past: StateType[];
   present: StateType;
   future: StateType[];
-}
+};
 
 const blankQuestion: Question = {
   type: undefined,
@@ -35,7 +45,14 @@ export const initialState: State = {
   past: [],
   present: {
     question: blankQuestion,
-    unusedKeys: []
+    unusedKeys: [],
+    details: [
+      {
+        msg: 'Pick a key',
+        open: ['key'],
+        label: 'no key picked'
+      },
+    ]
   },
   future: []
 };
@@ -52,7 +69,14 @@ export function reducer(state = initialState, action: EditQuestionActions): Stat
         past: [],
         present: {
           question: blankQuestion,
-          unusedKeys: []
+          unusedKeys: [],
+          details: [
+            {
+              msg: 'Pick a key',
+              open: ['key'],
+              label: 'no key picked'
+            },
+          ]
         },
         future: []
       };
@@ -118,6 +142,10 @@ export function reducer(state = initialState, action: EditQuestionActions): Stat
       const newState = cloneDeep(state);
       const newPast = [state.present, ...state.past];
       newPresent.question.key = newKeyName;
+      const noKeyPicked = newPresent.details.findIndex(detail => detail.label === 'no key picked');
+      if ( typeof noKeyPicked !== 'undefined') {
+        newPresent.details.splice(noKeyPicked, 1);
+      }
       newState.present = newPresent;
       newState.past = newPast;
       return newState;
@@ -204,4 +232,9 @@ export function getPresentQuestion(state$: Observable<State>) {
 
 export function getEditQuestionKey(state$: Observable<State>) {
   return state$.select((s: State) => s.originalQuestionKey);
+}
+
+export function getQuestionDetails(state$: Observable<State>) {
+  return getPresentQuestion(state$)
+    .map(present => present.details);
 }

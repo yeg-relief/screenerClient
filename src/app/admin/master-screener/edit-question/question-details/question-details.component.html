@@ -1,0 +1,7 @@
+<div class="flex flex-column detail-wrapper">
+  <div *ngFor="let detail of (questionDetails$ | async )" 
+    class="border rounded bg-maroon white center detail"
+    (click)="handleClick(detail.open)">
+    {{ detail.msg }} 
+  </div>
+</div>

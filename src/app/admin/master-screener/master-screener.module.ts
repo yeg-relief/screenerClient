@@ -34,6 +34,7 @@ import { EditQuestionControlTypeComponent } from './edit-question/edit-question-
 import { EditQuestionExpandableComponent } from './edit-question/edit-question-expandable/edit-question-expandable.component';
 import { EditQuestionDisplayControlsComponent } 
   from './edit-question/edit-question-display-controls/edit-question-display-controls.component';
+import { QuestionDetailsComponent } from './edit-question/question-details/question-details.component';
 
 @NgModule({
   imports: [
@@ -68,7 +69,8 @@ import { EditQuestionDisplayControlsComponent }
     EditQuestionKeyComponent,
     EditQuestionControlTypeComponent,
     EditQuestionExpandableComponent,
-    EditQuestionDisplayControlsComponent
+    EditQuestionDisplayControlsComponent,
+    QuestionDetailsComponent
   ],
   providers: [
     EditGuardService,

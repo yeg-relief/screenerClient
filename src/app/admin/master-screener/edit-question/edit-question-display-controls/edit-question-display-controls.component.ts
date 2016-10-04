@@ -1,4 +1,4 @@
-import { Component, OnInit, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, Output, EventEmitter, Input } from '@angular/core';
 
 @Component({
   selector: 'app-edit-question-display-controls',
@@ -11,6 +11,15 @@ export class EditQuestionDisplayControlsComponent implements OnInit {
   @Output() toggleQuestionType = new EventEmitter<boolean>();
   @Output() toggleExpand = new EventEmitter<boolean>();
   @Output() toggleLabel = new EventEmitter<boolean>();
+  @Output() toggleDetails = new EventEmitter<boolean>();
+
+  @Input() showKeys: boolean;
+  @Input() showControlType: boolean;
+  @Input() showQuestionType: boolean;
+  @Input() showExpand: boolean;
+  @Input() showLabel: boolean;
+  @Input() showDetails: boolean;
+
   constructor() { }
 
   ngOnInit() {
@@ -36,4 +45,7 @@ export class EditQuestionDisplayControlsComponent implements OnInit {
     this.toggleExpand.emit($event);
   }
 
+  handleDetailsToggle($event) {
+    this.toggleDetails.emit($event);
+  }
 }

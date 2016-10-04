@@ -91,7 +91,8 @@ export const getPresentQuestionEdit =
 export const getOriginalKeyQuestionEdit =
   share(compose(fromEditQuestion.getEditQuestionKey, getEditQuestionState));
 
-
+export const getQuestionDetails =
+  share(compose(fromEditQuestion.getQuestionDetails, getEditQuestionState));
 
 /* for keys */
 export const getPresentKeys =

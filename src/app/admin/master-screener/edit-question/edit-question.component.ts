@@ -13,11 +13,12 @@ import { Key } from '../../models/key';
 })
 export class EditQuestionComponent implements OnInit {
   editQuestion$: Observable<{question: Question, unusedKeys: Key[]}>;
-  showKeys = true;
-  showControlType = true;
-  showQuestionType = true;
-  showExpand = true;
-  showLabel = true;
+  showKeys = false;
+  showControlType = false;
+  showQuestionType = false;
+  showExpand = false;
+  showLabel = false;
+  showDetails = true;
   constructor(private store: Store<fromRoot.State>) { }
 
   ngOnInit() {
@@ -42,5 +43,24 @@ export class EditQuestionComponent implements OnInit {
 
   labelToggle($event) {
     this.showLabel = $event;
+  }
+
+  detailsToggle($event) {
+    this.showDetails = $event;
+  }
+
+  focusOnDetails(sections: string[]) {
+    this.showKeys = false;
+    this.showControlType = false;
+    this.showQuestionType = false;
+    this.showExpand = false;
+    this.showLabel = false;
+    this.showDetails = true;
+    for (let section of sections) {
+      console.log(section);
+      if (section === 'key') {
+        this.showKeys = true;
+      }
+    }
   }
 }

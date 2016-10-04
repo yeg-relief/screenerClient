@@ -3,20 +3,25 @@
     <div class="px2"></div>
     <md-checkbox 
       (change)="handleControlTypeToggle($event.checked)"
-      [checked]="true">control-type</md-checkbox>
+      [checked]="showControlType">control-type</md-checkbox>
     <md-checkbox 
       (change)="handleQuestionTypeToggle($event.checked)" 
-      [checked]="true"
+      [checked]="showQuestionType"
       class="ml1 mr1">question-type</md-checkbox>
     <md-checkbox 
-      [checked]="true"
+      [checked]="showLabel"
       (change)="handleLabelToggle($event.checked)">label</md-checkbox>
     <md-checkbox 
-      [checked]="true"
+      [checked]="showKeys"
       (change)="handleKeyToggle($event.checked)" 
       class="ml1 mr1">key</md-checkbox>
     <md-checkbox 
-      [checked]="true"
-      (change)="handleExpandableToggle($event.checked)">expandable</md-checkbox>
+      [checked]="showExpand"
+      (change)="handleExpandableToggle($event.checked)"
+      class="mr1">expandable</md-checkbox>
+     <md-checkbox 
+      [checked]="showDetails"
+      (change)="handleDetailsToggle($event.checked)">
+      details</md-checkbox>
   </div>
 </div>

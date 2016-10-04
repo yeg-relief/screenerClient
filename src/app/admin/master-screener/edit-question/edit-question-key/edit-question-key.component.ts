@@ -12,7 +12,6 @@ import * as editQuestion from '../edit-question.actions';
 export class EditQuestionKeyComponent implements OnInit {
   @Input() unusedKeys: Key[];
   @Input() currentKey: string;
-
   constructor(private store: Store<fromRoot.State>) { }
 
   ngOnInit() {
