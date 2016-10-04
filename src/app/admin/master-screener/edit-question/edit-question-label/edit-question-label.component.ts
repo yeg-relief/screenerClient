@@ -10,12 +10,17 @@ import * as editQuestion from '../edit-question.actions';
 })
 export class EditQuestionLabelComponent implements OnInit {
   @Input() label: string;
+  internalLabel: string;
   constructor(private store: Store<fromRoot.State>) { }
 
   ngOnInit() {
   }
 
-  changeLabel($event) {
-    this.store.dispatch(new editQuestion.EditQuestionChangeLabel($event));
+  saveInput($event) {
+    this.internalLabel = $event;
+  }
+
+  changeLabel() {
+    this.store.dispatch(new editQuestion.EditQuestionChangeLabel(this.internalLabel));
   }
 }

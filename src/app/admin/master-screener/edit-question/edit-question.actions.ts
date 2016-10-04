@@ -10,7 +10,10 @@ export const EditQuestionActionTypes = {
   CHANGE_QUESTION_TYPE: '[EDIT_QUESTION] CHANGE_QUESTION_TYPE',
   CHANGE_LABEL: '[EDIT_QUESTION] CHANGE_LABEL',
   CHANGE_KEY: '[EDIT_QUESTION] CHANGE_KEY',
-  CHANGE_EXPANDABLE: '[EDIT_QUESTION] CHANGE_EXPANDABLE'
+  CHANGE_EXPANDABLE: '[EDIT_QUESTION] CHANGE_EXPANDABLE',
+  CLEAR_QUESTION: '[EDIT_QUESTION] CLEAR_QUESTION',
+  UNDO: '[EDIT_QUESTION] UNDO',
+  REDO: '[EDIT_QUESTION] REDO'
 };
 
 export class EditQuestionInit implements Action {
@@ -53,6 +56,20 @@ export class EditQuestionChangeExpand implements Action {
   constructor(public payload: boolean) {}
 }
 
+export class EditQuestionClearQuestion implements Action {
+  type = EditQuestionActionTypes.CLEAR_QUESTION;
+  constructor(public payload: {}) {}
+}
+
+export class UndoEdit implements Action {
+  type = EditQuestionActionTypes.UNDO;
+  constructor(public payload: any) {}
+}
+
+export class RedoEdit implements Action {
+  type = EditQuestionActionTypes.REDO;
+  constructor(public payload: any) {}
+}
 
 export type EditQuestionActions =
     EditQuestionInit
@@ -62,4 +79,7 @@ export type EditQuestionActions =
   | EditQuestionChangeQuestionType
   | EditQuestionChangeLabel
   | EditQuestionChangeKey
-  | EditQuestionChangeExpand;
+  | EditQuestionChangeExpand
+  | EditQuestionClearQuestion
+  | RedoEdit
+  | UndoEdit;

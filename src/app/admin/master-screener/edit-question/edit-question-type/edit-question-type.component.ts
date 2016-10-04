@@ -10,6 +10,7 @@ import * as editQuestion from '../edit-question.actions';
 })
 export class EditQuestionTypeComponent implements OnInit {
   @Input() type: string;
+  currentValue: string;
   private options = [
     {display: 'true/false', value: 'boolean'},
     {display: 'number', value: 'number'},
@@ -19,10 +20,14 @@ export class EditQuestionTypeComponent implements OnInit {
   constructor(private store: Store<fromRoot.State>) { }
 
   ngOnInit() {
+    this.currentValue = this.type;
   }
 
   changeType($event) {
-    this.store.dispatch(new editQuestion.EditQuestionChangeQuestionType($event));
+    if (typeof $event !== 'undefined' && this.currentValue !== $event) {
+      this.store.dispatch(new editQuestion.EditQuestionChangeQuestionType($event));
+      this.currentValue = $event;
+    }
   }
 
 }
