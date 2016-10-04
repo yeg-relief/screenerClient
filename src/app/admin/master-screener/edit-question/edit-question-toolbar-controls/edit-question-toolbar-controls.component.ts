@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Store } from '@ngrx/store';
 import * as fromRoot from '../../../reducer';
 import * as editQuestion from '../edit-question.actions';
+import { Observable } from 'rxjs/Observable';
 
 @Component({
   selector: 'app-edit-question-toolbar-controls',
@@ -9,10 +10,11 @@ import * as editQuestion from '../edit-question.actions';
   styleUrls: ['./edit-question-toolbar-controls.component.css']
 })
 export class EditQuestionToolbarControlsComponent implements OnInit {
-
+  workingEditVersion$: Observable<number>;
   constructor(private store: Store<fromRoot.State>) { }
 
   ngOnInit() {
+    this.workingEditVersion$ = this.store.let(fromRoot.getPresentEditScreenerVersion);
   }
 
   handleUndo() {

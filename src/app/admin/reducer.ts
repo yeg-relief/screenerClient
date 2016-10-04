@@ -81,12 +81,17 @@ export const getPresentEditScreener =
 export const getPresentEditQuestions =
   share(compose(fromEditScreener.getPresentQuestions, getEditScreenerState));
 
+export const getPresentEditScreenerVersion =
+  share(compose(fromEditScreener.getPresentVersion, getEditScreenerState));
+
 /* for question edit */
 export const getPresentQuestionEdit =
   share(compose(fromEditQuestion.getPresentQuestion, getEditQuestionState));
 
 export const getOriginalKeyQuestionEdit =
   share(compose(fromEditQuestion.getEditQuestionKey, getEditQuestionState));
+
+
 
 /* for keys */
 export const getPresentKeys =

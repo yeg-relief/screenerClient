@@ -3,6 +3,13 @@
     <i class="material-icons">save</i>
   </button>
   <div class="px2 flex-none"></div>
+  <button 
+    md-mini-fab 
+    color="warn"
+    routerLink="/admin/master-screener/edit/version/{{workingEditVersion$ | async}}">
+    <i class="material-icons">clear</i>
+  </button>
+  <div class="px2 flex-none"></div>
   <button md-mini-fab 
      color="primary" 
     (click)="handleUndo()">

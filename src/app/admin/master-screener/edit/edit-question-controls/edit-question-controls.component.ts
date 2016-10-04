@@ -2,7 +2,7 @@ import { Component, OnInit, Input } from '@angular/core';
 import { Question } from '../../../../shared/models';
 import { Store } from '@ngrx/store';
 import * as fromRoot from '../../../reducer';
-import { EditScreenerActionsTypes } from '../edit.actions';
+import * as editScreener from '../edit.actions';
 
 @Component({
   selector: 'app-edit-question-controls',
@@ -17,9 +17,6 @@ export class EditQuestionControlsComponent implements OnInit {
   }
 
   onDelete() {
-    this.store.dispatch({
-      type: EditScreenerActionsTypes.REMOVE_QUESTION,
-      payload: this.question
-    });
+    this.store.dispatch(new editScreener.RemoveQuestion(this.question));
   }
 }

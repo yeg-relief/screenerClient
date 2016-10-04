@@ -182,3 +182,7 @@ export function getPresentQuestions(state$: Observable<State>) {
   return getPresentScreener(state$)
     .map(screener => screener.questions);
 }
+
+export function getPresentVersion(state$: Observable<State>) {
+  return getPresentScreener(state$).map(s => s.meta.screener.version);
+}
