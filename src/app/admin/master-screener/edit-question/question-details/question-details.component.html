@@ -4,4 +4,8 @@
     (click)="handleClick(detail.open)">
     {{ detail.msg }} 
   </div>
+  <div *ngIf="(questionDetails$ | async ).length === 0"
+    class="border rounded bg-blue white center">
+    There are no guide messages
+  </div>
 </div>

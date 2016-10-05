@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { Store } from '@ngrx/store';
 import * as fromRoot from '../../../reducer';
 import * as editQuestion from '../edit-question.actions';
@@ -10,6 +10,7 @@ import * as editQuestion from '../edit-question.actions';
 })
 export class EditQuestionTypeComponent implements OnInit {
   @Input() type: string;
+  @Output() booleanSelected = new EventEmitter<boolean>();
   currentValue: string;
   private options = [
     {display: 'true/false', value: 'boolean'},
@@ -27,6 +28,11 @@ export class EditQuestionTypeComponent implements OnInit {
     if (typeof $event !== 'undefined' && this.currentValue !== $event) {
       this.store.dispatch(new editQuestion.EditQuestionChangeQuestionType($event));
       this.currentValue = $event;
+      if ($event === 'boolean') {
+        this.booleanSelected.emit(true);
+      } else {
+        this.booleanSelected.emit(false);
+      }
     }
   }
 

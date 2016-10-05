@@ -6,6 +6,30 @@ import { Key } from '../../models/key';
 import { cloneDeep } from 'lodash';
 
 import 'rxjs/add/operator/do';
+
+// for question details
+const LABELS = {
+  NO_KEY_PICKED: 'no key picked',
+  NO_LABEL_PICKED: 'no label picked',
+  NO_CONTROL_PICKED: 'no control picked',
+  NO_TYPE_PICKED: 'no type picked'
+};
+
+const MESSAGES = {
+  NO_KEY_PICKED: 'Pick a key',
+  NO_LABEL_PICKED: 'Write a label',
+  NO_CONTROL_PICKED: 'Select a control type',
+  NO_TYPE_PICKED: 'Select the type of answer you expect'
+};
+
+const OPEN_CONTROLS = {
+  NO_KEY_PICKED: ['key'],
+  NO_LABEL_PICKED: ['label'],
+  NO_CONTROL_PICKED: ['control'],
+  NO_TYPE_PICKED: ['type']
+};
+
+
 // I think we don't need to keep a history of unused keys
 export type StateType = {
   question: Question;
@@ -33,9 +57,9 @@ export interface State {
 const blankQuestion: Question = {
   type: undefined,
   label: undefined,
-  expandable: undefined,
-  conditonalQuestions: undefined,
-  options: undefined,
+  expandable: false,
+  conditonalQuestions: [],
+  options: [],
   key: 'empty',
   controlType: undefined
 };
@@ -48,10 +72,25 @@ export const initialState: State = {
     unusedKeys: [],
     details: [
       {
-        msg: 'Pick a key',
-        open: ['key'],
-        label: 'no key picked'
+        msg: MESSAGES.NO_KEY_PICKED,
+        open: OPEN_CONTROLS.NO_KEY_PICKED,
+        label: LABELS.NO_KEY_PICKED
       },
+      {
+        msg: MESSAGES.NO_LABEL_PICKED,
+        open: OPEN_CONTROLS.NO_LABEL_PICKED,
+        label: LABELS.NO_LABEL_PICKED
+      },
+      {
+        msg: MESSAGES.NO_CONTROL_PICKED,
+        open: OPEN_CONTROLS.NO_CONTROL_PICKED,
+        label: LABELS.NO_CONTROL_PICKED
+      },
+      {
+        msg: MESSAGES.NO_TYPE_PICKED,
+        open: OPEN_CONTROLS.NO_TYPE_PICKED,
+        label: LABELS.NO_TYPE_PICKED
+      }
     ]
   },
   future: []
@@ -62,24 +101,11 @@ export function reducer(state = initialState, action: EditQuestionActions): Stat
 
     case EditQuestionActionTypes.INIT_EDIT: {
       console.log('[EDIT_QUESTION] INIT_EDIT');
-      const questionKey = <string>cloneDeep(action.payload);
+      const questionKey = <string>action.payload;
       // editing multiple questions sequentially means state has to be reset upon editing a new question
-      const newState: State = {
-        originalQuestionKey: questionKey,
-        past: [],
-        present: {
-          question: blankQuestion,
-          unusedKeys: [],
-          details: [
-            {
-              msg: 'Pick a key',
-              open: ['key'],
-              label: 'no key picked'
-            },
-          ]
-        },
-        future: []
-      };
+      // unsure if clone is needed
+      const newState: State = cloneDeep(initialState);
+      newState.originalQuestionKey = questionKey;
       return newState;
     }
 
@@ -88,6 +114,9 @@ export function reducer(state = initialState, action: EditQuestionActions): Stat
       const questionToEdit = <Question>cloneDeep(action.payload);
       const newState: State = cloneDeep(state);
       newState.present.question = questionToEdit;
+      if (newState.present.question.key !== 'empty') {
+        newState.present.details = [];
+      }
       return newState;
     }
 
@@ -105,6 +134,10 @@ export function reducer(state = initialState, action: EditQuestionActions): Stat
       const newPresent = cloneDeep(state.present);
       const newState = cloneDeep(state);
       const newPast = [...state.past, state.present];
+      const nocontrolIndex = newPresent.details.findIndex(detail => detail.label === LABELS.NO_CONTROL_PICKED);
+      if ( typeof nocontrolIndex !== 'undefined') {
+        newPresent.details.splice(nocontrolIndex, 1);
+      }
       newPresent.question.controlType = newControlType;
       newState.present = newPresent;
       newState.past = newPast;
@@ -117,6 +150,10 @@ export function reducer(state = initialState, action: EditQuestionActions): Stat
       const newPresent = cloneDeep(state.present);
       const newState = cloneDeep(state);
       const newPast = [...state.past, state.present];
+      const notypeIndex = newPresent.details.findIndex(detail => detail.label === LABELS.NO_TYPE_PICKED);
+      if ( typeof notypeIndex !== 'undefined') {
+        newPresent.details.splice(notypeIndex, 1);
+      }
       newPresent.question.type = newQuestionType;
       newState.present = newPresent;
       newState.past = newPast;
@@ -130,6 +167,10 @@ export function reducer(state = initialState, action: EditQuestionActions): Stat
       const newState = cloneDeep(state);
       const newPast = [...state.past, state.present];
       newPresent.question.label = newLabel;
+      const nolabelIndex = newPresent.details.findIndex(detail => detail.label === LABELS.NO_LABEL_PICKED);
+      if ( typeof nolabelIndex !== 'undefined') {
+        newPresent.details.splice(nolabelIndex, 1);
+      }
       newState.present = newPresent;
       newState.past = newPast;
       return newState;
@@ -142,9 +183,9 @@ export function reducer(state = initialState, action: EditQuestionActions): Stat
       const newState = cloneDeep(state);
       const newPast = [state.present, ...state.past];
       newPresent.question.key = newKeyName;
-      const noKeyPicked = newPresent.details.findIndex(detail => detail.label === 'no key picked');
-      if ( typeof noKeyPicked !== 'undefined') {
-        newPresent.details.splice(noKeyPicked, 1);
+      const nokeyIndex = newPresent.details.findIndex(detail => detail.label === LABELS.NO_KEY_PICKED);
+      if ( typeof nokeyIndex !== 'undefined') {
+        newPresent.details.splice(nokeyIndex, 1);
       }
       newState.present = newPresent;
       newState.past = newPast;

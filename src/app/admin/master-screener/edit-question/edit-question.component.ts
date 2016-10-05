@@ -5,7 +5,6 @@ import { Observable } from 'rxjs/Observable';
 import { Question } from '../../../shared/models';
 import { Key } from '../../models/key';
 
-
 @Component({
   selector: 'app-edit-question',
   templateUrl: './edit-question.component.html',
@@ -49,6 +48,10 @@ export class EditQuestionComponent implements OnInit {
     this.showDetails = $event;
   }
 
+  showExpandedSection($event) {
+    this.showExpand = $event;
+  }
+
   focusOnDetails(sections: string[]) {
     this.showKeys = false;
     this.showControlType = false;
@@ -57,9 +60,25 @@ export class EditQuestionComponent implements OnInit {
     this.showLabel = false;
     this.showDetails = true;
     for (let section of sections) {
-      console.log(section);
-      if (section === 'key') {
-        this.showKeys = true;
+      switch (section) {
+        case 'key':
+          this.showKeys = true;
+          break;
+
+        case 'label':
+          this.showLabel = true;
+          break;
+
+        case 'control':
+          this.showControlType = true;
+          break;
+
+        case 'type':
+          this.showQuestionType = true;
+          break;
+
+        default:
+          break;
       }
     }
   }

@@ -7,7 +7,14 @@
       <md-card-subtitle>Are there "hidden" questions?</md-card-subtitle>
       <div class="flex col-12">
         <div class="col-2"></div>
-        <md-checkbox (change)="checkboxChange($event.checked)" [checked]="expandable">yes</md-checkbox>
+        <md-checkbox *ngIf="controlType === 'radio' && questionType === 'boolean'" 
+          (change)="checkboxChange($event.checked)" 
+          [checked]="expandable">
+          yes
+        </md-checkbox>
+        <md-card-subtitle *ngIf="controlType !== 'radio' || questionType !== 'boolean'"> 
+          Only questions controlled by buttons with answer type 'true/false' can be expandable
+        </md-card-subtitle>
         <div class="col-2 flex-grow"></div>
       </div>
     </div>

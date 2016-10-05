@@ -10,6 +10,8 @@ import * as editQuestion from '../edit-question.actions';
 })
 export class EditQuestionExpandableComponent implements OnInit {
   @Input() expandable: boolean;
+  @Input() controlType: string;
+  @Input() questionType: string;
   constructor(private store: Store<fromRoot.State>) { }
 
   ngOnInit() {
