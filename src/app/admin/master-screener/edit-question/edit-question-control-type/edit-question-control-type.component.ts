@@ -10,7 +10,6 @@ import * as editQuestion from '../edit-question.actions';
 })
 export class EditQuestionControlTypeComponent implements OnInit {
   @Input() controlType: string;
-  currentValue: string;
   private options = [
     {display: 'button', value: 'radio'},
     {display: 'text', value: 'input'},
@@ -18,13 +17,11 @@ export class EditQuestionControlTypeComponent implements OnInit {
   constructor(private store: Store<fromRoot.State>) { }
 
   ngOnInit() {
-    this.currentValue = this.controlType;
   }
 
-  changeType($event) {
-    if (typeof $event !== 'undefined' && this.currentValue !== $event) {
-      this.store.dispatch(new editQuestion.EditQuestionChangeControl($event));
-      this.currentValue = $event;
+  dispatchChange(newValue) {
+    if (newValue !== this.controlType) {
+      this.store.dispatch(new editQuestion.EditQuestionChangeControl(newValue));
     }
   }
 }

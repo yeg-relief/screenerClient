@@ -2,6 +2,10 @@ import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { Store } from '@ngrx/store';
 import * as fromRoot from '../../../reducer';
 import * as editQuestion from '../edit-question.actions';
+import { Observable } from 'rxjs/Observable';
+import { Question } from '../../../../shared/models';
+import { Key } from '../../../models/key';
+
 
 @Component({
   selector: 'app-edit-question-type',
@@ -9,9 +13,10 @@ import * as editQuestion from '../edit-question.actions';
   styleUrls: ['./edit-question-type.component.css']
 })
 export class EditQuestionTypeComponent implements OnInit {
-  @Input() type: string;
   @Output() booleanSelected = new EventEmitter<boolean>();
-  currentValue: string;
+  @Input() type: string;
+  editQuestion$: Observable<{question: Question, unusedKeys: Key[]}>;
+  userChangedValue$: Observable<Event>;
   private options = [
     {display: 'true/false', value: 'boolean'},
     {display: 'number', value: 'number'},
@@ -21,19 +26,12 @@ export class EditQuestionTypeComponent implements OnInit {
   constructor(private store: Store<fromRoot.State>) { }
 
   ngOnInit() {
-    this.currentValue = this.type;
+    this.editQuestion$ = this.store.let(fromRoot.getPresentQuestionEdit);
   }
 
-  changeType($event) {
-    if (typeof $event !== 'undefined' && this.currentValue !== $event) {
-      this.store.dispatch(new editQuestion.EditQuestionChangeQuestionType($event));
-      this.currentValue = $event;
-      if ($event === 'boolean') {
-        this.booleanSelected.emit(true);
-      } else {
-        this.booleanSelected.emit(false);
-      }
+  dispatchChange(newValue) {
+    if (newValue !== this.type) {
+      this.store.dispatch(new editQuestion.EditQuestionChangeQuestionType(newValue));
     }
   }
-
 }

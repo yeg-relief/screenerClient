@@ -12,21 +12,24 @@ const LABELS = {
   NO_KEY_PICKED: 'no key picked',
   NO_LABEL_PICKED: 'no label picked',
   NO_CONTROL_PICKED: 'no control picked',
-  NO_TYPE_PICKED: 'no type picked'
+  NO_TYPE_PICKED: 'no type picked',
+  MAKE_QUESTION_EXPANDABLE: 'make question expandable'
 };
 
 const MESSAGES = {
   NO_KEY_PICKED: 'Pick a key',
   NO_LABEL_PICKED: 'Write a label',
   NO_CONTROL_PICKED: 'Select a control type',
-  NO_TYPE_PICKED: 'Select the type of answer you expect'
+  NO_TYPE_PICKED: 'Select the type of answer you expect',
+  MAKE_QUESTION_EXPANDABLE: 'Would you like to add a hidden section to the question?'
 };
 
 const OPEN_CONTROLS = {
   NO_KEY_PICKED: ['key'],
   NO_LABEL_PICKED: ['label'],
   NO_CONTROL_PICKED: ['control'],
-  NO_TYPE_PICKED: ['type']
+  NO_TYPE_PICKED: ['type'],
+  MAKE_QUESTION_EXPANDABLE: ['expandable']
 };
 
 
@@ -133,11 +136,31 @@ export function reducer(state = initialState, action: EditQuestionActions): Stat
       const newControlType = <'radio' | 'input'>action.payload;
       const newPresent = cloneDeep(state.present);
       const newState = cloneDeep(state);
-      const newPast = [...state.past, state.present];
-      const nocontrolIndex = newPresent.details.findIndex(detail => detail.label === LABELS.NO_CONTROL_PICKED);
-      if ( typeof nocontrolIndex !== 'undefined') {
+      const newPast = [ state.present, ...state.past];
+      const nocontrolIndex =
+        newPresent.details.findIndex(detail => detail.label === LABELS.NO_CONTROL_PICKED);
+
+      if ( nocontrolIndex >= 0) {
         newPresent.details.splice(nocontrolIndex, 1);
       }
+
+      const makeExpandableIndex = newPresent.details.findIndex(detail => detail.label === LABELS.MAKE_QUESTION_EXPANDABLE);
+
+      // if its a bool question with a button and there is no makeExpanable message push one
+      if ( makeExpandableIndex < 0 && newControlType === 'radio' && newPresent.question.type === 'boolean') {
+        console.log('pushing make quesiton exapandable');
+        newPresent.details.push({
+          msg: MESSAGES.MAKE_QUESTION_EXPANDABLE,
+          open: OPEN_CONTROLS.MAKE_QUESTION_EXPANDABLE,
+          label: LABELS.MAKE_QUESTION_EXPANDABLE
+        });
+      }
+      // if the make expandable message is there but it's not a radio question or not a bool splice it
+      if ( makeExpandableIndex >= 0 && (newControlType !== 'radio' || newPresent.question.type !== 'boolean')) {
+        newPresent.details.splice(makeExpandableIndex, 1);
+      }
+
+
       newPresent.question.controlType = newControlType;
       newState.present = newPresent;
       newState.past = newPast;
@@ -149,11 +172,28 @@ export function reducer(state = initialState, action: EditQuestionActions): Stat
       const newQuestionType = <'boolean' | 'number' | 'text'>action.payload;
       const newPresent = cloneDeep(state.present);
       const newState = cloneDeep(state);
-      const newPast = [...state.past, state.present];
+      const newPast = [state.present, ...state.past];
       const notypeIndex = newPresent.details.findIndex(detail => detail.label === LABELS.NO_TYPE_PICKED);
-      if ( typeof notypeIndex !== 'undefined') {
+      if ( notypeIndex >= 0) {
         newPresent.details.splice(notypeIndex, 1);
       }
+
+      const makeExpandableIndex = newPresent.details.findIndex(detail => detail.label === LABELS.MAKE_QUESTION_EXPANDABLE);
+
+      // if its a bool question with a button and there is no makeExpanable message push one
+      if ( makeExpandableIndex < 0 && newQuestionType === 'boolean' && newPresent.question.controlType === 'radio') {
+        console.log('pushing make quesiton exapandable');
+        newPresent.details.push({
+          msg: MESSAGES.MAKE_QUESTION_EXPANDABLE,
+          open: OPEN_CONTROLS.MAKE_QUESTION_EXPANDABLE,
+          label: LABELS.MAKE_QUESTION_EXPANDABLE
+        });
+      }
+      // if the make expandable message is there but it's not a radio question or not a bool splice it
+      if ( makeExpandableIndex >= 0 && (newQuestionType !== 'boolean' || newPresent.question.controlType !== 'radio')) {
+        newPresent.details.splice(makeExpandableIndex, 1);
+      }
+
       newPresent.question.type = newQuestionType;
       newState.present = newPresent;
       newState.past = newPast;
@@ -165,10 +205,10 @@ export function reducer(state = initialState, action: EditQuestionActions): Stat
       const newLabel = <string>action.payload;
       const newPresent = cloneDeep(state.present);
       const newState = cloneDeep(state);
-      const newPast = [...state.past, state.present];
+      const newPast = [state.present, ...state.past];
       newPresent.question.label = newLabel;
       const nolabelIndex = newPresent.details.findIndex(detail => detail.label === LABELS.NO_LABEL_PICKED);
-      if ( typeof nolabelIndex !== 'undefined') {
+      if ( nolabelIndex >= 0) {
         newPresent.details.splice(nolabelIndex, 1);
       }
       newState.present = newPresent;
@@ -184,7 +224,7 @@ export function reducer(state = initialState, action: EditQuestionActions): Stat
       const newPast = [state.present, ...state.past];
       newPresent.question.key = newKeyName;
       const nokeyIndex = newPresent.details.findIndex(detail => detail.label === LABELS.NO_KEY_PICKED);
-      if ( typeof nokeyIndex !== 'undefined') {
+      if ( nokeyIndex >= 0) {
         newPresent.details.splice(nokeyIndex, 1);
       }
       newState.present = newPresent;
@@ -197,7 +237,7 @@ export function reducer(state = initialState, action: EditQuestionActions): Stat
       const newExpandable = <boolean>action.payload;
       const newPresent = cloneDeep(state.present);
       const newState = cloneDeep(state);
-      const newPast = [...state.past, state.present];
+      const newPast = [state.present, ...state.past];
       newPresent.question.expandable = newExpandable;
       newState.present = newPresent;
       newState.past = newPast;
@@ -211,7 +251,7 @@ export function reducer(state = initialState, action: EditQuestionActions): Stat
       }
       const question = blankQuestion;
       const newState = cloneDeep(state);
-      const newPast = [...state.past, state.present];
+      const newPast = [state.present, ...state.past];
       newState.present.question = question;
       newState.past = newPast;
       return newState;
@@ -224,18 +264,13 @@ export function reducer(state = initialState, action: EditQuestionActions): Stat
       console.log('UNDO');
       console.log(state);
       const newState = cloneDeep(state);
-      const previous = state.past[state.past.length - 1];
-      const newPast = state.past.slice(0, state.past.length - 1);
-      let newFuture;
-      newFuture = [state.present, ...state.future];
-      newState.past = cloneDeep(newPast);
-      newState.future = newFuture;
+      const previous = state.past.shift();
+      const newFuture = [state.present, ...state.future];
+      newState.past = cloneDeep(state.past);
+      newState.future = cloneDeep(newFuture);
       newState.present = cloneDeep(previous);
-      return Object.assign({}, state, {
-        past: newPast,
-        future: newFuture,
-        present: previous
-      });
+      console.log(newState);
+      return newState;
     }
 
     case EditQuestionActionTypes.REDO: {
@@ -245,19 +280,13 @@ export function reducer(state = initialState, action: EditQuestionActions): Stat
       console.log('REDO');
       console.log(state);
       const newState = cloneDeep(state);
-      const next = state.future[0];
-      const newFuture = state.future.slice(1);
-      let newPast;
-      newPast = [...state.past, state.present];
+      const next = state.future.shift();
+      const newPast = [state.present, ...state.past];
       newState.past = newPast;
-      newState.future = cloneDeep(newFuture);
+      newState.future = cloneDeep(state.future);
       newState.present = cloneDeep(next);
-
-      return Object.assign({}, state, {
-        past: newPast,
-        present: next,
-        future: newFuture
-      });
+      console.log(newState);
+      return newState;
     }
 
     default: {

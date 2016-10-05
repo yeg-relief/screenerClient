@@ -19,7 +19,6 @@ export class QuestionDetailsComponent implements OnInit {
   }
 
   handleClick(open: string[]) {
-    console.log([].concat(open));
     this.detailClick.emit(open);
   }
 

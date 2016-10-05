@@ -8,3 +8,19 @@ md-card-title,
 md-radio-button {
   font-family: 'Roboto Mono', monospace;
 }
+
+button {
+  font-family: 'Roboto Mono', monospace;
+  font-size: 130%;
+  
+}
+
+button[md-button] {
+  background-color: black;
+  color: white
+}
+
+button[md-button]:hover {
+  background-color: pink;
+  color: black;
+}

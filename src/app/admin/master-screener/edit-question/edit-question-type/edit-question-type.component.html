@@ -2,14 +2,27 @@
   <div class="col-1"></div>
   <div class="col-10 flex">
     <div class="col-1"></div>
-    <div class="col-10 flex flex-column bg-silver center py1">
+    <div class="col-10 bg-silver center py1">
       <md-card-title><p>Question Type</md-card-title>
       <md-card-subtitle><p>What kind of input you expect</md-card-subtitle>
-      <md-radio-group (change)="changeType($event.value)" [value]="type">
-        <md-radio-button class="ml2" *ngFor="let d of options" [value]="d.value">
-          {{d.display}}
-        </md-radio-button>
-      </md-radio-group>
+      <div class="col-12 flex">
+        <div class="col-1"></div>
+        <div class="col-10">
+          <div class="flex flex-justify">
+            <div class="col-1"></div>
+            <div *ngFor="let option of options">
+              <button *ngIf="option.value === type" md-raised-button color="primary">
+                {{option.display}}
+              </button>
+              <button *ngIf="option.value !== type" (click)="dispatchChange(option.value)" md-button>
+                {{option.display}}
+              </button>
+            </div>
+            <div class="col-1"></div>
+          </div>
+        </div>
+        <div class="col-1"></div>
+      </div>
     </div>
     <div class="col-1"></div>
   </div>

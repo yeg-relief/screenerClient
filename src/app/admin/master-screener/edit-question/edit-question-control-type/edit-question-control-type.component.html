@@ -5,11 +5,25 @@
     <div class="col-10 flex flex-column bg-silver center py2">
       <md-card-title>Question Control Type</md-card-title>
       <md-card-subtitle>How the user answers the question</md-card-subtitle>
-      <md-radio-group (change)="changeType($event.value)" [value]="controlType">
-        <md-radio-button class="ml2" *ngFor="let d of options" [value]="d.value">
-          {{d.display}}
-        </md-radio-button>
-      </md-radio-group>
+      <div class="col-12 flex">
+        <div class="col-3"></div>
+          <div class="col-6 center flex">
+            <div class="col-12 flex flex-justify" *ngFor="let option of options">
+              <div class="col-3"></div>
+              <button class="col-3" *ngIf="option.value === controlType" md-raised-button color="primary">
+                {{option.display}}
+              </button>
+              
+              <button class="col-3"
+                *ngIf="option.value !== controlType" 
+                (click)="dispatchChange(option.value)" md-button>
+                {{option.display}}
+              </button>
+              <div class="col-3"></div>
+            </div>
+          </div>
+        <div class="col-3"></div>
+      </div>
     </div>
     <div class="col-1"></div>
   </div>

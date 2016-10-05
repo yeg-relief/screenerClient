@@ -1,10 +1,26 @@
+main {
+  height: 20vh;
+}
+
 md-card,
 md-card-subtitle,
-md-card-title,
+md-card-title, 
 md-radio-button {
   font-family: 'Roboto Mono', monospace;
 }
 
-main {
-  height: 20vh;
+button {
+  font-family: 'Roboto Mono', monospace;
+  font-size: 130%;
+  
+}
+
+button[md-button] {
+  background-color: black;
+  color: white
+}
+
+button[md-button]:hover {
+  background-color: pink;
+  color: black;
 }

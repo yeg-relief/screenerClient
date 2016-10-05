@@ -4,6 +4,8 @@ import * as fromRoot from '../../reducer';
 import { Observable } from 'rxjs/Observable';
 import { Question } from '../../../shared/models';
 import { Key } from '../../models/key';
+import 'rxjs/add/operator/take';
+
 
 @Component({
   selector: 'app-edit-question',
@@ -12,6 +14,7 @@ import { Key } from '../../models/key';
 })
 export class EditQuestionComponent implements OnInit {
   editQuestion$: Observable<{question: Question, unusedKeys: Key[]}>;
+  originalEditQuestionKey$: Observable<string>;
   showKeys = false;
   showControlType = false;
   showQuestionType = false;
@@ -22,6 +25,37 @@ export class EditQuestionComponent implements OnInit {
 
   ngOnInit() {
     this.editQuestion$ = this.store.let(fromRoot.getPresentQuestionEdit);
+    this.originalEditQuestionKey$ = this.store.let(fromRoot.getOriginalKeyQuestionEdit).take(1);
+    this.originalEditQuestionKey$
+    .subscribe(
+      (key) => {
+        if (key === 'new') {
+          this.showGuide();
+        } else {
+          this.hideGuide();
+        }
+      },
+      (error) => console.log(error),
+      () => console.log('original edit key sub completed')
+    );
+  }
+
+  showGuide() {
+    this.showKeys = false;
+    this.showControlType = false;
+    this.showQuestionType = false;
+    this.showExpand = false;
+    this.showLabel = false;
+    this.showDetails = true;
+  }
+
+  hideGuide() {
+    this.showKeys = true;
+    this.showControlType = true;
+    this.showQuestionType = true;
+    this.showExpand = true;
+    this.showLabel = true;
+    this.showDetails = false;
   }
 
   keyToggle($event) {
@@ -75,6 +109,10 @@ export class EditQuestionComponent implements OnInit {
 
         case 'type':
           this.showQuestionType = true;
+          break;
+
+        case 'expandable':
+          this.showExpand = true;
           break;
 
         default:
