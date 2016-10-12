@@ -46,8 +46,8 @@ export class DataService {
   }
 
   loadVersionMetaData(): Observable<number[]> {
-    return Observable.range(1, 3)
-      .toArray()
+    // tslint:disable-next-line
+    return Observable.of(versions)
       .delay(100);
   }
 
@@ -61,11 +61,14 @@ export class DataService {
     // tslint:disable-next-line
     const latest = availableVersions[availableVersions.length - 1];
     screener.meta.screener.version++;
+    versions.push(screener.meta.screener.version);
     // tslint:disable-next-line
     availableVersions.push(screener);
     return Observable.of('').delay(2000);
   }
 }
+
+const versions = [1, 2, 3];
 
 const mockKeys: Key[] = [
   {
