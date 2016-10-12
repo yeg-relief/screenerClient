@@ -3,7 +3,7 @@
     md-mini-fab 
     color="primary"
     (click)="handleSave()"
-    *ngIf="!checkIfUndefined(workingEditVersion$ | async)">
+    *ngIf="!checkIfUndefined(workingEditVersion$ | async) && (unsavedEdits$ | async)">
     <i class="material-icons">save</i>
   </button>
   <div class="px2 flex-none"></div>

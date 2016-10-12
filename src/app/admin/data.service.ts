@@ -40,7 +40,9 @@ export class DataService {
 
   loadLatestScreener(): Observable<MasterScreener> {
     // tslint:disable-next-line
-    return Observable.of(availableVersions[availableVersions.length - 1]).delay(300);
+    const latest = availableVersions[availableVersions.length - 1];
+    this.screenerCache.set(latest.meta.screener.version.toString(), latest);
+    return Observable.of(latest).delay(1000);
   }
 
   loadVersionMetaData(): Observable<number[]> {
@@ -53,6 +55,15 @@ export class DataService {
     // tslint:disable-next-line
     return Observable.of(mockKeys)
       .delay(300);
+  }
+
+  saveScreener(screener: MasterScreener) {
+    // tslint:disable-next-line
+    const latest = availableVersions[availableVersions.length - 1];
+    screener.meta.screener.version++;
+    // tslint:disable-next-line
+    availableVersions.push(screener);
+    return Observable.of('').delay(2000);
   }
 }
 

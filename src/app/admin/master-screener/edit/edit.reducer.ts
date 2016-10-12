@@ -9,6 +9,7 @@ import { cloneDeep } from 'lodash';
 
 export interface State {
   workingVersion: number;
+  saving: boolean;
   past: MasterScreener[];
   present: MasterScreener;
   future: MasterScreener[];
@@ -16,6 +17,7 @@ export interface State {
 
 export const initialState: State = {
   workingVersion: undefined,
+  saving: false,
   past: new Array<MasterScreener>(),
   present: {
     questions: [],
@@ -52,8 +54,18 @@ export function reducer(state = initialState, action: EditScreenerActions): Stat
     };
 
     case EditScreenerActionsTypes.SAVE_SCREENER: {
-      return state;
+      console.log('save screener called');
+      return Object.assign({}, state, {
+        saving: true
+      });
     };
+
+    case EditScreenerActionsTypes.SAVE_SUCCESS: {
+      console.log('save screener success called');
+      return Object.assign({}, state, {
+        saving: false
+      });
+    }
 
     case EditScreenerActionsTypes.ADD_QUESTION: {
       const addedQuestion = <Question>action.payload;
@@ -191,14 +203,18 @@ export function getPresentQuestions(state$: Observable<State>) {
 }
 
 export function getPresentVersion(state$: Observable<State>) {
-  return getPresentScreener(state$).map(s => s.meta.screener.version).startWith(-1);
+  return getPresentScreener(state$).map(s => s.meta.screener.version);
 }
 
 export function getWorkingEditVersion(state$: Observable<State>) {
-  return state$.select(s => s.workingVersion).startWith(-1);
+  return state$.select(s => s.workingVersion);
 }
 
 export function unsavedEdits(state$: Observable<State>) {
   return state$.select(s => s.past)
     .map(past => past.length > 0);
+}
+
+export function getSavingState(state$: Observable<State>) {
+  return state$.select(s => s.saving);
 }

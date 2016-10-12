@@ -93,6 +93,7 @@ export const getCurrentEditWorkingVersion =
   if the previous two versions dont match then we must load a new version from the 
   data service
 */
+export const getEditScreenerSaving = share(compose(fromEditScreener.getSavingState, getEditScreenerState));
 
 
 
@@ -105,6 +106,8 @@ export const getOriginalKeyQuestionEdit =
 
 export const getQuestionDetails =
   share(compose(fromEditQuestion.getQuestionDetails, getEditQuestionState));
+
+export const unsavedQuestionEdits = share(compose(fromEditQuestion.unsavedEdits, getEditQuestionState));
 
 /* for keys */
 export const getPresentKeys =

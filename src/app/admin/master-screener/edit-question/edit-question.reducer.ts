@@ -305,3 +305,9 @@ export function getQuestionDetails(state$: Observable<State>) {
   return getPresentQuestion(state$)
     .map(present => present.details);
 }
+
+export function unsavedEdits(state$: Observable<State>) {
+  return state$.select(s => s.past)
+    .map(past => past.length > 0);
+}
+

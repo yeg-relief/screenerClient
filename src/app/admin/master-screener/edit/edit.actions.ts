@@ -6,6 +6,8 @@ export const EditScreenerActionsTypes = {
   INIT_EDIT: '[EDIT_SCREENER] INIT_EDIT',
   LOAD_SCREENER: '[EDIT_SCREENER] LOAD_SCREENER',
   SAVE_SCREENER: '[EDIT_SCREENER] SAVE_SCREENER',
+  SAVE_SUCCESS: '[EDIT_SCREENER] SAVE_SUCCESS',
+  SAVE_FAILURE: '[EDIT_SCREENER] SAVE_FAILURE',
   ADD_QUESTION: '[EDIT_SCREENER] ADD_QUESTION',
   REMOVE_QUESTION: '[EDIT_SCREENER] REMOVE_QUESTION',
   EDIT_QUESTION: '[EDIT_SCREENER] EDIT_QUESTION',
@@ -29,9 +31,19 @@ export class LoadScreener implements Action {
 
 /* save this screener to localstorage or to server? */
 export class SaveScreener implements Action {
-  type = EditScreenerActionsTypes.LOAD_SCREENER;
+  type = EditScreenerActionsTypes.SAVE_SCREENER;
 
   constructor(public payload: MasterScreener) { }
+}
+
+export class SaveScreenerSuccess implements Action {
+  type = EditScreenerActionsTypes.SAVE_SUCCESS;
+  constructor(public payload: {}) { }
+}
+
+export class SaveScreenerFailure implements Action {
+  type = EditScreenerActionsTypes.SAVE_FAILURE;
+  constructor(public payload: {}) { }
 }
 
 export class AddQuestion implements Action {
@@ -84,3 +96,5 @@ export type EditScreenerActions =
   | InitEdit
   | UndoEdit
   | RedoEdit
+  | SaveScreenerFailure
+  | SaveScreenerSuccess;

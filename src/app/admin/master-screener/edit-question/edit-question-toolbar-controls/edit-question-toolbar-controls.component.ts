@@ -17,10 +17,12 @@ import 'rxjs/add/observable/of';
 })
 export class EditQuestionToolbarControlsComponent implements OnInit {
   workingEditVersion$: Observable<number>;
+  unsavedEdits$: Observable<boolean>;
   constructor(private store: Store<fromRoot.State>, private router: Router) { }
 
   ngOnInit() {
     this.workingEditVersion$ = this.store.let(fromRoot.getPresentEditScreenerVersion);
+    this.unsavedEdits$ = this.store.let(fromRoot.unsavedQuestionEdits);
   }
 
   handleUndo() {

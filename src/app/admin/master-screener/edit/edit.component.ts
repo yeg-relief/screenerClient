@@ -10,11 +10,13 @@ import { MasterScreener } from '../../models/master-screener';
 })
 export class EditComponent implements OnInit {
   workingScreener$: Observable<MasterScreener>;
+  saving$: Observable<boolean>;
 
   constructor(private store: Store<fromRoot.State>) { }
 
   ngOnInit() {
     this.workingScreener$ = this.store.let(fromRoot.getPresentEditScreener);
+    this.saving$ = this.store.let(fromRoot.getEditScreenerSaving);
   }
 
 }

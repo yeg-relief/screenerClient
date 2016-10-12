@@ -1,6 +1,6 @@
-<div class="flex flex-justify clearfix">
+<div class="flex flex-justify clearfix" *ngIf="!(saving$ | async)">
   <div class="col-3"></div>
-  <button md-mini-fab color="primary" *ngIf="(unsavedEdits$ | async)">
+  <button md-mini-fab color="primary" *ngIf="(unsavedEdits$ | async)" (click)="handleSave()">
     <i class="material-icons">save</i>
   </button>
   <div class="px2 flex-none"></div>
