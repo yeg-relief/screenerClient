@@ -39,10 +39,6 @@ export class OverviewComponent implements OnInit {
     this.questions$ = this.store.let(fromRoot.flattenedQuestions);
     this.questionCount$ = this.store.let(fromRoot.getWorkingQuestionCount);
     this.creationDate$ = this.store.let(fromRoot.getWorkingCreationDate);
-    // move these calls into an activate route guard 
-    this.store.dispatch({
-      type: MasterScreenerActionsTypes.LOAD_VERSIONS_INFO
-    });
   }
 
 }

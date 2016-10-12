@@ -261,15 +261,12 @@ export function reducer(state = initialState, action: EditQuestionActions): Stat
       if (state.past.length <= 0) {
         return state;
       }
-      console.log('UNDO');
-      console.log(state);
       const newState = cloneDeep(state);
       const previous = state.past.shift();
       const newFuture = [state.present, ...state.future];
       newState.past = cloneDeep(state.past);
       newState.future = cloneDeep(newFuture);
       newState.present = cloneDeep(previous);
-      console.log(newState);
       return newState;
     }
 
@@ -277,20 +274,20 @@ export function reducer(state = initialState, action: EditQuestionActions): Stat
       if (state.future.length <= 0) {
         return state;
       }
-      console.log('REDO');
-      console.log(state);
       const newState = cloneDeep(state);
       const next = state.future.shift();
       const newPast = [state.present, ...state.past];
       newState.past = newPast;
       newState.future = cloneDeep(state.future);
       newState.present = cloneDeep(next);
-      console.log(newState);
       return newState;
     }
 
+    case EditQuestionActionTypes.SAVE_QUESTION: {
+      return initialState;
+    }
+
     default: {
-      console.log('[EDIT_QUESTION] DEFAULT');
       return state;
     }
   }

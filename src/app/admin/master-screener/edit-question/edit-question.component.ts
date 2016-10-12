@@ -35,8 +35,7 @@ export class EditQuestionComponent implements OnInit {
           this.hideGuide();
         }
       },
-      (error) => console.log(error),
-      () => console.log('original edit key sub completed')
+      (error) => console.log(error)
     );
   }
 

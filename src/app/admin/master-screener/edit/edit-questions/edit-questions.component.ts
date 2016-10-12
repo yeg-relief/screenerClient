@@ -6,6 +6,7 @@ import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/observable/of';
 import { Question } from '../../../../shared/models';
 import 'rxjs/add/operator/do';
+import 'rxjs/add/operator/take';
 
 @Component({
   selector: 'app-edit-questions',
@@ -20,8 +21,8 @@ export class EditQuestionsComponent implements OnInit {
 
   ngOnInit() {
     this.questionControlService.toFormGroup(Observable.of(this.questions))
-      .subscribe( form => this.form = form )
-      .unsubscribe();
+      .take(1)
+      .subscribe( form => this.form = form );
   }
 
   addControls(questions) {

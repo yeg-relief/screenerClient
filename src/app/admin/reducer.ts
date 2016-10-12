@@ -81,8 +81,20 @@ export const getPresentEditScreener =
 export const getPresentEditQuestions =
   share(compose(fromEditScreener.getPresentQuestions, getEditScreenerState));
 
+export const unsavedEdits = share(compose(fromEditScreener.unsavedEdits, getEditScreenerState));
+
+// this function returns the edit version for the current screener in state
 export const getPresentEditScreenerVersion =
   share(compose(fromEditScreener.getPresentVersion, getEditScreenerState));
+// this function returns the "WORKING VERSION" which is found from init version derived from route
+export const getCurrentEditWorkingVersion =
+  share(compose(fromEditScreener.getWorkingEditVersion, getEditScreenerState));
+/*
+  if the previous two versions dont match then we must load a new version from the 
+  data service
+*/
+
+
 
 /* for question edit */
 export const getPresentQuestionEdit =

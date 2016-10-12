@@ -11,7 +11,8 @@ export class MasterScreenerGuardService implements CanActivate {
   constructor(private store: Store<fromRoot.State>, private data: DataService) {}
 
   canActivate(): boolean {
-    this.store.dispatch(new masterScreener.LoadScreenerVersion(3));
+    this.store.dispatch(new masterScreener.LoadLatestVersion({}));
+    this.store.dispatch(new masterScreener.LoadScreenerVersionsInfo({}));
     return true;
   }
 }

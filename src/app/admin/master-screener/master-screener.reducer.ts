@@ -48,6 +48,13 @@ export const initialState: State = {
 
 export function reducer(state = initialState, action: MasterScreenerActions): State {
   switch (action.type) {
+
+    case MasterScreenerActionsTypes.LOAD_LATEST_SCREENER_VERSION: {
+      const newState = cloneDeep(state);
+      newState.loading = true;
+      newState.error = '';
+      return newState;
+    }
     // load a version from the api server
     case MasterScreenerActionsTypes.LOAD_MASTER_SCREENER_VERSION: {
       const newState = cloneDeep(state);
@@ -107,8 +114,7 @@ export function getVersions(state$: Observable<State>) {
 }
 
 export function getQuestionCount(state$: Observable<State>) {
-  return state$.select(s => s.masterScreener.meta.questions.totalCount)
-    .do(s => console.log(s));
+  return state$.select(s => s.masterScreener.meta.questions.totalCount);
 }
 
 export function getCreatedDate(state$: Observable<State>) {

@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { MasterScreener, MasterScreenerMetaData } from './models/master-screener';
+import { MasterScreener } from './models/master-screener';
 import { Key } from './models/key';
 import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/observable/of';
@@ -14,32 +14,33 @@ export class DataService {
   private requestScreener(version: number): Observable<MasterScreener> | Observable<boolean> {
     const MOCK_VALID_VERSION = 3;
     const valid: boolean = version === MOCK_VALID_VERSION;
-    console.log(`request validity: ${valid}`);
     return Observable.of(valid)
       .switchMap<boolean | MasterScreener>((res: boolean) => {
         if (!res) {
           return Observable.of(res);
         }
         // tslint:disable-next-line
-        this.screenerCache.set(version.toString(), mockVersionEight);
+        this.screenerCache.set(version.toString(), mockVersionThree);
         // tslint:disable-next-line
-        return Observable.of(mockVersionEight);
+        return Observable.of(mockVersionThree);
       })
       .delay(1000);
   }
 
   loadScreener(version: number): Observable<MasterScreener> {
-    console.log(`screener version request service pov: ${version}`);
     return Observable.of(this.screenerCache.has(version.toString()))
       .switchMap<boolean | MasterScreener>((res: boolean) => {
         if (res) {
-          console.log(`loading master-screener version ${version} from cache.`);
           const versionA = this.screenerCache.get(version.toString());
           return Observable.of(versionA);
         }
-        console.log(`requesting master-screener version ${version} from network`);
         return this.requestScreener(version);
       });
+  }
+
+  loadLatestScreener(): Observable<MasterScreener> {
+    // tslint:disable-next-line
+    return Observable.of(availableVersions[availableVersions.length - 1]).delay(300);
   }
 
   loadVersionMetaData(): Observable<number[]> {
@@ -91,7 +92,7 @@ const mockKeys: Key[] = [
   },
 ];
 
-const mockVersionEight: MasterScreener = {
+const mockVersionThree: MasterScreener = {
   meta: {
     screener: {
       version: 3,
@@ -255,3 +256,5 @@ const mockVersionEight: MasterScreener = {
     }
   ]
 };
+
+const availableVersions = [mockVersionThree];

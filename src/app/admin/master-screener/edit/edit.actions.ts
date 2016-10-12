@@ -52,11 +52,10 @@ export class ClearQuestions implements Action {
   constructor(public payload: {}) { }
 }
 
-// next two actions have a payload of an array of only two questions... maybe make a more specific type?
 export class EditQuestion implements Action {
   type = EditScreenerActionsTypes.EDIT_QUESTION;
 
-  constructor(public payload: Question[]) { }
+  constructor(public payload: {originalKey: string, editedVersion: Question}) { }
 }
 
 export class SwapQuestions implements Action {

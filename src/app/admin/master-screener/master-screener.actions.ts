@@ -4,6 +4,7 @@ import { MasterScreener } from '../models/master-screener';
 export const MasterScreenerActionsTypes = {
   CHANGE_MASTER_SCREENER_VERSION: '[MASTER_SCREENER] CHANGE_MASTER_SCREENER_VERSION',
   LOAD_MASTER_SCREENER_VERSION: '[MASTER_SCREENER] LOAD_MASTER_SCREENER_VERSION',
+  LOAD_LATEST_SCREENER_VERSION: '[MASTER_SCREENER] LOAD_LATEST_SCREENER_VERSION',
   LOAD_VERSIONS_INFO: '[MASTER_SCREENER] LOAD_VERSIONS_INFO',
   CHANGE_VERSIONS_INFO: '[MASTER_SCREENER] CHANGE_VERSIONS_INFO'
 };
@@ -37,8 +38,14 @@ export class ChangeScreenerVersionInfo implements Action {
   constructor(public payload: number[]) {}
 }
 
+export class LoadLatestVersion implements Action {
+  type = MasterScreenerActionsTypes.LOAD_LATEST_SCREENER_VERSION;
+  constructor(public payload: {}) {}
+}
+
 export type MasterScreenerActions =
     ChangeScreenerVersion
   | LoadScreenerVersion
   | LoadScreenerVersionsInfo
   | ChangeScreenerVersionInfo
+  | LoadLatestVersion;

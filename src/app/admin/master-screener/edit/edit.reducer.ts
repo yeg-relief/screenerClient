@@ -1,4 +1,6 @@
 import '@ngrx/core/add/operator/select';
+import 'rxjs/add/operator/map';
+import 'rxjs/add/operator/startWith';
 import { Observable } from 'rxjs/Observable';
 import {EditScreenerActions, EditScreenerActionsTypes} from './edit.actions';
 import { MasterScreener } from '../../models/master-screener';
@@ -6,12 +8,14 @@ import { Question } from '../../../shared/models';
 import { cloneDeep } from 'lodash';
 
 export interface State {
+  workingVersion: number;
   past: MasterScreener[];
   present: MasterScreener;
   future: MasterScreener[];
 }
 
 export const initialState: State = {
+  workingVersion: undefined,
   past: new Array<MasterScreener>(),
   present: {
     questions: [],
@@ -32,7 +36,10 @@ export function reducer(state = initialState, action: EditScreenerActions): Stat
   switch (action.type) {
 
     case EditScreenerActionsTypes.INIT_EDIT: {
-      return state;
+      const workingVersion = <number>action.payload;
+      return Object.assign({}, state, {
+        workingVersion: workingVersion
+      });
     }
 
     case EditScreenerActionsTypes.LOAD_SCREENER: {
@@ -79,11 +86,11 @@ export function reducer(state = initialState, action: EditScreenerActions): Stat
     }
 
     case EditScreenerActionsTypes.EDIT_QUESTION: {
-      const originalQuestion = <Question>action.payload[0];
-      const editedQuestion = <Question>action.payload[1];
+      const originalKey = <string>action.payload.originalKey;
+      const editedQuestion = <Question>action.payload.editedVersion;
       const present: MasterScreener = cloneDeep(state.present);
       const index = present.questions.findIndex(stateQuestion => {
-        return stateQuestion.key === originalQuestion.key;
+        return stateQuestion.key === originalKey;
       });
       if (typeof index === 'undefined') {
         return state;
@@ -184,5 +191,14 @@ export function getPresentQuestions(state$: Observable<State>) {
 }
 
 export function getPresentVersion(state$: Observable<State>) {
-  return getPresentScreener(state$).map(s => s.meta.screener.version);
+  return getPresentScreener(state$).map(s => s.meta.screener.version).startWith(-1);
+}
+
+export function getWorkingEditVersion(state$: Observable<State>) {
+  return state$.select(s => s.workingVersion).startWith(-1);
+}
+
+export function unsavedEdits(state$: Observable<State>) {
+  return state$.select(s => s.past)
+    .map(past => past.length > 0);
 }

@@ -1,5 +1,9 @@
 <div class="flex flex-justify clearfix">
-  <button md-mini-fab color="primary">
+  <button 
+    md-mini-fab 
+    color="primary"
+    (click)="handleSave()"
+    *ngIf="!checkIfUndefined(workingEditVersion$ | async)">
     <i class="material-icons">save</i>
   </button>
   <div class="px2 flex-none"></div>
