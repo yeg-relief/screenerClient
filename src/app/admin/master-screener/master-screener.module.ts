@@ -32,9 +32,9 @@ import { EditQuestionLabelComponent } from './edit-question/edit-question-label/
 import { EditQuestionKeyComponent } from './edit-question/edit-question-key/edit-question-key.component';
 import { EditQuestionControlTypeComponent } from './edit-question/edit-question-control-type/edit-question-control-type.component';
 import { EditQuestionExpandableComponent } from './edit-question/edit-question-expandable/edit-question-expandable.component';
-import { EditQuestionDisplayControlsComponent } 
+import { EditQuestionDisplayControlsComponent }
   from './edit-question/edit-question-display-controls/edit-question-display-controls.component';
-import { QuestionDetailsComponent } from './edit-question/question-details/question-details.component';
+import { QuestionErrorsComponent } from './edit-question/question-errors/question-errors.component';
 
 @NgModule({
   imports: [
@@ -70,7 +70,7 @@ import { QuestionDetailsComponent } from './edit-question/question-details/quest
     EditQuestionControlTypeComponent,
     EditQuestionExpandableComponent,
     EditQuestionDisplayControlsComponent,
-    QuestionDetailsComponent
+    QuestionErrorsComponent
   ],
   providers: [
     EditGuardService,

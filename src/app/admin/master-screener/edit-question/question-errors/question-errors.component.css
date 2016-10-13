@@ -1,4 +1,4 @@
-.detail-wrapper {
+.error-wrapper {
   width: 69%;
   margin-left: 15.5%;
   margin-right: 15.5%;
@@ -7,8 +7,7 @@
 div {
   font-family: 'Roboto Mono', monospace;
 }
-
-.detail {
+.error {
   cursor: pointer;
   margin-bottom: 5px;
 }

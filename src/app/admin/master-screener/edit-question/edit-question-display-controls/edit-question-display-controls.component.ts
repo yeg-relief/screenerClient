@@ -11,14 +11,14 @@ export class EditQuestionDisplayControlsComponent implements OnInit {
   @Output() toggleQuestionType = new EventEmitter<boolean>();
   @Output() toggleExpand = new EventEmitter<boolean>();
   @Output() toggleLabel = new EventEmitter<boolean>();
-  @Output() toggleDetails = new EventEmitter<boolean>();
+  @Output() toggleErrors = new EventEmitter<boolean>();
 
   @Input() showKeys: boolean;
   @Input() showControlType: boolean;
   @Input() showQuestionType: boolean;
   @Input() showExpand: boolean;
   @Input() showLabel: boolean;
-  @Input() showDetails: boolean;
+  @Input() showErrors: boolean;
 
   constructor() { }
 
@@ -46,6 +46,6 @@ export class EditQuestionDisplayControlsComponent implements OnInit {
   }
 
   handleDetailsToggle($event) {
-    this.toggleDetails.emit($event);
+    this.toggleErrors.emit($event);
   }
 }

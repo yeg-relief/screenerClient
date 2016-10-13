@@ -68,6 +68,7 @@ export function reducer(state = initialState, action: EditScreenerActions): Stat
     }
 
     case EditScreenerActionsTypes.ADD_QUESTION: {
+      console.log('ADD_QUESTION CALLED');
       const addedQuestion = <Question>action.payload;
       const present = <MasterScreener>cloneDeep(state.present);
       present.questions = present.questions.concat(addedQuestion);

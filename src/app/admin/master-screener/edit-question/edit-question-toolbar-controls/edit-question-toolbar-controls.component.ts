@@ -6,9 +6,6 @@ import * as editScreener from '../../edit/edit.actions';
 import { Router } from '@angular/router';
 import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/observable/combineLatest';
-import 'rxjs/add/operator/take';
-import 'rxjs/add/operator/startWith';
-import 'rxjs/add/observable/of';
 
 @Component({
   selector: 'app-edit-question-toolbar-controls',
@@ -37,12 +34,12 @@ export class EditQuestionToolbarControlsComponent implements OnInit {
     Observable.combineLatest(
       this.store.let(fromRoot.getPresentQuestionEdit).take(1),
       this.store.let(fromRoot.getOriginalKeyQuestionEdit).take(1),
-      this.store.let(fromRoot.getWorkingNumber).take(1)
+      this.store.let(fromRoot.getWorkingNumber).take(1),
     )
     .subscribe(
       ([presentQuestionState, key, currentVersion]) => {
         if (key === 'new') {
-          this.store.dispatch(new editScreener.AddQuestion(presentQuestionState.question));
+          this.store.dispatch(new editQuestion.SaveQuestion(presentQuestionState.question));
         } else {
           this.store.dispatch(new editScreener.EditQuestion({
               originalKey: key,

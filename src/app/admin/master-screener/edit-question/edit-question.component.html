@@ -7,8 +7,8 @@
   (toggleQuestionType)="questionTypeToggle($event)"
   (toggleExpand)="expandToggle($event)"
   (toggleLabel)="labelToggle($event)"
-  (toggleDetails)="detailsToggle($event)"
-  [showDetails]="showDetails"
+  (toggleErrors)="errorsToggle($event)"
+  [showErrors]="showErrors"
   [showControlType]="showControlType"
   [showQuestionType]="showQuestionType"
   [showLabel]="showLabel"
@@ -16,12 +16,12 @@
   [showExpand]="showExpand">
 </app-edit-question-display-controls>
 <md-card class="col col-12 overview-wrapper">
-  <app-question-details 
-    (detailClick)="focusOnDetails($event)" 
-    *ngIf="showDetails">
-  </app-question-details>
+  <app-question-errors 
+    (errorClick)="focusOnError($event)" 
+    *ngIf="showErrors">
+  </app-question-errors>
   
-  <div class="py3" *ngIf="showDetails"></div>
+  <div class="py3" *ngIf="showErrors"></div>
   
   <app-edit-question-control-type 
     [controlType]="(editQuestion$ | async).question.controlType"

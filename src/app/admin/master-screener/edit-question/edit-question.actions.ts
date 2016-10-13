@@ -1,6 +1,7 @@
 import { Action } from '@ngrx/store';
 import { Key } from '../../models/key';
 import { Question } from '../../../shared/models/question';
+import { QuestionErrors } from './question-errors';
 
 export const EditQuestionActionTypes = {
   INIT_EDIT: '[EDIT QUESTION] INIT_EDIT',
@@ -14,7 +15,9 @@ export const EditQuestionActionTypes = {
   CLEAR_QUESTION: '[EDIT_QUESTION] CLEAR_QUESTION',
   UNDO: '[EDIT_QUESTION] UNDO',
   REDO: '[EDIT_QUESTION] REDO',
-  SAVE_QUESTION: '[EDIT_QUESTION] SAVE_QUESTION'
+  SAVE_QUESTION: '[EDIT_QUESTION] SAVE_QUESTION',
+  SAVE_QUESTION_SUCCESS: '[EDIT_QUESTION] SAVE_QUESTION_SUCCESS',
+  SAVE_QUESTION_FAILURE: '[EDIT_QUESTION] SAVE_QUESTION_FAILURE'
 };
 
 export class EditQuestionInit implements Action {
@@ -74,7 +77,17 @@ export class RedoEdit implements Action {
 
 export class SaveQuestion implements Action {
   type = EditQuestionActionTypes.SAVE_QUESTION;
-  constructor(public payload: Question) {}
+  constructor(public payload: Question) { }
+}
+
+export class SaveQuestionSuccess implements Action {
+  type = EditQuestionActionTypes.SAVE_QUESTION_SUCCESS;
+  constructor(public payload: {}) { }
+}
+
+export class SaveQuestionFailure implements Action {
+  type = EditQuestionActionTypes.SAVE_QUESTION_FAILURE;
+  constructor(public payload: QuestionErrors) { }
 }
 
 export type EditQuestionActions =
@@ -89,4 +102,6 @@ export type EditQuestionActions =
   | EditQuestionClearQuestion
   | RedoEdit
   | UndoEdit
-  | SaveQuestion;
+  | SaveQuestion
+  | SaveQuestionSuccess
+  | SaveQuestionFailure;

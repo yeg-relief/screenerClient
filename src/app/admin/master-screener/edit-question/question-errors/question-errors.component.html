@@ -1,0 +1,11 @@
+<div class="flex flex-column error-wrapper">
+  <div *ngFor="let error of (questionErrors$ | async )" 
+    class="border rounded bg-maroon white center error"
+    (click)="handleClick(error.open)">
+    {{ error.msg }} 
+  </div>
+  <div *ngIf="(questionErrors$ | async ).length === 0"
+    class="border rounded bg-blue white center">
+    There are no errors
+  </div>
+</div>

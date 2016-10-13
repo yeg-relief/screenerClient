@@ -1,7 +1,10 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Router } from '@angular/router';
 import { Store } from '@ngrx/store';
 import * as fromRoot from '../../reducer';
 import { Observable } from 'rxjs/Observable';
+import 'rxjs/add/observable/combineLatest';
+import { Subscription } from 'rxjs/Subscription';
 import { Question } from '../../../shared/models';
 import { Key } from '../../models/key';
 import 'rxjs/add/operator/take';
@@ -12,49 +15,25 @@ import 'rxjs/add/operator/take';
   templateUrl: './edit-question.component.html',
   styleUrls: ['./edit-question.component.css']
 })
-export class EditQuestionComponent implements OnInit {
+export class EditQuestionComponent implements OnInit, OnDestroy {
   editQuestion$: Observable<{question: Question, unusedKeys: Key[]}>;
   originalEditQuestionKey$: Observable<string>;
-  showKeys = false;
-  showControlType = false;
-  showQuestionType = false;
-  showExpand = false;
-  showLabel = false;
-  showDetails = true;
-  constructor(private store: Store<fromRoot.State>) { }
+  showKeys = true;
+  showControlType = true;
+  showQuestionType = true;
+  showExpand = true;
+  showLabel = true;
+  showErrors = false;
+  savedQuestion: Subscription;
+  constructor(private store: Store<fromRoot.State>, private router: Router) { }
 
   ngOnInit() {
     this.editQuestion$ = this.store.let(fromRoot.getPresentQuestionEdit);
     this.originalEditQuestionKey$ = this.store.let(fromRoot.getOriginalKeyQuestionEdit).take(1);
-    this.originalEditQuestionKey$
-    .subscribe(
-      (key) => {
-        if (key === 'new') {
-          this.showGuide();
-        } else {
-          this.hideGuide();
-        }
-      },
-      (error) => console.log(error)
-    );
   }
 
-  showGuide() {
-    this.showKeys = false;
-    this.showControlType = false;
-    this.showQuestionType = false;
-    this.showExpand = false;
-    this.showLabel = false;
-    this.showDetails = true;
-  }
-
-  hideGuide() {
-    this.showKeys = true;
-    this.showControlType = true;
-    this.showQuestionType = true;
-    this.showExpand = true;
-    this.showLabel = true;
-    this.showDetails = false;
+  ngOnDestroy() {
+    //this.savedQuestion.unsubscribe();
   }
 
   keyToggle($event) {
@@ -77,21 +56,21 @@ export class EditQuestionComponent implements OnInit {
     this.showLabel = $event;
   }
 
-  detailsToggle($event) {
-    this.showDetails = $event;
+  errorsToggle($event) {
+    this.showErrors = $event;
   }
 
   showExpandedSection($event) {
     this.showExpand = $event;
   }
 
-  focusOnDetails(sections: string[]) {
+  focusOnError(sections: string[]) {
     this.showKeys = false;
     this.showControlType = false;
     this.showQuestionType = false;
     this.showExpand = false;
     this.showLabel = false;
-    this.showDetails = true;
+    this.showErrors = true;
     for (let section of sections) {
       switch (section) {
         case 'key':

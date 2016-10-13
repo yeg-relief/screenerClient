@@ -104,24 +104,16 @@ export const getPresentQuestionEdit =
 export const getOriginalKeyQuestionEdit =
   share(compose(fromEditQuestion.getEditQuestionKey, getEditQuestionState));
 
-export const getQuestionDetails =
-  share(compose(fromEditQuestion.getQuestionDetails, getEditQuestionState));
+export const getQuestionErrors =
+  share(compose(fromEditQuestion.getQuestionErrors, getEditQuestionState));
 
 export const unsavedQuestionEdits = share(compose(fromEditQuestion.unsavedEdits, getEditQuestionState));
+
+//export const questionSaved = share(compose(fromEditQuestion.savedQuestion, getEditQuestionState));
 
 /* for keys */
 export const getPresentKeys =
   share(compose(fromKeys.getPresentKeys, getKeysState));
-
-/*
-export const isSelectedBookInCollection = function (state$: Observable<State>) {
-  return combineLatest<string[], Book>(
-    state$.let(getCollectionBookIds),
-    state$.let(getSelectedBook)
-  )
-  .map(([ ids, selectedBook ]) => ids.indexOf(selectedBook.id) > -1);
-};
-*/
 
 export const findEditQuestion = function (state$: Observable<State>) {
   return Observable.combineLatest<string, Question[]>(
