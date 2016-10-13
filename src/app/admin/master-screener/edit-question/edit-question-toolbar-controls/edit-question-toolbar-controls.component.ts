@@ -47,7 +47,7 @@ export class EditQuestionToolbarControlsComponent implements OnInit {
             })
           );
         }
-        this.router.navigateByUrl(`/admin/master-screener/edit/version/${currentVersion}`);
+        //this.router.navigateByUrl(`/admin/master-screener/edit/version/${currentVersion}`);
       },
       (error) => console.log(error)
     );

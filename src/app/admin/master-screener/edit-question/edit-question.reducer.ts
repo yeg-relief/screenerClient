@@ -196,11 +196,22 @@ export function reducer(state = initialState, action: EditQuestionActions): Stat
     }
 
     case EditQuestionActionTypes.SAVE_QUESTION_SUCCESS: {
-      return state;
+      return Object.assign({}, state, {
+        saved: true
+      });
     }
 
     case EditQuestionActionTypes.SAVE_QUESTION_FAILURE: {
-      return state;
+      console.log('save question failure called');
+      const errors = <QuestionErrors>action.payload;
+      console.log(errors);
+      const newPresent = cloneDeep(state.present);
+      const newState = cloneDeep(state);
+      const newPast = [ state.present, ...state.past];
+      newPresent.errors = [...errors];
+      newState.present = newPresent;
+      newState.past = newPast;
+      return newState;
     }
 
     default: {
