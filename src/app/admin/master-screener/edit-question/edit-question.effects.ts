@@ -30,7 +30,6 @@ export class EditQuestionEffects {
   @Effect() saveQuestion$ = this.actions$
     .ofType(editQuestion.EditQuestionActionTypes.SAVE_QUESTION)
     .map<Question>(action => action.payload)
-    .do(question => console.log(question))
     .switchMap((question: Question) => {
       return Observable.combineLatest(
         verifyQuestion(question),
@@ -40,9 +39,47 @@ export class EditQuestionEffects {
     )
     .map(([errors, question]) => {
       if (errors.length === 0) {
-        return new edit.AddQuestion(question);
+        this.store.dispatch(new editQuestion.SaveQuestionSuccess(question));
+        return new editQuestion.SaveQuestionSuccess(question);
       }
       return new editQuestion.SaveQuestionFailure(errors);
+    })
+    .map(action => {
+      if (action.type === editQuestion.EditQuestionActionTypes.SAVE_QUESTION_SUCCESS) {
+        const question = <Question>action.payload;
+        return new edit.AddQuestion(question);
+      }
+      return action;
+    });
+
+  @Effect() updateQuestion$ = this.actions$
+    .ofType(editQuestion.EditQuestionActionTypes.UPDATE_QUESTION)
+    .map(action => action.payload)
+    .switchMap((payload) => {
+      const editedVersion = <Question>payload.editedVersion;
+      const originalKey = <Question>payload.originalKey;
+      return Observable.combineLatest(
+        verifyQuestion(editedVersion),
+        Observable.of(originalKey),
+        Observable.of(editedVersion)
+      );
+    })
+    .map(([errors, originalKey, editedVersion]) => {
+      if (errors.length === 0) {
+        const payload = {
+          originalKey: originalKey,
+          editedVersion: editedVersion
+        };
+        this.store.dispatch(new editQuestion.UpdateQuestionSuccess(payload));
+        return new editQuestion.UpdateQuestionSuccess(payload);
+      }
+      return new editQuestion.UpdateQuestionFailure(errors);
+    })
+    .map(action => {
+      if (action.type === editQuestion.EditQuestionActionTypes.UPDATE_QUESTION_SUCCESS) {
+        return new edit.EditQuestion(action.payload);
+      }
+      return action;
     });
 
   constructor(

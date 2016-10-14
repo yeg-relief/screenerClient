@@ -17,7 +17,10 @@ export const EditQuestionActionTypes = {
   REDO: '[EDIT_QUESTION] REDO',
   SAVE_QUESTION: '[EDIT_QUESTION] SAVE_QUESTION',
   SAVE_QUESTION_SUCCESS: '[EDIT_QUESTION] SAVE_QUESTION_SUCCESS',
-  SAVE_QUESTION_FAILURE: '[EDIT_QUESTION] SAVE_QUESTION_FAILURE'
+  SAVE_QUESTION_FAILURE: '[EDIT_QUESTION] SAVE_QUESTION_FAILURE',
+  UPDATE_QUESTION: '[EDIT_QUESTION] UPDATE_QUESTION',
+  UPDATE_QUESTION_SUCCESS: '[EDIT_QUESTION] UPDATE_QUESTION_SUCCESS',
+  UPDATE_QUESTION_FAILURE: '[EDIT_QUESTION] UPDATE_QUESTION_FAILURE',
 };
 
 export class EditQuestionInit implements Action {
@@ -82,11 +85,26 @@ export class SaveQuestion implements Action {
 
 export class SaveQuestionSuccess implements Action {
   type = EditQuestionActionTypes.SAVE_QUESTION_SUCCESS;
-  constructor(public payload: {}) { }
+  constructor(public payload: Question) { }
 }
 
 export class SaveQuestionFailure implements Action {
   type = EditQuestionActionTypes.SAVE_QUESTION_FAILURE;
+  constructor(public payload: QuestionErrors) { }
+}
+
+export class UpdateQuestion implements Action {
+  type = EditQuestionActionTypes.UPDATE_QUESTION;
+  constructor(public payload: any) { }
+}
+
+export class UpdateQuestionSuccess implements Action {
+  type = EditQuestionActionTypes.UPDATE_QUESTION_SUCCESS;
+  constructor(public payload: any) { }
+}
+
+export class UpdateQuestionFailure implements Action {
+  type = EditQuestionActionTypes.UPDATE_QUESTION_FAILURE;
   constructor(public payload: QuestionErrors) { }
 }
 
@@ -104,4 +122,7 @@ export type EditQuestionActions =
   | UndoEdit
   | SaveQuestion
   | SaveQuestionSuccess
-  | SaveQuestionFailure;
+  | SaveQuestionFailure
+  | UpdateQuestion
+  | UpdateQuestionFailure
+  | UpdateQuestionSuccess;

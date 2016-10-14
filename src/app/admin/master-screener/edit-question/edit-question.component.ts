@@ -8,6 +8,7 @@ import { Subscription } from 'rxjs/Subscription';
 import { Question } from '../../../shared/models';
 import { Key } from '../../models/key';
 import 'rxjs/add/operator/take';
+import 'rxjs/add/observable/combineLatest';
 
 
 @Component({
@@ -23,17 +24,26 @@ export class EditQuestionComponent implements OnInit, OnDestroy {
   showQuestionType = true;
   showExpand = true;
   showLabel = true;
-  showErrors = false;
+  showErrors = true;
   savedQuestion: Subscription;
   constructor(private store: Store<fromRoot.State>, private router: Router) { }
 
   ngOnInit() {
     this.editQuestion$ = this.store.let(fromRoot.getPresentQuestionEdit);
     this.originalEditQuestionKey$ = this.store.let(fromRoot.getOriginalKeyQuestionEdit).take(1);
+    this.savedQuestion = Observable.combineLatest(
+        this.store.let(fromRoot.questionSaved),
+        this.store.let(fromRoot.getWorkingNumber).take(1)
+    )
+      .subscribe(([saved, currentVersion]) => {
+        if (saved) {
+          this.router.navigateByUrl(`/admin/master-screener/edit/version/${currentVersion}`);
+        }
+      });
   }
 
   ngOnDestroy() {
-    //this.savedQuestion.unsubscribe();
+    this.savedQuestion.unsubscribe();
   }
 
   keyToggle($event) {

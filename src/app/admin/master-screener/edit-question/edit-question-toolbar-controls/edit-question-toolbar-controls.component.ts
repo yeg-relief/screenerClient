@@ -34,20 +34,18 @@ export class EditQuestionToolbarControlsComponent implements OnInit {
     Observable.combineLatest(
       this.store.let(fromRoot.getPresentQuestionEdit).take(1),
       this.store.let(fromRoot.getOriginalKeyQuestionEdit).take(1),
-      this.store.let(fromRoot.getWorkingNumber).take(1),
     )
     .subscribe(
-      ([presentQuestionState, key, currentVersion]) => {
+      ([presentQuestionState, key]) => {
         if (key === 'new') {
           this.store.dispatch(new editQuestion.SaveQuestion(presentQuestionState.question));
         } else {
-          this.store.dispatch(new editScreener.EditQuestion({
+          this.store.dispatch(new editQuestion.UpdateQuestion({
               originalKey: key,
               editedVersion: presentQuestionState.question
             })
           );
         }
-        //this.router.navigateByUrl(`/admin/master-screener/edit/version/${currentVersion}`);
       },
       (error) => console.log(error)
     );

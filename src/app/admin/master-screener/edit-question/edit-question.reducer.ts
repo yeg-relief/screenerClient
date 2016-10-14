@@ -191,8 +191,6 @@ export function reducer(state = initialState, action: EditQuestionActions): Stat
     }
 
     case EditQuestionActionTypes.SAVE_QUESTION: {
-      console.log('save question reducer called');
-      console.log(state.present.question);
       return state;
     }
 
@@ -203,9 +201,28 @@ export function reducer(state = initialState, action: EditQuestionActions): Stat
     }
 
     case EditQuestionActionTypes.SAVE_QUESTION_FAILURE: {
-      console.log('save question failure called');
       const errors = <QuestionErrors>action.payload;
-      console.log(errors);
+      const newPresent = cloneDeep(state.present);
+      const newState = cloneDeep(state);
+      const newPast = [ state.present, ...state.past];
+      newPresent.errors = [...errors];
+      newState.present = newPresent;
+      newState.past = newPast;
+      return newState;
+    }
+
+    case EditQuestionActionTypes.UPDATE_QUESTION: {
+      return state;
+    }
+
+    case EditQuestionActionTypes.UPDATE_QUESTION_SUCCESS: {
+      const newState = cloneDeep(state);
+      newState.saved = true;
+      return newState;
+    }
+
+    case EditQuestionActionTypes.UPDATE_QUESTION_FAILURE: {
+      const errors = <QuestionErrors>action.payload;
       const newPresent = cloneDeep(state.present);
       const newState = cloneDeep(state);
       const newPast = [ state.present, ...state.past];

@@ -4,7 +4,6 @@ import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/observable/of';
 
 export function verifyQuestion(question: Question): Observable<QuestionErrors> {
-  console.log(question);
   const errorDetails: QuestionErrors = [];
   if (question.key === 'empty' || question.key === undefined) {
     errorDetails.push(ERRORS.NO_KEY_PICKED);
