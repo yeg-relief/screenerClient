@@ -109,7 +109,7 @@ export const getQuestionErrors =
 
 export const unsavedQuestionEdits = share(compose(fromEditQuestion.unsavedEdits, getEditQuestionState));
 
-//export const questionSaved = share(compose(fromEditQuestion.savedQuestion, getEditQuestionState));
+export const questionSaved = share(compose(fromEditQuestion.savedQuestion, getEditQuestionState));
 
 /* for keys */
 export const getPresentKeys =
@@ -126,9 +126,9 @@ export const findEditQuestion = function (state$: Observable<State>) {
       return {
         type: undefined,
         label: undefined,
-        expandable: undefined,
-        conditonalQuestions: undefined,
-        options: undefined,
+        expandable: false,
+        conditonalQuestions: [],
+        options: [],
         key: 'empty',
         controlType: undefined
       };

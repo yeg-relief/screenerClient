@@ -19,7 +19,7 @@ export type StateType = {
 };
 
 export interface State {
-  //saved: boolean;
+  saved: boolean;
   originalQuestionKey: string;
   past: StateType[];
   present: StateType;
@@ -37,7 +37,7 @@ const blankQuestion: Question = {
 };
 
 export const initialState: State = {
-  //saved: false,
+  saved: false,
   originalQuestionKey: '',
   past: [],
   present: {
@@ -192,13 +192,14 @@ export function reducer(state = initialState, action: EditQuestionActions): Stat
 
     case EditQuestionActionTypes.SAVE_QUESTION: {
       console.log('save question reducer called');
+      console.log(state.present.question);
       return state;
     }
 
     case EditQuestionActionTypes.SAVE_QUESTION_SUCCESS: {
-      return Object.assign({}, state, {
-        saved: true
-      });
+      const newState = cloneDeep(state);
+      newState.saved = true;
+      return newState;
     }
 
     case EditQuestionActionTypes.SAVE_QUESTION_FAILURE: {
@@ -238,7 +239,7 @@ export function unsavedEdits(state$: Observable<State>) {
     .map(past => past.length > 0);
 }
 
-/*
+
 export function savedQuestion(state$: Observable<State>) {
   return state$.select(s => s.saved);
-}*/
+}

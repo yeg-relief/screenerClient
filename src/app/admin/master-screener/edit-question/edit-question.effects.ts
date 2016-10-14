@@ -30,6 +30,7 @@ export class EditQuestionEffects {
   @Effect() saveQuestion$ = this.actions$
     .ofType(editQuestion.EditQuestionActionTypes.SAVE_QUESTION)
     .map<Question>(action => action.payload)
+    .do(question => console.log(question))
     .switchMap((question: Question) => {
       return Observable.combineLatest(
         verifyQuestion(question),
