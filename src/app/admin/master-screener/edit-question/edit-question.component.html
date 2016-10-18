@@ -22,36 +22,39 @@
   </app-question-errors>
   
   <div class="py3" *ngIf="showErrors"></div>
-  
+  <!-- possible abuse of safe navigation operator incoming --> 
+  <!-- consider rewriting such that there is one component that relies on the observable 
+       and thus only one subscription (this component can hold the others inside ie it is 
+       a container) -->
   <app-edit-question-control-type 
-    [controlType]="(editQuestion$ | async).question.controlType"
+    [controlType]="(editQuestion$ | async)?.question.controlType"
+    [questionOptions]="(editQuestion$ | async)?.question.options"
     *ngIf="showControlType">
   </app-edit-question-control-type>
   
   <app-edit-question-type 
-    [type]="(editQuestion$ | async).question.type"
+    [type]="(editQuestion$ | async)?.question.type"
     (booleanSelected)="showExpandedSection($event)"
     *ngIf="showQuestionType">
   </app-edit-question-type>
   
   <app-edit-question-label 
-    [label]="(editQuestion$ | async).question.label"
+    [label]="(editQuestion$ | async)?.question.label"
     *ngIf="showLabel">
   </app-edit-question-label>
   
   <app-edit-question-key 
-    [unusedKeys]="(editQuestion$ | async).unusedKeys"
-    [currentKey]="(editQuestion$ | async).question.key"
+    [unusedKeys]="(editQuestion$ | async)?.unusedKeys"
+    [currentKey]="(editQuestion$ | async)?.question.key"
     *ngIf="showKeys">
   </app-edit-question-key>
   
   <app-edit-question-expandable 
-    [expandable]="(editQuestion$ | async).question.expandable"
-    [controlType]="(editQuestion$ | async).question.controlType"
-    [questionType]="(editQuestion$ | async).question.type"
+    [expandable]="(editQuestion$ | async)?.question.expandable"
+    [controlType]="(editQuestion$ | async)?.question.controlType"
+    [questionType]="(editQuestion$ | async)?.question.type"
     *ngIf="showExpand">
   </app-edit-question-expandable>
   
   <div class="py2"></div>
 </md-card>
-

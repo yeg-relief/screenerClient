@@ -1,7 +1,7 @@
 import '@ngrx/core/add/operator/select';
 import { Observable } from 'rxjs/Observable';
 import { EditQuestionActions, EditQuestionActionTypes } from './edit-question.actions';
-import { Question } from '../../../shared/models';
+import { Question, QuestionOption } from '../../../shared/models';
 import { Key } from '../../models/key';
 import { cloneDeep } from 'lodash';
 import { QuestionErrors, LABELS } from './question-errors';
@@ -87,6 +87,10 @@ export function reducer(state = initialState, action: EditQuestionActions): Stat
 
       if ( nocontrolIndex >= 0) {
         newPresent.errors.splice(nocontrolIndex, 1);
+      }
+
+      if (newControlType !== 'radio') {
+        newPresent.question.options = [];
       }
 
       newPresent.question.controlType = newControlType;
@@ -227,6 +231,41 @@ export function reducer(state = initialState, action: EditQuestionActions): Stat
       const newState = cloneDeep(state);
       const newPast = [ state.present, ...state.past];
       newPresent.errors = [...errors];
+      newState.present = newPresent;
+      newState.past = newPast;
+      return newState;
+    }
+
+    case EditQuestionActionTypes.ADD_OPTION: {
+      const newOption = <QuestionOption>action.payload;
+      const findFnc = (option: QuestionOption) => {
+        return option.display === newOption.display || option.value === newOption.value;
+      };
+      if (state.present.question.options.findIndex(findFnc) >= 0) {
+        return state;
+      }
+      const newState = cloneDeep(state);
+      const newPresent = cloneDeep(state.present);
+      const newPast = [ state.present, ...state.past];
+      newPresent.question.options = [newOption, ...state.present.question.options];
+      newState.present = newPresent;
+      newState.past = newPast;
+      return newState;
+    }
+
+    case EditQuestionActionTypes.REMOVE_OPTION: {
+      const newOption = <QuestionOption>action.payload;
+      const findFnc = (option: QuestionOption) => {
+        return option.display === newOption.display || option.value === newOption.value;
+      };
+      const optionIndex = state.present.question.options.findIndex(findFnc);
+      if ( optionIndex < 0) {
+        return state;
+      }
+      const newState = cloneDeep(state);
+      const newPresent = cloneDeep(state.present);
+      const newPast = [ state.present, ...state.past];
+      newPresent.question.options.splice(optionIndex, 1);
       newState.present = newPresent;
       newState.past = newPast;
       return newState;

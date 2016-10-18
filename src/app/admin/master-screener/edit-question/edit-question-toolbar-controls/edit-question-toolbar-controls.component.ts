@@ -2,10 +2,10 @@ import { Component, OnInit } from '@angular/core';
 import { Store } from '@ngrx/store';
 import * as fromRoot from '../../../reducer';
 import * as editQuestion from '../edit-question.actions';
-import * as editScreener from '../../edit/edit.actions';
 import { Router } from '@angular/router';
 import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/observable/combineLatest';
+import 'rxjs/add/operator/do';
 
 @Component({
   selector: 'app-edit-question-toolbar-controls',

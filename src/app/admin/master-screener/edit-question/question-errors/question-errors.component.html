@@ -4,8 +4,4 @@
     (click)="handleClick(error.open)">
     {{ error.msg }} 
   </div>
-  <div *ngIf="(questionErrors$ | async ).length === 0"
-    class="border rounded bg-blue white center">
-    There are no errors
-  </div>
 </div>

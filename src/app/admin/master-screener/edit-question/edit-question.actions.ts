@@ -1,6 +1,6 @@
 import { Action } from '@ngrx/store';
 import { Key } from '../../models/key';
-import { Question } from '../../../shared/models/question';
+import { Question, QuestionOption } from '../../../shared/models';
 import { QuestionErrors } from './question-errors';
 
 export const EditQuestionActionTypes = {
@@ -21,6 +21,8 @@ export const EditQuestionActionTypes = {
   UPDATE_QUESTION: '[EDIT_QUESTION] UPDATE_QUESTION',
   UPDATE_QUESTION_SUCCESS: '[EDIT_QUESTION] UPDATE_QUESTION_SUCCESS',
   UPDATE_QUESTION_FAILURE: '[EDIT_QUESTION] UPDATE_QUESTION_FAILURE',
+  ADD_OPTION: '[EDIT_QUESTION] ADD_OPTION',
+  REMOVE_OPTION: '[EDIT_QUESTION] REMOVE_OPTION'
 };
 
 export class EditQuestionInit implements Action {
@@ -108,6 +110,16 @@ export class UpdateQuestionFailure implements Action {
   constructor(public payload: QuestionErrors) { }
 }
 
+export class AddOption implements Action {
+  type = EditQuestionActionTypes.ADD_OPTION;
+  constructor(public payload: QuestionOption) { }
+}
+
+export class RemoveOption implements Action {
+  type = EditQuestionActionTypes.REMOVE_OPTION;
+  constructor(public payload: QuestionOption) { }
+}
+
 export type EditQuestionActions =
     EditQuestionInit
   | EditQuestionLoad
@@ -125,4 +137,6 @@ export type EditQuestionActions =
   | SaveQuestionFailure
   | UpdateQuestion
   | UpdateQuestionFailure
-  | UpdateQuestionSuccess;
+  | UpdateQuestionSuccess
+  | AddOption
+  | RemoveOption;
