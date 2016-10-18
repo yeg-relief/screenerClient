@@ -53,6 +53,7 @@
     [expandable]="(editQuestion$ | async)?.question.expandable"
     [controlType]="(editQuestion$ | async)?.question.controlType"
     [questionType]="(editQuestion$ | async)?.question.type"
+    [conditionalQuestions]="(editQuestion$ | async)?.question.conditonalQuestions"
     *ngIf="showExpand">
   </app-edit-question-expandable>
   
