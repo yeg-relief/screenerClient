@@ -122,7 +122,9 @@ const mockVersionThree: MasterScreener = {
       key: 'age',
       label: 'age',
       expandable: false,
-      controlType: 'input'
+      controlType: 'input',
+      options: [],
+      conditonalQuestions: []
     },
     {
       type: 'number',
@@ -155,6 +157,7 @@ const mockVersionThree: MasterScreener = {
           value: 60000
         }
       ],
+      conditonalQuestions: [],
       expandable: false
     },
     {
@@ -191,6 +194,7 @@ const mockVersionThree: MasterScreener = {
               value: false
             }
           ],
+          conditonalQuestions: [],
           expandable: false
         },
         {
@@ -209,6 +213,7 @@ const mockVersionThree: MasterScreener = {
               value: false
             }
           ],
+          conditonalQuestions: [],
           expandable: false
         },
         {
@@ -227,6 +232,7 @@ const mockVersionThree: MasterScreener = {
               value: false
             }
           ],
+          conditonalQuestions: [],
           expandable: false
         }
       ]
@@ -247,6 +253,7 @@ const mockVersionThree: MasterScreener = {
           value: false
         }
       ],
+      conditonalQuestions: [],
       expandable: false
     },
     {
@@ -266,6 +273,7 @@ const mockVersionThree: MasterScreener = {
           value: false
         }
       ],
+      conditonalQuestions: [],
       expandable: false
     }
   ]

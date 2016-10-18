@@ -27,5 +27,10 @@ export function verifyQuestion(question: Question): Observable<QuestionErrors> {
     }
   }
 
+  if (question.expandable && question.conditonalQuestions !== undefined &&
+      question.conditonalQuestions.length === 0) {
+    errorDetails.push(ERRORS.NO_CONDITIONALS);
+  }
+
   return Observable.of(errorDetails);
 }

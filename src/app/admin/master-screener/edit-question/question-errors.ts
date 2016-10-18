@@ -14,6 +14,7 @@ export const LABELS = {
   NO_TYPE_PICKED: 'no type picked',
   MAKE_QUESTION_EXPANDABLE: 'make question expandable',
   NO_OPTIONS: 'radio button with no options',
+  NO_CONDITIONALS: 'an expandable question without conditional questions'
 };
 
 const MESSAGES = {
@@ -22,7 +23,8 @@ const MESSAGES = {
   NO_CONTROL_PICKED: 'Select a control type',
   NO_TYPE_PICKED: 'Select the type of answer you expect',
   MAKE_QUESTION_EXPANDABLE: 'Would you like to add a hidden section to the question?',
-  NO_OPTIONS: 'A button question requires options'
+  NO_OPTIONS: 'A button question requires options',
+  NO_CONDITIONALS: 'An expandable question needs conditional questions'
 };
 
 const OPEN_CONTROLS = {
@@ -31,7 +33,8 @@ const OPEN_CONTROLS = {
   NO_CONTROL_PICKED: ['control'],
   NO_TYPE_PICKED: ['type'],
   MAKE_QUESTION_EXPANDABLE: ['expandable'],
-  NO_OPTIONS: ['control']
+  NO_OPTIONS: ['control'],
+  NO_CONDITIONALS: ['expandable']
 };
 
 
@@ -60,5 +63,10 @@ export const ERRORS = {
     msg: MESSAGES.NO_OPTIONS,
     label: LABELS.NO_OPTIONS,
     open: OPEN_CONTROLS.NO_OPTIONS
+  },
+  NO_CONDITIONALS: {
+    msg: MESSAGES.NO_CONDITIONALS,
+    label: LABELS.NO_CONDITIONALS,
+    open: OPEN_CONTROLS.NO_CONDITIONALS
   }
 };
