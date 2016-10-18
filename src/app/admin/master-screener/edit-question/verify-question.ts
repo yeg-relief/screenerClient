@@ -22,7 +22,7 @@ export function verifyQuestion(question: Question): Observable<QuestionErrors> {
   }
 
   if (question.controlType !== undefined && question.options !== undefined) {
-    if (question.options.length > 0 && question.controlType === 'radio') {
+    if (question.options.length === 0 && question.controlType === 'radio') {
       errorDetails.push(ERRORS.NO_OPTIONS);
     }
   }

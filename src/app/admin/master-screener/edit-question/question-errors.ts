@@ -13,7 +13,7 @@ export const LABELS = {
   NO_CONTROL_PICKED: 'no control picked',
   NO_TYPE_PICKED: 'no type picked',
   MAKE_QUESTION_EXPANDABLE: 'make question expandable',
-  NO_OPTIONS: 'radio button with no options'
+  NO_OPTIONS: 'radio button with no options',
 };
 
 const MESSAGES = {
