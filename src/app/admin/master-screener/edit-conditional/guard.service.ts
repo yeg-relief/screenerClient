@@ -18,7 +18,10 @@ export class ConditionalGuardService implements CanActivate {
     const last = splitUrl.length - 1;
     console.log(splitUrl[last]);
     this.store.dispatch(new editQuestion.SetExpandableKey(splitUrl[last]));
-    this.store.dispatch(new editQuestion.EditQuestionInit('new'));
+    this.store.dispatch(new editQuestion.EditQuestionInit({
+      originalQuestionKey: 'new',
+      expandableQuestionKey: splitUrl[last]
+    }));
     return true;
   }
 }

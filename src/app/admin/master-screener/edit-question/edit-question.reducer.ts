@@ -54,12 +54,13 @@ export function reducer(state = initialState, action: EditQuestionActions): Stat
   switch (action.type) {
 
     case EditQuestionActionTypes.INIT_EDIT: {
-      const questionKey = <string>action.payload;
+      const keys = action.payload;
       // editing multiple questions sequentially means state has to be reset upon editing a new question
       // unsure if clone is needed
       // TODO: NEED TO SOMEHOW NOT OVERWRITE state.expandableQuestionKey
       const newState: State = cloneDeep(initialState);
-      newState.originalQuestionKey = questionKey;
+      newState.originalQuestionKey = keys.originalQuestionKey;
+      newState.expandableQuestionKey = keys.expandableQuestionKey;
       console.log(action.type + ' called');
       console.log(action.payload);
       console.log(newState);

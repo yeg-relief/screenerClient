@@ -21,7 +21,7 @@ export class EditQuestionGuardService implements CanActivate {
   }
 
   loadScreener(key: string): boolean {
-    this.store.dispatch(new editQuestion.EditQuestionInit(key));
+    this.store.dispatch(new editQuestion.EditQuestionInit({originalQuestionKey: key, expandableQuestionKey: ''}));
     return true;
   }
 }

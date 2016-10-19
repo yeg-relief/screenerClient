@@ -30,7 +30,7 @@ export const EditQuestionActionTypes = {
 
 export class EditQuestionInit implements Action {
   type = EditQuestionActionTypes.INIT_EDIT;
-  constructor(public payload: string) { }
+  constructor(public payload: {originalQuestionKey: string, expandableQuestionKey: string}) { }
 }
 
 export class EditQuestionLoad implements Action {
