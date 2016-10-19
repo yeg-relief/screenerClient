@@ -13,6 +13,10 @@ export const routing: ModuleWithProviders = RouterModule.forChild([
         {
           path: 'master-screener',
           loadChildren: 'app/admin/master-screener/master-screener.module#MasterScreenerModule'
+        },
+        {
+          path: 'programs',
+          loadChildren: 'app/admin/programs/programs.module#ProgramsModule'
         }
     ]
   },
