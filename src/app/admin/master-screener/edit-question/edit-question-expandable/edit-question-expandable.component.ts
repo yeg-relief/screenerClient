@@ -13,6 +13,7 @@ export class EditQuestionExpandableComponent implements OnInit {
   @Input() expandable: boolean;
   @Input() controlType: string;
   @Input() questionType: string;
+  @Input() questionKey: string;
   @Input() conditionalQuestions: Question[];
 
   constructor(private store: Store<fromRoot.State>) { }

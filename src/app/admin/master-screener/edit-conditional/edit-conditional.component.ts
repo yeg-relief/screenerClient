@@ -31,11 +31,11 @@ export class EditConditionalComponent implements OnInit, OnDestroy {
     this.expandableQuestionKey = this.store.let(fromRoot.expandableKey).take(1);
     this.savedQuestion = Observable.combineLatest(
         this.store.let(fromRoot.questionSaved),
-        this.store.let(fromRoot.getWorkingNumber).take(1)
+        this.store.let(fromRoot.expandableKey).take(1)
     )
-      .subscribe(([saved, currentVersion]) => {
+      .subscribe(([saved, expandableKey]) => {
         if (saved) {
-          this.router.navigateByUrl(`/admin/master-screener/edit/version/${currentVersion}`);
+          this.router.navigateByUrl(`/admin/master-screener/question/edit/${expandableKey}`);
         }
       });
   }

@@ -61,9 +61,6 @@ export function reducer(state = initialState, action: EditQuestionActions): Stat
       const newState: State = cloneDeep(initialState);
       newState.originalQuestionKey = keys.originalQuestionKey;
       newState.expandableQuestionKey = keys.expandableQuestionKey;
-      console.log(action.type + ' called');
-      console.log(action.payload);
-      console.log(newState);
       return newState;
     }
 
@@ -74,9 +71,6 @@ export function reducer(state = initialState, action: EditQuestionActions): Stat
       if (newState.present.question.key !== 'empty') {
         newState.present.errors = [];
       }
-      console.log(action.type + ' called');
-      console.log(action.payload);
-      console.log(newState);
       return newState;
     }
 
@@ -84,9 +78,6 @@ export function reducer(state = initialState, action: EditQuestionActions): Stat
       const unusedKeys = <Key[]>cloneDeep(action.payload);
       const newState: State = cloneDeep(state);
       newState.present.unusedKeys = unusedKeys;
-      console.log(action.type + ' called');
-      console.log(action.payload);
-      console.log(newState);
       return newState;
     }
 
@@ -306,15 +297,10 @@ export function reducer(state = initialState, action: EditQuestionActions): Stat
       const expandableKey = <string>action.payload;
       const newState: State = cloneDeep(initialState);
       newState.expandableQuestionKey = expandableKey;
-      console.log(action.type + ' called');
-      console.log(action.payload);
-      console.log(newState);
       return newState;
     }
 
     case EditQuestionActionTypes.ADD_CONDITIONAL: {
-      console.log(EditQuestionActionTypes.ADD_CONDITIONAL + ' called');
-      console.log(action.payload);
       return state;
     }
 
