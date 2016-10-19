@@ -22,7 +22,10 @@ export const EditQuestionActionTypes = {
   UPDATE_QUESTION_SUCCESS: '[EDIT_QUESTION] UPDATE_QUESTION_SUCCESS',
   UPDATE_QUESTION_FAILURE: '[EDIT_QUESTION] UPDATE_QUESTION_FAILURE',
   ADD_OPTION: '[EDIT_QUESTION] ADD_OPTION',
-  REMOVE_OPTION: '[EDIT_QUESTION] REMOVE_OPTION'
+  REMOVE_OPTION: '[EDIT_QUESTION] REMOVE_OPTION',
+  REMOVE_CONDITIONAL: '[EDIT_QUESTION] REMOVE_CONDITIONAL',
+  SET_EXPANDABLE_KEY: '[EDIT_QUESTION] EXPANDABLE_KEY',
+  ADD_CONDITIONAL: '[EDIT_QUESTION] ADD_CONDITIONAL'
 };
 
 export class EditQuestionInit implements Action {
@@ -120,6 +123,21 @@ export class RemoveOption implements Action {
   constructor(public payload: QuestionOption) { }
 }
 
+export class RemoveConditional implements Action {
+  type = EditQuestionActionTypes.REMOVE_CONDITIONAL;
+  constructor(public payload: Question) { }
+}
+
+export class SetExpandableKey implements Action {
+  type = EditQuestionActionTypes.SET_EXPANDABLE_KEY;
+  constructor(public payload: string) { }
+}
+
+export class AddConditional implements Action {
+  type = EditQuestionActionTypes.ADD_CONDITIONAL;
+  constructor(public payload: {questionKey: string, conditional: Question}) { }
+}
+
 export type EditQuestionActions =
     EditQuestionInit
   | EditQuestionLoad
@@ -139,4 +157,7 @@ export type EditQuestionActions =
   | UpdateQuestionFailure
   | UpdateQuestionSuccess
   | AddOption
-  | RemoveOption;
+  | RemoveOption
+  | RemoveConditional
+  | SetExpandableKey
+  | AddConditional;

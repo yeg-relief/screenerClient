@@ -55,7 +55,7 @@ export class EditQuestionEffects {
   @Effect() updateQuestion$ = this.actions$
     .ofType(editQuestion.EditQuestionActionTypes.UPDATE_QUESTION)
     .map(action => action.payload)
-    .switchMap((payload) => {
+    .switchMap(payload => {
       const editedVersion = <Question>payload.editedVersion;
       const originalKey = <Question>payload.originalKey;
       return Observable.combineLatest(
@@ -80,6 +80,31 @@ export class EditQuestionEffects {
         return new edit.EditQuestion(action.payload);
       }
       return action;
+    });
+
+  @Effect() addConditional$ = this.actions$
+    .ofType(editQuestion.EditQuestionActionTypes.ADD_CONDITIONAL)
+    .do(action => console.log(action))
+    .map(action => action.payload)
+    .switchMap(payload => {
+      const questionKey = <string>payload.questionKey;
+      const conditional = <Question>payload.conditional;
+      return Observable.combineLatest(
+        verifyQuestion(conditional),
+        Observable.of(questionKey),
+        Observable.of(conditional)
+      );
+    })
+    .map(([errors, expandableQuestionKey, conditionalQuestion]) => {
+      if (errors.length === 0) {
+        const payload = {
+          questionKey: expandableQuestionKey,
+          conditional: conditionalQuestion
+        };
+        this.store.dispatch(new edit.AddConditional(payload));
+        return new editQuestion.UpdateQuestionSuccess(payload);
+      }
+      return new editQuestion.UpdateQuestionFailure(errors);
     });
 
   constructor(

@@ -34,8 +34,30 @@
       *ngIf="expandable && conditionalQuestions.length > 0">
   <div class="col-2"></div>
   <md-card class="col-8">
-    <app-overview-question [toggled]="alwaysTrue$" [questions]="conditionalQuestions">
-    </app-overview-question>
+    <table class="table-light overflow-hidden bg-white border rounded">
+        <thead class="bg-darken-1">
+          <tr>
+            <th>key</th>
+            <th>control type</th>
+            <th>label</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let question of conditionalQuestions">
+            <td>{{ question.key }}</td>
+            <td>{{ question.controlType }}</td>
+            <td>{{ question.label }}</td>
+            <td>
+              <button md-mini-fab 
+                color="primary"
+                (click)="deleteConditional(question)">
+                <i class="material-icons">clear</i>
+              </button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
   </md-card>
   <div class="col-2"></div>
 </div>

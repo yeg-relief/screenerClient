@@ -8,4 +8,11 @@
   <button md-mini-fab color="warn" (click)="onDelete()">
     <i class="material-icons">clear</i>
   </button>
+  <div *ngIf="question.expandable">
+    <div class="py1"></div>
+    <button md-mini-fab color="primary"
+      routerLink="/admin/master-screener/question/edit/conditionals/{{question.key}}">
+      <i class="material-icons">add</i>
+    </button>
+  </div>
 </div>

@@ -5,13 +5,13 @@
   <div *ngIf="!(saving$ | async)">
     <app-screener-stats
       [questionCount]="(workingScreener$ | async)?.questions?.length"
-      [creationDate]="(workingScreener$ | async)?.meta.screener.created"
-      [versionNumber]="(workingScreener$ | async)?.meta.screener.version"
+      [creationDate]="(workingScreener$ | async)?.meta?.screener?.created"
+      [versionNumber]="(workingScreener$ | async)?.meta?.screener?.version"
       [error]="''">
     </app-screener-stats>
     <div class="p2"></div>
     <div class="p2"></div>
-    <div *ngIf="(workingScreener$ | async)?.questions.length > 0">
+    <div *ngIf="(workingScreener$ | async)?.questions?.length > 0">
       <app-edit-questions [questions]="(workingScreener$ | async)?.questions">
       </app-edit-questions>
     </div>

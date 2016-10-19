@@ -1,0 +1,23 @@
+<div class="col-12 clearfix border-left border-right bg-silver py1">
+  <div class="p1 flex flex-center flex-justify col-6">
+    <div class="px2"></div>
+    <md-checkbox 
+      (change)="handleControlTypeToggle($event.checked)"
+      [checked]="showControlType">control-type</md-checkbox>
+    <md-checkbox 
+      (change)="handleQuestionTypeToggle($event.checked)" 
+      [checked]="showQuestionType"
+      class="ml1 mr1">question-type</md-checkbox>
+    <md-checkbox 
+      [checked]="showLabel"
+      (change)="handleLabelToggle($event.checked)">label</md-checkbox>
+    <md-checkbox 
+      [checked]="showKeys"
+      (change)="handleKeyToggle($event.checked)" 
+      class="ml1 mr1">key</md-checkbox>
+     <md-checkbox 
+      [checked]="showErrors"
+      (change)="handleDetailsToggle($event.checked)">
+      errors</md-checkbox>
+  </div>
+</div>

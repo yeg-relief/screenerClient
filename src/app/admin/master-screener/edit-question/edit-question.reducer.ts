@@ -21,6 +21,7 @@ export type StateType = {
 export interface State {
   saved: boolean;
   originalQuestionKey: string;
+  expandableQuestionKey: string;
   past: StateType[];
   present: StateType;
   future: StateType[];
@@ -39,6 +40,7 @@ const blankQuestion: Question = {
 export const initialState: State = {
   saved: false,
   originalQuestionKey: '',
+  expandableQuestionKey: '',
   past: [],
   present: {
     question: blankQuestion,
@@ -55,8 +57,12 @@ export function reducer(state = initialState, action: EditQuestionActions): Stat
       const questionKey = <string>action.payload;
       // editing multiple questions sequentially means state has to be reset upon editing a new question
       // unsure if clone is needed
+      // TODO: NEED TO SOMEHOW NOT OVERWRITE state.expandableQuestionKey
       const newState: State = cloneDeep(initialState);
       newState.originalQuestionKey = questionKey;
+      console.log(action.type + ' called');
+      console.log(action.payload);
+      console.log(newState);
       return newState;
     }
 
@@ -67,6 +73,9 @@ export function reducer(state = initialState, action: EditQuestionActions): Stat
       if (newState.present.question.key !== 'empty') {
         newState.present.errors = [];
       }
+      console.log(action.type + ' called');
+      console.log(action.payload);
+      console.log(newState);
       return newState;
     }
 
@@ -74,6 +83,9 @@ export function reducer(state = initialState, action: EditQuestionActions): Stat
       const unusedKeys = <Key[]>cloneDeep(action.payload);
       const newState: State = cloneDeep(state);
       newState.present.unusedKeys = unusedKeys;
+      console.log(action.type + ' called');
+      console.log(action.payload);
+      console.log(newState);
       return newState;
     }
 
@@ -271,6 +283,40 @@ export function reducer(state = initialState, action: EditQuestionActions): Stat
       return newState;
     }
 
+    case EditQuestionActionTypes.REMOVE_CONDITIONAL: {
+      const removeQuestion = <Question>action.payload;
+      const findFnc = (question: Question) => {
+        return question.key === removeQuestion.key;
+      };
+      const questionIndex = state.present.question.conditonalQuestions.findIndex(findFnc);
+      if ( questionIndex < 0 ) {
+        return state;
+      }
+      const newState = cloneDeep(state);
+      const newPresent = cloneDeep(state.present);
+      const newPast = [ state.present, ...state.past];
+      newPresent.question.conditonalQuestions.splice(questionIndex, 1);
+      newState.present = newPresent;
+      newState.past = newPast;
+      return newState;
+    }
+
+    case EditQuestionActionTypes.SET_EXPANDABLE_KEY: {
+      const expandableKey = <string>action.payload;
+      const newState: State = cloneDeep(initialState);
+      newState.expandableQuestionKey = expandableKey;
+      console.log(action.type + ' called');
+      console.log(action.payload);
+      console.log(newState);
+      return newState;
+    }
+
+    case EditQuestionActionTypes.ADD_CONDITIONAL: {
+      console.log(EditQuestionActionTypes.ADD_CONDITIONAL + ' called');
+      console.log(action.payload);
+      return state;
+    }
+
     default: {
       return state;
     }
@@ -298,4 +344,8 @@ export function unsavedEdits(state$: Observable<State>) {
 
 export function savedQuestion(state$: Observable<State>) {
   return state$.select(s => s.saved);
+}
+
+export function expandableQuestionKey(state$: Observable<State>) {
+  return state$.select(s => s.expandableQuestionKey);
 }

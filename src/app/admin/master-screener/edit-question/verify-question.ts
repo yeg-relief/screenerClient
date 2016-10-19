@@ -32,5 +32,10 @@ export function verifyQuestion(question: Question): Observable<QuestionErrors> {
     errorDetails.push(ERRORS.NO_CONDITIONALS);
   }
 
+  if (!question.expandable && question.conditonalQuestions !== undefined &&
+      question.conditonalQuestions.length > 0) {
+    errorDetails.push(ERRORS.NON_EXPANDABLE_CONDITIONALS);
+  }
+
   return Observable.of(errorDetails);
 }

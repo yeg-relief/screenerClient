@@ -186,6 +186,27 @@ export function reducer(state = initialState, action: EditScreenerActions): Stat
       });
     }
 
+    case EditScreenerActionsTypes.ADD_CONDITIONAL: {
+      const expandableKey = <string>action.payload.questionKey;
+      const conditionalQuestion = <Question>action.payload.conditional;
+      const findFnc = (question: Question) => {
+        return question.key === expandableKey;
+      };
+
+      const expandableQuestionIndex = state.present.questions.findIndex(findFnc);
+      if (expandableQuestionIndex < 0 ) {
+        return state;
+      }
+      const newState = cloneDeep(state);
+      const newPresent = cloneDeep(state.present);
+      const newPast = [ state.present, ...state.past];
+      const expandableQuestion = newPresent.questions[expandableQuestionIndex];
+      expandableQuestion.conditonalQuestions.push(conditionalQuestion);
+      newState.present = newPresent;
+      newState.past = newPast;
+      return newState;
+    }
+
     default: {
       return state;
     }

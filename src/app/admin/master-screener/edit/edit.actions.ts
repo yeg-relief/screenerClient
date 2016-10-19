@@ -14,7 +14,8 @@ export const EditScreenerActionsTypes = {
   SWAP_QUESTIONS: '[EDIT_SCREENER] SWAP_QUESTIONS',
   CLEAR_QUESTIONS: '[EDIT_SCREENER] CLEAR_QUESTIONS',
   UNDO: '[EDIT_SCREENER] UNDO_EDIT',
-  REDO: '[EDIT_SCREENER] REDO_EDIT'
+  REDO: '[EDIT_SCREENER] REDO_EDIT',
+  ADD_CONDITIONAL: '[EDIT_SCREENER] ADD_CONDITIONAL'
 };
 
 export class InitEdit implements Action {
@@ -85,6 +86,11 @@ export class RedoEdit implements Action {
   constructor(public payload: any) {}
 }
 
+export class AddConditional implements Action {
+  type = EditScreenerActionsTypes.ADD_CONDITIONAL;
+  constructor(public payload: {questionKey: string, conditional: Question}) { }
+}
+
 export type EditScreenerActions =
     LoadScreener
   | SaveScreener
@@ -97,4 +103,5 @@ export type EditScreenerActions =
   | UndoEdit
   | RedoEdit
   | SaveScreenerFailure
-  | SaveScreenerSuccess;
+  | SaveScreenerSuccess
+  | AddConditional;

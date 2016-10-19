@@ -111,6 +111,9 @@ export const unsavedQuestionEdits = share(compose(fromEditQuestion.unsavedEdits,
 
 export const questionSaved = share(compose(fromEditQuestion.savedQuestion, getEditQuestionState));
 
+export const expandableKey = share(compose(fromEditQuestion.expandableQuestionKey, getEditQuestionState));
+
+
 /* for keys */
 export const getPresentKeys =
   share(compose(fromKeys.getPresentKeys, getKeysState));

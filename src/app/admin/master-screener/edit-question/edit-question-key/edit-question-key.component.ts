@@ -19,7 +19,6 @@ export class EditQuestionKeyComponent implements OnInit {
 
   selectChange(value) {
     this.store.dispatch(new editQuestion.EditQuestionChangeKey(value));
-
   }
 
   isSelected(key: string) {

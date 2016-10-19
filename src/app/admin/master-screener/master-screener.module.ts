@@ -35,6 +35,10 @@ import { EditQuestionExpandableComponent } from './edit-question/edit-question-e
 import { EditQuestionDisplayControlsComponent }
   from './edit-question/edit-question-display-controls/edit-question-display-controls.component';
 import { QuestionErrorsComponent } from './edit-question/question-errors/question-errors.component';
+import { EditConditionalComponent } from './edit-conditional/edit-conditional.component';
+import { ConditionalGuardService } from './edit-conditional/guard.service';
+import { EditConditionalDisplayControlsComponent } from './edit-conditional/edit-conditional-display-controls/edit-conditional-display-controls.component';
+import { EditConditionalToolbarControlsComponent } from './edit-conditional/edit-conditional-toolbar-controls/edit-conditional-toolbar-controls.component';
 
 @NgModule({
   imports: [
@@ -70,12 +74,16 @@ import { QuestionErrorsComponent } from './edit-question/question-errors/questio
     EditQuestionControlTypeComponent,
     EditQuestionExpandableComponent,
     EditQuestionDisplayControlsComponent,
-    QuestionErrorsComponent
+    QuestionErrorsComponent,
+    EditConditionalComponent,
+    EditConditionalDisplayControlsComponent,
+    EditConditionalToolbarControlsComponent,
   ],
   providers: [
     EditGuardService,
     MasterScreenerGuardService,
-    EditQuestionGuardService
+    EditQuestionGuardService,
+    ConditionalGuardService
   ]
 })
 export class MasterScreenerModule { }
