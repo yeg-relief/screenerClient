@@ -9,6 +9,7 @@ import * as fromMasterScreener from './master-screener/master-screener.reducer';
 import * as fromEditScreener from './master-screener/edit/edit.reducer';
 import * as fromEditQuestion from './master-screener/edit-question/edit-question.reducer';
 import * as fromKeys from './master-screener/keys/key.reducer';
+import * as fromProgramOverview from './programs/program-overview/reducer';
 import { Question } from '../shared/models';
 import { Key } from './models/key';
 import 'rxjs/add/operator/mergeMap';
@@ -20,13 +21,15 @@ export interface State {
   editScreener: fromEditScreener.State;
   editQuestion: fromEditQuestion.State;
   keys: fromKeys.State;
+  programOverview: fromProgramOverview.State;
 }
 
 const reducers = {
   masterScreener: fromMasterScreener.reducer,
   editScreener: fromEditScreener.reducer,
   editQuestion: fromEditQuestion.reducer,
-  keys: fromKeys.reducer
+  keys: fromKeys.reducer,
+  programOverview: fromProgramOverview.reducer
 };
 
 const productionReducer = combineReducers(reducers);
@@ -50,6 +53,11 @@ export function getEditQuestionState(state$: Observable<State>) {
 export function getKeysState(state$: Observable<State>) {
   return state$.select(state => state.keys);
 }
+
+export function getProgramOverviewState(state$: Observable<State>) {
+  return state$.select(state => state.programOverview);
+}
+
 
 /* for master-screener overview */
 export const getVersions = share(compose(fromMasterScreener.getVersions, getMasterScreenerState));
@@ -165,6 +173,11 @@ export const findUnusedKeys = function (state$: Observable<State>) {
     return unusedKeys;
   });
 };
+
+/* for programs */
+export const getLoadedPrograms = share(compose(fromProgramOverview.getPrograms, getProgramOverviewState));
+
+export const areProgramsLoaded = share(compose(fromProgramOverview.programsLoaded, getProgramOverviewState));
 
 
 /* https://github.com/ngrx/example-app/blob/final/src/util.ts */

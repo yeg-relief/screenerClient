@@ -1,3 +1,22 @@
-<p>
-  program-overview works!
-</p>
+<app-bread-crumb>
+  <app-overview-controls [loaded]="!(loading$ | async)"></app-overview-controls>
+</app-bread-crumb>
+<div class="py1"></div>
+<div class="program-container" *ngIf="!(loading$ | async)">
+  <div *ngFor="let program of (programs$ | async)" class="col-12 flex">
+    <div class="col-2"></div>
+    <app-program-detail class="col-10" [program]="program"></app-program-detail>
+    <div class="col-2 py2">
+      <app-program-detail-control></app-program-detail-control>
+    </div>
+  </div>
+</div>
+<div class="clearfix flex py2" *ngIf="(loading$ | async)">
+  <div class="col-4"></div>
+  <md-progress-circle 
+    class="flex-grow" 
+    color="accent" 
+    mode="indeterminate">
+  </md-progress-circle>
+  <div class="col-4"></div>
+</div>

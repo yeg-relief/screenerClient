@@ -1,6 +1,10 @@
 import { Action } from '@ngrx/store';
 import { MasterScreener } from '../models/master-screener';
 
+/*
+  TODO: rename/refactor into master-screener.overview.actions or some such filename
+*/
+
 export const MasterScreenerActionsTypes = {
   CHANGE_MASTER_SCREENER_VERSION: '[MASTER_SCREENER] CHANGE_MASTER_SCREENER_VERSION',
   LOAD_MASTER_SCREENER_VERSION: '[MASTER_SCREENER] LOAD_MASTER_SCREENER_VERSION',

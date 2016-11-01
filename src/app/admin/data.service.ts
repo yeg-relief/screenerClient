@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { MasterScreener } from './models/master-screener';
+import { UserFacingProgram } from '../shared/models';
 import { Key } from './models/key';
 import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/observable/of';
@@ -65,6 +66,10 @@ export class DataService {
     // tslint:disable-next-line
     availableVersions.push(screener);
     return Observable.of('').delay(2000);
+  }
+
+  loadPrograms(): Observable<UserFacingProgram[]> {
+    return Observable.of(mockPrograms).delay(2000);
   }
 }
 
@@ -280,3 +285,54 @@ const mockVersionThree: MasterScreener = {
 };
 
 const availableVersions = [mockVersionThree];
+
+const mockPrograms: UserFacingProgram[] = [
+  {
+    guid: 'f41608cb-09aa-4e5b-a050-75d9166fbf6b',
+    description: {
+      guid: 'f41608cb-09aa-4e5b-a050-75d9166fbf6b',
+      title: 'Alberta Adult Health Benefit',
+      details: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.' +
+      'Mauris quis ornare elit. Nam feugiat mollis lorem, sed ultricies tellus accumsan at. ' +
+      'Donec augue diam, condimentum ac lobortis nec, finibus ut ante. Phasellus eget enim nec neque ' +
+      'rutrum mattis sit amet tincidunt justo. Etiam porttitor dolor vitae felis rutrum, ' +
+      'sit amet iaculis sapien condimentum. Aenean scelerisque eros vel tellus fermentum, sed tempor ' +
+      'neque pellentesque. Morbi scelerisque dolor massa, facilisis suscipit dolor interdum a.',
+      externalLink: 'http://www.humanservices.alberta.ca/financial-support/2085.html'
+    },
+    created: '',
+    tags: ['adult', 'health']
+  },
+  {
+    guid: '86959ea1-7e27-461c-b274-c08cdcffc193',
+    description: {
+      guid: '86959ea1-7e27-461c-b274-c08cdcffc193',
+      title: 'Alberta Child Health Benefit',
+      details: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.' +
+      'Mauris quis ornare elit. Nam feugiat mollis lorem, sed ultricies tellus accumsan at. ' +
+      'Donec augue diam, condimentum ac lobortis nec, finibus ut ante. Phasellus eget enim nec neque ' +
+      'rutrum mattis sit amet tincidunt justo. Etiam porttitor dolor vitae felis rutrum, ' +
+      'sit amet iaculis sapien condimentum. Aenean scelerisque eros vel tellus fermentum, sed tempor ' +
+      'neque pellentesque. Morbi scelerisque dolor massa, facilisis suscipit dolor interdum a.',
+      externalLink: 'http://www.humanservices.alberta.ca/financial-support/2076.html'
+    },
+    created: '',
+    tags: ['child', 'health']
+  },
+  {
+    guid: 'ee4ee200-9c8e-4e2c-9b1f-b9e6b0b330e0',
+    description: {
+      guid: 'ee4ee200-9c8e-4e2c-9b1f-b9e6b0b330e0',
+      title: 'RDSP: Registered Disablity Savings Plan',
+      details: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.' +
+      'Mauris quis ornare elit. Nam feugiat mollis lorem, sed ultricies tellus accumsan at. ' +
+      'Donec augue diam, condimentum ac lobortis nec, finibus ut ante. Phasellus eget enim nec neque ' +
+      'rutrum mattis sit amet tincidunt justo. Etiam porttitor dolor vitae felis rutrum, ' +
+      'sit amet iaculis sapien condimentum. Aenean scelerisque eros vel tellus fermentum, sed tempor ' +
+      'neque pellentesque. Morbi scelerisque dolor massa, facilisis suscipit dolor interdum a.',
+      externalLink: 'http://www.cra-arc.gc.ca/rdsp/'
+    },
+    created: '',
+    tags: ['tax', 'savings', 'disabled']
+  }
+];
