@@ -1,13 +1,9 @@
 import { NgModule } from '@angular/core';
-import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { AdminComponent } from './admin.component';
 import { routing } from './admin.routes';
 import { AuthGuardService } from './core/services/auth-guard.service';
 import { AuthService } from './core/services/auth.service';
-import { LoginComponent } from './core/login/login.component';
-import { SidenavComponent } from './core/sidenav/sidenav.component';
-import { SidenavSectionComponent }from './core/sidenav/sidenav-section/sidenav-section.component';
 import { StoreModule } from '@ngrx/store';
 import { reducer } from './reducer';
 import { MasterScreenerEffects } from './master-screener/master-screener.effects';
@@ -22,11 +18,12 @@ import { EditQuestionEffects } from './master-screener/edit-question/edit-questi
 import { KeyEffects } from './master-screener/keys/key.effects';
 import { StoreDevtoolsModule } from '@ngrx/store-devtools';
 import { StoreLogMonitorModule, useLogMonitor } from '@ngrx/store-log-monitor';
+import { AdminCoreModule } from './core/admin-core.module';
+import { ProgramOverviewEffects } from './programs/program-overview/effects';
 
 @NgModule({
   imports: [
     CommonModule,
-    FormsModule,
     routing,
     MdCardModule.forRoot(),
     MdButtonModule.forRoot(),
@@ -36,13 +33,12 @@ import { StoreLogMonitorModule, useLogMonitor } from '@ngrx/store-log-monitor';
     EffectsModule.run(MasterScreenerEffects),
     EffectsModule.run(EditScreenerEffects),
     EffectsModule.run(EditQuestionEffects),
-    EffectsModule.run(KeyEffects)
+    EffectsModule.run(KeyEffects),
+    EffectsModule.run(ProgramOverviewEffects),
+    AdminCoreModule
   ],
   declarations: [
     AdminComponent,
-    LoginComponent,
-    SidenavSectionComponent,
-    SidenavComponent,
   ],
   providers: [AuthGuardService, AuthService, DataService]
 })

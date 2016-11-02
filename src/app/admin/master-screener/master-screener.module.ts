@@ -21,7 +21,6 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { UserFacingProgramModule } from '../../shared/modules/user-facing-program.module';
 import { QuestionModule } from '../../shared/modules/question.module';
 import { EditQuestionControlsComponent } from './edit/edit-question-controls/edit-question-controls.component';
-import { BreadCrumbComponent } from '../core/bread-crumb/bread-crumb.component';
 import { MasterScreenerGuardService } from './master-screener.guard.service';
 import { EditQuestionComponent } from './edit-question/edit-question.component';
 import { EditQuestionGuardService } from './edit-question/edit-question.guard.service';
@@ -37,8 +36,12 @@ import { EditQuestionDisplayControlsComponent }
 import { QuestionErrorsComponent } from './edit-question/question-errors/question-errors.component';
 import { EditConditionalComponent } from './edit-conditional/edit-conditional.component';
 import { ConditionalGuardService } from './edit-conditional/guard.service';
-import { EditConditionalDisplayControlsComponent } from './edit-conditional/edit-conditional-display-controls/edit-conditional-display-controls.component';
-import { EditConditionalToolbarControlsComponent } from './edit-conditional/edit-conditional-toolbar-controls/edit-conditional-toolbar-controls.component';
+import { EditConditionalDisplayControlsComponent }
+  from './edit-conditional/edit-conditional-display-controls/edit-conditional-display-controls.component';
+import { EditConditionalToolbarControlsComponent }
+  from './edit-conditional/edit-conditional-toolbar-controls/edit-conditional-toolbar-controls.component';
+import { AdminCoreModule } from '../core/admin-core.module';
+
 
 @NgModule({
   imports: [
@@ -52,7 +55,8 @@ import { EditConditionalToolbarControlsComponent } from './edit-conditional/edit
     MdInputModule.forRoot(),
     ReactiveFormsModule,
     UserFacingProgramModule,
-    QuestionModule
+    QuestionModule,
+    AdminCoreModule
   ],
   declarations: [
     MasterScreenerComponent,
@@ -65,7 +69,6 @@ import { EditConditionalToolbarControlsComponent } from './edit-conditional/edit
     EditControlsComponent,
     EditQuestionsComponent,
     EditQuestionControlsComponent,
-    BreadCrumbComponent,
     EditQuestionComponent,
     EditQuestionToolbarControlsComponent,
     EditQuestionTypeComponent,
