@@ -21,6 +21,7 @@ import { StoreLogMonitorModule, useLogMonitor } from '@ngrx/store-log-monitor';
 import { AdminCoreModule } from './core/admin-core.module';
 import { ProgramOverviewEffects } from './programs/program-overview/effects';
 import { ProgramEditEffects } from './programs/program-edit/effects';
+import { ProgramDeleteEffects } from './programs/program-overview/delete-confirmation/effects';
 
 @NgModule({
   imports: [
@@ -37,6 +38,7 @@ import { ProgramEditEffects } from './programs/program-edit/effects';
     EffectsModule.run(KeyEffects),
     EffectsModule.run(ProgramOverviewEffects),
     EffectsModule.run(ProgramEditEffects),
+    EffectsModule.run(ProgramDeleteEffects),
     AdminCoreModule
   ],
   declarations: [

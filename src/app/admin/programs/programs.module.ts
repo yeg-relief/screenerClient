@@ -11,6 +11,8 @@ import { ProgramDetailControlComponent } from './program-overview/program-detail
 import { OverviewControlsComponent } from './program-overview/overview-controls/overview-controls.component';
 import { ProgramEditComponent } from './program-edit/program-edit.component';
 import { ProgramEditGuardService } from './program-edit/route-guard';
+import { DeleteConfirmationComponent } from './program-overview/delete-confirmation/delete-confirmation.component';
+import { ProgramDeleteGuardService } from './program-overview/delete-confirmation/route-guard';
 
 @NgModule({
   imports: [
@@ -25,8 +27,13 @@ import { ProgramEditGuardService } from './program-edit/route-guard';
     ProgramDetailComponent,
     ProgramDetailControlComponent,
     OverviewControlsComponent,
-    ProgramEditComponent
+    ProgramEditComponent,
+    DeleteConfirmationComponent,
   ],
-  providers: [ProgramOverviewGuardService, ProgramEditGuardService]
+  providers: [
+    ProgramOverviewGuardService,
+    ProgramEditGuardService,
+    ProgramDeleteGuardService
+  ]
 })
 export class ProgramsModule { }

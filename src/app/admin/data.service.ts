@@ -82,12 +82,10 @@ export class DataService {
   }
 
   updateProgram(program: UserFacingProgram) {
-    console.log(this.loadedPrograms);
     const updateProgramIndex = this.loadedPrograms.findIndex(mockProgram => mockProgram.guid === program.guid);
     if (updateProgramIndex >= 0) {
       this.loadedPrograms.splice(updateProgramIndex, 1, program);
     }
-    console.log(this.loadedPrograms);
     return Observable.of(this.loadedPrograms)
       .delay(2000);
   }
@@ -97,6 +95,15 @@ export class DataService {
     program.guid = newGUID;
     program.description.guid = newGUID;
     this.loadedPrograms.push(program);
+    return Observable.of(this.loadedPrograms)
+      .delay(2000);
+  }
+
+  deleteProgram(program: UserFacingProgram) {
+    const deleteProgramIndex = this.loadedPrograms.findIndex(mockProgram => mockProgram.guid === program.guid);
+    if (deleteProgramIndex >= 0) {
+      this.loadedPrograms.splice(deleteProgramIndex, 1);
+    }
     return Observable.of(this.loadedPrograms)
       .delay(2000);
   }

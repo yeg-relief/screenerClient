@@ -65,6 +65,18 @@ export function reducer(state = initialState, action: ProgramOverviewActions): S
       });
     }
 
+    case ProgramOverviewActionsTypes.DELETE_PROGRAM: {
+      return Object.assign({}, state, {loading: true});
+    }
+
+    case ProgramOverviewActionsTypes.DELETE_PROGRAM_SUCCESS: {
+      const updatedPrograms = <UserFacingProgram[]>action.payload;
+      return Object.assign({}, state, {
+        programs: [...updatedPrograms],
+        loading: false
+      });
+    }
+
     default: {
       return state;
     }

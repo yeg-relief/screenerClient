@@ -28,27 +28,36 @@ export class ProgramEditComponent implements OnInit {
     DESCRIPTION: 'empty description'
   };
 
+  saveInProgress: boolean;
+  touched: boolean;
+
   constructor(private service: ProgramEditGuardService) { }
 
   ngOnInit() {
     // clone it so we can maintain a local state and just mutate etc
     this.service.program$.take(1).subscribe(storeProgram => this.program = cloneDeep(storeProgram));
+    this.saveInProgress = false;
+    this.touched = false;
   }
 
   titleChange(value) {
     this.program.description.title = value;
+    this.touched = true;
   }
 
   detailChange(value) {
     this.program.description.details = value;
+    this.touched = true;
   }
 
   linkChange(value) {
     this.program.description.externalLink = value;
+    this.touched = true;
   }
 
   newTagChange(value) {
     this.newTag = value;
+    this.touched = true;
   }
 
   deleteTag(value) {
@@ -56,6 +65,7 @@ export class ProgramEditComponent implements OnInit {
     if (index >= 0) {
       this.program.tags.splice(index, 1);
     }
+    this.touched = true;
   }
 
   addTag() {
@@ -64,6 +74,7 @@ export class ProgramEditComponent implements OnInit {
       this.program.tags.push(this.newTag);
       this.newTag = '';
     }
+    this.touched = true;
   }
 
   verifyProgram(): boolean {
@@ -97,8 +108,10 @@ export class ProgramEditComponent implements OnInit {
 
   saveProgram() {
     const valid = this.verifyProgram();
-    if (valid) {
-      if (this.program.guid === '') {
+    if (valid && this.touched) {
+      this.saveInProgress = true;
+      console.log(this.saveInProgress);
+      if (this.program.guid === 'new') {
         this.service.createProgram(this.program);
       } else {
         this.service.updateProgram(this.program);

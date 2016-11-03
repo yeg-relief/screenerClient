@@ -5,6 +5,8 @@ import { ProgramOverviewComponent } from './program-overview/program-overview.co
 import { ProgramOverviewGuardService } from './program-overview/route-guard';
 import { ProgramEditComponent } from './program-edit/program-edit.component';
 import { ProgramEditGuardService } from './program-edit/route-guard';
+import { DeleteConfirmationComponent } from './program-overview/delete-confirmation/delete-confirmation.component';
+import { ProgramDeleteGuardService } from './program-overview/delete-confirmation/route-guard';
 
 export const routing: ModuleWithProviders = RouterModule.forChild([
   {
@@ -21,8 +23,13 @@ export const routing: ModuleWithProviders = RouterModule.forChild([
         canActivate: [ProgramEditGuardService]
       },
       {
+        path: 'delete/:guid',
+        component: DeleteConfirmationComponent,
+        canActivate: [ProgramDeleteGuardService]
+      },
+      {
         path: '', pathMatch: 'full', redirectTo: 'overview'
-      }
+      },
     ]
   }
 ]);

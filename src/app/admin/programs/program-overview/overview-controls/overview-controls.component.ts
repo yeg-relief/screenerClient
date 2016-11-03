@@ -7,7 +7,7 @@ import { Component, OnInit, Input } from '@angular/core';
 })
 export class OverviewControlsComponent implements OnInit {
   @Input() loaded: boolean;
-
+  @Input() deleteInitiated: boolean;
   constructor() { }
 
   ngOnInit() {

@@ -25,6 +25,12 @@ export class ProgramOverviewEffects {
     .switchMap(program => this.data.createProgram(program))
     .map(programs => new programOverview.CreateProgramSuccess(programs));
 
+  @Effect() deleteProgram$ = this.actions$
+    .ofType(programOverview.ProgramOverviewActionsTypes.DELETE_PROGRAM)
+    .map<UserFacingProgram>(action => action.payload)
+    .switchMap(program => this.data.deleteProgram(program))
+    .map(programs => new programOverview.DeleteProgramSuccess(programs));
+
   constructor(
     private data: DataService,
     private actions$: Actions,

@@ -8,7 +8,9 @@ export const ProgramOverviewActionsTypes = {
   UPDATE_PROGRAM: '[PROGRAM_OVERVIEW] UPDATE_PROGRAM',
   UPDATE_PROGRAM_SUCCESS: '[PROGRAM_OVERVIEW] UPDATE_PROGRAM_SUCCESS',
   CREATE_PROGRAM: '[PROGRAM_OVERVIEW] CREATE_PROGRAM',
-  CREATE_PROGRAM_SUCCESS: '[PROGRAM_OVERVIEW] CREATE_PROGRAM_SUCCESS'
+  CREATE_PROGRAM_SUCCESS: '[PROGRAM_OVERVIEW] CREATE_PROGRAM_SUCCESS',
+  DELETE_PROGRAM: '[PROGRAM_OVERVIEW] DELETE_PROGRAM',
+  DELETE_PROGRAM_SUCCESS: '[PROGRAM_OVERVIEW] DELETE_PROGRAM_SUCCESS'
 };
 
 export class LoadPrograms implements Action {
@@ -53,6 +55,18 @@ export class CreateProgramSuccess implements Action {
   constructor(public payload: UserFacingProgram[]) { }
 }
 
+export class DeleteProgram implements Action {
+  type = ProgramOverviewActionsTypes.DELETE_PROGRAM;
+
+  constructor(public payload: UserFacingProgram) { }
+}
+
+export class DeleteProgramSuccess implements Action {
+  type = ProgramOverviewActionsTypes.DELETE_PROGRAM_SUCCESS;
+
+  constructor(public payload: UserFacingProgram[]) { }
+}
+
 export type ProgramOverviewActions =
     LoadPrograms
   | LoadProgramsSuccess
@@ -60,4 +74,6 @@ export type ProgramOverviewActions =
   | UpdateProgram
   | UpdateProgramSuccess
   | CreateProgram
-  | CreateProgramSuccess;
+  | CreateProgramSuccess
+  | DeleteProgram
+  | DeleteProgramSuccess;
