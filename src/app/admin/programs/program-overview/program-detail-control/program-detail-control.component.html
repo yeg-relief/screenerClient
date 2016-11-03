@@ -1,11 +1,13 @@
 <div class="flex flex-column px1">
   <div class="py2"></div>
   <button md-mini-fab
+    routerLink="/admin/programs/edit/{{program.guid}}"
     color="primary">
     <i class="material-icons">create</i>
   </button>
   <div class="py1"></div>
-  <button md-mini-fab color="warn">
+  <button md-mini-fab color="warn" 
+    routerLink="/admin/programs/delete/{{program.guid}}">
     <i class="material-icons">clear</i>
   </button>
 </div>

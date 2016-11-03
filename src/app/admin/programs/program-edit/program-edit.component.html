@@ -1,0 +1,46 @@
+<app-bread-crumb>
+</app-bread-crumb>
+<div *ngIf="errors.length > 0" class="flex flex-column flex-center">
+  <div class="py1 error" *ngFor="let error of errors">
+    <div class="center fit">
+      {{error}}
+    </div>
+  </div>
+</div>
+<div class="py2"></div>
+<section class="main-container flex flex-column flex-center">
+  <md-input class="container-item" placeholder="title" [value]="program.description.title" (input)="titleChange($event.target.value)"></md-input>
+  <div class="py1"></div>
+  <textarea placeholder="description" class="container-item" rows="4" *ngIf="program.description.details.length === 0" (input)="detailChange($event.target.value)"></textarea>
+  <textarea placeholder="description" class="container-item" rows="4" *ngIf="program.description.details.length > 0" (input)="detailChange($event.target.value)">{{program.description.details}}</textarea>
+  <div class="py1"></div>
+  <md-input class="container-item" placeholder="link" [value]="program.description.externalLink" (input)="linkChange($event.target.value)"></md-input>
+  <div class="container-item flex">
+    <div class="ml1 mr1 p1 border bg-silver" *ngFor="let tag of program.tags">
+      {{tag}} <div style="cursor:pointer" (click)="deleteTag(tag)"> X</div>
+    </div>
+  </div>
+  <div class="container-item flex flex-center">
+    <md-input class="mr2" placeholder="tag" [value]="newTag" (input)="newTagChange($event.target.value)"></md-input>
+    <button md-mini-fab color="primary" (click)="addTag()">
+      <i class="material-icons">add</i>
+    </button>
+  </div>
+  <div class="py2"></div>
+  <md-progress-bar mode="indeterminate" color="warn" *ngIf="saveInProgress"></md-progress-bar>
+  <div class="py2"></div>
+  <div class="flex col-10 border bg-silver rounded p1" style="overflow: hidden">
+    <div class="px2"></div>
+    <button md-raised-button 
+      color="primary" 
+      (click)="saveProgram()" 
+      [attr.disabled]="saveInProgress ? true : null"
+      [attr.disabled]="!touched ? true : null">SAVE</button>
+    <div class="px2"></div>
+    <button md-raised-button 
+      color="primary"
+      [attr.disabled]="saveInProgress ? true : null" 
+      routerLink="/admin/programs/overview">CANCEL</button>
+    <div class="flex-grow"></div>
+  </div>
+</section>

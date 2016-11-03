@@ -7,10 +7,13 @@ import 'rxjs/add/observable/of';
 import 'rxjs/add/operator/switchMap';
 import 'rxjs/add/observable/range';
 import 'rxjs/add/operator/toArray';
+import 'rxjs/add/operator/do';
+import { cloneDeep } from 'lodash';
 
 @Injectable()
 export class DataService {
   private screenerCache = new Map<string, MasterScreener>();
+  private loadedPrograms: UserFacingProgram[] = [];
   constructor() { }
   private requestScreener(version: number): Observable<MasterScreener> | Observable<boolean> {
     const MOCK_VALID_VERSION = 3;
@@ -69,7 +72,40 @@ export class DataService {
   }
 
   loadPrograms(): Observable<UserFacingProgram[]> {
-    return Observable.of(mockPrograms).delay(2000);
+    if (this.loadedPrograms.length === 0) {
+      console.log('loading from network');
+      return Observable.of(mockPrograms)
+        .delay(2000)
+        .do(programs => this.loadedPrograms = [...programs]);
+    }
+    return Observable.of(this.loadedPrograms);
+  }
+
+  updateProgram(program: UserFacingProgram) {
+    const updateProgramIndex = this.loadedPrograms.findIndex(mockProgram => mockProgram.guid === program.guid);
+    if (updateProgramIndex >= 0) {
+      this.loadedPrograms.splice(updateProgramIndex, 1, program);
+    }
+    return Observable.of(this.loadedPrograms)
+      .delay(2000);
+  }
+
+  createProgram(program: UserFacingProgram) {
+    const newGUID = Math.random().toString();
+    program.guid = newGUID;
+    program.description.guid = newGUID;
+    this.loadedPrograms.push(program);
+    return Observable.of(this.loadedPrograms)
+      .delay(2000);
+  }
+
+  deleteProgram(program: UserFacingProgram) {
+    const deleteProgramIndex = this.loadedPrograms.findIndex(mockProgram => mockProgram.guid === program.guid);
+    if (deleteProgramIndex >= 0) {
+      this.loadedPrograms.splice(deleteProgramIndex, 1);
+    }
+    return Observable.of(this.loadedPrograms)
+      .delay(2000);
   }
 }
 

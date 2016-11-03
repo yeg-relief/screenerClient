@@ -1,4 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
+import { UserFacingProgram } from '../../../../shared/models';
+
 
 @Component({
   selector: 'app-program-detail-control',
@@ -6,6 +8,8 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./program-detail-control.component.css']
 })
 export class ProgramDetailControlComponent implements OnInit {
+
+  @Input() program: UserFacingProgram;
 
   constructor() { }
 

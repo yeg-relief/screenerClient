@@ -1,0 +1,17 @@
+<app-bread-crumb></app-bread-crumb>
+<app-program-detail [program]="program"></app-program-detail>
+<div class="py1"></div>
+<md-progress-bar mode="indeterminate" color="warn" *ngIf="deletionInProgress"></md-progress-bar>
+<div class="flex col-12 border bg-silver rounded p1">
+  <div class="px2"></div>
+  <button 
+    md-raised-button color="warn" 
+    (click)="handleDelete()"
+    [attr.disabled]="deletionInProgress ? true : null">DELETE</button>
+  <div class="px2"></div>
+  <button md-raised-button 
+    color="primary"
+    [attr.disabled]="deletionInProgress ? true : null" 
+    routerLink="/admin/programs/overview">CANCEL</button>
+  <div class="flex-grow"></div>
+</div>

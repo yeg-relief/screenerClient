@@ -17,6 +17,8 @@ export const initialState: State = {
 };
 
 export function reducer(state = initialState, action: ProgramOverviewActions): State {
+
+
   switch (action.type) {
 
     case ProgramOverviewActionsTypes.LOAD_PROGRAMS: {
@@ -38,6 +40,42 @@ export function reducer(state = initialState, action: ProgramOverviewActions): S
       newState.error = '';
       newState.programs = [...<UserFacingProgram[]>action.payload];
       return newState;
+    }
+
+    case ProgramOverviewActionsTypes.UPDATE_PROGRAM: {
+      return Object.assign({}, state, {loading: true});
+    }
+
+    case ProgramOverviewActionsTypes.UPDATE_PROGRAM_SUCCESS: {
+      const updatedPrograms = <UserFacingProgram[]>action.payload;
+      return Object.assign({}, state, {
+        programs: [... updatedPrograms],
+        loading: false
+      });
+    }
+
+    case ProgramOverviewActionsTypes.CREATE_PROGRAM: {
+      return Object.assign({}, state, {loading: true});
+    }
+
+    case ProgramOverviewActionsTypes.CREATE_PROGRAM_SUCCESS: {
+      const updatedPrograms = <UserFacingProgram[]>action.payload;
+      return Object.assign({}, state, {
+        programs: [...updatedPrograms],
+        loading: false
+      });
+    }
+
+    case ProgramOverviewActionsTypes.DELETE_PROGRAM: {
+      return Object.assign({}, state, {loading: true});
+    }
+
+    case ProgramOverviewActionsTypes.DELETE_PROGRAM_SUCCESS: {
+      const updatedPrograms = <UserFacingProgram[]>action.payload;
+      return Object.assign({}, state, {
+        programs: [...updatedPrograms],
+        loading: false
+      });
     }
 
     default: {
