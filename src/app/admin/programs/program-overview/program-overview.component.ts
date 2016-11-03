@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
-import { UserFacingProgram } from '../../../shared/models';
+import { ApplicationFacingProgram } from '../../models/program';
 import { Store } from '@ngrx/store';
 import * as fromRoot from '../../reducer';
 
@@ -10,7 +10,7 @@ import * as fromRoot from '../../reducer';
   styleUrls: ['./program-overview.component.css']
 })
 export class ProgramOverviewComponent implements OnInit {
-  private programs$: Observable<UserFacingProgram[]>;
+  private programs$: Observable<ApplicationFacingProgram[]>;
   private loading$: Observable<boolean>;
 
   constructor(private store: Store<fromRoot.State>) { }

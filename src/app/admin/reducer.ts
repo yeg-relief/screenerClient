@@ -16,7 +16,7 @@ import 'rxjs/add/operator/concatMap';
 import 'rxjs/add/operator/do';
 import 'rxjs/add/operator/find';
 import { cloneDeep } from 'lodash';
-import { UserFacingProgram } from '../shared/models';
+import { ApplicationFacingProgram } from './models/program';
 
 export interface State {
   masterScreener: fromMasterScreener.State;
@@ -187,17 +187,22 @@ export const findProgram = function (state$: Observable<State>, guid: string){
     .concatMap(vals => vals)
     .find(program => guid === program.guid);
 
-  const emptyProgram: UserFacingProgram = {
+  const emptyProgram: ApplicationFacingProgram = {
     guid: 'new',
-    description: {
+    user: {
       guid: 'new',
-      title: '',
-      details: '',
-      externalLink: ''
+      description: {
+        guid: 'new',
+        title: '',
+        details: '',
+        externalLink: ''
+      },
+      created: '',
+      tags: []
     },
-    created: '',
-    tags: []
+    application: []
   };
+
   if ( guid === 'new' ) {
     return Observable.of(emptyProgram);
   }

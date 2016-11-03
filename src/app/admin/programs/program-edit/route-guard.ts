@@ -3,12 +3,12 @@ import { CanActivate, RouterStateSnapshot, ActivatedRouteSnapshot, Router } from
 import { Store } from '@ngrx/store';
 import * as fromRoot from '../../reducer';
 import * as fromOverview from '../program-overview/actions';
-import { UserFacingProgram } from '../../../shared/models';
+import { ApplicationFacingProgram } from '../../models/program';
 import { Observable } from 'rxjs/Observable';
 
 @Injectable()
 export class ProgramEditGuardService implements CanActivate {
-  program$: Observable<UserFacingProgram>;
+  program$: Observable<ApplicationFacingProgram>;
 
   constructor(private store: Store<fromRoot.State>, private router: Router) {}
 

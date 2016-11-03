@@ -21,3 +21,9 @@
   </md-progress-circle>
   <div class="col-4"></div>
 </div>
+<div class="empty-statement-container border rounded bg-maroon white py2 flex flex-center col-12" 
+  *ngIf="(programs$ | async)?.length === 0 && !(loading$ | async)">
+  <div class="col-4"></div>
+  <div class="emtpy-statement col-4 center">No programs found</div>
+  <div class="col-4"></div>
+</div>

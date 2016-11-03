@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { UserFacingProgram } from '../../../shared/models';
+import { ApplicationFacingProgram } from '../../models/program';
 import { cloneDeep } from 'lodash';
 import 'rxjs/add/operator/take';
 import { ProgramEditGuardService } from './route-guard';
@@ -8,16 +8,20 @@ import { ProgramEditGuardService } from './route-guard';
   styleUrls: ['./program-edit.component.css']
 })
 export class ProgramEditComponent implements OnInit {
-  program: UserFacingProgram = {
+  program: ApplicationFacingProgram = {
     guid: '',
-    description: {
+    user: {
       guid: '',
-      title: '',
-      details: '',
-      externalLink: ''
+      description: {
+        guid: '',
+        title: '',
+        details: '',
+        externalLink: ''
+      },
+      created: '',
+      tags: []
     },
-    created: '',
-    tags: []
+    application: []
   };
   newTag = '';
 
@@ -41,17 +45,17 @@ export class ProgramEditComponent implements OnInit {
   }
 
   titleChange(value) {
-    this.program.description.title = value;
+    this.program.user.description.title = value;
     this.touched = true;
   }
 
   detailChange(value) {
-    this.program.description.details = value;
+    this.program.user.description.details = value;
     this.touched = true;
   }
 
   linkChange(value) {
-    this.program.description.externalLink = value;
+    this.program.user.description.externalLink = value;
     this.touched = true;
   }
 
@@ -60,17 +64,17 @@ export class ProgramEditComponent implements OnInit {
   }
 
   deleteTag(value) {
-    const index = this.program.tags.findIndex(tag => tag === value);
+    const index = this.program.user.tags.findIndex(tag => tag === value);
     if (index >= 0) {
-      this.program.tags.splice(index, 1);
+      this.program.user.tags.splice(index, 1);
     }
     this.touched = true;
   }
 
   addTag() {
-    const index = this.program.tags.findIndex(tag => tag === this.newTag);
+    const index = this.program.user.tags.findIndex(tag => tag === this.newTag);
     if (this.newTag !== '' && index < 0) {
-      this.program.tags.push(this.newTag);
+      this.program.user.tags.push(this.newTag);
       this.newTag = '';
     }
     this.touched = true;
@@ -80,7 +84,7 @@ export class ProgramEditComponent implements OnInit {
     let valid = true;
     const descriptionErrorIndex = this.errors.findIndex(error => error === this.PROGRAM_ERRORS.DESCRIPTION);
     const titleErrorIndex = this.errors.findIndex(error => error === this.PROGRAM_ERRORS.TITLE);
-    if (this.program.description.title === '') {
+    if (this.program.user.description.title === '') {
       if (titleErrorIndex < 0) {
         this.errors.push(this.PROGRAM_ERRORS.TITLE);
       }
@@ -91,7 +95,7 @@ export class ProgramEditComponent implements OnInit {
       }
     }
 
-    if (this.program.description.details === '') {
+    if (this.program.user.description.details === '') {
       if (descriptionErrorIndex < 0) {
         this.errors.push(this.PROGRAM_ERRORS.DESCRIPTION);
       }

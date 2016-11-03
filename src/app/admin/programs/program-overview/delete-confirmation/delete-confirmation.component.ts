@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { UserFacingProgram } from '../../../../shared/models';
+import { ApplicationFacingProgram } from '../../../models/program';
 import { ProgramDeleteGuardService } from './route-guard';
 import 'rxjs/add/operator/take';
 
@@ -9,16 +9,20 @@ import 'rxjs/add/operator/take';
   styleUrls: ['./delete-confirmation.component.css']
 })
 export class DeleteConfirmationComponent implements OnInit {
-  program: UserFacingProgram = {
+  program: ApplicationFacingProgram = {
     guid: '',
-    description: {
+    user: {
       guid: '',
-      title: '',
-      details: '',
-      externalLink: ''
+      description: {
+        guid: '',
+        title: '',
+        details: '',
+        externalLink: ''
+      },
+      created: '',
+      tags: []
     },
-    created: '',
-    tags: []
+    application: []
   };
   deletionInProgress: boolean;
 

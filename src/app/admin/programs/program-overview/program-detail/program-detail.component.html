@@ -1,18 +1,18 @@
 <div class="py1"></div>
 <md-card>
-  <md-card-title> {{program.description.title}}  </md-card-title>
-  <md-card-subtitle> uploaded on: {{ program.created }}</md-card-subtitle>
+  <md-card-title> {{program.user.description.title}}  </md-card-title>
+  <md-card-subtitle> uploaded on: {{ program.user.created }}</md-card-subtitle>
   <md-card-content>
-    <p>{{ program.description.details }} </p>
+    <p>{{ program.user.description.details }} </p>
   </md-card-content>
   <md-card-subtitle>
-    link: {{ program.description.externalLink }}
+    link: {{ program.user.description.externalLink }}
   </md-card-subtitle>
   <div class="p1"></div>
   <div class="clearfix flex">
     <div 
       class="col-2 border bg-silver black center rounded mr1 md-show" 
-      *ngFor="let tag of program.tags">
+      *ngFor="let tag of program.user.tags">
       {{tag}}
     </div>
   </div>

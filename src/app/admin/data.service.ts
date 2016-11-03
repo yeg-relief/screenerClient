@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { MasterScreener } from './models/master-screener';
-import { UserFacingProgram } from '../shared/models';
+import { ApplicationFacingProgram } from './models/program';
 import { Key } from './models/key';
 import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/observable/of';
@@ -8,12 +8,11 @@ import 'rxjs/add/operator/switchMap';
 import 'rxjs/add/observable/range';
 import 'rxjs/add/operator/toArray';
 import 'rxjs/add/operator/do';
-import { cloneDeep } from 'lodash';
 
 @Injectable()
 export class DataService {
   private screenerCache = new Map<string, MasterScreener>();
-  private loadedPrograms: UserFacingProgram[] = [];
+  private loadedPrograms: ApplicationFacingProgram[];
   constructor() { }
   private requestScreener(version: number): Observable<MasterScreener> | Observable<boolean> {
     const MOCK_VALID_VERSION = 3;
@@ -71,8 +70,8 @@ export class DataService {
     return Observable.of('').delay(2000);
   }
 
-  loadPrograms(): Observable<UserFacingProgram[]> {
-    if (this.loadedPrograms.length === 0) {
+  loadPrograms(): Observable<ApplicationFacingProgram[]> {
+    if (this.loadedPrograms === undefined) {
       console.log('loading from network');
       return Observable.of(mockPrograms)
         .delay(2000)
@@ -81,7 +80,7 @@ export class DataService {
     return Observable.of(this.loadedPrograms);
   }
 
-  updateProgram(program: UserFacingProgram) {
+  updateProgram(program: ApplicationFacingProgram) {
     const updateProgramIndex = this.loadedPrograms.findIndex(mockProgram => mockProgram.guid === program.guid);
     if (updateProgramIndex >= 0) {
       this.loadedPrograms.splice(updateProgramIndex, 1, program);
@@ -90,16 +89,17 @@ export class DataService {
       .delay(2000);
   }
 
-  createProgram(program: UserFacingProgram) {
+  createProgram(program: ApplicationFacingProgram) {
     const newGUID = Math.random().toString();
     program.guid = newGUID;
-    program.description.guid = newGUID;
+    program.user.guid = newGUID;
+    program.user.description.guid = newGUID;
     this.loadedPrograms.push(program);
     return Observable.of(this.loadedPrograms)
       .delay(2000);
   }
 
-  deleteProgram(program: UserFacingProgram) {
+  deleteProgram(program: ApplicationFacingProgram) {
     const deleteProgramIndex = this.loadedPrograms.findIndex(mockProgram => mockProgram.guid === program.guid);
     if (deleteProgramIndex >= 0) {
       this.loadedPrograms.splice(deleteProgramIndex, 1);
@@ -322,53 +322,65 @@ const mockVersionThree: MasterScreener = {
 
 const availableVersions = [mockVersionThree];
 
-const mockPrograms: UserFacingProgram[] = [
+const mockPrograms: ApplicationFacingProgram[] = [
   {
     guid: 'f41608cb-09aa-4e5b-a050-75d9166fbf6b',
-    description: {
+    user: {
       guid: 'f41608cb-09aa-4e5b-a050-75d9166fbf6b',
-      title: 'Alberta Adult Health Benefit',
-      details: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.' +
-      'Mauris quis ornare elit. Nam feugiat mollis lorem, sed ultricies tellus accumsan at. ' +
-      'Donec augue diam, condimentum ac lobortis nec, finibus ut ante. Phasellus eget enim nec neque ' +
-      'rutrum mattis sit amet tincidunt justo. Etiam porttitor dolor vitae felis rutrum, ' +
-      'sit amet iaculis sapien condimentum. Aenean scelerisque eros vel tellus fermentum, sed tempor ' +
-      'neque pellentesque. Morbi scelerisque dolor massa, facilisis suscipit dolor interdum a.',
-      externalLink: 'http://www.humanservices.alberta.ca/financial-support/2085.html'
+      description: {
+        guid: 'f41608cb-09aa-4e5b-a050-75d9166fbf6b',
+        title: 'Alberta Adult Health Benefit',
+        details: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.' +
+        'Mauris quis ornare elit. Nam feugiat mollis lorem, sed ultricies tellus accumsan at. ' +
+        'Donec augue diam, condimentum ac lobortis nec, finibus ut ante. Phasellus eget enim nec neque ' +
+        'rutrum mattis sit amet tincidunt justo. Etiam porttitor dolor vitae felis rutrum, ' +
+        'sit amet iaculis sapien condimentum. Aenean scelerisque eros vel tellus fermentum, sed tempor ' +
+        'neque pellentesque. Morbi scelerisque dolor massa, facilisis suscipit dolor interdum a.',
+        externalLink: 'http://www.humanservices.alberta.ca/financial-support/2085.html'
+      },
+      created: '',
+      tags: ['adult', 'health']
     },
-    created: '',
-    tags: ['adult', 'health']
+    application: []
   },
   {
     guid: '86959ea1-7e27-461c-b274-c08cdcffc193',
-    description: {
+    user: {
       guid: '86959ea1-7e27-461c-b274-c08cdcffc193',
-      title: 'Alberta Child Health Benefit',
-      details: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.' +
-      'Mauris quis ornare elit. Nam feugiat mollis lorem, sed ultricies tellus accumsan at. ' +
-      'Donec augue diam, condimentum ac lobortis nec, finibus ut ante. Phasellus eget enim nec neque ' +
-      'rutrum mattis sit amet tincidunt justo. Etiam porttitor dolor vitae felis rutrum, ' +
-      'sit amet iaculis sapien condimentum. Aenean scelerisque eros vel tellus fermentum, sed tempor ' +
-      'neque pellentesque. Morbi scelerisque dolor massa, facilisis suscipit dolor interdum a.',
-      externalLink: 'http://www.humanservices.alberta.ca/financial-support/2076.html'
+      description: {
+        guid: '86959ea1-7e27-461c-b274-c08cdcffc193',
+        title: 'Alberta Child Health Benefit',
+        details: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.' +
+        'Mauris quis ornare elit. Nam feugiat mollis lorem, sed ultricies tellus accumsan at. ' +
+        'Donec augue diam, condimentum ac lobortis nec, finibus ut ante. Phasellus eget enim nec neque ' +
+        'rutrum mattis sit amet tincidunt justo. Etiam porttitor dolor vitae felis rutrum, ' +
+        'sit amet iaculis sapien condimentum. Aenean scelerisque eros vel tellus fermentum, sed tempor ' +
+        'neque pellentesque. Morbi scelerisque dolor massa, facilisis suscipit dolor interdum a.',
+        externalLink: 'http://www.humanservices.alberta.ca/financial-support/2076.html'
+      },
+      created: '',
+      tags: ['child', 'health']
     },
-    created: '',
-    tags: ['child', 'health']
+    application: []
   },
   {
     guid: 'ee4ee200-9c8e-4e2c-9b1f-b9e6b0b330e0',
-    description: {
+    user: {
       guid: 'ee4ee200-9c8e-4e2c-9b1f-b9e6b0b330e0',
-      title: 'RDSP: Registered Disablity Savings Plan',
-      details: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.' +
-      'Mauris quis ornare elit. Nam feugiat mollis lorem, sed ultricies tellus accumsan at. ' +
-      'Donec augue diam, condimentum ac lobortis nec, finibus ut ante. Phasellus eget enim nec neque ' +
-      'rutrum mattis sit amet tincidunt justo. Etiam porttitor dolor vitae felis rutrum, ' +
-      'sit amet iaculis sapien condimentum. Aenean scelerisque eros vel tellus fermentum, sed tempor ' +
-      'neque pellentesque. Morbi scelerisque dolor massa, facilisis suscipit dolor interdum a.',
-      externalLink: 'http://www.cra-arc.gc.ca/rdsp/'
+      description: {
+        guid: 'ee4ee200-9c8e-4e2c-9b1f-b9e6b0b330e0',
+        title: 'RDSP: Registered Disablity Savings Plan',
+        details: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.' +
+        'Mauris quis ornare elit. Nam feugiat mollis lorem, sed ultricies tellus accumsan at. ' +
+        'Donec augue diam, condimentum ac lobortis nec, finibus ut ante. Phasellus eget enim nec neque ' +
+        'rutrum mattis sit amet tincidunt justo. Etiam porttitor dolor vitae felis rutrum, ' +
+        'sit amet iaculis sapien condimentum. Aenean scelerisque eros vel tellus fermentum, sed tempor ' +
+        'neque pellentesque. Morbi scelerisque dolor massa, facilisis suscipit dolor interdum a.',
+        externalLink: 'http://www.cra-arc.gc.ca/rdsp/'
+      },
+      created: '',
+      tags: ['tax', 'savings', 'disabled']
     },
-    created: '',
-    tags: ['tax', 'savings', 'disabled']
+    application: []
   }
 ];

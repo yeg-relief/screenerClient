@@ -8,7 +8,7 @@ export const routing: ModuleWithProviders = RouterModule.forChild([
    // commented out for development cycle
   //{ path: '', component: AdminComponent, canActivate: [AuthGuardService] },
   {
-    path: '', component: AdminComponent, canActivate: [AuthGuardService],
+    path: '', component: AdminComponent,
       children: [
         {
           path: 'master-screener',

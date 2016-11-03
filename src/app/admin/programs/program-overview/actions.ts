@@ -1,5 +1,5 @@
 import { Action } from '@ngrx/store';
-import { UserFacingProgram } from '../../../shared/models';
+import { ApplicationFacingProgram } from '../../models/program';
 
 export const ProgramOverviewActionsTypes = {
   LOAD_PROGRAMS: '[PROGRAM_OVERVIEW] LOAD_PROGRAMS',
@@ -22,7 +22,7 @@ export class LoadPrograms implements Action {
 export class LoadProgramsSuccess implements Action {
   type = ProgramOverviewActionsTypes.LOAD_PROGRAMS_SUCCESS;
 
-  constructor(public payload: UserFacingProgram[]) { }
+  constructor(public payload: ApplicationFacingProgram[]) { }
 }
 
 export class LoadProgramsFailure implements Action {
@@ -34,37 +34,37 @@ export class LoadProgramsFailure implements Action {
 export class UpdateProgram implements Action {
   type = ProgramOverviewActionsTypes.UPDATE_PROGRAM;
 
-  constructor(public payload: UserFacingProgram) { }
+  constructor(public payload: ApplicationFacingProgram) { }
 }
 
 export class UpdateProgramSuccess implements Action {
   type = ProgramOverviewActionsTypes.UPDATE_PROGRAM_SUCCESS;
 
-  constructor(public payload: UserFacingProgram[]) { }
+  constructor(public payload: ApplicationFacingProgram[]) { }
 }
 
 export class CreateProgram implements Action {
   type = ProgramOverviewActionsTypes.CREATE_PROGRAM;
 
-  constructor(public payload: UserFacingProgram) { }
+  constructor(public payload: ApplicationFacingProgram) { }
 }
 
 export class CreateProgramSuccess implements Action {
   type = ProgramOverviewActionsTypes.CREATE_PROGRAM_SUCCESS;
 
-  constructor(public payload: UserFacingProgram[]) { }
+  constructor(public payload: ApplicationFacingProgram[]) { }
 }
 
 export class DeleteProgram implements Action {
   type = ProgramOverviewActionsTypes.DELETE_PROGRAM;
 
-  constructor(public payload: UserFacingProgram) { }
+  constructor(public payload: ApplicationFacingProgram) { }
 }
 
 export class DeleteProgramSuccess implements Action {
   type = ProgramOverviewActionsTypes.DELETE_PROGRAM_SUCCESS;
 
-  constructor(public payload: UserFacingProgram[]) { }
+  constructor(public payload: ApplicationFacingProgram[]) { }
 }
 
 export type ProgramOverviewActions =

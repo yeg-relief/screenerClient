@@ -1,12 +1,12 @@
 import '@ngrx/core/add/operator/select';
 import { Observable } from 'rxjs/Observable';
 import { ProgramOverviewActionsTypes, ProgramOverviewActions} from './actions';
-import { UserFacingProgram } from '../../../shared/models';
+import { ApplicationFacingProgram } from '../../models/program';
 import { cloneDeep } from 'lodash';
 
 export interface State {
   loading: boolean;
-  programs: UserFacingProgram[];
+  programs: ApplicationFacingProgram[];
   error: string;
 }
 
@@ -38,7 +38,7 @@ export function reducer(state = initialState, action: ProgramOverviewActions): S
       const newState = cloneDeep(state);
       newState.loading = false;
       newState.error = '';
-      newState.programs = [...<UserFacingProgram[]>action.payload];
+      newState.programs = [...<ApplicationFacingProgram[]>action.payload];
       return newState;
     }
 
@@ -47,7 +47,7 @@ export function reducer(state = initialState, action: ProgramOverviewActions): S
     }
 
     case ProgramOverviewActionsTypes.UPDATE_PROGRAM_SUCCESS: {
-      const updatedPrograms = <UserFacingProgram[]>action.payload;
+      const updatedPrograms = <ApplicationFacingProgram[]>action.payload;
       return Object.assign({}, state, {
         programs: [... updatedPrograms],
         loading: false
@@ -59,7 +59,7 @@ export function reducer(state = initialState, action: ProgramOverviewActions): S
     }
 
     case ProgramOverviewActionsTypes.CREATE_PROGRAM_SUCCESS: {
-      const updatedPrograms = <UserFacingProgram[]>action.payload;
+      const updatedPrograms = <ApplicationFacingProgram[]>action.payload;
       return Object.assign({}, state, {
         programs: [...updatedPrograms],
         loading: false
@@ -71,7 +71,7 @@ export function reducer(state = initialState, action: ProgramOverviewActions): S
     }
 
     case ProgramOverviewActionsTypes.DELETE_PROGRAM_SUCCESS: {
-      const updatedPrograms = <UserFacingProgram[]>action.payload;
+      const updatedPrograms = <ApplicationFacingProgram[]>action.payload;
       return Object.assign({}, state, {
         programs: [...updatedPrograms],
         loading: false

@@ -3,12 +3,12 @@ import { CanActivate, RouterStateSnapshot, ActivatedRouteSnapshot, Router } from
 import { Store } from '@ngrx/store';
 import * as fromRoot from '../../../reducer';
 import * as fromOverview from '../actions';
-import { UserFacingProgram } from '../../../../shared/models';
+import { ApplicationFacingProgram } from '../../../models/program';
 import { Observable } from 'rxjs/Observable';
 
 @Injectable()
 export class ProgramDeleteGuardService implements CanActivate {
-  program$: Observable<UserFacingProgram>;
+  program$: Observable<ApplicationFacingProgram>;
 
   constructor(private store: Store<fromRoot.State>, private router: Router) {}
 
@@ -22,7 +22,7 @@ export class ProgramDeleteGuardService implements CanActivate {
     return true;
   }
 
-  dispatchDelete(program: UserFacingProgram) {
+  dispatchDelete(program: ApplicationFacingProgram) {
     this.store.dispatch(new fromOverview.DeleteProgram(program));
   }
 }
