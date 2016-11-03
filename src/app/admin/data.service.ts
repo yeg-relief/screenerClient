@@ -8,6 +8,7 @@ import 'rxjs/add/operator/switchMap';
 import 'rxjs/add/observable/range';
 import 'rxjs/add/operator/toArray';
 import 'rxjs/add/operator/do';
+import { cloneDeep } from 'lodash';
 
 @Injectable()
 export class DataService {
@@ -72,11 +73,32 @@ export class DataService {
 
   loadPrograms(): Observable<UserFacingProgram[]> {
     if (this.loadedPrograms.length === 0) {
+      console.log('loading from network');
       return Observable.of(mockPrograms)
         .delay(2000)
         .do(programs => this.loadedPrograms = [...programs]);
     }
     return Observable.of(this.loadedPrograms);
+  }
+
+  updateProgram(program: UserFacingProgram) {
+    console.log(this.loadedPrograms);
+    const updateProgramIndex = this.loadedPrograms.findIndex(mockProgram => mockProgram.guid === program.guid);
+    if (updateProgramIndex >= 0) {
+      this.loadedPrograms.splice(updateProgramIndex, 1, program);
+    }
+    console.log(this.loadedPrograms);
+    return Observable.of(this.loadedPrograms)
+      .delay(2000);
+  }
+
+  createProgram(program: UserFacingProgram) {
+    const newGUID = Math.random().toString();
+    program.guid = newGUID;
+    program.description.guid = newGUID;
+    this.loadedPrograms.push(program);
+    return Observable.of(this.loadedPrograms)
+      .delay(2000);
   }
 }
 

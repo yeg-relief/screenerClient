@@ -1,8 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { UserFacingProgram } from '../../../shared/models';
 import { cloneDeep } from 'lodash';
-import { Store } from '@ngrx/store';
-import * as fromRoot from '../../reducer';
 import 'rxjs/add/operator/take';
 import { ProgramEditGuardService } from './route-guard';
 @Component({
@@ -30,11 +28,11 @@ export class ProgramEditComponent implements OnInit {
     DESCRIPTION: 'empty description'
   };
 
-  constructor(private store: Store<fromRoot.State>, private service: ProgramEditGuardService) { }
+  constructor(private service: ProgramEditGuardService) { }
 
   ngOnInit() {
     // clone it so we can maintain a local state and just mutate etc
-    this.service.program.take(1).subscribe(storeProgram => this.program = cloneDeep(storeProgram));
+    this.service.program$.take(1).subscribe(storeProgram => this.program = cloneDeep(storeProgram));
   }
 
   titleChange(value) {
@@ -100,7 +98,11 @@ export class ProgramEditComponent implements OnInit {
   saveProgram() {
     const valid = this.verifyProgram();
     if (valid) {
-      // save the program
+      if (this.program.guid === '') {
+        this.service.createProgram(this.program);
+      } else {
+        this.service.updateProgram(this.program);
+      }
     }
   }
 }
