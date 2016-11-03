@@ -12,9 +12,11 @@ import * as fromKeys from './master-screener/keys/key.reducer';
 import * as fromProgramOverview from './programs/program-overview/reducer';
 import { Question } from '../shared/models';
 import { Key } from './models/key';
-import 'rxjs/add/operator/mergeMap';
+import 'rxjs/add/operator/concatMap';
 import 'rxjs/add/operator/do';
+import 'rxjs/add/operator/find';
 import { cloneDeep } from 'lodash';
+import { UserFacingProgram } from '../shared/models';
 
 export interface State {
   masterScreener: fromMasterScreener.State;
@@ -178,6 +180,29 @@ export const findUnusedKeys = function (state$: Observable<State>) {
 export const getLoadedPrograms = share(compose(fromProgramOverview.getPrograms, getProgramOverviewState));
 
 export const areProgramsLoaded = share(compose(fromProgramOverview.programsLoaded, getProgramOverviewState));
+
+export const findProgram = function (state$: Observable<State>, guid: string){
+  const searchProgram = state$.select(state => state.programOverview)
+    .map(state => state.programs)
+    .concatMap(vals => vals)
+    .find(program => guid === program.guid);
+
+  const emptyProgram: UserFacingProgram = {
+    guid: 'new',
+    description: {
+      guid: 'new',
+      title: '',
+      details: '',
+      externalLink: ''
+    },
+    created: '',
+    tags: []
+  };
+  if ( guid === 'new' ) {
+    return Observable.of(emptyProgram);
+  }
+  return searchProgram;
+};
 
 
 /* https://github.com/ngrx/example-app/blob/final/src/util.ts */

@@ -7,10 +7,12 @@ import 'rxjs/add/observable/of';
 import 'rxjs/add/operator/switchMap';
 import 'rxjs/add/observable/range';
 import 'rxjs/add/operator/toArray';
+import 'rxjs/add/operator/do';
 
 @Injectable()
 export class DataService {
   private screenerCache = new Map<string, MasterScreener>();
+  private loadedPrograms: UserFacingProgram[] = [];
   constructor() { }
   private requestScreener(version: number): Observable<MasterScreener> | Observable<boolean> {
     const MOCK_VALID_VERSION = 3;
@@ -69,7 +71,12 @@ export class DataService {
   }
 
   loadPrograms(): Observable<UserFacingProgram[]> {
-    return Observable.of(mockPrograms).delay(2000);
+    if (this.loadedPrograms.length === 0) {
+      return Observable.of(mockPrograms)
+        .delay(2000)
+        .do(programs => this.loadedPrograms = [...programs]);
+    }
+    return Observable.of(this.loadedPrograms);
   }
 }
 

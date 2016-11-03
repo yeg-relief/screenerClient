@@ -9,6 +9,9 @@ import { ProgramDetailComponent } from './program-overview/program-detail/progra
 import { ProgramOverviewGuardService } from './program-overview/route-guard';
 import { ProgramDetailControlComponent } from './program-overview/program-detail-control/program-detail-control.component';
 import { OverviewControlsComponent } from './program-overview/overview-controls/overview-controls.component';
+import { ProgramEditComponent } from './program-edit/program-edit.component';
+import { ProgramEditGuardService } from './program-edit/route-guard';
+
 @NgModule({
   imports: [
     CommonModule,
@@ -21,8 +24,9 @@ import { OverviewControlsComponent } from './program-overview/overview-controls/
     ProgramOverviewComponent,
     ProgramDetailComponent,
     ProgramDetailControlComponent,
-    OverviewControlsComponent
+    OverviewControlsComponent,
+    ProgramEditComponent
   ],
-  providers: [ProgramOverviewGuardService]
+  providers: [ProgramOverviewGuardService, ProgramEditGuardService]
 })
 export class ProgramsModule { }
