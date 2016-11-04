@@ -2,3 +2,7 @@ md-card {
   font-family: 'Roboto Mono', monospace;
   overflow-x: hidden;
 }
+
+md-button-toggle {
+  font-family: 'Roboto Mono', monospace;
+}

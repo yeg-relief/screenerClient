@@ -39,3 +39,7 @@ button {
   margin-top: 3px;
   width: 70%;
 }
+
+md-button-toggle {
+  font-family: 'Roboto Mono', monospace;
+}

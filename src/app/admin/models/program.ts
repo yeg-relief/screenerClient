@@ -5,6 +5,7 @@ export interface ProgramCondition {
   guid: string;
   key: Key;
   value: boolean | string | number;
+  type: 'boolean' | 'string' | 'number';
   qualifier?: string | 'lessThan' | 'equal' | 'greaterThan';
 }
 

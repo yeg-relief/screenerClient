@@ -1,20 +1,54 @@
 <div class="py1"></div>
 <md-card>
-  <md-card-title> {{program.user.description.title}}  </md-card-title>
-  <md-card-subtitle> uploaded on: {{ program.user.created }}</md-card-subtitle>
-  <md-card-content>
-    <p>{{ program.user.description.details }} </p>
-  </md-card-content>
-  <md-card-subtitle>
-    link: {{ program.user.description.externalLink }}
-  </md-card-subtitle>
-  <div class="p1"></div>
-  <div class="clearfix flex">
-    <div 
-      class="col-2 border bg-silver black center rounded mr1 md-show" 
-      *ngFor="let tag of program.user.tags">
-      {{tag}}
+  <md-button-toggle-group (change)="viewChange($event.value)" [value]="views[0].value">
+    <md-button-toggle *ngFor="let view of views" [value]="view.value">
+        {{view.value}}
+    </md-button-toggle>
+  </md-button-toggle-group>
+  <div class="py1"></div>
+  <section *ngIf="selectedView === 'user'">
+    <md-card-title> {{program.user.description.title}}  </md-card-title>
+    <md-card-subtitle> uploaded on: {{ program.user.created }}</md-card-subtitle>
+    <md-card-content>
+      <p>{{ program.user.description.details }} </p>
+    </md-card-content>
+    <md-card-subtitle>
+      link: {{ program.user.description.externalLink }}
+    </md-card-subtitle>
+    <div class="p1"></div>
+    <div class="clearfix flex">
+      <div 
+        class="col-2 border bg-silver black center rounded mr1 md-show" 
+        *ngFor="let tag of program.user.tags">
+        {{tag}}
+      </div>
     </div>
-  </div>
+  </section>
+  <section *ngIf="selectedView === 'application' && program.application.length > 0" >
+    <table style="width:100%">
+      <tr>
+        <th>Key</th>
+        <th>Type</th>
+        <th>Qualifier</th>
+        <th>Value</th> 
+        
+      </tr>
+      <tr *ngFor="let condition of program.application">
+        <td>{{condition.key}}</td>
+        <td>{{condition.type}}</td>
+        <div [ngSwitch]="condition.qualifier">
+          <td *ngSwitchCase="'lessThan'"> < </td>
+          <td *ngSwitchCase="'equal'"> = < </td>
+          <td *ngSwitchCase="'greaterThan'"> > </td>
+          <td *ngSwitchDefault>unknown</td>
+        </div>
+        <td>{{condition.value}}</td>
+        
+      </tr>
+    </table>
+  </section>
+  <section *ngIf="selectedView === 'application' && program.application.length === 0" >
+    <div class="center">There are no conditions associated with this program </div>
+  </section>
 </md-card>
 <div class="py1"></div>

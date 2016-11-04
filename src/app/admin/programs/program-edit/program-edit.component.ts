@@ -35,6 +35,17 @@ export class ProgramEditComponent implements OnInit {
   saveInProgress: boolean;
   touched: boolean;
 
+  selectedView: string;
+
+  views = [
+    {
+      value: 'user'
+    },
+    {
+      value: 'application'
+    }
+  ];
+
   constructor(private service: ProgramEditGuardService) { }
 
   ngOnInit() {
@@ -42,6 +53,7 @@ export class ProgramEditComponent implements OnInit {
     this.service.program$.take(1).subscribe(storeProgram => this.program = cloneDeep(storeProgram));
     this.saveInProgress = false;
     this.touched = false;
+    this.selectedView = this.views[0].value;
   }
 
   titleChange(value) {
@@ -118,6 +130,13 @@ export class ProgramEditComponent implements OnInit {
       } else {
         this.service.updateProgram(this.program);
       }
+    }
+  }
+
+  viewChange($event) {
+    const index = this.views.findIndex(view => view.value === $event);
+    if (index >= 0) {
+      this.selectedView = this.views[index].value;
     }
   }
 }
