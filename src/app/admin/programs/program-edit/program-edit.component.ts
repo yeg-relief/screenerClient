@@ -3,15 +3,24 @@ import { ApplicationFacingProgram } from '../../models/program';
 import { cloneDeep } from 'lodash';
 import 'rxjs/add/operator/take';
 import { ProgramEditGuardService } from './route-guard';
+import { Store } from '@ngrx/store';
+import * as fromRoot from '../../reducer';
+import { Observable } from 'rxjs/Observable';
+import { Key } from '../../models/key';
+import 'rxjs/add/operator/take';
+import 'rxjs/add/operator/find';
+import 'rxjs/add/operator/concatMap';
+
 @Component({
   templateUrl: './program-edit.component.html',
   styleUrls: ['./program-edit.component.css']
 })
 export class ProgramEditComponent implements OnInit {
+  keys$: Observable<Key[]>;
   program: ApplicationFacingProgram = {
-    guid: '',
+    guid: 'new',
     user: {
-      guid: '',
+      guid: 'new',
       description: {
         guid: '',
         title: '',
@@ -45,8 +54,52 @@ export class ProgramEditComponent implements OnInit {
       value: 'application'
     }
   ];
+  // keys
+  currentKey = {
+    name: '',
+    type: ''
+  };
+  numberOptions = [
+    {
+      display: '>', value: 'greaterThan'
+    },
+    {
+      display: '>=', value: 'greaterThanOrEqual'
+    },
+    {
+      display: '=', value: 'equal'
+    },
+    {
+      display: '<', value: 'lessThanOrEqual'
+    },
+    {
+      display: '<', value: 'lessThan'
+    }
+  ];
 
-  constructor(private service: ProgramEditGuardService) { }
+  booleanOptions = [
+    {
+      display: 'true', value: true
+    },
+    {
+      display: 'false', value: false
+    }
+  ];
+
+  selectedNumberOption: string;
+  selectedBooleanOption: string;
+
+  newCondition = {
+    key: {
+      name: '',
+      type: ''
+    },
+    value: undefined,
+    type: undefined,
+    qualifier: undefined
+  };
+
+  constructor(private service: ProgramEditGuardService, private store: Store<fromRoot.State> ) { }
 
   ngOnInit() {
     // clone it so we can maintain a local state and just mutate etc
@@ -54,6 +107,11 @@ export class ProgramEditComponent implements OnInit {
     this.saveInProgress = false;
     this.touched = false;
     this.selectedView = this.views[0].value;
+    this.keys$ = this.store.let(fromRoot.getKeys);
+    this.currentKey.name = 'empty';
+    this.currentKey.type = undefined;
+    this.selectedNumberOption = '';
+    this.selectedBooleanOption = '';
   }
 
   titleChange(value) {
@@ -117,7 +175,6 @@ export class ProgramEditComponent implements OnInit {
         this.errors.splice(descriptionErrorIndex, 1);
       }
     }
-
     return valid;
   }
 
@@ -138,5 +195,21 @@ export class ProgramEditComponent implements OnInit {
     if (index >= 0) {
       this.selectedView = this.views[index].value;
     }
+  }
+
+  isEmpty() {
+    return this.currentKey.name === 'empty';
+  }
+
+  isSelected(key: string) {
+    return key === this.currentKey.name;
+  }
+
+  selectChange(value) {
+    this.keys$
+      .take(1)
+      .concatMap(keys => keys)
+      .find(key => key.name === value)
+      .subscribe(key => this.currentKey = key);
   }
 }

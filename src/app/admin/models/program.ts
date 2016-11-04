@@ -6,7 +6,7 @@ export interface ProgramCondition {
   key: Key;
   value: boolean | string | number;
   type: 'boolean' | 'string' | 'number';
-  qualifier?: string | 'lessThan' | 'equal' | 'greaterThan';
+  qualifier?: string | 'lessThan' | 'lessThanOrEqual' | 'equal' | 'greaterThanOrEqual' | 'greaterThan';
 }
 
 export interface ApplicationFacingProgram {

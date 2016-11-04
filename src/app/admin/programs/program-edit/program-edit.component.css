@@ -43,3 +43,11 @@ button {
 md-button-toggle {
   font-family: 'Roboto Mono', monospace;
 }
+
+select {
+  font-family: 'Roboto Mono', monospace;
+  padding-bottom: 5px;
+}
+select > option {
+  font-family: 'Roboto Mono', monospace;
+}
