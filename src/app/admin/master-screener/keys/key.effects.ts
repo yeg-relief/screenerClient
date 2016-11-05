@@ -9,7 +9,7 @@ import 'rxjs/add/operator/map';
 @Injectable()
 export class KeyEffects {
 
-  @Effect() initEdit$ = this.actions$
+  @Effect() initKeys$ = this.actions$
     .ofType(key.KeyActionsTypes.LOAD_KEYS)
     .switchMap( () => this.data.loadKeys() )
     .map((keys: Key[]) => new key.LoadKeysSuccess(keys));

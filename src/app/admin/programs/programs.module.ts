@@ -2,7 +2,7 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ProgramsComponent } from './programs.component';
 import { ProgramOverviewComponent } from './program-overview/program-overview.component';
-import { routing } from './programs.routes';
+import { RouterModule } from '@angular/router';
 import { MaterialModule } from '@angular/material';
 import { AdminCoreModule } from '../core/admin-core.module';
 import { ProgramDetailComponent } from './program-overview/program-detail/program-detail.component';
@@ -13,12 +13,15 @@ import { ProgramEditComponent } from './program-edit/program-edit.component';
 import { ProgramEditGuardService } from './program-edit/route-guard';
 import { DeleteConfirmationComponent } from './program-overview/delete-confirmation/delete-confirmation.component';
 import { ProgramDeleteGuardService } from './program-overview/delete-confirmation/route-guard';
+import { ApplicationSideComponent } from './program-edit/application-side/application-side.component';
+import { ReactiveFormsModule } from '@angular/forms';
 
 @NgModule({
   imports: [
     CommonModule,
-    routing,
+    RouterModule,
     MaterialModule.forRoot(),
+    ReactiveFormsModule,
     AdminCoreModule
   ],
   declarations: [
@@ -28,7 +31,8 @@ import { ProgramDeleteGuardService } from './program-overview/delete-confirmatio
     ProgramDetailControlComponent,
     OverviewControlsComponent,
     ProgramEditComponent,
-    DeleteConfirmationComponent
+    DeleteConfirmationComponent,
+    ApplicationSideComponent
   ],
   providers: [
     ProgramOverviewGuardService,

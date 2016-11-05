@@ -1,8 +1,8 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { RouterModule } from '@angular/router';
 import { MasterScreenerComponent } from './master-screener.component';
 import { OverviewComponent } from './overview/overview.component';
-import { routing } from './master-screener.routes';
 import { ScreenerStatsComponent } from './overview/screener-stats/screener-stats.component';
 import { OverviewControlsComponent } from './overview/controls/controls.component';
 import { KeyComponent } from './overview/key/key.component';
@@ -46,7 +46,6 @@ import { AdminCoreModule } from '../core/admin-core.module';
 @NgModule({
   imports: [
     CommonModule,
-    routing,
     MdProgressCircleModule.forRoot(),
     MdCheckboxModule.forRoot(),
     MdCardModule.forRoot(),
@@ -56,7 +55,8 @@ import { AdminCoreModule } from '../core/admin-core.module';
     ReactiveFormsModule,
     UserFacingProgramModule,
     QuestionModule,
-    AdminCoreModule
+    AdminCoreModule,
+    RouterModule
   ],
   declarations: [
     MasterScreenerComponent,

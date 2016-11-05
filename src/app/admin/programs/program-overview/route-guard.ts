@@ -12,7 +12,7 @@ export class ProgramOverviewGuardService implements CanActivate {
 
   canActivate(): boolean {
     this.store.dispatch(new programOverview.LoadPrograms({}));
-    //this.store.dispatch(new fromKeys.LoadKeys({}));
+    this.store.dispatch(new fromKeys.LoadKeys({}));
     return true;
   }
 }

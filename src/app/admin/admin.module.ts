@@ -23,6 +23,8 @@ import { ProgramOverviewEffects } from './programs/program-overview/effects';
 import { ProgramEditEffects } from './programs/program-edit/effects';
 import { ProgramDeleteEffects } from './programs/program-overview/delete-confirmation/effects';
 
+import { ProgramsModule } from './programs/programs.module';
+import { MasterScreenerModule } from './master-screener/master-screener.module';
 
 @NgModule({
   imports: [
@@ -40,7 +42,9 @@ import { ProgramDeleteEffects } from './programs/program-overview/delete-confirm
     EffectsModule.run(ProgramOverviewEffects),
     EffectsModule.run(ProgramEditEffects),
     EffectsModule.run(ProgramDeleteEffects),
-    AdminCoreModule
+    AdminCoreModule,
+    ProgramsModule,
+    MasterScreenerModule
   ],
   declarations: [
     AdminComponent,
