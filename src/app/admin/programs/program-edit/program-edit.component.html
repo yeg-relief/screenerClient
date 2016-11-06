@@ -3,21 +3,20 @@
     <div class="px2"></div>
     <button md-raised-button 
       color="primary" 
-      (click)="saveProgram()" 
+      (click)="saveProgram()"
+      *ngIf="selectedView === 'user'" 
       [attr.disabled]="saveInProgress ? true : null"
       [attr.disabled]="!touched ? true : null">SAVE</button>
     <div class="px2"></div>
     <button md-raised-button 
       color="primary"
-      [attr.disabled]="saveInProgress ? true : null" 
+      [attr.disabled]="saveInProgress ? true : null"
+      *ngIf="selectedView === 'user'" 
       routerLink="/admin/programs/overview">CANCEL</button>
     <div class="flex-grow"></div>
   </div>
 </app-bread-crumb>
 <md-progress-bar mode="indeterminate" color="warn" *ngIf="saveInProgress"></md-progress-bar>
-<section *ngIf="program.application.length === 0" class="py2">
-  <div class="center py1">There are no conditions associated with this program </div>
-</section>
 <div *ngIf="errors.length > 0" class="flex flex-column flex-center">
   <div class="py1 error" *ngFor="let error of errors">
     <div class="center fit">
@@ -63,24 +62,28 @@
         
       </tr>
       <tr *ngFor="let condition of program.application">
-        <td>{{condition.key}}</td>
+        <td>{{condition.key.name}}</td>
         <td>{{condition.type}}</td>
         <div [ngSwitch]="condition.qualifier">
           <td *ngSwitchCase="'lessThan'"> < </td>
+          <td *ngSwitchCase="'lessThanOrEqual'"> <= </td>
           <td *ngSwitchCase="'equal'"> = < </td>
+          <td *ngSwitchCase="'greaterThanOrEqual'"> >= </td>
           <td *ngSwitchCase="'greaterThan'"> > </td>
-          <td *ngSwitchDefault>unknown</td>
+          <td *ngSwitchDefault></td>
         </div>
         <td>{{condition.value}}</td>
         
       </tr>
     </table>
   </section>
-  <section *ngIf="selectedView === 'application'" class="col-12">
-    <app-application-side
-      [keys]="(keys$ | async)"
-      [conditionsLength]="program.application.length"
-      (saveCondition)="handleApplicationSave($event)">
-    </app-application-side>
+  <section *ngIf="program.application.length === 0 && selectedView === 'application'" class="py2">
+    <div class="center py1">There are no conditions associated with this program </div>
   </section>
+</section>
+<section *ngIf="selectedView === 'application'" class="col-12">
+  <app-application-side
+    [keys]="(keys$ | async)"
+    (saveCondition)="newCondition$.next($event)">
+  </app-application-side>
 </section>

@@ -1,22 +1,32 @@
-import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter, OnDestroy } from '@angular/core';
 import { Key } from '../../../models/key';
 import { ProgramCondition } from '../../../models/program';
-import { FormControl } from '@angular/forms';
-
+import { FormGroup, FormControl, Validators } from '@angular/forms';
+import { Observable } from 'rxjs/Observable';
+import { Subject } from 'rxjs/Subject';
+import 'rxjs/add/operator/filter';
+import 'rxjs/add/observable/of';
+import 'rxjs/add/observable/combineLatest';
+import 'rxjs/add/operator/multicast';
+import 'rxjs/add/operator/startWith';
+import 'rxjs/add/operator/do';
+import 'rxjs/add/operator/map';
+import 'rxjs/add/operator/takeUntil';
+import { cloneDeep } from 'lodash';
 
 @Component({
   selector: 'app-application-side',
   templateUrl: './application-side.component.html',
   styleUrls: ['./application-side.component.css']
 })
-export class ApplicationSideComponent implements OnInit {
+export class ApplicationSideComponent implements OnInit, OnDestroy {
   @Output() saveCondition = new EventEmitter<ProgramCondition>();
   @Input() keys: Key[];
-  @Input() conditionsLength: number;
-
-  keyControl = new FormControl('select a key');
-
-  inputError = false;
+  destroy$ = new Subject<boolean>();
+  condition$: Observable<ProgramCondition>;
+  key$: Observable<Key>;
+  // valid when 'select a key' is not the value
+  keyControl = new FormControl('select a key', Validators.pattern('^((?!(select a key)).)*$'));
   numberOptions = [
     {
       display: '>', value: 'greaterThan'
@@ -34,19 +44,7 @@ export class ApplicationSideComponent implements OnInit {
       display: '<', value: 'lessThan'
     }
   ];
-
-  numberDisplayOptions  = this.numberOptions.reduce( (accum, option) => {
-    accum.push(option.display);
-    return accum;
-  }, []);
-
-  numberValueOptions = this.numberOptions.reduce( (accum, option) => {
-    accum.push(option.value);
-    return accum;
-  }, []);
-
-  selectedNumberOption = this.numberValueOptions[0];
-
+  numberControl = new FormControl(this.numberOptions[0].value);
   booleanOptions = [
     {
       display: 'true', value: true
@@ -55,83 +53,69 @@ export class ApplicationSideComponent implements OnInit {
       display: 'false', value: false
     }
   ];
+  boolControl = new FormControl(this.booleanOptions[0].value);
 
-  booleanDisplayOptions = this.booleanOptions.reduce ( (accum, option) => {
-    accum.push(option.display);
-    return accum;
-  }, []);
-
-  booleanValueOptions = this.booleanOptions.reduce ( (accum, option) => {
-    accum.push(option.value);
-    return accum;
-  }, []);
-
-
-  newCondition: ProgramCondition = this.blankCondition();
+  inputControl = new FormControl(0, Validators.pattern('^\\d+$'));
+  form = new FormGroup({
+    input: this.inputControl,
+    key: this.keyControl,
+  });
+  condition: ProgramCondition;
 
   constructor() { }
 
   ngOnInit() {
-    this.keyControl.valueChanges.subscribe(val => console.log(val));
+    this.condition$ = this.blankCondition();
+    const subject$ = new Subject();
+    this.key$ = this.keyControl.valueChanges
+      .map(keyDisplay => this.keys.find(inputKey => keyDisplay === inputKey.name))
+      .filter(key => key !== undefined)
+      .do(() => this.inputControl.reset('0'))
+      .multicast(subject$).refCount();
+
+    Observable.combineLatest(
+      this.condition$,
+      this.key$.startWith({
+        name: 'empty',
+        type: 'empty'
+      }),
+      this.numberControl.valueChanges.startWith(this.numberOptions[0].value),
+      this.boolControl.valueChanges.startWith(this.booleanOptions[0].value),
+      this.inputControl.valueChanges.startWith('0'),
+    )
+    .map(([condition, key, qualifier, bool, value]) => {
+       condition.key = key;
+       if (condition.key.type === 'boolean') {
+         condition.value = bool;
+         condition.type = 'boolean';
+         delete condition.qualifier;
+       } else if (condition.key.type === 'number') {
+         condition.qualifier = qualifier;
+         condition.value = Number.parseInt(value, 10);
+         condition.type = 'number';
+       }
+       return condition;
+    })
+    .takeUntil(this.destroy$)
+    .subscribe((cond) => this.condition = cloneDeep(cond));
+
   }
 
-  blankCondition(): ProgramCondition {
-    return {
+  ngOnDestroy() {
+    this.destroy$.next(true);
+  }
+
+  blankCondition(): Observable<ProgramCondition> {
+    const key: Key = {
+      name: 'empty',
+      type: 'empty'
+    };
+    return Observable.of({
       guid: 'empty',
-      key: {
-        name: 'empty',
-        type: undefined
-      },
+      key: key,
       value: undefined,
       type: undefined,
       qualifier: undefined
-    };
+    });
   }
-
-  isEmpty() {
-    return this.newCondition.key.name === 'empty';
-  }
-
-  keyChange(value) {
-    this.newCondition = this.blankCondition();
-    const key = this.keys.find(inputKey => value === inputKey.name);
-    if (key !== undefined) {
-      this.inputError = false;
-      this.newCondition.key = key;
-      this.newCondition.type = key.type;
-      if (key.type === 'number') {
-        this.newCondition.value = 0;
-        this.newCondition.qualifier = this.numberValueOptions[0];
-        this.selectedNumberOption = this.numberValueOptions[0];
-      } else if (key.type === 'boolean') {
-        this.newCondition.value = true;
-      }
-    }
-  }
-
-  keySelected(name) {
-    return name === this.newCondition.key.name;
-  }
-
-  valueInput($event) {
-    const reg = new RegExp('^\\d+$');
-    if (reg.test($event)) {
-      this.inputError = false;
-      this.newCondition.value = $event;
-    } else {
-      this.inputError = true;
-      if ($event === '') {
-        this.newCondition.value = 0;
-      }
-    }
-  }
-
-  boolChange($event) {
-    this.newCondition.value = $event;
-  }
-
-  qualifierChange($event) {
-    this.newCondition.qualifier = $event;
-  }
-
 }

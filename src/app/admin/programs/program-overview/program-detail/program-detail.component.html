@@ -34,7 +34,7 @@
         
       </tr>
       <tr *ngFor="let condition of program.application">
-        <td>{{condition.key}}</td>
+        <td>{{condition.key.name}}</td>
         <td>{{condition.type}}</td>
         <div [ngSwitch]="condition.qualifier">
           <td *ngSwitchCase="'lessThan'"> < </td>

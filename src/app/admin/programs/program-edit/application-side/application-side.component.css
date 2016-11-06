@@ -6,6 +6,11 @@ select > option {
   font-family: 'Roboto Mono', monospace;
 }
 
-.input-error {
+.ng-invalid {
   color: red;
+}
+
+.my-container {
+  margin: 0px 5% 0px 5%;
+  height: 10vh;
 }

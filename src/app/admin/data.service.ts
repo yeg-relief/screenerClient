@@ -74,7 +74,7 @@ export class DataService {
     if (this.loadedPrograms === undefined) {
       console.log('loading from network');
       return Observable.of(mockPrograms)
-        .delay(2000)
+        //.delay(2000)
         .do(programs => this.loadedPrograms = [...programs]);
     }
     return Observable.of(this.loadedPrograms);

@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { ApplicationFacingProgram } from '../../models/program';
 import { cloneDeep } from 'lodash';
 import 'rxjs/add/operator/take';
@@ -6,13 +6,18 @@ import { ProgramEditGuardService } from './route-guard';
 import { Store } from '@ngrx/store';
 import * as fromRoot from '../../reducer';
 import { Observable } from 'rxjs/Observable';
+import { Subject } from 'rxjs/Subject';
 import { Key } from '../../models/key';
+import { ProgramCondition } from '../../models/program';
+import 'rxjs/add/operator/scan';
+import 'rxjs/add/operator/takeUntil';
+import 'rxjs/add/operator/do';
 
 @Component({
   templateUrl: './program-edit.component.html',
   styleUrls: ['./program-edit.component.css']
 })
-export class ProgramEditComponent implements OnInit {
+export class ProgramEditComponent implements OnInit, OnDestroy {
   keys$: Observable<Key[]>;
   program: ApplicationFacingProgram = {
     guid: 'new',
@@ -30,7 +35,8 @@ export class ProgramEditComponent implements OnInit {
     application: []
   };
   newTag = '';
-
+  newCondition$ = new Subject<ProgramCondition>();
+  destroy$ = new Subject<boolean>();
   errors = [];
 
   PROGRAM_ERRORS = {
@@ -61,6 +67,24 @@ export class ProgramEditComponent implements OnInit {
     this.touched = false;
     this.selectedView = this.views[0].value;
     this.keys$ = this.store.let(fromRoot.getPresentKeys);
+    this.newCondition$
+      .scan( (accum, editCondition) => {
+        const duplicate = accum.find(programCondition => JSON.stringify(programCondition) === JSON.stringify(editCondition));
+        if (duplicate === undefined) {
+          accum.push(editCondition);
+        }
+        return accum;
+      }, [])
+      .takeUntil(this.destroy$)
+      .do(() => this.touched = true)
+      .subscribe({
+        next: (conditions: ProgramCondition[]) => this.program.application = [...conditions],
+        complete: () => console.log('completed')
+      });
+  }
+
+  ngOnDestroy() {
+    this.destroy$.next(true);
   }
 
   titleChange(value) {
@@ -144,5 +168,9 @@ export class ProgramEditComponent implements OnInit {
     if (index >= 0) {
       this.selectedView = this.views[index].value;
     }
+  }
+
+  handleApplicationSave($event) {
+    console.log($event);
   }
 }

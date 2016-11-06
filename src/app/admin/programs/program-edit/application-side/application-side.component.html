@@ -1,18 +1,59 @@
-{{ inputError | json }}
 <section class="col-12">
-  <div class="col-12 flex flex-center">
-    <select class="rounded col-3" [formControl]="keyControl">
+  <div class="py2"></div>
+  <div class="col-12 flex flex-center my-container">
+    <select class="rounded col-4" [formControl]="keyControl">
       <option disabled value="select a key">
         select a key
       </option>
       <option 
         *ngFor="let key of keys" 
-        [attr.selected]="keySelected(key.name) ? true : null" 
         [value]="key.name">
         {{key.name}}
       </option>
     </select>
-    <div class="col-1"></div>
+    <div class="px2"></div>
+    <select class="rounded col-1 center" 
+      [formControl]="numberControl"
+      *ngIf="(key$ | async)?.type === 'number'">
+      <option *ngFor="let option of numberOptions" 
+        [value]="option.value">
+        {{option.display}}
+      </option>
+    </select>
+    <div class="px2"></div>
+    <select class="rounded col-1" 
+      *ngIf="(key$ | async)?.type === 'boolean'" 
+      [formControl]="boolControl">
+      <option *ngFor="let option of booleanOptions" 
+        [value]="option.value">
+        {{option.display}}
+      </option>
+    </select>
+    <div class="col-1" 
+      *ngIf="(key$ | async)?.type !== 'boolean' && (key$ | async)?.type !== 'number'">
+    </div>
+    
+    <div class="px2"></div>
+    <md-input class="col-2"
+      [formControl]="inputControl"
+      *ngIf="(key$ | async)?.type === 'number'"
+      placeholder="value">
+    </md-input>
+    <div class="col-2" *ngIf="(key$ | async)?.type === 'boolean'"></div>
+    <div class="col-2" 
+      *ngIf="(key$ | async)?.type !== 'boolean' && (key$ | async)?.type !== 'number'">
+    </div>
+    <div class="px2"></div>
+    <button class="col-2"
+      md-raised-button 
+      [attr.disabled]="!form.valid ? true : null" 
+      color="primary"
+      (click)="saveCondition.emit(condition)">
+      SAVE
+    </button>
+      
+<!--    
+    
     <select class="rounded col-3" 
       *ngIf="newCondition.key.type === 'number'">
       <option *ngFor="let option of numberDisplayOptions; let i = index" 
@@ -23,7 +64,7 @@
     </select>
     <select class="rounded col-3" 
       *ngIf="newCondition.key.type === 'boolean'" 
-      (change)="boolChange($event.target.value)">
+      [formControl]="boolControl">
       <option *ngFor="let option of booleanOptions" 
         [attr.selected]="option.display === selectedBooleanOption ? true : null" 
         [value]="option.value">
@@ -43,5 +84,6 @@
       color="primary" 
       *ngIf="newCondition.key.name !== 'empty'"
       [attr.disabled]="inputError? true : null">SAVE</button>
+-->
   </div>
 </section>
