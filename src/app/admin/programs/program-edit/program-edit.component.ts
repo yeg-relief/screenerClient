@@ -12,6 +12,8 @@ import { ProgramCondition } from '../../models/program';
 import 'rxjs/add/operator/scan';
 import 'rxjs/add/operator/takeUntil';
 import 'rxjs/add/operator/do';
+import 'rxjs/add/operator/startWith';
+import 'rxjs/add/observable/from';
 
 @Component({
   templateUrl: './program-edit.component.html',
@@ -66,7 +68,7 @@ export class ProgramEditComponent implements OnInit, OnDestroy {
     this.saveInProgress = false;
     this.touched = false;
     this.selectedView = this.views[0].value;
-    this.keys$ = this.store.let(fromRoot.getPresentKeys);
+    this.keys$ = this.store.let(fromRoot.getPresentKeys);    
     this.newCondition$
       .scan( (accum, editCondition) => {
         const duplicate = accum.find(programCondition => JSON.stringify(programCondition) === JSON.stringify(editCondition));
@@ -81,6 +83,9 @@ export class ProgramEditComponent implements OnInit, OnDestroy {
         next: (conditions: ProgramCondition[]) => this.program.application = [...conditions],
         complete: () => console.log('completed')
       });
+
+      // inject already present values... sloppy?
+      Observable.from(this.program.application).subscribe(val => this.newCondition$.next(val)).unsubscribe();
   }
 
   ngOnDestroy() {

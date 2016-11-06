@@ -37,11 +37,11 @@
         <td>{{condition.key.name}}</td>
         <td>{{condition.type}}</td>
         <div [ngSwitch]="condition.qualifier">
-          <td *ngSwitchCase="'lessThan'"> '<' </td>
-          <td *ngSwitchCase="'lessThanOrEqual'"> '<=' </td>
-          <td *ngSwitchCase="'equal'"> '=' < </td>
-          <td *ngSwitchCase="'greaterThanOrEqual'"> '>=' </td>
-          <td *ngSwitchCase="'greaterThan'"> '>' </td>
+          <td *ngSwitchCase="'lessThan'"> &lt; </td>
+          <td *ngSwitchCase="'lessThanOrEqual'"> &lt;= </td>
+          <td *ngSwitchCase="'equal'"> = </td>
+          <td *ngSwitchCase="'greaterThanOrEqual'"> &gt;= </td>
+          <td *ngSwitchCase="'greaterThan'"> &gt; </td>
           <td *ngSwitchDefault></td>
         </div>
         <td>{{condition.value}}</td>
