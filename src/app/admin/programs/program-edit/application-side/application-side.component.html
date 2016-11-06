@@ -51,39 +51,5 @@
       (click)="saveCondition.emit(condition)">
       SAVE
     </button>
-      
-<!--    
-    
-    <select class="rounded col-3" 
-      *ngIf="newCondition.key.type === 'number'">
-      <option *ngFor="let option of numberDisplayOptions; let i = index" 
-        [attr.selected]="option.value === selectedNumberOption ? true : null" 
-        [value]="numberValueOptions[i]">
-        {{option}}
-      </option>
-    </select>
-    <select class="rounded col-3" 
-      *ngIf="newCondition.key.type === 'boolean'" 
-      [formControl]="boolControl">
-      <option *ngFor="let option of booleanOptions" 
-        [attr.selected]="option.display === selectedBooleanOption ? true : null" 
-        [value]="option.value">
-        {{option.display}}
-      </option>
-    </select>
-    <div class="col-1"></div>
-    <md-input placeholder="value" 
-      [value]="newCondition.value" 
-      *ngIf="newCondition.key.type === 'number'"
-      [value]="newCondition.value"
-      (input)="valueInput($event.target.value)"
-      [class.input-error]="inputError"></md-input>
-    <div class="col-1"></div>
-    <button 
-      md-raised-button 
-      color="primary" 
-      *ngIf="newCondition.key.name !== 'empty'"
-      [attr.disabled]="inputError? true : null">SAVE</button>
--->
   </div>
 </section>
