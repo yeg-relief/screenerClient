@@ -2,87 +2,73 @@
   <div class="flex col-10 p1" style="overflow: hidden">
     <div class="px2"></div>
     <button md-raised-button 
-      color="primary" 
-      (click)="saveProgram()"
-      *ngIf="selectedView === 'user'" 
-      [attr.disabled]="saveInProgress ? true : null"
-      [attr.disabled]="!touched ? true : null">SAVE</button>
+      color="primary"
+      [attr.disabled]="!form.valid ? true : null"
+      (click)="this.submit$.next(true)">SAVE</button>
     <div class="px2"></div>
     <button md-raised-button 
       color="primary"
-      [attr.disabled]="saveInProgress ? true : null"
-      *ngIf="selectedView === 'user'" 
       routerLink="/admin/programs/overview">CANCEL</button>
     <div class="flex-grow"></div>
   </div>
 </app-bread-crumb>
-<md-progress-bar mode="indeterminate" color="warn" *ngIf="saveInProgress"></md-progress-bar>
-<div *ngIf="errors.length > 0" class="flex flex-column flex-center">
-  <div class="py1 error" *ngFor="let error of errors">
-    <div class="center fit">
-      {{error}}
-    </div>
-  </div>
+<!-- SAVE BAR -->
+<md-progress-bar mode="indeterminate" color="warn" *ngIf="saving$ | async"></md-progress-bar>
+<div class="p2 center">
+  <md-button-toggle-group [formControl]="view">
+    <md-button-toggle *ngFor="let v of views" [value]="v">
+      {{v}}
+    </md-button-toggle>
+  </md-button-toggle-group>
 </div>
-<div class="py2"></div>
-<section class="main-container flex flex-column flex-center">
-  <div class="border p2 rounded">
-    <md-button-toggle-group (change)="viewChange($event.value)" [value]="views[0].value">
-      <md-button-toggle *ngFor="let view of views" [value]="view.value">
-          {{view.value}}
-      </md-button-toggle>
-    </md-button-toggle-group>
-  </div>
-  <div *ngIf="selectedView === 'user'" class="col-12">
-    <md-input class="container-item" placeholder="title" [value]="program.user.description.title" (input)="titleChange($event.target.value)"></md-input>
+<section class="main-container flex flex-column flex-center" *ngIf="(view$ | async) === 'user'">
+  <div class="col-12">
+    <md-input class="container-item" placeholder="title" [formControl]="title"></md-input>
     <div class="py1"></div>
-    <textarea placeholder="description" class="container-item" rows="4" *ngIf="program.user.description.details.length === 0" (input)="detailChange($event.target.value)"></textarea>
-    <textarea placeholder="description" class="container-item" rows="4" *ngIf="program.user.description.details.length > 0" (input)="detailChange($event.target.value)">{{program.user.description.details}}</textarea>
+    <textarea placeholder="description" class="container-item" rows="4" [formControl]="details"></textarea>
     <div class="py1"></div>
-    <md-input class="container-item" placeholder="link" [value]="program.user.description.externalLink" (input)="linkChange($event.target.value)"></md-input>
+    <md-input class="container-item" placeholder="link" [formControl]="link"></md-input>
     <div class="container-item flex">
-      <div class="ml1 mr1 p1 border bg-silver" *ngFor="let tag of program.user.tags">
-        {{tag}} <div style="cursor:pointer" (click)="deleteTag(tag)"> X</div>
+      <div class="ml1 mr1 p1 border bg-silver">
+        tag <div style="cursor:pointer"> X</div>
       </div>
     </div>
     <div class="container-item flex flex-center">
-      <md-input class="mr2" placeholder="tag" [value]="newTag" (input)="newTagChange($event.target.value)"></md-input>
-      <button md-mini-fab color="primary" (click)="addTag()">
+      <md-input class="mr2" placeholder="tag name" [formControl]="tag"></md-input>
+      <button md-mini-fab color="primary" (click)="tagAdd.next()">
         <i class="material-icons">add</i>
       </button>
     </div>
   </div>
-  <section *ngIf="selectedView === 'application' && program.application.length > 0" class="py1" >
-    <table style="width:100%">
-      <tr>
-        <th>Key</th>
-        <th>Type</th>
-        <th>Qualifier</th>
-        <th>Value</th> 
-        
-      </tr>
-      <tr *ngFor="let condition of program.application">
-        <td>{{condition.key.name}}</td>
-        <td>{{condition.type}}</td>
-        <div [ngSwitch]="condition.qualifier">
-          <td *ngSwitchCase="'lessThan'"> &lt; </td>
-          <td *ngSwitchCase="'lessThanOrEqual'"> &lt;= </td>
-          <td *ngSwitchCase="'equal'"> =  </td>
-          <td *ngSwitchCase="'greaterThanOrEqual'"> &gt;= </td>
-          <td *ngSwitchCase="'greaterThan'"> &gt; </td>
-          <td *ngSwitchDefault></td>
-        </div>
-        <td>{{condition.value}}</td>
-        
-      </tr>
-    </table>
-  </section>
-  <section *ngIf="program.application.length === 0 && selectedView === 'application'" class="py2">
-    <div class="center py1">There are no conditions associated with this program </div>
+  <section class="py1" >
+    <div *ngFor="let query of (state$ | async)?.application">
+      <table style="width:100%" class="py2">
+        <tr>
+          <th>Key</th>
+          <th>Type</th>
+          <th>Qualifier</th>
+          <th>Value</th> 
+          
+        </tr>
+        <tr *ngFor="let condition of query">
+          <td>{{condition.key.name}}</td>
+          <td>{{condition.type}}</td>
+          <div [ngSwitch]="condition.qualifier">
+            <td *ngSwitchCase="'lessThan'"> &lt; </td>
+            <td *ngSwitchCase="'lessThanOrEqual'"> &lt;= </td>
+            <td *ngSwitchCase="'equal'"> =  </td>
+            <td *ngSwitchCase="'greaterThanOrEqual'"> &gt;= </td>
+            <td *ngSwitchCase="'greaterThan'"> &gt; </td>
+            <td *ngSwitchDefault></td>
+          </div>
+        </tr>
+      </table>
+    </div>
   </section>
 </section>
-<section *ngIf="selectedView === 'application'" class="col-12">
+<section class="col-12">
   <app-application-side
+    *ngIf="(view$ | async) === 'application'"
     [keys]="(keys$ | async)"
     (saveCondition)="newCondition$.next($event)">
   </app-application-side>
