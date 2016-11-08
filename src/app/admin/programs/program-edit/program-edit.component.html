@@ -11,6 +11,7 @@
       routerLink="/admin/programs/overview">CANCEL</button>
     <div class="flex-grow"></div>
   </div>
+  {{ state$ | async | json }}
 </app-bread-crumb>
 <!-- SAVE BAR -->
 <md-progress-bar mode="indeterminate" color="warn" *ngIf="saving$ | async"></md-progress-bar>
@@ -29,8 +30,8 @@
     <div class="py1"></div>
     <md-input class="container-item" placeholder="link" [formControl]="link"></md-input>
     <div class="container-item flex">
-      <div class="ml1 mr1 p1 border bg-silver">
-        tag <div style="cursor:pointer"> X</div>
+      <div class="ml1 mr1 p1 border bg-silver" *ngFor="let tag of (state$ | async)?.user.tags">
+        {{ tag }} <div style="cursor:pointer" (click)="removeTag$.next(tag)"> X</div>
       </div>
     </div>
     <div class="container-item flex flex-center">

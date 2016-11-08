@@ -55,6 +55,9 @@ export class ProgramEditComponent implements OnInit, OnDestroy {
 
   state$: Observable<ApplicationFacingProgram>;
 
+  // remove a tag
+  removeTag$ = new Subject<string>();
+
   form: FormGroup;
 
   constructor(
@@ -81,20 +84,29 @@ export class ProgramEditComponent implements OnInit, OnDestroy {
     this.state$ = Observable.combineLatest(
       this.title.valueChanges.startWith(this.title.value),
       this.details.valueChanges.startWith(this.details.value),
-      tagAdd$.startWith(''),
-      this.link.valueChanges.startWith(this.link.value)
+      tagAdd$.startWith('-1'),
+      this.link.valueChanges.startWith(this.link.value),
+      this.removeTag$.asObservable().startWith('')
     )
     // update the program we're working on with each change
-    .scan( (accum, [title, details, tag, link]) => {
+    .scan( (accum, [title, details, tag, link, remove]) => {
       accum = <ApplicationFacingProgram>accum;
       accum.user.description.title = title;
       accum.user.description.details = details;
-      if (tag !== '') {
+      if (tag !== '-1') {
         accum.user.tags = [tag, ...accum.user.tags];
+      }
+
+      if (remove !== '') {
+        const tagIndex = accum.user.tags.findIndex(programTag => programTag === remove);
+        if (tagIndex >= 0) {
+          accum.user.tags.splice(tagIndex, 1);
+        }
       }
       accum.user.description.externalLink = link;
       return accum;
     }, seedProgram)
+    .startWith(seedProgram)
     .let(deDuplicateProgramTags)
     .let(deDuplicateQueries)
     // share observable
