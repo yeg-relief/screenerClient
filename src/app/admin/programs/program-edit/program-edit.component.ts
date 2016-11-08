@@ -17,6 +17,7 @@ import 'rxjs/add/operator/let';
 import 'rxjs/add/operator/filter';
 import 'rxjs/add/operator/multicast';
 import 'rxjs/add/observable/combineLatest';
+import 'rxjs/add/observable/merge';
 import { uniqWith } from 'lodash';
 import { FormControl, Validators, FormGroup } from '@angular/forms';
 
@@ -56,7 +57,7 @@ export class ProgramEditComponent implements OnInit, OnDestroy {
   state$: Observable<ApplicationFacingProgram>;
 
   // remove a tag
-  removeTag$ = new Subject<string>();
+  removeTag$ = new BehaviorSubject<string>('dummy');
 
   form: FormGroup;
 
@@ -78,39 +79,55 @@ export class ProgramEditComponent implements OnInit, OnDestroy {
     this.keys$ = this.store.let(fromRoot.getPresentKeys);
 
     const tagAdd$ = this.tagAdd.asObservable().withLatestFrom(this.tag.valueChanges)
-      .map<string>( ([_, tag]) => tag);
+      .do(() => this.tag.reset())
+      .map( ([_, tag]) => { return {action: 'ADD_TAG', payload: tag }; });
+
+    const changeTitle = this.title.valueChanges.map(title => {
+     return {
+       action: 'UPDATE_TITLE',
+       payload: title
+     };
+    });
+
+
 
     // changes in all inputs
-    this.state$ = Observable.combineLatest(
+    const changes$ = Observable.combineLatest(
       this.title.valueChanges.startWith(this.title.value),
       this.details.valueChanges.startWith(this.details.value),
-      tagAdd$.startWith('-1'),
+      // if I don't startWith something this observable will not comine all changes... ie, it
+      // gets hung waiting for EVERYTHING to change at least once
+      tagAdd$.startWith('dummy'),
+      this.removeTag$,
       this.link.valueChanges.startWith(this.link.value),
-      this.removeTag$.asObservable().startWith('')
     )
     // update the program we're working on with each change
-    .scan( (accum, [title, details, tag, link, remove]) => {
+    .scan( (accum, [title, details, tag, removeTag, link]) => {
       accum = <ApplicationFacingProgram>accum;
       accum.user.description.title = title;
       accum.user.description.details = details;
-      if (tag !== '-1') {
-        accum.user.tags = [tag, ...accum.user.tags];
+      if (tag !== 'dummy') {
+        const index = accum.user.tags.findIndex(programTag => programTag === tag);
+        if (index < 0) {
+          accum.user.tags = [tag, ...accum.user.tags];
+        }
       }
-
-      if (remove !== '') {
-        const tagIndex = accum.user.tags.findIndex(programTag => programTag === remove);
-        if (tagIndex >= 0) {
-          accum.user.tags.splice(tagIndex, 1);
+      if (removeTag !== 'dummy') {
+        const index = accum.user.tags.findIndex(programTag => programTag === removeTag);
+        if (index >= 0) {
+          accum.user.tags.splice(index, 1);
         }
       }
       accum.user.description.externalLink = link;
       return accum;
     }, seedProgram)
-    .startWith(seedProgram)
     .let(deDuplicateProgramTags)
     .let(deDuplicateQueries)
     // share observable
     .multicast(new Subject()).refCount();
+
+
+    this.state$ = Observable.merge(Observable.of(seedProgram), changes$);
 
     this.submit$.withLatestFrom(this.state$)
       // only submit if the form is valid

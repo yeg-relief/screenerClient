@@ -11,7 +11,6 @@
       routerLink="/admin/programs/overview">CANCEL</button>
     <div class="flex-grow"></div>
   </div>
-  {{ state$ | async | json }}
 </app-bread-crumb>
 <!-- SAVE BAR -->
 <md-progress-bar mode="indeterminate" color="warn" *ngIf="saving$ | async"></md-progress-bar>
