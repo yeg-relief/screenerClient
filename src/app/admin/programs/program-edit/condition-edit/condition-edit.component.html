@@ -1,0 +1,44 @@
+<div class="col-12 flex flex-center my-container">
+  <select class="rounded col-4" [formControl]="keySelect">
+    <option *ngFor="let key of (keys$ | async)" [value]="key.name" 
+      [attr.disabled]="key.name === 'select a key' ? true : null">
+      {{key.name}}
+    </option>
+  </select>
+  <div class="px2"></div>
+  <select class="rounded col-2 center" [formControl]="qualifierInput" 
+    *ngIf="(state$ | async)?.type === 'number'">
+    <option *ngFor="let option of qualifierOptions" [value]="option.value">
+      {{option.display}}
+    </option>
+  </select>
+  <div class="px1"></div>
+  <select class="rounded col-2" *ngIf="(state$ | async)?.type === 'boolean'" 
+    [formControl]="booleanValueSelect">
+    <option *ngFor="let option of booleanValueOptions" [value]="option.value">
+      {{option.display}}
+    </option>
+  </select>
+  <div class="px2"></div>
+  <md-input class="col-2" 
+    [formControl]="inputNumberValue" 
+    *ngIf="(state$ | async)?.type === 'number'" placeholder="value">
+  </md-input>
+  <div class="col-2" *ngIf="(state$ | async)?.type === 'boolean'"></div>
+  <div class="col-4" 
+    *ngIf="(state$ | async)?.type !== 'boolean' && (state$ | async)?.type !== 'number'">
+  </div>
+  <div class="px2"></div>
+  <button 
+    md-mini-fab color="primary" 
+    [attr.disabled]="!form.valid ? true : null"
+    (click)="save$.next()">
+      <i class="material-icons">add</i>
+  </button>
+  <div class="px1"></div>
+  <button md-mini-fab color="warn" (click)="cancel.emit(false)">
+      <i class="material-icons">clear</i>
+  </button>
+</div>
+{{ form.valid }}
+{{ form  }}

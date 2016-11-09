@@ -44,7 +44,7 @@ export class ApplicationSideComponent implements OnInit, OnDestroy {
       .takeUntil(this.destroy$)
       .multicast(new ReplaySubject(1)).refCount();
 
-    this.editQuery$ = this.state$.map(state => state.editQuery);
+    this.editQuery$ = this.state$.map(state => state.editQuery).takeUntil(this.destroy$);
   }
 
   dispatch$() {

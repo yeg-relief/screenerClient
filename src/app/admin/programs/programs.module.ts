@@ -15,6 +15,7 @@ import { DeleteConfirmationComponent } from './program-overview/delete-confirmat
 import { ProgramDeleteGuardService } from './program-overview/delete-confirmation/route-guard';
 import { ApplicationSideComponent } from './program-edit/application-side/application-side.component';
 import { ReactiveFormsModule } from '@angular/forms';
+import { ConditionEditComponent } from './program-edit/condition-edit/condition-edit.component';
 import { QueryEditComponent } from './program-edit/query-edit/query-edit.component';
 
 @NgModule({
@@ -34,6 +35,7 @@ import { QueryEditComponent } from './program-edit/query-edit/query-edit.compone
     ProgramEditComponent,
     DeleteConfirmationComponent,
     ApplicationSideComponent,
+    ConditionEditComponent,
     QueryEditComponent
   ],
   providers: [

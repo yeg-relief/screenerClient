@@ -1,4 +1,4 @@
-<section class="col-12">
+<section class="col-12" *ngIf="!addQuery">
   <div class="py2"></div>
   <section class="col-12" >
     <div class="center"> 
@@ -33,9 +33,7 @@
   <section *ngIf="program.application?.length === 0" class="py1 center">
     There are no queries associated with this program.
   </section>
-  
 </section>
-<app-query-edit 
-  *ngIf="addQuery"
-  [query]="(state$ | async)?.editQuery">
+<app-query-edit *ngIf="addQuery" [query]="editQuery$ | async">
+  
 </app-query-edit>

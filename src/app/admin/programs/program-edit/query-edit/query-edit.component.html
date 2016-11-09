@@ -1,42 +1,26 @@
-<div class="col-12 flex flex-center my-container">
-  <select class="rounded col-4" [formControl]="keySelect">
-    <option disabled value="select a key">
-      select a key
-    </option>
-    <option *ngFor="let key of (keys$ | async)" [value]="key.name">
-      {{key.name}}
-    </option>
-  </select>
-  <div class="px2"></div>
-  <select class="rounded col-2 center" [formControl]="qualifierInput" 
-    *ngIf="(state$ | async)?.editCondition.type === 'number'">
-    <option *ngFor="let option of qualifierOptions" [value]="option.value">
-      {{option.display}}
-    </option>
-  </select>
-  <div class="px1"></div>
-  <select class="rounded col-2" *ngIf="(state$ | async)?.editCondition.type === 'boolean'" 
-    [formControl]="booleanValueSelect">
-    <option *ngFor="let option of booleanValueOptions" [value]="option.value">
-      {{option.display}}
-    </option>
-  </select>
-  <div class="px2"></div>
-  <md-input class="col-2" 
-    [formControl]="inputNumberValue" 
-    *ngIf="(state$ | async)?.editCondition.type === 'number'" placeholder="value">
-  </md-input>
-  <div class="col-2" *ngIf="(state$ | async)?.editCondition.type === 'boolean'"></div>
-  <div class="col-4" 
-    *ngIf="(state$ | async)?.editCondition.type !== 'boolean' && (state$ | async)?.editCondition.type !== 'number'">
-  </div>
-  <div class="px2"></div>
-  <button 
-    md-mini-fab color="primary" 
-    [attr.disabled]="!form.valid ? true : null">
-      <i class="material-icons">add</i>
-  </button>
-  <button md-mini-fab color="warn">
-      <i class="material-icons">clear</i>
-  </button>
-</div>
+<table style="width:100%">
+  <tr>
+    <th>Key</th>
+    <th>Type</th>
+    <th>Qualifier</th>
+    <th>Value</th>
+  </tr>
+  <tr *ngFor="let condition of (state$ | async)?.query.conditions">
+    <td>{{condition.key.name}}</td>
+    <td>{{condition.type}}</td>
+    <div [ngSwitch]="condition.qualifier">
+      <td *ngSwitchCase="'lessThan'"> &lt; </td>
+      <td *ngSwitchCase="'lessThanOrEqual'"> &lt;= </td>
+      <td *ngSwitchCase="'equal'"> = </td>
+      <td *ngSwitchCase="'greaterThanOrEqual'"> &gt;= </td>
+      <td *ngSwitchCase="'greaterThan'"> &gt; </td>
+      <td *ngSwitchDefault></td>
+    </div>
+    <td>{{condition.value}}</td>
+  </tr>
+</table>
+<div class="py2"></div>
+<app-condition-edit 
+  [condition]="(state$ | async)?.selectedCondition"
+  (save)="commitCondition.next($event)">
+</app-condition-edit>
