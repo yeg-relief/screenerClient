@@ -10,6 +10,7 @@ export interface ProgramCondition {
 
 export interface ProgramQuery {
   guid: string;
+  id: string;
   conditions: ProgramCondition[];
 }
 

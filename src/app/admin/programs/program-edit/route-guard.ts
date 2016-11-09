@@ -11,7 +11,6 @@ import 'rxjs/add/operator/map';
 @Injectable()
 export class ProgramEditGuardService implements CanActivate {
   program$: Observable<ApplicationFacingProgram>;
-
   constructor(private store: Store<fromRoot.State>, private router: Router) {}
 
   canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): boolean {

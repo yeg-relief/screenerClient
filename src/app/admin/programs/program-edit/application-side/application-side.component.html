@@ -1,55 +1,41 @@
 <section class="col-12">
   <div class="py2"></div>
-  <div class="col-12 flex flex-center my-container">
-    <select class="rounded col-4" [formControl]="keyControl">
-      <option disabled value="select a key">
-        select a key
-      </option>
-      <option 
-        *ngFor="let key of keys" 
-        [value]="key.name">
-        {{key.name}}
-      </option>
-    </select>
-    <div class="px2"></div>
-    <select class="rounded col-1 center" 
-      [formControl]="numberControl"
-      *ngIf="(key$ | async)?.type === 'number'">
-      <option *ngFor="let option of numberOptions" 
-        [value]="option.value">
-        {{option.display}}
-      </option>
-    </select>
-    <div class="px2"></div>
-    <select class="rounded col-1" 
-      *ngIf="(key$ | async)?.type === 'boolean'" 
-      [formControl]="boolControl">
-      <option *ngFor="let option of booleanOptions" 
-        [value]="option.value">
-        {{option.display}}
-      </option>
-    </select>
-    <div class="col-1" 
-      *ngIf="(key$ | async)?.type !== 'boolean' && (key$ | async)?.type !== 'number'">
+  <section class="col-12" >
+    <div class="center"> 
+      <button md-raised-button color="primary"
+        (click)="addQuery = true"> ADD QUERY 
+      </button> 
     </div>
-    
-    <div class="px2"></div>
-    <md-input class="col-2"
-      [formControl]="inputControl"
-      *ngIf="(key$ | async)?.type === 'number'"
-      placeholder="value">
-    </md-input>
-    <div class="col-2" *ngIf="(key$ | async)?.type === 'boolean'"></div>
-    <div class="col-2" 
-      *ngIf="(key$ | async)?.type !== 'boolean' && (key$ | async)?.type !== 'number'">
+    <div *ngFor="let query of (state$ | async)?.queries" class="query py2">
+      <table style="width:100%">
+        <tr>
+          <th>Key</th>
+          <th>Type</th>
+          <th>Qualifier</th>
+          <th>Value</th> 
+          
+        </tr>
+        <tr *ngFor="let condition of query">
+          <td>{{condition.key.name}}</td>
+          <td>{{condition.type}}</td>
+          <div [ngSwitch]="condition.qualifier">
+            <td *ngSwitchCase="'lessThan'"> &lt; </td>
+            <td *ngSwitchCase="'lessThanOrEqual'"> &lt;= </td>
+            <td *ngSwitchCase="'equal'"> =  </td>
+            <td *ngSwitchCase="'greaterThanOrEqual'"> &gt;= </td>
+            <td *ngSwitchCase="'greaterThan'"> &gt; </td>
+            <td *ngSwitchDefault></td>
+          </div>
+        </tr>
+      </table>
     </div>
-    <div class="px2"></div>
-    <button class="col-2"
-      md-raised-button 
-      [attr.disabled]="!form.valid ? true : null" 
-      color="primary"
-      (click)="saveCondition.emit(condition)">
-      SAVE
-    </button>
-  </div>
+  </section>
+  <section *ngIf="program.application?.length === 0" class="py1 center">
+    There are no queries associated with this program.
+  </section>
+  
 </section>
+<app-query-edit 
+  *ngIf="addQuery"
+  [query]="(state$ | async)?.editQuery">
+</app-query-edit>

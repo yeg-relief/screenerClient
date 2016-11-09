@@ -40,36 +40,12 @@
       </button>
     </div>
   </div>
-  <section class="py1" >
-    <div *ngFor="let query of (state$ | async)?.application">
-      <table style="width:100%" class="py2">
-        <tr>
-          <th>Key</th>
-          <th>Type</th>
-          <th>Qualifier</th>
-          <th>Value</th> 
-          
-        </tr>
-        <tr *ngFor="let condition of query">
-          <td>{{condition.key.name}}</td>
-          <td>{{condition.type}}</td>
-          <div [ngSwitch]="condition.qualifier">
-            <td *ngSwitchCase="'lessThan'"> &lt; </td>
-            <td *ngSwitchCase="'lessThanOrEqual'"> &lt;= </td>
-            <td *ngSwitchCase="'equal'"> =  </td>
-            <td *ngSwitchCase="'greaterThanOrEqual'"> &gt;= </td>
-            <td *ngSwitchCase="'greaterThan'"> &gt; </td>
-            <td *ngSwitchDefault></td>
-          </div>
-        </tr>
-      </table>
-    </div>
-  </section>
 </section>
 <section class="col-12">
   <app-application-side
     *ngIf="(view$ | async) === 'application'"
     [keys]="(keys$ | async)"
+    [program]="(state$ | async)"
     (saveCondition)="newCondition$.next($event)">
   </app-application-side>
 </section>

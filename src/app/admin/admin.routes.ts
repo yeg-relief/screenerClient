@@ -18,7 +18,7 @@ import { ProgramEditComponent } from './programs/program-edit/program-edit.compo
 import { ProgramEditGuardService } from './programs/program-edit/route-guard';
 import { DeleteConfirmationComponent } from './programs/program-overview/delete-confirmation/delete-confirmation.component';
 import { ProgramDeleteGuardService } from './programs/program-overview/delete-confirmation/route-guard';
-
+import { QueryEditComponent } from './programs/program-edit/query-edit/query-edit.component';
 
 export const routing: ModuleWithProviders = RouterModule.forChild([
    // commented out for development cycle
@@ -59,6 +59,10 @@ export const routing: ModuleWithProviders = RouterModule.forChild([
               path: 'delete/:guid',
               component: DeleteConfirmationComponent,
               canActivate: [ProgramDeleteGuardService]
+            },
+            {
+              path: 'query-edit/:guid/:id',
+              component: QueryEditComponent
             },
             {
               path: '', pathMatch: 'full', redirectTo: 'overview'

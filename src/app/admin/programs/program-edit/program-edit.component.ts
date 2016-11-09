@@ -2,8 +2,6 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 import { ApplicationFacingProgram, ProgramQuery } from '../../models/program';
 import { Key } from '../../models/key';
 import { ProgramEditGuardService } from './route-guard';
-import { Store } from '@ngrx/store';
-import * as fromRoot from '../../reducer';
 import { Observable } from 'rxjs/Observable';
 import { Subject } from 'rxjs/Subject';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
@@ -60,15 +58,9 @@ export class ProgramEditComponent implements OnInit, OnDestroy {
   // used primarily to enable/disable save button
   form: FormGroup;
 
-  constructor(
-    private service: ProgramEditGuardService,
-    private store: Store<fromRoot.State>
-  ) { }
+  constructor( private service: ProgramEditGuardService ) { }
 
   ngOnInit() {
-    // the keys the user can assign conditions for queries... loaded from memory
-    this.keys$ = this.store.let(fromRoot.getPresentKeys).takeUntil(this.destroy$);
-
     this.state$ = this.dispatch$()
       .do(action => console.log(`action.type = ${action.type}, action.payload = ${action.payload}`))
       .let(reducer)
@@ -76,14 +68,14 @@ export class ProgramEditComponent implements OnInit, OnDestroy {
       .takeUntil(this.destroy$)
       .multicast(new ReplaySubject(1)).refCount();
 
-   this.submit$
-    .asObservable()
-    .withLatestFrom(this.state$)
-    .filter( () => this.form.valid)
-    .do(() => this.saving$.next(true))
-    .takeUntil(this.destroy$)
-    .do( ([_ , program]) => this.service.save(program))
-    .subscribe();
+    this.submit$
+      .asObservable()
+      .withLatestFrom(this.state$)
+      .filter( () => this.form.valid)
+      .do(() => this.saving$.next(true))
+      .takeUntil(this.destroy$)
+      .do( ([_ , program]) => this.service.save(program))
+      .subscribe();
   }
 
   // called in dispatch$ via program$ subscription

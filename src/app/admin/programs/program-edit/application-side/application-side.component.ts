@@ -1,18 +1,22 @@
 import { Component, OnInit, Input, Output, EventEmitter, OnDestroy } from '@angular/core';
 import { Key } from '../../../models/key';
-import { ProgramCondition } from '../../../models/program';
-import { FormGroup, FormControl, Validators } from '@angular/forms';
+import { ProgramCondition, ApplicationFacingProgram, ProgramQuery } from '../../../models/program';
 import { Observable } from 'rxjs/Observable';
 import { Subject } from 'rxjs/Subject';
-import 'rxjs/add/operator/filter';
-import 'rxjs/add/observable/of';
-import 'rxjs/add/observable/combineLatest';
-import 'rxjs/add/operator/multicast';
-import 'rxjs/add/operator/startWith';
-import 'rxjs/add/operator/do';
 import 'rxjs/add/operator/map';
+import 'rxjs/add/observable/merge';
+import 'rxjs/add/operator/do';
+import 'rxjs/add/operator/let';
 import 'rxjs/add/operator/takeUntil';
+import 'rxjs/add/operator/multicast';
+import { ReplaySubject } from 'rxjs/ReplaySubject';
 import { cloneDeep } from 'lodash';
+
+interface State {
+  queries: ProgramQuery[];
+  editQuery: ProgramQuery;
+};
+
 
 @Component({
   selector: 'app-application-side',
@@ -20,102 +24,68 @@ import { cloneDeep } from 'lodash';
   styleUrls: ['./application-side.component.css']
 })
 export class ApplicationSideComponent implements OnInit, OnDestroy {
+  // going to get rid of this
   @Output() saveCondition = new EventEmitter<ProgramCondition>();
   @Input() keys: Key[];
-  destroy$ = new Subject<boolean>();
-  condition$: Observable<ProgramCondition>;
-  key$: Observable<Key>;
-  // valid when 'select a key' is not the value
-  keyControl = new FormControl('select a key', Validators.pattern('^((?!(select a key)).)*$'));
-  numberOptions = [
-    {
-      display: '>', value: 'greaterThan'
-    },
-    {
-      display: '>=', value: 'greaterThanOrEqual'
-    },
-    {
-      display: '=', value: 'equal'
-    },
-    {
-      display: '<=', value: 'lessThanOrEqual'
-    },
-    {
-      display: '<', value: 'lessThan'
-    }
-  ];
-  numberControl = new FormControl(this.numberOptions[0].value);
-  booleanOptions = [
-    {
-      display: 'true', value: true
-    },
-    {
-      display: 'false', value: false
-    }
-  ];
-  boolControl = new FormControl(this.booleanOptions[0].value);
-
-  inputControl = new FormControl(0, Validators.pattern('^\\d+$'));
-  form = new FormGroup({
-    input: this.inputControl,
-    key: this.keyControl,
-  });
-  condition: ProgramCondition;
+  @Input() program: ApplicationFacingProgram;
+  guid: string;
+  addQuery: boolean = false;
+  state$: Observable<State>;
+  editQuery$: Observable<ProgramQuery>;
+  destroy$ = new Subject();
 
   constructor() { }
 
   ngOnInit() {
-    this.condition$ = this.blankCondition();
-    const subject$ = new Subject();
-    this.key$ = this.keyControl.valueChanges
-      .map(keyDisplay => this.keys.find(inputKey => keyDisplay === inputKey.name))
-      .filter(key => key !== undefined)
-      .do(() => this.inputControl.reset('0'))
-      .multicast(subject$).refCount();
+    this.state$ = this.dispatch$()
+      .do(action => console.log(`action.type = ${action.type}, action.payload = ${action.payload}`))
+      .let(reducer)
+      .do(state => console.log(state))
+      .takeUntil(this.destroy$)
+      .multicast(new ReplaySubject(1)).refCount();
 
-    Observable.combineLatest(
-      this.condition$,
-      this.key$.startWith({
-        name: 'empty',
-        type: 'empty'
-      }),
-      this.numberControl.valueChanges.startWith(this.numberOptions[0].value),
-      this.boolControl.valueChanges.startWith(this.booleanOptions[0].value),
-      this.inputControl.valueChanges.startWith('0'),
-    )
-    .map(([condition, key, qualifier, bool, value]) => {
-       condition.key = key;
-       if (condition.key.type === 'boolean') {
-         condition.value = bool;
-         condition.type = 'boolean';
-         delete condition.qualifier;
-       } else if (condition.key.type === 'number') {
-         condition.qualifier = qualifier;
-         condition.value = Number.parseInt(value, 10);
-         condition.type = 'number';
-       }
-       return condition;
-    })
-    .takeUntil(this.destroy$)
-    .subscribe((cond) => this.condition = cloneDeep(cond));
+    this.editQuery$ = this.state$.map(state => state.editQuery);
+  }
 
+  dispatch$() {
+    const initState$ = Observable.of(cloneDeep(this.program))
+      .map(program => {
+        return {
+          type: 'INIT_STATE',
+          payload: {
+            queries: <ProgramQuery[]>program.application,
+            guid: program.guid
+          }
+        };
+      });
+
+    return Observable.merge(
+      initState$
+    );
   }
 
   ngOnDestroy() {
-    this.destroy$.next(true);
+    this.destroy$.next();
   }
 
-  blankCondition(): Observable<ProgramCondition> {
-    const key: Key = {
-      name: 'empty',
-      type: 'empty'
-    };
-    return Observable.of({
-      guid: 'empty',
-      key: key,
-      value: undefined,
-      type: undefined,
-      qualifier: undefined
-    });
-  }
+}
+
+function reducer(actions: Observable<any>): Observable<State> {
+  return actions.scan( (state, action) => {;
+    switch (action.type) {
+      case 'INIT_STATE': {
+        return Object.assign({}, {
+          queries: [...action.payload.queries],
+          editQuery: {
+            guid: action.payload.guid,
+            id: 'new',
+            conditions: []
+          }
+        });
+      }
+      default: {
+        return state;
+      }
+    }
+  }, {});
 }
