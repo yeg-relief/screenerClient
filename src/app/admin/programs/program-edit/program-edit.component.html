@@ -29,7 +29,7 @@
     <div class="py1"></div>
     <md-input class="container-item" placeholder="link" [formControl]="link"></md-input>
     <div class="container-item flex">
-      <div class="ml1 mr1 p1 border bg-silver" *ngFor="let tag of (state$ | async)?.user.tags">
+      <div class="ml1 mr1 p1 border bg-silver" *ngFor="let tag of (state$ | async).user.tags">
         {{ tag }} <div style="cursor:pointer" (click)="removeTag$.next(tag)"> X</div>
       </div>
     </div>

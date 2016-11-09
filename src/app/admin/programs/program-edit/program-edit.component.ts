@@ -7,6 +7,7 @@ import * as fromRoot from '../../reducer';
 import { Observable } from 'rxjs/Observable';
 import { Subject } from 'rxjs/Subject';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
+import { ReplaySubject } from 'rxjs/ReplaySubject';
 import 'rxjs/add/operator/scan';
 import 'rxjs/add/operator/takeUntil';
 import 'rxjs/add/operator/do';
@@ -18,7 +19,6 @@ import 'rxjs/add/operator/filter';
 import 'rxjs/add/operator/multicast';
 import 'rxjs/add/observable/combineLatest';
 import 'rxjs/add/observable/merge';
-import { uniqWith } from 'lodash';
 import { FormControl, Validators, FormGroup } from '@angular/forms';
 
 @Component({
@@ -35,11 +35,11 @@ export class ProgramEditComponent implements OnInit, OnDestroy {
   // emit in OnDestroy to unsubscribe 'main' observable
   destroy$ = new Subject<boolean>();
   // md-input control for program title
-  title: FormControl;
+  title = new FormControl('', Validators.required);
   // text-area control for program details
-  details: FormControl;
+  details = new FormControl('', Validators.required);
   // md-input control for program link
-  link: FormControl;
+  link = new FormControl('');
   // md-input control for a tag name
   tag = new FormControl('');
   // url regex is not currently used
@@ -53,12 +53,11 @@ export class ProgramEditComponent implements OnInit, OnDestroy {
   view$ = this.view.valueChanges.startWith('user').multicast(new Subject()).refCount();
   // program submission button
   submit$ = new Subject();
-
+  // program being edited
   state$: Observable<ApplicationFacingProgram>;
-
   // remove a tag
-  removeTag$ = new BehaviorSubject<string>('dummy');
-
+  removeTag$ = new Subject<string>();
+  // used primarily to enable/disable save button
   form: FormGroup;
 
   constructor(
@@ -66,95 +65,99 @@ export class ProgramEditComponent implements OnInit, OnDestroy {
     private store: Store<fromRoot.State>
   ) { }
 
-  // set up logic for componenent
   ngOnInit() {
-    this.view.valueChanges.subscribe(view => console.log(view));
-    // the program being edited or created... loaded from memory
-    let seedProgram: ApplicationFacingProgram;
-    this.service.program$.take(1)
-      .do(program => this.setControls(program))
-      .do(program => seedProgram = program)
-      .subscribe();
-    // the keys the user can search... loaded from memory
-    this.keys$ = this.store.let(fromRoot.getPresentKeys);
+    // the keys the user can assign conditions for queries... loaded from memory
+    this.keys$ = this.store.let(fromRoot.getPresentKeys).takeUntil(this.destroy$);
 
-    const tagAdd$ = this.tagAdd.asObservable().withLatestFrom(this.tag.valueChanges)
-      .do(() => this.tag.reset())
-      .map( ([_, tag]) => { return {action: 'ADD_TAG', payload: tag }; });
-
-    const changeTitle = this.title.valueChanges.map(title => {
-     return {
-       action: 'UPDATE_TITLE',
-       payload: title
-     };
-    });
-
-
-
-    // changes in all inputs
-    const changes$ = Observable.combineLatest(
-      this.title.valueChanges.startWith(this.title.value),
-      this.details.valueChanges.startWith(this.details.value),
-      // if I don't startWith something this observable will not comine all changes... ie, it
-      // gets hung waiting for EVERYTHING to change at least once
-      tagAdd$.startWith('dummy'),
-      this.removeTag$,
-      this.link.valueChanges.startWith(this.link.value),
-    )
-    // update the program we're working on with each change
-    .scan( (accum, [title, details, tag, removeTag, link]) => {
-      accum = <ApplicationFacingProgram>accum;
-      accum.user.description.title = title;
-      accum.user.description.details = details;
-      if (tag !== 'dummy') {
-        const index = accum.user.tags.findIndex(programTag => programTag === tag);
-        if (index < 0) {
-          accum.user.tags = [tag, ...accum.user.tags];
-        }
-      }
-      if (removeTag !== 'dummy') {
-        const index = accum.user.tags.findIndex(programTag => programTag === removeTag);
-        if (index >= 0) {
-          accum.user.tags.splice(index, 1);
-        }
-      }
-      accum.user.description.externalLink = link;
-      return accum;
-    }, seedProgram)
-    .let(deDuplicateProgramTags)
-    .let(deDuplicateQueries)
-    // share observable
-    .multicast(new Subject()).refCount();
-
-
-    this.state$ = Observable.merge(Observable.of(seedProgram), changes$);
-
-    this.submit$.withLatestFrom(this.state$)
-      // only submit if the form is valid
-      .filter(() => this.form.valid)
+    this.state$ = this.dispatch$()
+      .do(action => console.log(`action.type = ${action.type}, action.payload = ${action.payload}`))
+      .let(reducer)
+      .do(state => console.log(state))
       .takeUntil(this.destroy$)
-      .do(() => this.saving$.next(true))
-      .map( ([_, program]) => program)
-      // there is no logic to stop user from uploading duplicate programs
-      .do(program => {
-        if (program.guid === 'new') {
-          this.service.createProgram(program);
-        } else {
-          this.service.updateProgram(program);
-        }
-      })
-      .subscribe(program => console.log(program));
+      .multicast(new ReplaySubject(1)).refCount();
 
+   this.submit$
+    .asObservable()
+    .withLatestFrom(this.state$)
+    .filter( () => this.form.valid)
+    .do(() => this.saving$.next(true))
+    .takeUntil(this.destroy$)
+    .do( ([_ , program]) => this.service.save(program))
+    .subscribe();
   }
 
+  // called in dispatch$ via program$ subscription
+  // sets all the formcontrols to reflect values in memory upon startup
   setControls(program: ApplicationFacingProgram) {
-    this.title = new FormControl(program.user.description.title, Validators.required);
-    this.details = new FormControl(program.user.description.details, Validators.required);
-    this.link = new FormControl(program.user.description.externalLink);
+    this.title.setValue(program.user.description.title);
+    this.details.setValue(program.user.description.details);
+    this.link.setValue(program.user.description.externalLink);
     this.form = new FormGroup({
       title: this.title,
       details: this.details,
     });
+  }
+
+  dispatch$() {
+    const initialState$ = this.service.program$.take(1)
+      .do(program => this.setControls(program))
+      // sideEffects executed once
+      .multicast(new ReplaySubject(1)).refCount();
+
+    const title$ = this.title.valueChanges.map(title => {
+     return {
+       type: 'UPDATE_TITLE',
+       payload: title
+     };
+    });
+
+    const updateDetails$ = this.details.valueChanges.map(details => {
+     return {
+       type: 'UPDATE_DETAILS',
+       payload: details
+     };
+    });
+
+    const updateLink$ = this.link.valueChanges.map(link => {
+     return {
+       type: 'UPDATE_LINK',
+       payload: link
+     };
+    });
+
+    const initState$ = initialState$.map(p => {
+      return {
+        type: 'INIT_STATE',
+        payload: p
+      };
+    });
+
+    const tagAdd$ = this.tagAdd.asObservable().withLatestFrom(this.tag.valueChanges)
+      .do(() => this.tag.reset(''))
+      .map( ([_, tag]) => {
+        return {
+          type: 'ADD_TAG',
+          payload: tag
+        };
+      })
+      .multicast(new Subject()).refCount();
+
+    const removeTag = this.removeTag$.map(tag => {
+      return {
+        type: 'REMOVE_TAG',
+        payload: tag
+      };
+    });
+
+    return Observable.merge(
+      // initState$ must be first to ensure there is an initial state
+      initState$,
+      title$,
+      updateDetails$,
+      updateLink$,
+      tagAdd$,
+      removeTag
+    );
   }
 
   ngOnDestroy() {
@@ -162,22 +165,40 @@ export class ProgramEditComponent implements OnInit, OnDestroy {
   }
 }
 
-function queryComparator(q1, q2): boolean {
-  return JSON.stringify(q1) === JSON.stringify(q2);
-}
-
-// don't allow for setting duplicate tags
-function deDuplicateProgramTags(program: Observable<ApplicationFacingProgram>): Observable<ApplicationFacingProgram> {
-  return program.map( (p: ApplicationFacingProgram) => {
-    p.user.tags = uniqWith(p.user.tags);
-    return p;
-  });
-}
-
-// don't allow for duplicate queries
-function deDuplicateQueries(program: Observable<ApplicationFacingProgram>): Observable<ApplicationFacingProgram> {
-  return program.map( (p: ApplicationFacingProgram) => {
-    p.application = uniqWith(p.application, queryComparator);
-    return p;
-  });
+function reducer(actions: Observable<any>): Observable<ApplicationFacingProgram> {
+  return actions.scan( (state, action) => {;
+      switch (action.type) {
+        case 'INIT_STATE': {
+          return Object.assign({}, state, action.payload);
+        }
+        case 'UPDATE_DETAILS': {
+          state.user.description.details = action.payload;
+          return state;
+        }
+        case 'UPDATE_LINK': {
+          state.user.description.externalLink = action.payload;
+          return state;
+        }
+        case 'UPDATE_TITLE': {
+          state.user.description.title = action.payload;
+          return state;
+        }
+        case 'ADD_TAG': {
+          if (state.user.tags.findIndex(programTag => action.payload === programTag) < 0) {
+            state.user.tags.push(action.payload);
+          }
+          return state;
+        }
+        case 'REMOVE_TAG': {
+          const index = state.user.tags.findIndex(programTag => action.payload === programTag);
+          if (index >= 0) {
+            state.user.tags.splice(index, 1);
+          }
+          return state;
+        }
+        default: {
+          return state;
+        }
+      }
+    }, {});
 }

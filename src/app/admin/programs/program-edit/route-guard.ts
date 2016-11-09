@@ -15,27 +15,25 @@ export class ProgramEditGuardService implements CanActivate {
   constructor(private store: Store<fromRoot.State>, private router: Router) {}
 
   canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): boolean {
-    // reset saved to false because this subject may not have been garbage collected since 
-    // last navigation
     const splitUrl = state.url.split('/');
     // the guid
     const last = splitUrl.length - 1;
     this.program$ =
       fromRoot.findProgram(this.store, splitUrl[last])
+        // get rid of object reference
         .map(program => cloneDeep(program))
         .take(1);
 
     return true;
   }
 
-  updateProgram(program) {
-    console.log('update program called');
-    this.store.dispatch(new fromOverview.UpdateProgram(program));
-  }
-
-  createProgram(program) {
-    console.log('create program called');
-    this.store.dispatch(new fromOverview.CreateProgram(program));
+  save(program: ApplicationFacingProgram) {
+    console.log(program);
+    if (program.guid === 'new') {
+      this.store.dispatch(new fromOverview.CreateProgram(program));
+    } else {
+      this.store.dispatch(new fromOverview.UpdateProgram(program));
+    }
   }
 
 }
