@@ -10,7 +10,7 @@ import 'rxjs/add/operator/let';
 import 'rxjs/add/operator/takeUntil';
 import 'rxjs/add/operator/multicast';
 import { ReplaySubject } from 'rxjs/ReplaySubject';
-import { cloneDeep } from 'lodash';
+import { cloneDeep, uniqWith } from 'lodash';
 
 interface State {
   queries: ProgramQuery[];
@@ -25,13 +25,17 @@ interface State {
 })
 export class ApplicationSideComponent implements OnInit, OnDestroy {
   // going to get rid of this
-  @Output() saveCondition = new EventEmitter<ProgramCondition>();
+  @Output() saveQueries = new EventEmitter<ProgramQuery[]>();
   @Input() keys: Key[];
   @Input() program: ApplicationFacingProgram;
   guid: string;
   addQuery: boolean = false;
   state$: Observable<State>;
   editQuery$: Observable<ProgramQuery>;
+  saveQuery$ = new Subject<ProgramQuery>();
+  cancel$ = new Subject<boolean>();
+  edit$ = new Subject<ProgramQuery>();
+  delete$ = new Subject<ProgramQuery>();
   destroy$ = new Subject();
 
   constructor() { }
@@ -41,10 +45,13 @@ export class ApplicationSideComponent implements OnInit, OnDestroy {
       .do(action => console.log(`action.type = ${action.type}, action.payload = ${action.payload}`))
       .let(reducer)
       .do(state => console.log(state))
+      .do(state => this.saveQueries.emit(state.queries))
       .takeUntil(this.destroy$)
       .multicast(new ReplaySubject(1)).refCount();
 
-    this.editQuery$ = this.state$.map(state => state.editQuery).takeUntil(this.destroy$);
+    this.editQuery$ = this.state$.map(state => state.editQuery)
+      .takeUntil(this.destroy$)
+      .multicast(new ReplaySubject(1)).refCount();
   }
 
   dispatch$() {
@@ -59,8 +66,48 @@ export class ApplicationSideComponent implements OnInit, OnDestroy {
         };
       });
 
+    const onQuerySave$ = this.saveQuery$
+      .filter(query => query.conditions !== undefined && query.guid !== undefined && query.id !== undefined)
+      .filter(query => query.conditions.length > 0)
+      .map(query => {
+        return {
+          type: 'SAVE_QUERY',
+          payload: query
+        };
+      })
+      .do(() => this.addQuery = false);
+
+    const onEdit$ = this.edit$
+      .map(query => {
+        return {
+          type: 'EDIT_QUERY',
+          payload: query
+        };
+      })
+      .do(() => this.addQuery = true);
+
+    const onCancel$ = this.cancel$
+      .map(() => {
+        return {
+          type: 'CANCEL_EDIT',
+        };
+      })
+      .do(() => this.addQuery = false);
+
+    const onDelete$ = this.delete$
+      .map(query => {
+        return {
+          type: 'DELETE_QUERY',
+          payload: query
+        };
+      });
+
     return Observable.merge(
-      initState$
+      initState$,
+      onQuerySave$,
+      onEdit$,
+      onCancel$,
+      onDelete$
     );
   }
 
@@ -71,7 +118,7 @@ export class ApplicationSideComponent implements OnInit, OnDestroy {
 }
 
 function reducer(actions: Observable<any>): Observable<State> {
-  return actions.scan( (state, action) => {;
+  return actions.scan( (state, action) => {
     switch (action.type) {
       case 'INIT_STATE': {
         return Object.assign({}, {
@@ -83,9 +130,64 @@ function reducer(actions: Observable<any>): Observable<State> {
           }
         });
       }
+      // can clean up some code here (return statements)
+      case 'SAVE_QUERY': {
+        const query = action.payload;
+        // if it's new query then give temp id and make sure it doesn't have 
+        // conditions duplicate to another query
+        if (query.id === 'new') {
+          query.id = `temp-${Math.random().toString(10)}`;
+          return Object.assign({}, state, {
+            queries: uniqWith([action.payload, ...state.queries], queryComparator),
+            editQuery: {
+              guid: state.editQuery.guid,
+              id: 'new',
+              conditions: []
+            }
+          });
+        }
+        // this is not a new query
+        const index = state.queries.findIndex(programQuery => programQuery.id === query.id);
+        if (index >= 0) {
+          const queries = state.queries;
+          queries.splice(index, 1, action.payload);
+          return Object.assign({}, state, {
+            queries: uniqWith([action.payload, ...state.queries], queryComparator),
+            editQuery: {
+              guid: state.editQuery.guid,
+              id: 'new',
+              conditions: []
+            }
+          });
+        }
+        return state;
+      }
+      case 'EDIT_QUERY': {
+        return Object.assign({}, state, {
+          editQuery: cloneDeep(action.payload)
+        });
+      }
+      case 'CANCEL_EDIT': {
+        return Object.assign({}, state, {
+          editQuery: {
+            guid: state.editQuery.guid,
+            id: 'new',
+            conditions: []
+          }
+        });
+      }
+      case 'DELETE_QUERY': {
+        return Object.assign({}, state, {
+          queries: state.queries.filter(programQuery => programQuery.id !== action.payload.id)
+        });
+      }
       default: {
         return state;
       }
     }
   }, {});
+}
+
+function queryComparator(q1, q2): boolean {
+  return JSON.stringify(q1.conditions) === JSON.stringify(q2.conditions);
 }

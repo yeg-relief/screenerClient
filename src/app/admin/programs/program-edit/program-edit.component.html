@@ -21,31 +21,34 @@
     </md-button-toggle>
   </md-button-toggle-group>
 </div>
-<section class="main-container flex flex-column flex-center" *ngIf="(view$ | async) === 'user'">
-  <div class="col-12">
-    <md-input class="container-item" placeholder="title" [formControl]="title"></md-input>
-    <div class="py1"></div>
-    <textarea placeholder="description" class="container-item" rows="4" [formControl]="details"></textarea>
-    <div class="py1"></div>
-    <md-input class="container-item" placeholder="link" [formControl]="link"></md-input>
-    <div class="container-item flex">
-      <div class="ml1 mr1 p1 border bg-silver" *ngFor="let tag of (state$ | async).user.tags">
-        {{ tag }} <div style="cursor:pointer" (click)="removeTag$.next(tag)"> X</div>
+<div [hidden]="hide">
+  <section class="main-container flex flex-column flex-center">
+    <div class="col-12">
+      <md-input class="container-item" placeholder="title" [formControl]="title"></md-input>
+      <div class="py1"></div>
+      <textarea placeholder="description" class="container-item" rows="4" [formControl]="details"></textarea>
+      <div class="py1"></div>
+      <md-input class="container-item" placeholder="link" [formControl]="link"></md-input>
+      <div class="container-item flex">
+        <div class="ml1 mr1 p1 border bg-silver" *ngFor="let tag of (state$ | async).user.tags">
+          {{ tag }} <div style="cursor:pointer" (click)="removeTag$.next(tag)"> X</div>
+        </div>
+      </div>
+      <div class="container-item flex flex-center">
+        <md-input class="mr2" placeholder="tag name" [formControl]="tag"></md-input>
+        <button md-mini-fab color="primary" (click)="tagAdd.next()">
+          <i class="material-icons">add</i>
+        </button>
       </div>
     </div>
-    <div class="container-item flex flex-center">
-      <md-input class="mr2" placeholder="tag name" [formControl]="tag"></md-input>
-      <button md-mini-fab color="primary" (click)="tagAdd.next()">
-        <i class="material-icons">add</i>
-      </button>
-    </div>
-  </div>
-</section>
+  </section>
+</div>
+
 <section class="col-12">
   <app-application-side
     *ngIf="(view$ | async) === 'application'"
     [keys]="(keys$ | async)"
     [program]="(state$ | async)"
-    (saveCondition)="newCondition$.next($event)">
+    (saveQueries)="updatedQueries$.next($event)">
   </app-application-side>
 </section>

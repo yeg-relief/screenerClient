@@ -47,8 +47,7 @@ export class ProgramEditComponent implements OnInit, OnDestroy {
   // controls if user is editing the title, description etc or adding queries 
   view = new FormControl('user');
   views = ['user', 'application'];
-  // multicasted observable used in template
-  view$ = this.view.valueChanges.startWith('user').multicast(new Subject()).refCount();
+  view$ = this.view.valueChanges.multicast(new Subject()).refCount();
   // program submission button
   submit$ = new Subject();
   // program being edited
@@ -57,6 +56,10 @@ export class ProgramEditComponent implements OnInit, OnDestroy {
   removeTag$ = new Subject<string>();
   // used primarily to enable/disable save button
   form: FormGroup;
+  // save updated queries from application side
+  updatedQueries$ = new Subject<ProgramQuery[]>();
+
+  hide = false;
 
   constructor( private service: ProgramEditGuardService ) { }
 
@@ -75,6 +78,17 @@ export class ProgramEditComponent implements OnInit, OnDestroy {
       .do(() => this.saving$.next(true))
       .takeUntil(this.destroy$)
       .do( ([_ , program]) => this.service.save(program))
+      .subscribe();
+
+    this.view$
+      .do(view => {
+        if (view === 'user') {
+          this.hide = false;
+        } else {
+          this.hide = true;
+        }
+      })
+      .takeUntil(this.destroy$)
       .subscribe();
   }
 
@@ -141,6 +155,14 @@ export class ProgramEditComponent implements OnInit, OnDestroy {
       };
     });
 
+    const onUpdateQueries$ = this.updatedQueries$
+      .map(queries => {
+        return {
+          type: 'UPDATE_QUERIES',
+          payload: queries
+        };
+      });
+
     return Observable.merge(
       // initState$ must be first to ensure there is an initial state
       initState$,
@@ -148,7 +170,8 @@ export class ProgramEditComponent implements OnInit, OnDestroy {
       updateDetails$,
       updateLink$,
       tagAdd$,
-      removeTag
+      removeTag,
+      onUpdateQueries$
     );
   }
 
@@ -187,6 +210,11 @@ function reducer(actions: Observable<any>): Observable<ApplicationFacingProgram>
             state.user.tags.splice(index, 1);
           }
           return state;
+        }
+        case 'UPDATE_QUERIES': {
+          return Object.assign({}, state, {
+            application: [...action.payload]
+          });
         }
         default: {
           return state;

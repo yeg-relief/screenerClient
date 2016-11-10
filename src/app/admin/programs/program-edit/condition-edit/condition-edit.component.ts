@@ -25,8 +25,7 @@ import 'rxjs/add/operator/let';
   styleUrls: ['./condition-edit.component.css']
 })
 export class ConditionEditComponent implements OnInit, OnDestroy {
-  @Input() condition: ProgramCondition;
-  @Output() cancel = new EventEmitter<boolean>();
+  @Input() condition: Observable<ProgramCondition>;
   @Output() save = new EventEmitter<ProgramCondition>();
   save$ = new Subject();
   destroy$ = new Subject();
@@ -50,7 +49,7 @@ export class ConditionEditComponent implements OnInit, OnDestroy {
       display: '<', value: 'lessThan'
     }
   ];
-  qualifierInput = new FormControl(this.qualifierOptions[0].display);
+  qualifierInput = new FormControl(this.qualifierOptions[0].value);
 
   booleanValueOptions = [
     {
@@ -60,7 +59,7 @@ export class ConditionEditComponent implements OnInit, OnDestroy {
       display: 'false', value: false
     }
   ];
-  booleanValueSelect = new FormControl(this.booleanValueOptions[0].display);
+  booleanValueSelect = new FormControl(this.booleanValueOptions[0].value);
   inputNumberValue = new FormControl(0, Validators.pattern('^\\d+$'));
 
   state$: Observable<ProgramCondition>;
@@ -108,7 +107,7 @@ export class ConditionEditComponent implements OnInit, OnDestroy {
       .filter(action => action.payload.type === 'number')
       .filter(() => !this.form.contains('inputNumberValue'))
       .do(() => this.form.addControl('inputNumberValue', this.inputNumberValue))
-      .do(() => this.qualifierInput.setValue(this.qualifierOptions[0].display))
+      .do(() => this.qualifierInput.setValue(this.qualifierOptions[0].value))
       .do(() => this.inputNumberValue.setValue(0));
 
     // numberKey -> numberKey
@@ -118,7 +117,7 @@ export class ConditionEditComponent implements OnInit, OnDestroy {
       .filter(() => this.form.contains('inputNumberValue'))
       .do(() => this.inputNumberValue.setValue(0))
       // this is not working... use html encoding or whatever it's called? &<number>;
-      .do(() => this.qualifierInput.setValue('>'));
+      .do(() => this.qualifierInput.setValue(this.qualifierOptions[0].value));
 
     // numberKey -> booleanKey
     const removeNumberControl$ = drivers.key
@@ -132,27 +131,37 @@ export class ConditionEditComponent implements OnInit, OnDestroy {
       .filter(action => action.payload !== undefined)
       .filter(action => action.payload.type === 'boolean')
       .filter(() => !this.form.contains('inputNumberValue'))
-      .do(() => this.booleanValueSelect.setValue(this.booleanValueOptions[0].display));
+      .do(() => this.booleanValueSelect.setValue(this.booleanValueOptions[0].value));
 
+    const updateKeyDisplayOnChange$ = drivers.inputChange
+      .filter((action) => action.payload.key !== undefined)
+      .do((action) => this.keySelect.setValue(action.payload.key.name));
+
+    // query editor has cleared a selected key
+    const clearKeyDisplay$ = drivers.inputChange
+      .filter(action => action.payload.key === undefined)
+      .do((_) => this.keySelect.setValue('select a key'));
 
     Observable.merge(
       addNumberControl$,
       removeNumberControl$,
       changeNumberKey$,
       changeBooleanControl$,
+      updateKeyDisplayOnChange$,
+      clearKeyDisplay$
     )
     .takeUntil(this.destroy$)
     .subscribe();
   }
 
   dispatch$() {
-    const initState$ = Observable.of(cloneDeep(this.condition))
+    const initState$ = this.condition
       .map(condition => {
         return {
           type: 'INIT_STATE',
           payload: condition
         };
-      });
+      }).multicast(new ReplaySubject(1)).refCount();
 
     const keySelect$ = this.keySelect.valueChanges.withLatestFrom(this.keys$)
       .map(([newKeyName, keys]) => keys.find(applicationKey => newKeyName === applicationKey.name))
@@ -196,6 +205,7 @@ export class ConditionEditComponent implements OnInit, OnDestroy {
       });
 
     this.runEffects$({
+      inputChange: initState$,
       key: keySelect$
     });
 

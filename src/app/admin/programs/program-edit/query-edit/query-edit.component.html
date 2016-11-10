@@ -1,9 +1,19 @@
+<div class="flex col-4">
+  <div class="px2"></div>
+  <button md-raised-button color="primary" 
+    (click)="onSave$.next()"
+    [attr.disabled]="!saveEnabled ? true : null">SAVE QUERY</button>
+  <div class="px2"></div>
+  <button md-raised-button color="primary" (click)="cancel.next()">CANCEL</button>
+</div>
 <table style="width:100%">
   <tr>
     <th>Key</th>
     <th>Type</th>
     <th>Qualifier</th>
     <th>Value</th>
+    <th></th>
+    <th></th>
   </tr>
   <tr *ngFor="let condition of (state$ | async)?.query.conditions">
     <td>{{condition.key.name}}</td>
@@ -17,10 +27,20 @@
       <td *ngSwitchDefault></td>
     </div>
     <td>{{condition.value}}</td>
+    <td>
+      <button md-mini-fab color="warn" (click)="delete$.next(condition)">
+        <i class="material-icons">clear</i>
+      </button>
+    </td>
+    <td>
+      <button md-mini-fab color="primary" (click)="select$.next(condition)">
+        <i class="material-icons">create</i>
+      </button>
+    </td>
   </tr>
 </table>
 <div class="py2"></div>
 <app-condition-edit 
-  [condition]="(state$ | async)?.selectedCondition"
+  [condition]="editCondition"
   (save)="commitCondition.next($event)">
 </app-condition-edit>
