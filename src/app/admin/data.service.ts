@@ -107,11 +107,17 @@ export class DataService {
     return Observable.of(this.loadedPrograms)
       .delay(2000);
   }
+
+  updateKey(key: Key) {
+    const keys = mockKeys.filter(mockKey => mockKey.name !== key.name);
+    mockKeys = [key, ...keys];
+    return Observable.of(mockKeys).delay(200);
+  }
 }
 
 const versions = [1, 2, 3];
 
-const mockKeys: Key[] = [
+let mockKeys: Key[] = [
   {
     name: 'age', type: 'number'
   },

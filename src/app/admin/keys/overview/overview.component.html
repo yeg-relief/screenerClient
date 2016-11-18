@@ -1,0 +1,23 @@
+<app-bread-crumb>
+  <app-key-overview-controls></app-key-overview-controls>
+</app-bread-crumb>
+<div class="py2"></div>
+<md-card-subtitle> 
+  For the momement, only allow to create keys. Edit/delete keys will have effects on questions 
+  and programs. Need to consider how to deal with this.
+</md-card-subtitle>
+
+<section class="col-12 flex">
+  <div class="col-3 bg-grey border"></div>
+  <table class="col-6" >
+      <tr>
+        <th> key name </th>
+        <th> key type </th>
+      </tr>
+      <tr *ngFor="let key of (loadedKeys$ | async)" class="py2">
+        <td> {{ key.name }} </td>
+        <td> {{ key.type }} </td>
+      </tr>
+  </table> 
+  <div class="col-3 bg-grey border"></div>
+</section>

@@ -20,6 +20,11 @@ import { DeleteConfirmationComponent } from './programs/program-overview/delete-
 import { ProgramDeleteGuardService } from './programs/program-overview/delete-confirmation/route-guard';
 import { QueryEditComponent } from './programs/program-edit/query-edit/query-edit.component';
 
+import { KeysComponent } from './keys/keys.component';
+import { KeysOverviewComponent } from './keys/overview/overview.component';
+import { KeyRouteGuard } from './keys/route-guard.service';
+import { KeyEditComponent } from './keys/edit/key-edit.component';
+
 export const routing: ModuleWithProviders = RouterModule.forChild([
    // commented out for development cycle
   //{ path: '', component: AdminComponent, canActivate: [AuthGuardService] },
@@ -68,9 +73,25 @@ export const routing: ModuleWithProviders = RouterModule.forChild([
               path: '', pathMatch: 'full', redirectTo: 'overview'
             },
           ]
+        },
+        {
+          path: 'keys',
+          component: KeysComponent,
+          canActivate: [KeyRouteGuard],
+          children: [
+            {
+              path: 'overview',
+              component: KeysOverviewComponent
+            },
+            {
+              path: 'edit/:id',
+              component: KeyEditComponent
+            }
+          ]
         }
     ]
   },
   { path: 'login', component: LoginComponent },
+  // master-screener/question
   ...MasterScreenerRoutes
 ]);

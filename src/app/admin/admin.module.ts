@@ -16,8 +16,6 @@ import { MdProgressBarModule } from '@angular/material';
 import { DataService } from './data.service';
 import { EditQuestionEffects } from './master-screener/edit-question/edit-question.effects';
 import { KeyEffects } from './master-screener/keys/key.effects';
-import { StoreDevtoolsModule } from '@ngrx/store-devtools';
-import { StoreLogMonitorModule, useLogMonitor } from '@ngrx/store-log-monitor';
 import { AdminCoreModule } from './core/admin-core.module';
 import { ProgramOverviewEffects } from './programs/program-overview/effects';
 import { ProgramEditEffects } from './programs/program-edit/effects';
@@ -25,6 +23,7 @@ import { ProgramDeleteEffects } from './programs/program-overview/delete-confirm
 
 import { ProgramsModule } from './programs/programs.module';
 import { MasterScreenerModule } from './master-screener/master-screener.module';
+import { KeysModule } from './keys/keys.module';
 
 @NgModule({
   imports: [
@@ -44,7 +43,8 @@ import { MasterScreenerModule } from './master-screener/master-screener.module';
     EffectsModule.run(ProgramDeleteEffects),
     AdminCoreModule,
     ProgramsModule,
-    MasterScreenerModule
+    MasterScreenerModule,
+    KeysModule
   ],
   declarations: [
     AdminComponent,

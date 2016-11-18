@@ -8,8 +8,13 @@ import { compose } from '@ngrx/core/compose';
 import * as fromMasterScreener from './master-screener/master-screener.reducer';
 import * as fromEditScreener from './master-screener/edit/edit.reducer';
 import * as fromEditQuestion from './master-screener/edit-question/edit-question.reducer';
+
+// need to figure out or refactor these Key reducer duplication
 import * as fromKeys from './master-screener/keys/key.reducer';
+import * as fromKeyOverview from './keys/reducer';
+
 import * as fromProgramOverview from './programs/program-overview/reducer';
+
 import { Question } from '../shared/models';
 import { Key } from './models/key';
 import 'rxjs/add/operator/concatMap';
@@ -23,6 +28,7 @@ export interface State {
   editScreener: fromEditScreener.State;
   editQuestion: fromEditQuestion.State;
   keys: fromKeys.State;
+  keyOverview: fromKeyOverview.State;
   programOverview: fromProgramOverview.State;
 }
 
@@ -31,6 +37,7 @@ const reducers = {
   editScreener: fromEditScreener.reducer,
   editQuestion: fromEditQuestion.reducer,
   keys: fromKeys.reducer,
+  keyOverview: fromKeyOverview.reducer,
   programOverview: fromProgramOverview.reducer
 };
 
@@ -60,6 +67,9 @@ export function getProgramOverviewState(state$: Observable<State>) {
   return state$.select(state => state.programOverview);
 }
 
+export function getKeyOverview(state$: Observable<State>) {
+  return state$.select(state => state.keyOverview);
+}
 
 /* for master-screener overview */
 export const getVersions = share(compose(fromMasterScreener.getVersions, getMasterScreenerState));
@@ -78,10 +88,12 @@ export const getLoading =
 
 export const getErrors = share(compose(fromMasterScreener.getErrors, getMasterScreenerState));
 
+
 export const getKeys = share(compose(fromMasterScreener.getKeys, getMasterScreenerState));
 
 export const flattenedQuestions =
   share(compose(fromMasterScreener.getFlattenedQuestions, getMasterScreenerState));
+
 
 /* for master-screener edit */
 export const getPresentEditScreener =
@@ -209,6 +221,9 @@ export const findProgram = function (state$: Observable<State>, guid: string){
   return searchProgram;
 };
 
+
+/* for keys **key/overview etc** */
+export const allLoadedKeys = share(compose(fromKeyOverview.getLoadedKeys, getKeyOverview));
 
 /* https://github.com/ngrx/example-app/blob/final/src/util.ts */
 interface SelectorFn<T, V> {

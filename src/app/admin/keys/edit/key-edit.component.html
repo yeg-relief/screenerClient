@@ -1,0 +1,33 @@
+<app-bread-crumb>
+  <div>form valid = {{form.valid}}</div>
+  <div class="px2"></div>
+  <div>form = {{ form.value | json }} </div>
+  <div class="px2"></div>
+  <div>uniqueKeyName = {{ uniqueKeyName }} </div> 
+</app-bread-crumb>
+
+
+<section class="key-edit-container flex flex-center col-12">
+  <div class="col-2"></div>
+  <md-input class="col-4" placeholder="key name" [formControl]="nameControl"></md-input>
+  <div class="col-1"></div>
+  <md-button-toggle-group [formControl]="typeControl">
+    <md-button-toggle *ngFor="let option of typeOptions" [value]="option">
+        {{ option }}
+    </md-button-toggle>
+  </md-button-toggle-group>
+  <div class="col-2"></div>
+</section>
+<div class="py2"></div>
+<div class="flex flex-center">
+  <div class="col-2"></div>
+  <button class="col-4"
+    md-raised-button color="primary" 
+    [attr.disabled]="!(form.valid && uniqueKeyName) ? true : null"
+    (click)="dispatchKeyUpdate()">
+    SAVE
+  </button>
+  <div class="col-2" *ngIf="form.valid && !uniqueKeyName">
+    <strong>Pick a unique key name.</strong>
+  </div>
+</div>
