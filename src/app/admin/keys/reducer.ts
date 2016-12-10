@@ -41,7 +41,7 @@ export function reducer(state = initialState, action: KeysActions): State {
     }
     case KeysActionsTypes.DELETE_KEY: {
       const deleteKey = <Key>action.payload;
-      const newKeys = state.keys.filter( (key: Key) => key.name !== deleteKey.name && key.type !== deleteKey.type);
+      const newKeys = state.keys.filter( (key: Key) => key.name !== deleteKey.name);
       return Object.assign({}, state, {
         keys: [...newKeys]
       });

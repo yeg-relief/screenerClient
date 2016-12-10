@@ -13,10 +13,18 @@
       <tr>
         <th> key name </th>
         <th> key type </th>
+        <th></th>
       </tr>
       <tr *ngFor="let key of (loadedKeys$ | async)" class="py2">
         <td> {{ key.name }} </td>
         <td> {{ key.type }} </td>
+        <td>
+          <button 
+            md-mini-fab color="warn"
+            (click)="removeKey(key)">
+              <i class="material-icons">clear</i>
+          </button>
+        </td>
       </tr>
   </table> 
   <div class="col-3 bg-grey border"></div>

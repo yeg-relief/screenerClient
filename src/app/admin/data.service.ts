@@ -113,6 +113,10 @@ export class DataService {
     mockKeys = [key, ...keys];
     return Observable.of(mockKeys).delay(200);
   }
+
+  delete(key: Key) {
+    mockKeys = mockKeys.filter(mockKey => mockKey.name !== key.name);
+  }
 }
 
 const versions = [1, 2, 3];
