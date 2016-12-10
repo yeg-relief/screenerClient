@@ -1,6 +1,6 @@
 <main>
   <h1 class="center"> Master Screener </h1>
-  <form (ngSubmit)="onSubmit()" [formGroup]="form">
+  <form (ngSubmit)="onSubmit()" *ngIf="init" [formGroup]="form">
     <div>
       <div *ngFor="let question of (questions$ | async); let i = index" class="clearfix flex">
         <div class="questions">
@@ -14,11 +14,9 @@
       </div>
     </div>
 
-    <!-- submit controls for screens >= md -->
     <section class="clearfix">
       <div class="p2"></div>
       <div class="container">
-        <!-- submit/clear (TODO) buttons -->
         <div class="submit-wrapper rounded flex p2">
           <button 
               class="flex-grow" 
@@ -32,3 +30,4 @@
     </section>
   </form>
 </main>
+<div *ngIf="errorMessage" class="center"> <strong>{{errorMessage}} </strong></div>

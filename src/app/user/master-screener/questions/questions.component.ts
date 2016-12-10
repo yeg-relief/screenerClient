@@ -5,6 +5,7 @@ import { MasterScreenerService } from '../master-screener.service';
 import { QuestionControlService } from './question-control.service';
 import { Question } from '../../../shared';
 import { Observable } from 'rxjs/Observable';
+import 'rxjs/add/operator/take';
 
 @Component({
   templateUrl: './questions.component.html',
@@ -14,7 +15,8 @@ import { Observable } from 'rxjs/Observable';
 export class QuestionsComponent implements OnInit {
   questions$: Observable<Question[]>;
   form: FormGroup;
-  payLoad = '';
+  init = false;
+  errorMessage;
 
 
   constructor(
@@ -25,13 +27,15 @@ export class QuestionsComponent implements OnInit {
 
   ngOnInit() {
     this.questions$ = this.masterScreenerService.loadQuestions();
-    this.loadForm();
+    this.questionControlService.toFormGroup(this.questions$)
+      .then(form => this.form = form)
+      .then(() => this.init = true )
+      .catch(error => this.errorMessage = error);
   }
 
 
   onSubmit() {
-    this.payLoad = JSON.stringify(this.form.value);
-    this.masterScreenerService.fetchResults(this.payLoad);
+    //this.masterScreenerService.fetchResults(this.payLoad);
     this.router.navigateByUrl('/master-screener/results');
   }
 
@@ -41,14 +45,5 @@ export class QuestionsComponent implements OnInit {
 
   removeControls(questions) {
     this.questionControlService.removeQuestions(questions, this.form);
-  }
-
-  loadForm() {
-    const sub = this.questionControlService.toFormGroup(this.questions$)
-      .subscribe(
-      (formGroup: FormGroup) => this.form = formGroup,
-      (error: any) => console.log(`error ${error}`)
-      );
-   sub.unsubscribe();
   }
 }

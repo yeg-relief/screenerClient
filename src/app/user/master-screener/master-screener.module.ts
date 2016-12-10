@@ -9,6 +9,7 @@ import { UserFacingProgramModule } from '../../shared/modules/user-facing-progra
 import { MasterScreenerService } from './master-screener.service';
 import { MdButtonModule } from '@angular/material';
 import { MasterScreenerComponent } from './master-screener.component';
+import { HttpModule } from '@angular/http';
 
 @NgModule({
   imports: [
@@ -17,7 +18,8 @@ import { MasterScreenerComponent } from './master-screener.component';
     UserFacingProgramModule,
     routing,
     ReactiveFormsModule,
-    MdButtonModule.forRoot()
+    MdButtonModule.forRoot(),
+    HttpModule
   ],
   declarations: [
     QuestionsComponent,
