@@ -4,7 +4,6 @@ import { FormGroup  } from '@angular/forms';
 import { MasterScreenerService } from '../master-screener.service';
 import { QuestionControlService } from './question-control.service';
 import { Question } from '../../../shared';
-import { DataSharingService } from '../../../data-sharing.service';
 
 @Component({
   templateUrl: './questions.component.html',
@@ -15,7 +14,6 @@ export class QuestionsComponent implements OnInit {
   // having problems passing form through async pipe... 
   // resolving form in `then` statement and using a flag to indicate form is resolved
   form: FormGroup;
-  formResolved = false;
   questions: Question[] = [];
   errorMessage = '';
 
@@ -24,7 +22,6 @@ export class QuestionsComponent implements OnInit {
     private questionControlService: QuestionControlService,
     private router: Router,
     private route: ActivatedRoute,
-    private dataSharingService: DataSharingService
   ) { }
 
   ngOnInit() {
@@ -41,16 +38,14 @@ export class QuestionsComponent implements OnInit {
         this.errorMessage = 'internal program error, please contact admin.';
       }
     }
-    this.masterScreenerService.id = 'questions';
-    this.dataSharingService.data.set('test', 'success');
   }
 
 
   onSubmit() {
-    console.log(this.form.value);
     this.masterScreenerService.loadResults(this.form.value)
-      .then( results => this.dataSharingService.data.set('results', results))
-      .then(() => this.router.navigateByUrl('/master-screener/results'));
+      .then( results => this.masterScreenerService.results = [].concat(results))
+      .then(() => this.router.navigateByUrl('/master-screener/results'))
+      .catch( () => this.errorMessage = 'unable to load results, try later.');
   }
 
   addControls($event) {

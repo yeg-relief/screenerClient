@@ -1,6 +1,5 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
-import { ReplaySubject } from 'rxjs/ReplaySubject';
 import 'rxjs/add/observable/from';
 import 'rxjs/add/operator/toArray';
 import 'rxjs/add/operator/delay';
@@ -10,10 +9,12 @@ import 'rxjs/add/operator/toPromise';
 import 'rxjs/add/operator/do';
 import { Question, UserFacingProgram } from '../../shared';
 import { Http, Response, Headers, RequestOptions } from '@angular/http';
-import { cloneDeep } from 'lodash';
+import { FormGroup } from '@angular/forms';
+
 
 @Injectable()
 export class MasterScreenerService {
+  results = [];
   constructor(private http: Http) { }
 
   loadQuestions(): Observable<Question[]> {

@@ -11,7 +11,6 @@ import { MdButtonModule } from '@angular/material';
 import { MasterScreenerComponent } from './master-screener.component';
 import { HttpModule } from '@angular/http';
 import { QuestionsResolverService } from './questions/questions-resolver.service';
-import { ResultsResolverService } from './results/results-resolver.service';
 
 
 @NgModule({
@@ -31,8 +30,7 @@ import { ResultsResolverService } from './results/results-resolver.service';
   ],
   providers: [ 
     MasterScreenerService, 
-    QuestionsResolverService,
-    ResultsResolverService 
+    QuestionsResolverService
   ]
 })
 export class MasterScreenerModule {}

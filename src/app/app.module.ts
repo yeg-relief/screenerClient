@@ -7,7 +7,6 @@ import { MdCoreModule } from '@angular/material';
 import { ToolbarComponent } from './shared/components/toolbar/toolbar.component';
 import { PageNotFoundComponent } from './shared/components/page-not-found/page-not-found.component';
 import { AboutComponent } from './user/about/about.component';
-import { DataSharingService } from './data-sharing.service';
 
 @NgModule({
   declarations: [
@@ -24,7 +23,6 @@ import { DataSharingService } from './data-sharing.service';
   ],
   providers: [
     appRoutingProviders,
-    DataSharingService
   ],
   bootstrap: [AppComponent]
 })
