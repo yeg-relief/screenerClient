@@ -10,6 +10,7 @@ import { MasterScreenerService } from './master-screener.service';
 import { MdButtonModule } from '@angular/material';
 import { MasterScreenerComponent } from './master-screener.component';
 import { HttpModule } from '@angular/http';
+import { QuestionsResolverService } from './questions-resolver.service';
 
 @NgModule({
   imports: [
@@ -26,6 +27,9 @@ import { HttpModule } from '@angular/http';
     ResultsComponent,
     MasterScreenerComponent
   ],
-  providers: [ MasterScreenerService ]
+  providers: [ 
+    MasterScreenerService, 
+    QuestionsResolverService 
+  ]
 })
 export class MasterScreenerModule {}

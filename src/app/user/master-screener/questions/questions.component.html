@@ -1,12 +1,13 @@
 <main>
   <h1 class="center"> Master Screener </h1>
-  <form (ngSubmit)="onSubmit()" *ngIf="init" [formGroup]="form">
+  <div *ngIf="errorMessage" class="center"> <strong>{{errorMessage}} </strong></div>
+  <form (ngSubmit)="onSubmit()" [formGroup]="form" *ngIf="errorMessage.length === 0">
     <div>
-      <div *ngFor="let question of (questions$ | async); let i = index" class="clearfix flex">
+      <div *ngFor="let question of questions; let i = index" class="clearfix flex">
         <div class="questions">
           <app-question [question]="question" 
             [index]="i + 1" 
-            [length]="(questions$ | async).length" 
+            [length]="questions.length" 
             [conditional]="false" [form]="form"
             (onExpand)="addControls($event)" (onHide)="removeControls($event)">
           </app-question>
@@ -30,4 +31,3 @@
     </section>
   </form>
 </main>
-<div *ngIf="errorMessage" class="center"> <strong>{{errorMessage}} </strong></div>

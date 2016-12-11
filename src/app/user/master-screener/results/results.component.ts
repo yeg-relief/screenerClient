@@ -14,7 +14,7 @@ export class ResultsComponent implements OnInit {
   constructor(private masterScreenerService: MasterScreenerService) { }
 
   ngOnInit() {
-    this.responses$ = this.masterScreenerService.loadResults();
+    //this.responses$ = this.masterScreenerService.loadResults();
   }
 
 }

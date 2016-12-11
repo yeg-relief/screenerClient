@@ -4,34 +4,31 @@ import { ReplaySubject } from 'rxjs/ReplaySubject';
 import 'rxjs/add/observable/from';
 import 'rxjs/add/operator/toArray';
 import 'rxjs/add/operator/delay';
-import 'rxjs/add/operator/multicast';
 import 'rxjs/add/observable/throw';
+import 'rxjs/add/operator/let';
 import { Question, UserFacingProgram } from '../../shared';
-import { Http, Response } from '@angular/http';
+import { Http, Response, Headers, RequestOptions } from '@angular/http';
 
 @Injectable()
 export class MasterScreenerService {
-  private readonly url: string = '/api/questions';
   constructor(private http: Http) { }
 
   loadQuestions(): Observable<Question[]> {
-    return this.http.get(`${this.url}/latest`)
+    return this.http.get('/api/questions/latest')
             .map(res => res.json().response)
-            .multicast(new ReplaySubject(1)).refCount()
             .catch(this.loadError);
   }
 
-/*
-  fetchResults(responsePayload: string): boolean {
-    //this.results = this.results.concat(this.mockResults);
-    return true;
+  loadResults(form: Object) {
+    const headers = new Headers({ 'Content-Type': 'application/json' });
+    const options = new RequestOptions({ headers: headers });
+    const body = { data: {}};
+    body.data = JSON.stringify(form);
+    return this.http.post('/api/user_master_screener/', body, options)
+            .map(res => res.json().response)
+            .catch(this.loadError);
   }
-
-  loadResults() {
-    // return Observable.from(this.results).delay(400).toArray();
-    //return Observable.from(this.mockResults).delay(400).toArray();
-  }
-*/  
+  
   loadError(error: Response | any) {
     let errMsg: string;
     if (error instanceof Response) {
