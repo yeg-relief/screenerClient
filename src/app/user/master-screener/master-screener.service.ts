@@ -6,8 +6,11 @@ import 'rxjs/add/operator/toArray';
 import 'rxjs/add/operator/delay';
 import 'rxjs/add/observable/throw';
 import 'rxjs/add/operator/let';
+import 'rxjs/add/operator/toPromise';
+import 'rxjs/add/operator/do';
 import { Question, UserFacingProgram } from '../../shared';
 import { Http, Response, Headers, RequestOptions } from '@angular/http';
+import { cloneDeep } from 'lodash';
 
 @Injectable()
 export class MasterScreenerService {
@@ -22,11 +25,11 @@ export class MasterScreenerService {
   loadResults(form: Object) {
     const headers = new Headers({ 'Content-Type': 'application/json' });
     const options = new RequestOptions({ headers: headers });
-    const body = { data: {}};
-    body.data = JSON.stringify(form);
+    const body = JSON.stringify({ data: form});
     return this.http.post('/api/user_master_screener/', body, options)
             .map(res => res.json().response)
-            .catch(this.loadError);
+            .catch(this.loadError)
+            .toPromise();
   }
   
   loadError(error: Response | any) {

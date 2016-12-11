@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Resolve, ActivatedRouteSnapshot } from '@angular/router'
-import { MasterScreenerService } from './master-screener.service';
+import { MasterScreenerService } from '../master-screener.service';
 import { Observable } from 'rxjs/Observable';
 
 @Injectable()

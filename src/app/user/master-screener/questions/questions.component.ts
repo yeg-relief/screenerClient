@@ -1,9 +1,10 @@
 import { Component, OnInit } from '@angular/core';
-import { Router, ActivatedRoute } from '@angular/router';
+import { Router, ActivatedRoute, NavigationExtras } from '@angular/router';
 import { FormGroup  } from '@angular/forms';
 import { MasterScreenerService } from '../master-screener.service';
 import { QuestionControlService } from './question-control.service';
 import { Question } from '../../../shared';
+import { DataSharingService } from '../../../data-sharing.service';
 
 @Component({
   templateUrl: './questions.component.html',
@@ -19,10 +20,11 @@ export class QuestionsComponent implements OnInit {
   errorMessage = '';
 
   constructor(
-    private masterScreenerService: MasterScreenerService,
+    public masterScreenerService: MasterScreenerService,
     private questionControlService: QuestionControlService,
     private router: Router,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private dataSharingService: DataSharingService
   ) { }
 
   ngOnInit() {
@@ -39,14 +41,16 @@ export class QuestionsComponent implements OnInit {
         this.errorMessage = 'internal program error, please contact admin.';
       }
     }
-    
+    this.masterScreenerService.id = 'questions';
+    this.dataSharingService.data.set('test', 'success');
   }
 
 
   onSubmit() {
-    console.log(JSON.stringify(this.form.value));
-    //this.masterScreenerService.fetchResults(this.payLoad);
-    //this.router.navigateByUrl('/master-screener/results');
+    console.log(this.form.value);
+    this.masterScreenerService.loadResults(this.form.value)
+      .then( results => this.dataSharingService.data.set('results', results))
+      .then(() => this.router.navigateByUrl('/master-screener/results'));
   }
 
   addControls($event) {

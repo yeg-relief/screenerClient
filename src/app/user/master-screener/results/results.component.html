@@ -7,20 +7,23 @@
       <i>any</i> of these programs. <br>They are meant to help you find programs that can help you. 
     </div>
   </div>
-  <div *ngFor="let response of (responses$ | async)" class="clearfix flex">
-    <!-- responsive side spacing -->
-    <div class="px1 sm-hide"></div>
-    <div class="col col-2 lg-show"></div>
-    <div class="col col-1 sm-show lg-hide"></div>
+  <div *ngIf="errorMessage"> <strong> There was an error loading data, please try later </strong> </div>
+  <div *ngIf="errorMessage.length === 0">
+    <div *ngFor="let response of results" class="clearfix flex">
+      <!-- responsive side spacing -->
+      <div class="px1 sm-hide"></div>
+      <div class="col col-2 lg-show"></div>
+      <div class="col col-1 sm-show lg-hide"></div>
 
-    <div class="col col-8 flex-grow">
-      <app-user-facing-program [program]="response"></app-user-facing-program>
+      <div class="col col-8 flex-grow">
+        <app-user-facing-program [program]="response"></app-user-facing-program>
+      </div>
+
+      <!-- responsive side spacing -->
+      <div class="col col-2 lg-show"></div>
+      <div class="col col-1 sm-show lg-hide"></div>
+      <div class="px1 sm-hide"></div>
     </div>
-
-    <!-- responsive side spacing -->
-    <div class="col col-2 lg-show"></div>
-    <div class="col col-1 sm-show lg-hide"></div>
-    <div class="px1 sm-hide"></div>
   </div>
   <div class="p3"></div>
 </main>
