@@ -1,6 +1,6 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
-import { routing, appRoutingProviders }  from './app.routes';
+import { routing }  from './app.routes';
 import { AppComponent } from './app.component';
 import { MaterialModule } from '@angular/material';
 import { ToolbarComponent } from './shared/components/toolbar/toolbar.component';
@@ -26,9 +26,7 @@ import { HomeComponent } from './user/home/home.component';
     routing,
     MaterialModule.forRoot()
   ],
-  providers: [
-    appRoutingProviders,
-  ],
+  providers: [ ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

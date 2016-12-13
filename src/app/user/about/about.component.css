@@ -7,8 +7,6 @@
   }
   
   section {
-    margin-left: 25%;
-    margin-right: 25%;
     width: 50%;
   }
 }
@@ -19,11 +17,13 @@ main {
   width: 100vw;
   overflow: auto;
   position: fixed;
+  display: flex;
+  flex-direction: column;
 }
 
 section {
   background-color: rgba(248,248,255, 0.2);
-  height: 30vh;
+  margin: 0 auto;
 }
 
 @media(min-width: 40em) and (max-width: 52em) {
@@ -35,8 +35,6 @@ section {
   }
   
   section {
-    margin-left: 15%;
-    margin-right: 15%;
     width: 70%;
   }
 }
@@ -50,8 +48,6 @@ section {
   }
   
   section {
-    margin-left: 5%;
-    margin-right: 5%;
     width: 90%;
   }
 }
