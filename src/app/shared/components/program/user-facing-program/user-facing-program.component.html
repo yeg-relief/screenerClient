@@ -2,12 +2,12 @@
 </div>
 
 <md-card>
-  <md-card-title> {{program.title}} </md-card-title>
-  <md-card-subtitle> uploaded on: 14-09-2015 TODO: change date format</md-card-subtitle>
+  <md-card-title> {{program?.title}} </md-card-title>
+  <md-card-subtitle> uploaded on: {{program?.created | date }}</md-card-subtitle>
   <md-card-content>
-    <p>{{ program.details }} </p>
+    <p>{{ program?.details }} </p>
   </md-card-content>
-  <a href="{{ program.externalLink }}" target="_blank">
+  <a href="{{ program?.externalLink }}" target="_blank">
     more information
   </a>
   <div class="p1"></div>
@@ -15,7 +15,7 @@
     <div 
       class="col-2 border bg-silver black center rounded mr1 md-show" 
       style="cursor: pointer;"
-      *ngFor="let tag of program.tags"
+      *ngFor="let tag of program?.tags"
       routerLink="/browse-programs/category/{{tag}}">
       {{tag}}
     </div>
@@ -24,7 +24,7 @@
     <div 
       class="col-6 border bg-silver black center rounded mr1 sm-hide mt1 mb1" 
       style="cursor: pointer;"
-      *ngFor="let tag of program.tags"
+      *ngFor="let tag of program?.tags"
       routerLink="/browse-programs/category/{{tag}}">
       {{tag}}
     </div>
