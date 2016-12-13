@@ -1,15 +1,15 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { routing } from './browse.routes';
 import { BrowseComponent } from './browse.component';
 import { CategoryComponent } from './category/category.component';
 import { UserFacingProgramModule } from '../../shared/modules/user-facing-program.module';
 import { MdButtonModule } from '@angular/material';
+import { RouterModule } from '@angular/router';
 
 @NgModule({
   imports: [
     CommonModule,
-    routing,
+    RouterModule,
     UserFacingProgramModule,
     MdButtonModule.forRoot()
   ],

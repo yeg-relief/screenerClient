@@ -10,7 +10,7 @@
       <div class="lg-show">
         <div class="border p1 clearfix flex flex-justify rounded bg-silver">
           <button md-button 
-            color="primary" routerLink="/browse-programs/category/{{ category }}"
+            color="primary" routerLink="/browse-programs/{{ category }}"
              routerLinkActive="active" *ngFor="let category of ( categories$ | async)">
              {{ category }}
           </button>

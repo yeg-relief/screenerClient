@@ -2,11 +2,14 @@ import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { routing, appRoutingProviders }  from './app.routes';
 import { AppComponent } from './app.component';
-import { MdCardModule } from '@angular/material';
-import { MdCoreModule } from '@angular/material';
+import { MaterialModule } from '@angular/material';
 import { ToolbarComponent } from './shared/components/toolbar/toolbar.component';
 import { PageNotFoundComponent } from './shared/components/page-not-found/page-not-found.component';
 import { AboutComponent } from './user/about/about.component';
+import { MasterScreenerModule } from './user/master-screener/master-screener.module';
+import { BrowseModule } from './user/browse/browse.module';
+import { HomeComponent } from './user/home/home.component';
+
 
 @NgModule({
   declarations: [
@@ -14,12 +17,14 @@ import { AboutComponent } from './user/about/about.component';
     ToolbarComponent,
     PageNotFoundComponent,
     AboutComponent,
+    HomeComponent
   ],
   imports: [
     BrowserModule,
+    MasterScreenerModule,
+    BrowseModule, //browse programs not related to BrowserModule... i.e "browse benefit programs"
     routing,
-    MdCardModule.forRoot(),
-    MdCoreModule.forRoot()
+    MaterialModule.forRoot()
   ],
   providers: [
     appRoutingProviders,
