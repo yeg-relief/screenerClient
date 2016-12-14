@@ -24,7 +24,8 @@ export class CategoryComponent implements OnInit{
       .then(programs => this.programs = [].concat(programs));
 
     // no need to unsubscribe https://youtu.be/WWR9nxVx1ec?t=20m18s
-    // and yet complete is never called.... going to unsub 
+    // and yet complete is never called.... going to unsub, but should investigate 
+    // if this implies subscription is still active.
     this.subscription = this.route.params.subscribe({
         next: (params) => {
           if (params['category'] === 'all') {

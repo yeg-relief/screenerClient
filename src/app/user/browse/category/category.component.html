@@ -1,12 +1,4 @@
-<div class="p2"></div>
-<div *ngFor="let program of programs" class="clearfix flex">
-  <div class="col-1 md-show"></div>
-  <div class="px1 sm-hide"></div>
-  <app-user-facing-program 
-    [program]="program" 
-    class="col-10 flex-grow"
-    style="overflow: auto"></app-user-facing-program>
-  <div class="col-1 md-show"></div>
-  <div class="px1 sm-hide"></div>
+<div class="program-container">
+  <app-user-facing-program *ngFor="let program of programs" [program]="program">
+  </app-user-facing-program>
 </div>
-<div class="p2"></div>
