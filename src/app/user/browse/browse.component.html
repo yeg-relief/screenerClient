@@ -1,4 +1,4 @@
-<div class="browse">
+<div class="browse" *ngIf="!errorMsg">
   <section class="clearfix flex py2">
     <!-- responsive side spacing -->
     <div class="px1 sm-hide"></div>
@@ -11,7 +11,7 @@
         <div class="border p1 clearfix flex flex-justify rounded bg-silver">
           <button md-button 
             color="primary" routerLink="/browse-programs/{{ category }}"
-             routerLinkActive="active" *ngFor="let category of categories">
+             routerLinkActive="active" *ngFor="let category of (categories | async)">
              {{ category }}
           </button>
         </div>
@@ -20,9 +20,10 @@
       <!-- categories display for screens <= small -->
       <div class="lg-hide">
         <select name="category"  (change)="selectChange($event)" class="block col-12 field rounded center">
+          <option [selected]="category === currentCategory">all</option>
           <option 
-            *ngFor="let category of ( categories$ | async )"
-            [selected]="category === currCategory()">{{category}}</option>
+            *ngFor="let category of ( categories | async )"
+            [selected]="category === currentCategory">{{category}}</option>
         </select>
       </div>
       

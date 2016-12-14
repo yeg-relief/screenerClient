@@ -9,7 +9,7 @@ import { BrowseService } from '../browse.service';
   styleUrls: ['./category.component.css']
 })
 export class CategoryComponent implements OnInit{
-  programs: UserFacingProgram[];
+  programs: UserFacingProgram[] = [];
   filteredPrograms = [];
   subscription: any;
 
@@ -18,25 +18,28 @@ export class CategoryComponent implements OnInit{
     private browseService: BrowseService) {}
 
   ngOnInit(){
-    this.programs = [];
-    this.browseService.getAllPrograms().then(programs => this.programs = [].concat(programs));
+    // this code could be refactored by keeping this as an observable and using 
+    // a combination operator in conjuction with route param 
+    this.browseService.getAllPrograms()
+      .then(programs => this.programs = [].concat(programs));
 
     // no need to unsubscribe https://youtu.be/WWR9nxVx1ec?t=20m18s
     // and yet complete is never called.... going to unsub 
     this.subscription = this.route.params.subscribe({
         next: (params) => {
-          console.log(`current category param: ${params['category']}`);
           if (params['category'] === 'all') {
             this.filteredPrograms = [].concat(this.programs)
           } else {
             this.filteredPrograms = this.programs.filter(program => program.tags.indexOf(params['category']) > -1);
           }
-        },
-        complete: () => console.log('category router param subscription complete')
+        }
       });
   }
 
   ngOnDestroy(){
-    this.subscription.unsubscribe();
+    if (!this.subscription.closed) {
+      this.subscription.unsubscribe();
+    }
+    
   }
 }

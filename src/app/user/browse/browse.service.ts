@@ -2,14 +2,14 @@ import { Injectable } from '@angular/core';
 import { UserFacingProgram } from '../../shared';
 import { Observable } from 'rxjs/Observable';
 import { Http, Response } from '@angular/http';
+import { ReplaySubject } from 'rxjs/ReplaySubject';
 import 'rxjs/add/observable/throw';
 import 'rxjs/add/operator/switchMap';
 import 'rxjs/add/operator/pluck';
 import 'rxjs/add/operator/reduce';
-import 'rxjs/add/operator/do';
 import 'rxjs/add/operator/multicast';
 import 'rxjs/add/operator/toArray';
-import { ReplaySubject } from 'rxjs/ReplaySubject';
+
 
 @Injectable()
 export class BrowseService {
@@ -17,7 +17,6 @@ export class BrowseService {
 
   constructor(private http: Http) {
     this.programs$ =  this.http.get('/api/programs')
-                        .do(() => console.log('http call made'))
                         .map(res => res.json().programs)
                         // ensure that only one http call is made with mulitple subscriptions to this obs
                         .multicast( new ReplaySubject(1)).refCount()

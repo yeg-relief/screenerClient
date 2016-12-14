@@ -1,6 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { BrowseService } from './browse.service';
 import { Observable } from 'rxjs/Observable';
+import { Subscription } from 'rxjs/Subscription';
 import 'rxjs/add/operator/switchMap';
 import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/do';
@@ -17,8 +18,11 @@ import { UserFacingProgram } from '../../shared/models'
   styleUrls: ['./browse.component.css'],
   providers: [ BrowseService ]
 })
-export class BrowseComponent implements OnInit {
-  categories: string[];
+export class BrowseComponent implements OnInit, OnDestroy {
+  categories: Promise<string[]>;
+  errorMsg = '';
+  subscription: Subscription;
+  currentCategory: string;
   constructor(
     private browseService: BrowseService,
     private route: ActivatedRoute,
@@ -26,9 +30,18 @@ export class BrowseComponent implements OnInit {
   ) { }
 
   ngOnInit() {
-    this.browseService.getCategories().then(categories => this.categories = [].concat(categories));
+    this.categories = this.browseService.getCategories().catch(error => this.errorMsg = error);
+
+    this.subscription = this.route.firstChild.params.subscribe(params => {
+      this.currentCategory = params['category'];
+    });
   }
 
+  ngOnDestroy() {
+    if(!this.subscription.closed){
+      this.subscription.unsubscribe();
+    }
+  }
 
 
   // called 12 times per render on my home machine :((
