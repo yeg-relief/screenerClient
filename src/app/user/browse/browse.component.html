@@ -11,8 +11,13 @@
         <div class="border p1 clearfix flex flex-justify rounded bg-silver">
           <button md-button 
             color="primary" routerLink="/browse-programs/{{ category }}"
-             routerLinkActive="active" *ngFor="let category of (categories | async)">
+            routerLinkActive="active" *ngFor="let category of (categories | async)">
              {{ category }}
+          </button>
+          <button md-button 
+            color="primary" routerLink="/browse-programs/all"
+            routerLinkActive="active">
+              all
           </button>
         </div>
       </div>

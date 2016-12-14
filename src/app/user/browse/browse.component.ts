@@ -43,31 +43,8 @@ export class BrowseComponent implements OnInit, OnDestroy {
     }
   }
 
-
-  // called 12 times per render on my home machine :((
-  // this feels like a hack...
-  currCategory(): string {
-    const category = this.extractCategoryFromRoute();
-    if ( category !== false) {
-      return <string>category;
-    }
-    return 'undefined';
-  }
-
   selectChange($event) {
     const category = $event.target.value;
     this.router.navigate([`/browse-programs/${category}`]);
-  }
-
-  extractCategoryFromRoute(): string | boolean {
-    let category = null;
-    // i'm scared
-    if ( this.router.routerState.snapshot.url ) {
-      category = this.router.routerState.snapshot.url.split('/')[3];
-    }
-    if (category) {
-      return category;
-    }
-    return false;
   }
 }
