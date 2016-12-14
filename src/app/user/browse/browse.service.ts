@@ -1,80 +1,56 @@
 import { Injectable } from '@angular/core';
 import { UserFacingProgram } from '../../shared';
 import { Observable } from 'rxjs/Observable';
-import 'rxjs/add/observable/of';
-import 'rxjs/add/operator/filter';
-import 'rxjs/add/observable/from';
+import { Http, Response } from '@angular/http';
+import 'rxjs/add/observable/throw';
+import 'rxjs/add/operator/switchMap';
+import 'rxjs/add/operator/pluck';
+import 'rxjs/add/operator/reduce';
+import 'rxjs/add/operator/do';
+import 'rxjs/add/operator/multicast';
 import 'rxjs/add/operator/toArray';
+import { ReplaySubject } from 'rxjs/ReplaySubject';
 
 @Injectable()
 export class BrowseService {
+  programs$;
 
-  categories = ['adult', 'health', 'tax', 'savings', 'disabled', 'child', 'all' ];
+  constructor(private http: Http) {
+    this.programs$ =  this.http.get('/api/programs')
+                        .do(() => console.log('http call made'))
+                        .map(res => res.json().programs)
+                        // ensure that only one http call is made with mulitple subscriptions to this obs
+                        .multicast( new ReplaySubject(1)).refCount()
+                        .catch(this.loadError);
+   }
 
-  private mockPrograms: UserFacingProgram[] = [
-    {
-      guid: 'f41608cb-09aa-4e5b-a050-75d9166fbf6b',
-      description: {
-        guid: 'f41608cb-09aa-4e5b-a050-75d9166fbf6b',
-        title: 'Alberta Adult Health Benefit',
-        details: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.' +
-                  'Mauris quis ornare elit. Nam feugiat mollis lorem, sed ultricies tellus accumsan at. ' +
-                  'Donec augue diam, condimentum ac lobortis nec, finibus ut ante. Phasellus eget enim nec neque ' +
-                  'rutrum mattis sit amet tincidunt justo. Etiam porttitor dolor vitae felis rutrum, ' +
-                  'sit amet iaculis sapien condimentum. Aenean scelerisque eros vel tellus fermentum, sed tempor ' +
-                  'neque pellentesque. Morbi scelerisque dolor massa, facilisis suscipit dolor interdum a.',
-        externalLink: 'http://www.humanservices.alberta.ca/financial-support/2085.html'
-      },
-      created: '',
-      tags: ['adult', 'health']
-    },
-    {
-      guid: '86959ea1-7e27-461c-b274-c08cdcffc193',
-      description: {
-        guid: '86959ea1-7e27-461c-b274-c08cdcffc193',
-        title: 'Alberta Child Health Benefit',
-        details: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.' +
-                  'Mauris quis ornare elit. Nam feugiat mollis lorem, sed ultricies tellus accumsan at. ' +
-                  'Donec augue diam, condimentum ac lobortis nec, finibus ut ante. Phasellus eget enim nec neque ' +
-                  'rutrum mattis sit amet tincidunt justo. Etiam porttitor dolor vitae felis rutrum, ' +
-                  'sit amet iaculis sapien condimentum. Aenean scelerisque eros vel tellus fermentum, sed tempor ' +
-                  'neque pellentesque. Morbi scelerisque dolor massa, facilisis suscipit dolor interdum a.',
-        externalLink: 'http://www.humanservices.alberta.ca/financial-support/2076.html'
-      },
-      created: '',
-      tags: ['child', 'health']
-    },
-    {
-      guid: 'ee4ee200-9c8e-4e2c-9b1f-b9e6b0b330e0',
-      description: {
-        guid: 'ee4ee200-9c8e-4e2c-9b1f-b9e6b0b330e0',
-        title: 'RDSP: Registered Disablity Savings Plan',
-        details: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.' +
-                  'Mauris quis ornare elit. Nam feugiat mollis lorem, sed ultricies tellus accumsan at. ' +
-                  'Donec augue diam, condimentum ac lobortis nec, finibus ut ante. Phasellus eget enim nec neque ' +
-                  'rutrum mattis sit amet tincidunt justo. Etiam porttitor dolor vitae felis rutrum, ' +
-                  'sit amet iaculis sapien condimentum. Aenean scelerisque eros vel tellus fermentum, sed tempor ' +
-                  'neque pellentesque. Morbi scelerisque dolor massa, facilisis suscipit dolor interdum a.',
-        externalLink: 'http://www.cra-arc.gc.ca/rdsp/'
-      },
-      created: '',
-      tags: ['tax', 'savings', 'disabled']
-    }
-  ];
-
-  constructor() { }
-
-  getCategories(): Observable<Array<string>> {
-    return Observable.of(this.categories);
+  getCategories(): Promise<string[]> {
+    return this.programs$
+            // flatten programs
+            .switchMap(x => x)
+            .pluck('tags')
+            .reduce( (allTags, programTags) => {
+              return allTags.concat(programTags);
+            }, [])
+            .toPromise()
+            .catch( Observable.throw('error getting categories'));
   }
 
-  getPrograms(category: string): Observable<Array<UserFacingProgram>> {
-    if (category === 'all') {
-      return Observable.of(this.mockPrograms);
-    }
+  // at this point we're just grabbing all programs... naive but okay at this stage of app
+  getAllPrograms()  {
+    return this.programs$.toPromise();
+  }
 
-    return Observable.from(this.mockPrograms)
-      .filter( (program: UserFacingProgram) => program.tags.indexOf(category) > -1)
-      .toArray();
+  loadError(error: Response | any) {
+    let errMsg: string;
+    if (error instanceof Response) {
+      const body = error.json() || '';
+      const err = body.message || JSON.stringify(body);
+      errMsg = err;
+    } else {
+      errMsg = error.message ? error.message : error.toString();
+    }
+    console.error(errMsg);
+    return Observable.throw(errMsg);
   }
 }

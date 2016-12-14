@@ -4,7 +4,12 @@ import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/operator/switchMap';
 import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/do';
+import 'rxjs/add/operator/concatMap';
+import 'rxjs/add/operator/filter';
+import 'rxjs/add/operator/toArray';
+import 'rxjs/add/operator/multicast';
 import { ActivatedRoute, Router } from '@angular/router';
+import { UserFacingProgram } from '../../shared/models'
 
 @Component({
   selector: 'app-browse',
@@ -13,7 +18,7 @@ import { ActivatedRoute, Router } from '@angular/router';
   providers: [ BrowseService ]
 })
 export class BrowseComponent implements OnInit {
-  categories$: Observable<string[]>;
+  categories: string[];
   constructor(
     private browseService: BrowseService,
     private route: ActivatedRoute,
@@ -21,8 +26,10 @@ export class BrowseComponent implements OnInit {
   ) { }
 
   ngOnInit() {
-    this.categories$ = this.browseService.getCategories();
+    this.browseService.getCategories().then(categories => this.categories = [].concat(categories));
   }
+
+
 
   // called 12 times per render on my home machine :((
   // this feels like a hack...
@@ -36,7 +43,7 @@ export class BrowseComponent implements OnInit {
 
   selectChange($event) {
     const category = $event.target.value;
-    this.router.navigate([`/browse-programs/category/${category}`]);
+    this.router.navigate([`/browse-programs/${category}`]);
   }
 
   extractCategoryFromRoute(): string | boolean {

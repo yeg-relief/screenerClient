@@ -14,6 +14,8 @@ import { FormGroup } from '@angular/forms';
 
 @Injectable()
 export class MasterScreenerService {
+  // results are set in QuestionsComponent.onSubmit()
+  // poor design?
   results = [];
   constructor(private http: Http) { }
 
@@ -38,7 +40,7 @@ export class MasterScreenerService {
     if (error instanceof Response) {
       const body = error.json() || '';
       const err = body.message || JSON.stringify(body);
-      errMsg = `${err}`;
+      errMsg = err;
     } else {
       errMsg = error.message ? error.message : error.toString();
     }
