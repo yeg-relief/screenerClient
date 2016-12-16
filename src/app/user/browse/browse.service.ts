@@ -9,7 +9,6 @@ import 'rxjs/add/operator/pluck';
 import 'rxjs/add/operator/reduce';
 import 'rxjs/add/operator/multicast';
 import 'rxjs/add/operator/toArray';
-import 'rxjs/add/operator/do';
 
 @Injectable()
 export class BrowseService {
@@ -27,10 +26,14 @@ export class BrowseService {
     return this.programs$
             // flatten programs
             .switchMap(x => x)
-            .do(program => console.log(program))
-            .pluck('value', 'tags')
+            .pluck('tags')
             .reduce( (allTags, programTags) => {
-              return allTags.concat(programTags);
+              programTags.forEach(tag => {
+                if (allTags.indexOf(tag) < 0) {
+                  allTags = [tag, ...allTags];
+                }
+              })
+              return allTags;
             }, [])
             .toPromise()
             .catch( Observable.throw('error getting categories'));

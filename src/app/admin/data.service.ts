@@ -3,109 +3,138 @@ import { MasterScreener } from './models/master-screener';
 import { ApplicationFacingProgram } from './models/program';
 import { Key } from './models/key';
 import { Observable } from 'rxjs/Observable';
+import { ReplaySubject } from 'rxjs/ReplaySubject';
+import { Http, Response, Headers, RequestOptions } from '@angular/http';
 import 'rxjs/add/observable/of';
 import 'rxjs/add/operator/switchMap';
 import 'rxjs/add/observable/range';
 import 'rxjs/add/operator/toArray';
 import 'rxjs/add/operator/do';
+import 'rxjs/add/operator/multicast';
+import 'rxjs/add/operator/filter';
+import 'rxjs/add/operator/toPromise';
+import 'rxjs/add/operator/reduce';
 
 @Injectable()
 export class DataService {
-  private screenerCache = new Map<string, MasterScreener>();
-  private loadedPrograms: ApplicationFacingProgram[];
-  constructor() { }
-  private requestScreener(version: number): Observable<MasterScreener> | Observable<boolean> {
-    const MOCK_VALID_VERSION = 3;
-    const valid: boolean = version === MOCK_VALID_VERSION;
-    return Observable.of(valid)
-      .switchMap<boolean | MasterScreener>((res: boolean) => {
-        if (!res) {
-          return Observable.of(res);
-        }
-        // tslint:disable-next-line
-        this.screenerCache.set(version.toString(), mockVersionThree);
-        // tslint:disable-next-line
-        return Observable.of(mockVersionThree);
-      })
-      .delay(1000);
+  private screeners$: Observable<MasterScreener[]>;
+  private keys$: Observable<Key[]>;
+
+  constructor(private http: Http) {
+    this.loadAllScreeners();
+    this.loadKeys();
   }
 
-  loadScreener(version: number): Observable<MasterScreener> {
-    return Observable.of(this.screenerCache.has(version.toString()))
-      .switchMap<boolean | MasterScreener>((res: boolean) => {
-        if (res) {
-          const versionA = this.screenerCache.get(version.toString());
-          return Observable.of(versionA);
+  private loadKeys() {
+    let httpCalls = 0;
+    this.keys$ = this.http.get('/api/keys/')
+      .do(() => {
+        if (httpCalls > 1) {
+          console.error('multiple http calls from DataService.loadKeys() being made!!');
         }
-        return this.requestScreener(version);
-      });
+      })
+      .map(res => res.json().response)
+      .multicast(new ReplaySubject(1)).refCount()
+      .catch(this.loadError);
+  }
+
+  // load every screener again naive, but it works at this point TODO: rewrite to improve scalability
+  private loadAllScreeners() {
+    let httpCalls = 0;
+    this.screeners$ = this.http.get('/api/master_screener/')
+      .do(() => {
+        if (httpCalls > 1) {
+          console.error('multiple http calls from DataService.loadAllScreeners() being made!!');
+        }
+      })
+      .map(res => res.json().response)
+      .multicast(new ReplaySubject(1)).refCount()
+      .catch(this.loadError);
+  }
+
+
+  loadScreener(version: number): Observable<MasterScreener> {
+    return this.screeners$
+      .switchMap(x => x)
+      .filter((screener: MasterScreener) => screener.version === version)
+  }
+
+
+  loadError(error: Response | any) {
+    let errMsg: string;
+    if (error instanceof Response) {
+      const body = error.json() || '';
+      const err = body.message || JSON.stringify(body);
+      errMsg = err;
+    } else {
+      errMsg = error.message ? error.message : error.toString();
+    }
+    console.error(errMsg);
+    return Observable.throw(errMsg);
   }
 
   loadLatestScreener(): Observable<MasterScreener> {
-    // tslint:disable-next-line
-    const latest = availableVersions[availableVersions.length - 1];
-    this.screenerCache.set(latest.meta.screener.version.toString(), latest);
-    return Observable.of(latest).delay(1000);
+    return this.screeners$
+      .map((screeners: MasterScreener[]) => {
+        const sorted = screeners.sort((a, b) => a.version - b.version)
+        return sorted[sorted.length - 1]
+      });
   }
 
   loadVersionMetaData(): Observable<number[]> {
-    // tslint:disable-next-line
-    return Observable.of(versions)
-      .delay(100);
+    return this.screeners$
+      .switchMap(x => x)
+      .reduce((accum: number[], screener: MasterScreener) => accum.concat(screener.version), []);
   }
 
-  loadKeys(): Observable<Key[]> {
-    // tslint:disable-next-line
-    return Observable.of(mockKeys)
-      .delay(300);
+  getKeys(): Observable<Key[]> {
+    return this.keys$;
   }
 
   saveScreener(screener: MasterScreener) {
-    // tslint:disable-next-line
-    const latest = availableVersions[availableVersions.length - 1];
-    screener.meta.screener.version++;
-    versions.push(screener.meta.screener.version);
-    // tslint:disable-next-line
-    availableVersions.push(screener);
-    return Observable.of('').delay(2000);
+    const headers = new Headers({ 'Content-Type': 'application/json' });
+    const options = new RequestOptions({ headers: headers });
+    const body = JSON.stringify({ data: screener });
+    return this.http.post('/api/master_screener/', body, options)
+      .map(res => res.json().response)
+      .catch(this.loadError)
+      .toPromise();
   }
 
   loadPrograms(): Observable<ApplicationFacingProgram[]> {
-    if (this.loadedPrograms === undefined) {
-      console.log('loading from network');
-      return Observable.of(mockPrograms)
-        //.delay(2000)
-        .do(programs => this.loadedPrograms = [...programs]);
-    }
-    return Observable.of(this.loadedPrograms);
+    return this.http.get('/api/programs/')
+      .map(res => res.json().programs)
+      .reduce((accum, program) => accum.concat(program.application), [])
+      .catch(this.loadError)
   }
 
   updateProgram(program: ApplicationFacingProgram) {
-    const updateProgramIndex = this.loadedPrograms.findIndex(mockProgram => mockProgram.guid === program.guid);
-    if (updateProgramIndex >= 0) {
-      this.loadedPrograms.splice(updateProgramIndex, 1, program);
-    }
-    return Observable.of(this.loadedPrograms)
-      .delay(2000);
+    const headers = new Headers({ 'Content-Type': 'application/json' });
+    const options = new RequestOptions({ headers: headers });
+    const body = JSON.stringify({ data: program });
+    return this.http.post('/api/programs/', body, options)
+      .map(res => res.json().response)
+      .catch(this.loadError)
+      .toPromise();
   }
 
   createProgram(program: ApplicationFacingProgram) {
-    const newGUID = Math.random().toString();
-    program.guid = newGUID;
-    program.user.guid = newGUID;
-    program.user.description.guid = newGUID;
-    this.loadedPrograms.push(program);
-    return Observable.of(this.loadedPrograms)
-      .delay(2000);
+    const headers = new Headers({ 'Content-Type': 'application/json' });
+    const options = new RequestOptions({ headers: headers });
+    const body = JSON.stringify({ data: program });
+    return this.http.post('/api/programs/', body, options)
+      .map(res => res.json().response)
+      .catch(this.loadError)
+      .toPromise();
   }
 
   deleteProgram(program: ApplicationFacingProgram) {
-    const deleteProgramIndex = this.loadedPrograms.findIndex(mockProgram => mockProgram.guid === program.guid);
-    if (deleteProgramIndex >= 0) {
-      this.loadedPrograms.splice(deleteProgramIndex, 1);
-    }
-    return Observable.of(this.loadedPrograms)
-      .delay(2000);
+    const headers = new Headers({ 'Content-Type': 'application/json' });
+    const options = new RequestOptions({ headers: headers });
+    return this.http.delete(`/api/programs/${program.guid}`, options)
+      .map(res => res.json().removed)
+      .catch(this.loadError)
+      .toPromise()
   }
 
   updateKey(key: Key) {
@@ -118,8 +147,6 @@ export class DataService {
     mockKeys = mockKeys.filter(mockKey => mockKey.name !== key.name);
   }
 }
-
-const versions = [1, 2, 3];
 
 let mockKeys: Key[] = [
   {

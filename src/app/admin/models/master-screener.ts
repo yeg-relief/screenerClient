@@ -5,6 +5,7 @@ export interface QuestionMeta {
 }
 
 export interface MasterScreener {
+  version: number;
   questions: Question[];
   meta: MasterScreenerMetaData;
 }

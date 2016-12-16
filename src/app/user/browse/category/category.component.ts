@@ -23,7 +23,7 @@ export class CategoryComponent implements OnInit{
     this.browseService.getAllPrograms()
       .then(programs => {
         this.programs = programs.reduce( (accum, program) => {
-          return accum.concat(program.value);
+          return accum.concat(program);
         }, [])
       })
       .catch(error => console.error(error));

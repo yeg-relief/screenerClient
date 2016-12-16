@@ -9,10 +9,7 @@ import { reducer } from './reducer';
 import { MasterScreenerEffects } from './master-screener/master-screener.effects';
 import { EditScreenerEffects } from './master-screener/edit/edit.effects';
 import { EffectsModule } from '@ngrx/effects';
-import { MdCardModule } from '@angular/material';
-import { MdButtonModule } from '@angular/material';
-import { MdInputModule } from '@angular/material';
-import { MdProgressBarModule } from '@angular/material';
+import { MaterialModule } from '@angular/material';
 import { DataService } from './data.service';
 import { EditQuestionEffects } from './master-screener/edit-question/edit-question.effects';
 import { KeyEffects } from './master-screener/keys/key.effects';
@@ -24,15 +21,14 @@ import { ProgramDeleteEffects } from './programs/program-overview/delete-confirm
 import { ProgramsModule } from './programs/programs.module';
 import { MasterScreenerModule } from './master-screener/master-screener.module';
 import { KeysModule } from './keys/keys.module';
+import { HttpModule } from '@angular/http';
+
 
 @NgModule({
   imports: [
     CommonModule,
     routing,
-    MdCardModule.forRoot(),
-    MdButtonModule.forRoot(),
-    MdInputModule.forRoot(),
-    MdProgressBarModule.forRoot(),
+    MaterialModule.forRoot(),
     StoreModule.provideStore(reducer),
     EffectsModule.run(MasterScreenerEffects),
     EffectsModule.run(EditScreenerEffects),
@@ -49,6 +45,6 @@ import { KeysModule } from './keys/keys.module';
   declarations: [
     AdminComponent,
   ],
-  providers: [AuthGuardService, AuthService, DataService]
+  providers: [AuthGuardService, AuthService, DataService, HttpModule]
 })
 export class AdminModule { }
