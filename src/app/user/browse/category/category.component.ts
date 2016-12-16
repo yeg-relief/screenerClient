@@ -21,7 +21,12 @@ export class CategoryComponent implements OnInit{
     // this code could be refactored by keeping this as an observable and using 
     // a combination operator in conjuction with route param 
     this.browseService.getAllPrograms()
-      .then(programs => this.programs = [].concat(programs));
+      .then(programs => {
+        this.programs = programs.reduce( (accum, program) => {
+          return accum.concat(program.value);
+        }, [])
+      })
+      .catch(error => console.error(error));
 
     // no need to unsubscribe https://youtu.be/WWR9nxVx1ec?t=20m18s
     // and yet complete is never called.... going to unsub, but should investigate 
