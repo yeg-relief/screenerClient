@@ -46,12 +46,17 @@ export function reducer(state = initialState, action: EditScreenerActions): Stat
     }
 
     case EditScreenerActionsTypes.LOAD_SCREENER: {
+      console.log('IN EDIT SCREENER REDUCER');
+      console.log(action.type);
+      console.log(action.payload);
       const newScreener = <MasterScreener>action.payload;
-      return Object.assign({}, state, {
+      const x = Object.assign({}, state, {
         past: [],
         present: newScreener,
         future: []
       });
+      console.log(x);
+      return x;
     };
 
     case EditScreenerActionsTypes.SAVE_SCREENER: {

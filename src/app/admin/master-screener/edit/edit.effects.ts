@@ -16,6 +16,8 @@ export class EditScreenerEffects {
     .ofType(editScreener.EditScreenerActionsTypes.INIT_EDIT)
     .map(action => action.payload)
     .switchMap( (version: number) => this.data.loadScreener(version))
+    .do(() => console.log('IN EDIT EFFECTS'))
+    .do(thing => console.log(thing))
     .map((screener: MasterScreener) => new editScreener.LoadScreener(screener));
 
   @Effect() saveScreener$ = this.actions$

@@ -6,7 +6,6 @@ import { AuthGuardService } from './core/services/auth-guard.service';
 import { AuthService } from './core/services/auth.service';
 import { StoreModule } from '@ngrx/store';
 import { reducer } from './reducer';
-import { MasterScreenerEffects } from './master-screener/master-screener.effects';
 import { EditScreenerEffects } from './master-screener/edit/edit.effects';
 import { EffectsModule } from '@ngrx/effects';
 import { MaterialModule } from '@angular/material';
@@ -23,6 +22,8 @@ import { MasterScreenerModule } from './master-screener/master-screener.module';
 import { KeysModule } from './keys/keys.module';
 import { HttpModule } from '@angular/http';
 
+import { MasterScreenerResolverService } from './master-screener/master-screener-resolver.service';
+
 
 @NgModule({
   imports: [
@@ -30,7 +31,6 @@ import { HttpModule } from '@angular/http';
     routing,
     MaterialModule.forRoot(),
     StoreModule.provideStore(reducer),
-    EffectsModule.run(MasterScreenerEffects),
     EffectsModule.run(EditScreenerEffects),
     EffectsModule.run(EditQuestionEffects),
     EffectsModule.run(KeyEffects),
@@ -45,6 +45,6 @@ import { HttpModule } from '@angular/http';
   declarations: [
     AdminComponent,
   ],
-  providers: [AuthGuardService, AuthService, DataService, HttpModule]
+  providers: [AuthGuardService, AuthService, DataService, HttpModule, MasterScreenerResolverService]
 })
 export class AdminModule { }

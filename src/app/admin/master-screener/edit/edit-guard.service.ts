@@ -9,7 +9,7 @@ import * as fromRoot from '../../reducer';
 import * as editScreener  from './edit.actions';
 import * as keys from '../keys/key.actions';
 import 'rxjs/add/operator/take';
-
+import 'rxjs/add/operator/do';
 
 @Injectable()
 export class EditGuardService implements CanActivate {
@@ -25,7 +25,9 @@ export class EditGuardService implements CanActivate {
 
   loadScreener(version: number): boolean {
     this.store.let(fromRoot.getCurrentEditWorkingVersion)
+    .do(() => console.log('IN EDIT GUARD'))
     .take(1)
+    .do( thing => console.log(thing))
     .subscribe(
       (workingVersion: number) => {
         if (workingVersion !== version) {

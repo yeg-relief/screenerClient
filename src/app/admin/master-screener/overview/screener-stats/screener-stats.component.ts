@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, ChangeDetectionStrategy } from '@angular/core';
+import { Component, Input, ChangeDetectionStrategy } from '@angular/core';
 
 @Component({
   selector: 'app-screener-stats',
@@ -6,14 +6,9 @@ import { Component, OnInit, Input, ChangeDetectionStrategy } from '@angular/core
   styleUrls: ['./screener-stats.component.css'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class ScreenerStatsComponent implements OnInit {
+export class ScreenerStatsComponent {
   @Input() questionCount: number;
-  @Input() creationDate: string;
+  @Input() creationDate: number;
   @Input() versionNumber: number;
   @Input() error: string;
-  constructor() { }
-
-  ngOnInit() {
-  }
-
 }

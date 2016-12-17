@@ -25,12 +25,7 @@ export class OverviewControlsComponent implements OnInit, OnDestroy {
   constructor(private router: Router, private store: Store<fromRoot.State>) { }
 
   ngOnInit() {
-    this.workingVersion$ = this.store.let(fromRoot.getWorkingNumber);
-    this.sub = this.workingVersion$.subscribe(
-      (version) => {
-        this.selectedVersion = version;
-      }
-    );
+    this.sub = this.store.let(fromRoot.getWorkingNumber).subscribe(version => this.selectedVersion = version);
   }
 
   keyChange(change) {
@@ -47,7 +42,6 @@ export class OverviewControlsComponent implements OnInit, OnDestroy {
 
   selectChange(updatedVersion: number) {
     this.selectedVersion = updatedVersion;
-    console.log(this.selectedVersion);
     this.store.dispatch({
       type: MasterScreenerActionsTypes.LOAD_MASTER_SCREENER_VERSION,
       payload: this.selectedVersion

@@ -139,10 +139,8 @@ export function getKeys(state$: Observable<State>) {
 }
 
 export function getFlattenedQuestions(state$: Observable<State>) {
-  return state$.do(s => console.log(s)).select(s => s.masterScreener.questions)
+  return state$.select(s => s.masterScreener.questions)
     .switchMap( (questions: Question[]) => {
-      console.log('FLATTENED QUESTIONS');
-      console.log(questions);
       const q: Question[] = questions.reduce( (acc: Question[], curr: Question) => {
         acc.push(curr);
         if (!curr.expandable) {

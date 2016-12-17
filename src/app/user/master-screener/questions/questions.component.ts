@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { Router, ActivatedRoute, NavigationExtras } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
 import { FormGroup  } from '@angular/forms';
 import { MasterScreenerService } from '../master-screener.service';
 import { QuestionControlService } from './question-control.service';

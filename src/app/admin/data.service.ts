@@ -54,9 +54,13 @@ export class DataService {
 
 
   loadScreener(version: number): Observable<MasterScreener> {
+    console.log('IN LOAD SCREENER')
     return this.screeners$
       .switchMap(x => x)
+      .do(thing => console.log(thing))
       .filter((screener: MasterScreener) => screener.version === version)
+      .do(version => console.log(version))
+
   }
 
 

@@ -16,7 +16,8 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { UserFacingProgramModule } from '../../shared/modules/user-facing-program.module';
 import { QuestionModule } from '../../shared/modules/question.module';
 import { EditQuestionControlsComponent } from './edit/edit-question-controls/edit-question-controls.component';
-import { MasterScreenerGuardService } from './master-screener.guard.service';
+//import { MasterScreenerGuardService } from './master-screener.guard.service';
+import { MasterScreenerResolverService } from './master-screener-resolver.service';
 import { EditQuestionComponent } from './edit-question/edit-question.component';
 import { EditQuestionGuardService } from './edit-question/edit-question.guard.service';
 import { EditQuestionToolbarControlsComponent }
@@ -74,9 +75,9 @@ import { AdminCoreModule } from '../core/admin-core.module';
   ],
   providers: [
     EditGuardService,
-    MasterScreenerGuardService,
     EditQuestionGuardService,
-    ConditionalGuardService
+    ConditionalGuardService,
+    MasterScreenerResolverService
   ]
 })
 export class MasterScreenerModule { }

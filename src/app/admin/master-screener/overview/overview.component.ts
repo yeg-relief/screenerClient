@@ -1,19 +1,22 @@
 import 'rxjs/add/operator/let';
 import 'rxjs/add/operator/do';
-import { Component, OnInit, } from '@angular/core';
+import { Component, OnInit, OnDestroy} from '@angular/core';
 import { Observable } from 'rxjs/Observable';
+import { Subscription } from 'rxjs/Subscription';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 import { Store } from '@ngrx/store';
 import * as fromRoot from '../../reducer';
 import { MasterScreenerActionsTypes } from '../master-screener.actions';
 import { Key } from '../../models/key';
 import { Question } from '../../../shared/models';
+import { ActivatedRoute } from '@angular/router';
+import * as masterScreener from '../master-screener.actions';
 
 @Component({
   templateUrl: './overview.component.html',
   styleUrls: ['./overview.component.css'],
 })
-export class OverviewComponent implements OnInit {
+export class OverviewComponent implements OnInit, OnDestroy {
   keyToggle: BehaviorSubject<boolean>;
   questionToggle: BehaviorSubject<boolean>;
   versions$: Observable<number[]>;
@@ -25,7 +28,9 @@ export class OverviewComponent implements OnInit {
   questionCount$: Observable<number>;
   // flattened array of all questions in screener
   questions$: Observable<Question[]>;
-  constructor(private store: Store<fromRoot.State>) { }
+
+  subscription: Subscription;
+  constructor(private store: Store<fromRoot.State>, private route: ActivatedRoute) { }
 
   ngOnInit() {
     this.keyToggle = new BehaviorSubject<boolean>(true);
@@ -37,9 +42,18 @@ export class OverviewComponent implements OnInit {
     this.loading$ = this.store.let(fromRoot.getLoading);
     this.error$ = this.store.let(fromRoot.getErrors);
     this.keys$ = this.store.let(fromRoot.getKeys);
-    this.questions$ = this.store.let(fromRoot.flattenedQuestions).do(thing => console.log(thing));
+    this.questions$ = this.store.let(fromRoot.flattenedQuestions);
     this.questionCount$ = this.store.let(fromRoot.getWorkingQuestionCount);
     this.creationDate$ = this.store.let(fromRoot.getWorkingCreationDate);
+    this.subscription = this.route.data
+      .do(data => this.store.dispatch(new masterScreener.ChangeScreenerVersion(data['masterScreener'])))
+      .subscribe();
+  }
+
+  ngOnDestroy() {
+    if (!this.subscription.closed) {
+      this.subscription.unsubscribe();
+    }
   }
 
 }
