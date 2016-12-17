@@ -145,7 +145,7 @@ export const findEditQuestion = function (state$: Observable<State>) {
     state$.let(getOriginalKeyQuestionEdit),
     state$.let(getPresentEditQuestions)
   )
-  .map<Question>(([key, questions]) => {
+  .map(([key, questions]) => {
     const q: Question = questions.find((question: Question) => question.key === key);
     if (typeof q === 'undefined') {
       return {
@@ -167,7 +167,7 @@ export const findUnusedKeys = function (state$: Observable<State>) {
     state$.let(getPresentEditQuestions),
     state$.let(getPresentKeys)
   )
-  .map<Key[]>(([questions, keys]) => {
+  .map(([questions, keys]) => {
     const usedKeyNames: string[] = [];
     questions.forEach( question => {
       usedKeyNames.push(question.key);

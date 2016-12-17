@@ -1,4 +1,5 @@
 import 'rxjs/add/operator/let';
+import 'rxjs/add/operator/do';
 import { Component, OnInit, } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
@@ -36,7 +37,7 @@ export class OverviewComponent implements OnInit {
     this.loading$ = this.store.let(fromRoot.getLoading);
     this.error$ = this.store.let(fromRoot.getErrors);
     this.keys$ = this.store.let(fromRoot.getKeys);
-    this.questions$ = this.store.let(fromRoot.flattenedQuestions);
+    this.questions$ = this.store.let(fromRoot.flattenedQuestions).do(thing => console.log(thing));
     this.questionCount$ = this.store.let(fromRoot.getWorkingQuestionCount);
     this.creationDate$ = this.store.let(fromRoot.getWorkingCreationDate);
   }

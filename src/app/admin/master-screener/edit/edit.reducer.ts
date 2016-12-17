@@ -20,6 +20,7 @@ export const initialState: State = {
   saving: false,
   past: new Array<MasterScreener>(),
   present: {
+    version: undefined,
     questions: [],
     meta: {
       questions: {

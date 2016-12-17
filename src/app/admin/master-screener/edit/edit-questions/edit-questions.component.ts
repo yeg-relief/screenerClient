@@ -20,9 +20,7 @@ export class EditQuestionsComponent implements OnInit {
   constructor(private questionControlService: QuestionControlService) { }
 
   ngOnInit() {
-    this.questionControlService.toFormGroup(Observable.of(this.questions))
-      .take(1)
-      .subscribe( form => this.form = form );
+    this.form = this.questionControlService.toFormGroup(this.questions);
   }
 
   addControls(questions) {

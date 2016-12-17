@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { Actions, Effect } from '@ngrx/effects';
 import { Store } from '@ngrx/store';
 import { Question } from '../../../shared/models';
+import { Key } from '../../models/key';
 import { verifyQuestion } from './verify-question';
 import * as fromRoot from '../../reducer';
 import  * as editQuestion from './edit-question.actions';
@@ -20,16 +21,16 @@ export class EditQuestionEffects {
   @Effect() initEditQuestion$ = this.actions$
     .ofType(editQuestion.EditQuestionActionTypes.INIT_EDIT)
     .switchMap( () => this.store.let(fromRoot.findEditQuestion))
-    .map(question => new editQuestion.EditQuestionLoad(question));
+    .map(question => new editQuestion.EditQuestionLoad(<Question>question));
 
   @Effect() findUnusedKeys = this.actions$
     .ofType(editQuestion.EditQuestionActionTypes.INIT_EDIT)
     .switchMap( () => this.store.let(fromRoot.findUnusedKeys))
-    .map(keys => new editQuestion.EditQuestionLoadUnusedKeys(keys));
+    .map(keys => new editQuestion.EditQuestionLoadUnusedKeys(<Key[]>keys));
 
   @Effect() saveQuestion$ = this.actions$
     .ofType(editQuestion.EditQuestionActionTypes.SAVE_QUESTION)
-    .map<Question>(action => action.payload)
+    .map(action => action.payload)
     .switchMap((question: Question) => {
       return Observable.combineLatest(
         verifyQuestion(question),

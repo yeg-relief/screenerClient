@@ -18,6 +18,12 @@ interface State {
   selectedCondition: ProgramCondition;
 }
 
+interface Action {
+  type: string;
+  payload: any;
+}
+
+
 @Component({
   selector: 'app-query-edit',
   templateUrl: './query-edit.component.html',
@@ -39,7 +45,7 @@ export class QueryEditComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.state$ = this.dispatch$()
-      .do(action => console.log(`action.type = ${action.type}, action.payload = ${action.payload}`))
+      .do( (action: Action) => console.log(`action.type = ${action.type}, action.payload = ${action.payload}`))
       .let(reducer)
       .do(state => console.log(state))
       .do(state => {

@@ -19,6 +19,11 @@ import 'rxjs/add/observable/combineLatest';
 import 'rxjs/add/observable/merge';
 import { FormControl, Validators, FormGroup } from '@angular/forms';
 
+interface Action {
+  type: string;
+  payload: any;
+}
+
 @Component({
   templateUrl: './program-edit.component.html',
   styleUrls: ['./program-edit.component.css']
@@ -65,7 +70,7 @@ export class ProgramEditComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.state$ = this.dispatch$()
-      .do(action => console.log(`action.type = ${action.type}, action.payload = ${action.payload}`))
+      .do( (action: Action) => console.log(`action.type = ${action.type}, action.payload = ${action.payload}`))
       .let(reducer)
       .do(state => console.log(state))
       .takeUntil(this.destroy$)

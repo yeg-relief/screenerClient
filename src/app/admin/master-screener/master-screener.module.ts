@@ -8,12 +8,7 @@ import { OverviewControlsComponent } from './overview/controls/controls.componen
 import { KeyComponent } from './overview/key/key.component';
 import { OverviewQuestionComponent } from './overview/question/question.component';
 import { EditComponent } from './edit/edit.component';
-import { MdProgressCircleModule } from '@angular/material';
-import { MdCheckboxModule } from '@angular/material';
-import { MdCardModule } from '@angular/material';
-import { MdButtonModule } from '@angular/material';
-import { MdRadioModule } from '@angular/material';
-import { MdInputModule } from '@angular/material';
+import { MaterialModule } from '@angular/material';
 import { EditGuardService } from './edit/edit-guard.service';
 import { EditControlsComponent } from './edit/controls/controls.component';
 import { EditQuestionsComponent } from './edit/edit-questions/edit-questions.component';
@@ -46,12 +41,7 @@ import { AdminCoreModule } from '../core/admin-core.module';
 @NgModule({
   imports: [
     CommonModule,
-    MdProgressCircleModule.forRoot(),
-    MdCheckboxModule.forRoot(),
-    MdCardModule.forRoot(),
-    MdButtonModule.forRoot(),
-    MdRadioModule.forRoot(),
-    MdInputModule.forRoot(),
+    MaterialModule.forRoot(),
     ReactiveFormsModule,
     UserFacingProgramModule,
     QuestionModule,

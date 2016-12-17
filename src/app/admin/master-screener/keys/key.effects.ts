@@ -11,9 +11,8 @@ export class KeyEffects {
 
   @Effect() initKeys$ = this.actions$
     .ofType(key.KeyActionsTypes.LOAD_KEYS)
-    .switchMap( () => this.data.loadKeys() )
+    .switchMap( () => this.data.getKeys() )
     .map((keys: Key[]) => new key.LoadKeysSuccess(keys));
-
 
   constructor(
     // DataService is provided via the admin module

@@ -19,6 +19,12 @@ import 'rxjs/add/operator/multicast';
 import 'rxjs/add/operator/takeUntil';
 import 'rxjs/add/operator/let';
 
+interface Action {
+  type: string;
+  payload: any;
+}
+
+
 @Component({
   selector: 'app-condition-edit',
   templateUrl: './condition-edit.component.html',
@@ -84,7 +90,7 @@ export class ConditionEditComponent implements OnInit, OnDestroy {
       .multicast(new ReplaySubject(1)).refCount();
 
     this.state$ = this.dispatch$()
-      .do(action => console.log(`action.type = ${action.type}, action.payload = ${action.payload}`))
+      .do( (action: Action) => console.log(`action.type = ${action.type}, action.payload = ${action.payload}`))
       .let(reducer)
       .do(state => console.log(state))
       .takeUntil(this.destroy$)

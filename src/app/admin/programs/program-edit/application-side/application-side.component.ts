@@ -17,6 +17,11 @@ interface State {
   editQuery: ProgramQuery;
 };
 
+interface Action {
+  type: string;
+  payload: any;
+}
+
 
 @Component({
   selector: 'app-application-side',
@@ -42,7 +47,7 @@ export class ApplicationSideComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.state$ = this.dispatch$()
-      .do(action => console.log(`action.type = ${action.type}, action.payload = ${action.payload}`))
+      .do( (action: Action) => console.log(`action.type = ${action.type}, action.payload = ${action.payload}`))
       .let(reducer)
       .do(state => console.log(state))
       .do(state => this.saveQueries.emit(state.queries))
@@ -118,7 +123,7 @@ export class ApplicationSideComponent implements OnInit, OnDestroy {
 }
 
 function reducer(actions: Observable<any>): Observable<State> {
-  return actions.scan( (state, action) => {
+  return actions.scan( (state, action: Action) => {
     switch (action.type) {
       case 'INIT_STATE': {
         return Object.assign({}, {

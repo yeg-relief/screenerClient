@@ -15,19 +15,19 @@ export class ProgramOverviewEffects {
 
   @Effect() updateProgram$ = this.actions$
     .ofType(programOverview.ProgramOverviewActionsTypes.UPDATE_PROGRAM)
-    .map<ApplicationFacingProgram>(action => action.payload)
+    .map(action => action.payload)
     .switchMap(program => this.data.updateProgram(program))
     .map(programs => new programOverview.UpdateProgramSuccess(programs));
 
   @Effect() createProgram$ = this.actions$
     .ofType(programOverview.ProgramOverviewActionsTypes.CREATE_PROGRAM)
-    .map<ApplicationFacingProgram>(action => action.payload)
+    .map(action => action.payload)
     .switchMap(program => this.data.createProgram(program))
     .map(programs => new programOverview.CreateProgramSuccess(programs));
 
   @Effect() deleteProgram$ = this.actions$
     .ofType(programOverview.ProgramOverviewActionsTypes.DELETE_PROGRAM)
-    .map<ApplicationFacingProgram>(action => action.payload)
+    .map(action => action.payload)
     .switchMap(program => this.data.deleteProgram(program))
     .map(programs => new programOverview.DeleteProgramSuccess(programs));
 

@@ -14,13 +14,13 @@ export class EditScreenerEffects {
 
   @Effect() initEdit$ = this.actions$
     .ofType(editScreener.EditScreenerActionsTypes.INIT_EDIT)
-    .map<number>(action => action.payload)
+    .map(action => action.payload)
     .switchMap( (version: number) => this.data.loadScreener(version))
     .map((screener: MasterScreener) => new editScreener.LoadScreener(screener));
 
   @Effect() saveScreener$ = this.actions$
     .ofType(editScreener.EditScreenerActionsTypes.SAVE_SCREENER)
-    .map<MasterScreener>(action => action.payload)
+    .map(action => action.payload)
     .switchMap(masterScreener => this.data.saveScreener(masterScreener))
     .map(() => new editScreener.SaveScreenerSuccess({}));
 

@@ -15,7 +15,7 @@ export class KeyRouteGuard implements CanActivate {
 
   canActivate(): boolean {
     this.store.dispatch(new keysActions._LoadKeys({}));
-    this.service.loadKeys()
+    this.service.getKeys()
       .do(keys => this.store.dispatch(new keysActions._LoadKeysSuccess(keys)))
       .take(1)
       .subscribe();

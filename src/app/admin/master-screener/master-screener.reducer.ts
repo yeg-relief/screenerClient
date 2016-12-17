@@ -31,6 +31,7 @@ export const initialState: State = {
   versions: [],
   workingVersion: undefined,
   masterScreener: {
+    version: undefined,
     questions: [],
     meta: {
       questions: {
@@ -123,7 +124,7 @@ export function getCreatedDate(state$: Observable<State>) {
 
 export function getKeys(state$: Observable<State>) {
   return state$.select(s => s.masterScreener.questions)
-    .switchMap<Key[]>( (questions: Question[]) => {
+    .switchMap( (questions: Question[]) => {
       const keys: Key[] = questions.reduce( (acc: Key[], curr: Question) => {
         // push the question key doesn't matter if expandable or not
         acc.push({name: curr.key, type: curr.type});
@@ -138,8 +139,10 @@ export function getKeys(state$: Observable<State>) {
 }
 
 export function getFlattenedQuestions(state$: Observable<State>) {
-  return state$.select(s => s.masterScreener.questions)
-    .switchMap<Question[]>( (questions: Question[]) => {
+  return state$.do(s => console.log(s)).select(s => s.masterScreener.questions)
+    .switchMap( (questions: Question[]) => {
+      console.log('FLATTENED QUESTIONS');
+      console.log(questions);
       const q: Question[] = questions.reduce( (acc: Question[], curr: Question) => {
         acc.push(curr);
         if (!curr.expandable) {
