@@ -28,7 +28,6 @@ import { MdButtonModule } from '@angular/material';
     MasterScreenerComponent
   ],
   providers: [ 
-    MasterScreenerService, 
     QuestionsResolverService
   ]
 })

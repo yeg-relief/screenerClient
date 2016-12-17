@@ -9,6 +9,7 @@ import { AboutComponent } from './user/about/about.component';
 import { MasterScreenerModule } from './user/master-screener/master-screener.module';
 import { BrowseModule } from './user/browse/browse.module';
 import { HomeComponent } from './user/home/home.component';
+import { MasterScreenerService } from './user/master-screener/master-screener.service';
 
 
 @NgModule({
@@ -26,7 +27,7 @@ import { HomeComponent } from './user/home/home.component';
     routing,
     MaterialModule.forRoot()
   ],
-  providers: [ ],
+  providers: [MasterScreenerService ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

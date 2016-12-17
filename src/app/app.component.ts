@@ -1,4 +1,5 @@
 import { Component, ViewEncapsulation } from '@angular/core';
+import { MasterScreenerService } from './user/master-screener/master-screener.service';
 @Component({
   selector: 'app-root',
   template: `
@@ -14,5 +15,6 @@ import { Component, ViewEncapsulation } from '@angular/core';
     `
   ],
   encapsulation: ViewEncapsulation.None,
+  providers: [MasterScreenerService]
 })
 export class AppComponent {}

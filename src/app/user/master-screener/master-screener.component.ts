@@ -1,13 +1,11 @@
 import { Component, OnInit } from '@angular/core';
-import { MasterScreenerService } from './master-screener.service';
+
 @Component({
   selector: `app-master-screener`,
   template: 
   `
     <router-outlet></router-outlet>
   `,
-  providers: [ MasterScreenerService]
+  providers: []
 })
-export class MasterScreenerComponent{ 
-  constructor(private masterScreenerService: MasterScreenerService) {}
-}
+export class MasterScreenerComponent{ }
