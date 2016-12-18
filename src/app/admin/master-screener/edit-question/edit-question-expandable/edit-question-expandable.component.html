@@ -48,14 +48,14 @@
           </tr>
         </thead>
         <tbody>
-          <tr *ngFor="let question of conditionalQuestions">
+          <tr *ngFor="let question of conditionalQuestions;let i = index">
             <td>{{ question.key }}</td>
             <td>{{ question.controlType }}</td>
             <td>{{ question.label }}</td>
             <td>
               <button md-mini-fab 
                 color="primary"
-                (click)="deleteConditional(question)">
+                (click)="deleteConditional(question, i)">
                 <i class="material-icons">clear</i>
               </button>
             </td>

@@ -12,7 +12,7 @@ import { EditQuestionResolverService } from './edit-question/edit-question-resol
 
 export const MasterScreenerRoutes = [
   {
-    path: 'master-screener/question/edit/:key', 
+    path: 'master-screener/question/edit/:version/:key', 
     component: EditQuestionComponent, 
     //canActivate: [EditQuestionGuardService],
     resolve: {
@@ -20,6 +20,6 @@ export const MasterScreenerRoutes = [
     }
   },
   {
-    path: 'master-screener/question/edit/conditionals/:key', component: EditConditionalComponent, canActivate: [ConditionalGuardService]
+    path: 'master-screener/question/edit/conditionals/:version/:key', component: EditConditionalComponent, canActivate: [ConditionalGuardService]
   }
 ];

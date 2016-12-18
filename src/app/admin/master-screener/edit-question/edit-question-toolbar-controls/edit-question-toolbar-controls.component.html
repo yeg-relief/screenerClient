@@ -2,28 +2,16 @@
   <button 
     md-mini-fab 
     color="primary"
-    (click)="handleSave()"
-    *ngIf="!checkIfUndefined(workingEditVersion$ | async) && (unsavedEdits$ | async)">
+    (click)="handleSave()">
     <i class="material-icons">save</i>
   </button>
   <div class="px2 flex-none"></div>
   <button 
     md-mini-fab 
     color="warn"
-    routerLink="/admin/master-screener/edit/version/{{workingEditVersion$ | async}}">
+    routerLink="/admin/master-screener/edit/version/{{workingEditVersion}}">
     <i class="material-icons">clear</i>
   </button>
   <div class="px2 flex-none"></div>
-  <button md-mini-fab 
-     color="primary" 
-    (click)="handleUndo()">
-    <i class="material-icons">undo</i>
-  </button>
-  <div class="px2 flex-none"></div>
-  <button md-mini-fab 
-    color="primary"
-    (click)="handleRedo()">
-    <i class="material-icons">redo</i>
-  </button>
   <div class="col-1 flex-grow"></div>
 </div>

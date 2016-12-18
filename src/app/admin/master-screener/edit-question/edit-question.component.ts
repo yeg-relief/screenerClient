@@ -4,6 +4,7 @@ import { Store } from '@ngrx/store';
 import * as fromRoot from '../../reducer';
 import * as fromEditQuestion from './edit-question.actions';
 import { Observable } from 'rxjs/Observable';
+import { ReplaySubject } from 'rxjs/ReplaySubject';
 import 'rxjs/add/observable/combineLatest';
 import { Subscription } from 'rxjs/Subscription';
 import { Question } from '../../../shared/models';
@@ -12,6 +13,8 @@ import 'rxjs/add/operator/take';
 import 'rxjs/add/observable/combineLatest';
 import 'rxjs/add/operator/do';
 import 'rxjs/add/operator/map';
+import 'rxjs/add/operator/multicast';
+import { DataService } from '../../data.service';
 
 @Component({
   selector: 'app-edit-question',
@@ -19,7 +22,8 @@ import 'rxjs/add/operator/map';
   styleUrls: ['./edit-question.component.css']
 })
 export class EditQuestionComponent implements OnInit, OnDestroy {
-  editQuestion$: Observable<{question: Question, unusedKeys: Key[]}>;
+  editQuestion$: Observable<Question>;
+  availableKeys$: Observable<Key[]>;
   originalEditQuestionKey$: Observable<string>;
   showKeys = true;
   showControlType = true;
@@ -27,33 +31,57 @@ export class EditQuestionComponent implements OnInit, OnDestroy {
   showExpand = true;
   showLabel = true;
   showErrors = true;
-  savedQuestion: Subscription;
-  constructor(private store: Store<fromRoot.State>, private router: Router, private route: ActivatedRoute) { }
+  constructor(
+    private store: Store<fromRoot.State>,
+    private router: Router,
+    private route: ActivatedRoute,
+    private dataService: DataService
+  ) { }
 
   ngOnInit() {
-    this.route.data
-      .do( (data) => this.store.dispatch(new fromEditQuestion.EditQuestionLoad(data['question'])))
-      .subscribe();
+    const data$ = this.route.data
+      .map(data => data['question'])
+      .do(thing => console.log(thing))
+      .multicast(new ReplaySubject(1)).refCount();
 
 
-    this.editQuestion$ = this.store.let(fromRoot.getPresentQuestionEdit);
-    this.originalEditQuestionKey$ = this.store.let(fromRoot.getOriginalKeyQuestionEdit).take(1);
-    this.savedQuestion = Observable.combineLatest(
-        this.store.let(fromRoot.questionSaved),
-        this.store.let(fromRoot.getWorkingNumber).take(1)
-    )
-      .subscribe(([saved, currentVersion]) => {
-        if (saved) {
-          this.router.navigateByUrl(`/admin/master-screener/edit/version/${currentVersion}`);
-        }
-      });
+    this.editQuestion$ = data$;
+    this.originalEditQuestionKey$ = data$.map(question => question.key).take(1);
+    this.availableKeys$ = this.findUnusedKeys();
   }
 
   ngOnDestroy() {
-    if (!this.savedQuestion.closed) {
-      this.savedQuestion.unsubscribe();
-    }
   }
+
+  findUnusedKeys() {
+    const version = +this.route.snapshot.params['version'];
+
+    return Observable.combineLatest<Question[], Key[]>(
+      this.dataService.loadScreener(version).map(screener => screener.questions),
+      this.dataService.getKeys()
+    )
+      .map(([questions, keys]) => {
+        const usedKeyNames: string[] = [];
+        questions.forEach(question => {
+          usedKeyNames.push(question.key);
+          if (question.expandable) {
+            question.conditonalQuestions.forEach(conditionalQuestion => {
+              usedKeyNames.push(conditionalQuestion.key);
+            });
+          }
+        });
+        const unusedKeys: Key[] = keys.reduce((acc: Key[], present: Key) => {
+          const presentIndex = usedKeyNames.findIndex(keyName => keyName === present.name);
+          if (presentIndex < 0) {
+            acc = acc.concat(present);
+          }
+          return acc;
+        }, []);
+        return unusedKeys;
+      })
+      .multicast( new ReplaySubject(1)).refCount();
+  }
+
 
   keyToggle($event) {
     this.showKeys = $event;

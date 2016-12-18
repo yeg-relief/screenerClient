@@ -1,7 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
-import { Store } from '@ngrx/store';
-import * as fromRoot from '../../../reducer';
-import * as editQuestion from '../edit-question.actions';
+import { Component, Input } from '@angular/core';
 import { Question } from '../../../../shared/models';
 
 @Component({
@@ -9,24 +6,19 @@ import { Question } from '../../../../shared/models';
   templateUrl: './edit-question-expandable.component.html',
   styleUrls: ['./edit-question-expandable.component.css']
 })
-export class EditQuestionExpandableComponent implements OnInit {
+export class EditQuestionExpandableComponent {
   @Input() expandable: boolean;
   @Input() controlType: string;
   @Input() questionType: string;
   @Input() questionKey: string;
   @Input() conditionalQuestions: Question[];
 
-  constructor(private store: Store<fromRoot.State>) { }
-
-  ngOnInit() {
-  }
-
   checkboxChange(value) {
-    this.store.dispatch(new editQuestion.EditQuestionChangeExpand(value));
+    this.expandable = value;
   }
 
-  deleteConditional(question: Question) {
-    this.store.dispatch(new editQuestion.RemoveConditional(question));
+  deleteConditional(question: Question, index: number) {
+    this.conditionalQuestions.splice(index, 1);
   }
 
 }

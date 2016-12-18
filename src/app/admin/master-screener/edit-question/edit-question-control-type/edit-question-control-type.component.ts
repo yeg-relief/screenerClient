@@ -1,7 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
-import { Store } from '@ngrx/store';
-import * as fromRoot from '../../../reducer';
-import * as editQuestion from '../edit-question.actions';
+import { Component, Input } from '@angular/core';
 import { QuestionOption } from '../../../../shared/models';
 
 @Component({
@@ -9,9 +6,9 @@ import { QuestionOption } from '../../../../shared/models';
   templateUrl: './edit-question-control-type.component.html',
   styleUrls: ['./edit-question-control-type.component.css']
 })
-export class EditQuestionControlTypeComponent implements OnInit {
+export class EditQuestionControlTypeComponent {
   @Input() controlType: string;
-  @Input() questionOptions: QuestionOption;
+  @Input() questionOptions: QuestionOption[];
   private options = [
     {display: 'button', value: 'radio'},
     {display: 'text', value: 'input'},
@@ -20,14 +17,10 @@ export class EditQuestionControlTypeComponent implements OnInit {
   // are in their own component
   private optionDisplay = '';
   private optionValue = '';
-  constructor(private store: Store<fromRoot.State>) { }
-
-  ngOnInit() {
-  }
 
   dispatchChange(newValue) {
     if (newValue !== this.controlType) {
-      this.store.dispatch(new editQuestion.EditQuestionChangeControl(newValue));
+      this.controlType = newValue;
       if (newValue !== 'radio') {
         this.optionDisplay = '';
         this.optionValue = '';
@@ -48,14 +41,19 @@ export class EditQuestionControlTypeComponent implements OnInit {
       value: this.optionValue,
       display: this.optionDisplay
     };
-    if (newOption.value !== '' && newOption.display !== '') {
-      this.store.dispatch(new editQuestion.AddOption(newOption));
+    const checkForBlank = () => newOption.value !== '' && newOption.display !== '';
+    const findDuplicate = (option) => option.value === newOption.value || option.display === newOption.display;
+    
+    if (checkForBlank() && this.questionOptions.findIndex(findDuplicate) === -1) {
+      this.questionOptions.push(newOption)
       this.optionDisplay = '';
       this.optionValue = '';
     }
   }
 
-  removeOption(option: QuestionOption) {
-    this.store.dispatch(new editQuestion.RemoveOption(option));
+  removeOption(index: number) {
+    if(index > -1){
+      this.questionOptions.splice(index, 1);
+    }
   }
 }

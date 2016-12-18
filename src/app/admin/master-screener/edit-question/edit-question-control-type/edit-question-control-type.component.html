@@ -63,13 +63,13 @@
         </tr>
       </thead>
       <tbody>
-        <tr *ngFor="let option of questionOptions">
+        <tr *ngFor="let option of questionOptions; let i = index">
           <td>{{ option.value }}</td>
           <td>{{ option.display }}</td>
           <td> 
             <button md-mini-fab 
               color="primary"
-              (click)="removeOption(option)">
+              (click)="removeOption(i)">
               <i class="material-icons">clear</i>
             </button>
           </td>

@@ -33,7 +33,7 @@ export class DataService {
           console.error('multiple http calls from DataService.loadKeys() being made!!');
         }
       })
-      .map(res => res.json().response)
+      .map(res => res.json().keys)
       .multicast(new ReplaySubject(1)).refCount()
       .catch(this.loadError);
   }
@@ -55,6 +55,7 @@ export class DataService {
 
   loadScreener(version: number): Observable<MasterScreener> {
     return this.screeners$
+      .do(() => console.log(`loadScreener(${version}) called`))
       .switchMap(x => x)
       .filter((screener: MasterScreener) => screener.version === version)
   }
@@ -88,7 +89,7 @@ export class DataService {
   }
 
   getKeys(): Observable<Key[]> {
-    return this.keys$;
+    return this.keys$.do(thing => console.log(thing));
   }
 
   saveScreener(screener: MasterScreener) {
