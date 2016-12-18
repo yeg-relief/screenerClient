@@ -53,7 +53,7 @@ export class EditQuestionToolbarControlsComponent implements OnInit {
 
   checkIfUndefined(value: any) {
     if (typeof value === 'undefined') {
-      this.router.navigateByUrl('/admin/master-screener/overview');
+      //this.router.navigateByUrl('/admin/master-screener/overview');
     }
   }
 }

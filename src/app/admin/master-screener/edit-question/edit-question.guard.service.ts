@@ -14,6 +14,8 @@ export class EditQuestionGuardService implements CanActivate {
   constructor(private store: Store<fromRoot.State>) {}
 
   canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): boolean {
+    console.log('in EDIT canActivate');
+
     const splitUrl = state.url.split('/');
     // the version number
     const last = splitUrl.length - 1;

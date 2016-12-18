@@ -46,35 +46,28 @@ export function reducer(state = initialState, action: EditScreenerActions): Stat
     }
 
     case EditScreenerActionsTypes.LOAD_SCREENER: {
-      console.log('IN EDIT SCREENER REDUCER');
-      console.log(action.type);
-      console.log(action.payload);
       const newScreener = <MasterScreener>action.payload;
       const x = Object.assign({}, state, {
         past: [],
-        present: newScreener,
+        present: cloneDeep(newScreener),
         future: []
       });
-      console.log(x);
       return x;
     };
 
     case EditScreenerActionsTypes.SAVE_SCREENER: {
-      console.log('save screener called');
       return Object.assign({}, state, {
         saving: true
       });
     };
 
     case EditScreenerActionsTypes.SAVE_SUCCESS: {
-      console.log('save screener success called');
       return Object.assign({}, state, {
         saving: false
       });
     }
 
     case EditScreenerActionsTypes.ADD_QUESTION: {
-      console.log('ADD_QUESTION CALLED');
       const addedQuestion = <Question>action.payload;
       const present = <MasterScreener>cloneDeep(state.present);
       present.questions = present.questions.concat(addedQuestion);

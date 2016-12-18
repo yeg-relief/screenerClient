@@ -1,7 +1,8 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { Router } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
 import { Store } from '@ngrx/store';
 import * as fromRoot from '../../reducer';
+import * as fromEditQuestion from './edit-question.actions';
 import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/observable/combineLatest';
 import { Subscription } from 'rxjs/Subscription';
@@ -9,6 +10,8 @@ import { Question } from '../../../shared/models';
 import { Key } from '../../models/key';
 import 'rxjs/add/operator/take';
 import 'rxjs/add/observable/combineLatest';
+import 'rxjs/add/operator/do';
+import 'rxjs/add/operator/map';
 
 @Component({
   selector: 'app-edit-question',
@@ -25,9 +28,14 @@ export class EditQuestionComponent implements OnInit, OnDestroy {
   showLabel = true;
   showErrors = true;
   savedQuestion: Subscription;
-  constructor(private store: Store<fromRoot.State>, private router: Router) { }
+  constructor(private store: Store<fromRoot.State>, private router: Router, private route: ActivatedRoute) { }
 
   ngOnInit() {
+    this.route.data
+      .do( (data) => this.store.dispatch(new fromEditQuestion.EditQuestionLoad(data['question'])))
+      .subscribe();
+
+
     this.editQuestion$ = this.store.let(fromRoot.getPresentQuestionEdit);
     this.originalEditQuestionKey$ = this.store.let(fromRoot.getOriginalKeyQuestionEdit).take(1);
     this.savedQuestion = Observable.combineLatest(
@@ -42,7 +50,9 @@ export class EditQuestionComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
-    this.savedQuestion.unsubscribe();
+    if (!this.savedQuestion.closed) {
+      this.savedQuestion.unsubscribe();
+    }
   }
 
   keyToggle($event) {

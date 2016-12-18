@@ -3,8 +3,12 @@
     <div class="col-1"></div>
     <select class="rounded" 
       *ngIf="!checkForUndefined()"
-      [attr.disabled]="loading ? true : null" 
-      (change)="selectChange($event.target.value)">
+      (change)="selectChange($event.target.value)"
+      [attr.disabled]="true">
+        <option [attr.selected]="true" [attr.disabled]="true">
+          disabled
+        </option>
+        <!--
         <option disabled
           [attr.disabled]="loading ? true : null"
           *ngFor="let version of versions"
@@ -12,6 +16,7 @@
           [value]="version">
             version {{version}}
         </option>
+        -->
     </select>
     <div class="col-1"></div>
   </div>

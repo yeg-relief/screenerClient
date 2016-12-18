@@ -28,7 +28,6 @@ export class OverviewComponent implements OnInit, OnDestroy {
   questionCount$: Observable<number>;
   // flattened array of all questions in screener
   questions$: Observable<Question[]>;
-
   subscription: Subscription;
   constructor(private store: Store<fromRoot.State>, private route: ActivatedRoute) { }
 
@@ -45,6 +44,7 @@ export class OverviewComponent implements OnInit, OnDestroy {
     this.questions$ = this.store.let(fromRoot.flattenedQuestions);
     this.questionCount$ = this.store.let(fromRoot.getWorkingQuestionCount);
     this.creationDate$ = this.store.let(fromRoot.getWorkingCreationDate);
+    // add error catching etc
     this.subscription = this.route.data
       .do(data => this.store.dispatch(new masterScreener.ChangeScreenerVersion(data['masterScreener'])))
       .subscribe();

@@ -52,24 +52,30 @@ export const initialState: State = {
 
 export function reducer(state = initialState, action: EditQuestionActions): State {
   switch (action.type) {
-
     case EditQuestionActionTypes.INIT_EDIT: {
+      console.log(action.type);
+      console.log(action.payload);
+      
       const keys = action.payload;
       // editing multiple questions sequentially means state has to be reset upon editing a new question
       // unsure if clone is needed
       const newState: State = cloneDeep(initialState);
       newState.originalQuestionKey = keys.originalQuestionKey;
       newState.expandableQuestionKey = keys.expandableQuestionKey;
+      //console.log(newState);
       return newState;
     }
 
     case EditQuestionActionTypes.LOAD_QUESTION: {
+      console.log(action.type);
+      console.log(action.payload);
       const questionToEdit = <Question>cloneDeep(action.payload);
       const newState: State = cloneDeep(state);
       newState.present.question = questionToEdit;
       if (newState.present.question.key !== 'empty') {
         newState.present.errors = [];
       }
+      //console.log(newState);
       return newState;
     }
 

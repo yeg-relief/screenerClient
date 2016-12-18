@@ -7,7 +7,7 @@ import { LoginComponent } from './core/login/login.component';
 import { MasterScreenerComponent } from './master-screener/master-screener.component';
 import { OverviewComponent } from './master-screener/overview/overview.component';
 import { EditComponent } from './master-screener/edit/edit.component';
-//import { MasterScreenerGuardService } from './master-screener/master-screener.guard.service';
+import { EditResolveService } from './master-screener/edit/edit-resolve.service';
 import { MasterScreenerResolverService } from './master-screener/master-screener-resolver.service';
 import { EditGuardService } from './master-screener/edit/edit-guard.service';
 import { MasterScreenerRoutes } from './master-screener/master-screener.routes';
@@ -43,7 +43,11 @@ export const routing: ModuleWithProviders = RouterModule.forChild([
               }
             },
             {
-              path: 'edit/version/:id', component: EditComponent, canActivate: [EditGuardService]
+              path: 'edit/version/:version', 
+              component: EditComponent, 
+              resolve: {
+                screener: EditResolveService
+              }
             },
             {
               path: '', pathMatch: 'full', redirectTo: 'overview',

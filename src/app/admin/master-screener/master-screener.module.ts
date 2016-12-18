@@ -37,7 +37,7 @@ import { EditConditionalDisplayControlsComponent }
 import { EditConditionalToolbarControlsComponent }
   from './edit-conditional/edit-conditional-toolbar-controls/edit-conditional-toolbar-controls.component';
 import { AdminCoreModule } from '../core/admin-core.module';
-
+//import { EditResolveService } from './edit/edit-resolve.service';
 
 @NgModule({
   imports: [
@@ -77,7 +77,8 @@ import { AdminCoreModule } from '../core/admin-core.module';
     EditGuardService,
     EditQuestionGuardService,
     ConditionalGuardService,
-    MasterScreenerResolverService
+    //MasterScreenerResolverService,
+    //EditResolveService
   ]
 })
 export class MasterScreenerModule { }

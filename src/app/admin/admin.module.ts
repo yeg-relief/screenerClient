@@ -23,7 +23,8 @@ import { KeysModule } from './keys/keys.module';
 import { HttpModule } from '@angular/http';
 
 import { MasterScreenerResolverService } from './master-screener/master-screener-resolver.service';
-
+import { EditResolveService } from './master-screener/edit/edit-resolve.service';
+import { EditQuestionResolverService } from './master-screener/edit-question/edit-question-resolver.service';
 
 @NgModule({
   imports: [
@@ -31,8 +32,8 @@ import { MasterScreenerResolverService } from './master-screener/master-screener
     routing,
     MaterialModule.forRoot(),
     StoreModule.provideStore(reducer),
-    EffectsModule.run(EditScreenerEffects),
-    EffectsModule.run(EditQuestionEffects),
+    //EffectsModule.run(EditScreenerEffects),
+    //EffectsModule.run(EditQuestionEffects),
     EffectsModule.run(KeyEffects),
     EffectsModule.run(ProgramOverviewEffects),
     EffectsModule.run(ProgramEditEffects),
@@ -45,6 +46,14 @@ import { MasterScreenerResolverService } from './master-screener/master-screener
   declarations: [
     AdminComponent,
   ],
-  providers: [AuthGuardService, AuthService, DataService, HttpModule, MasterScreenerResolverService]
+  providers: [
+    AuthGuardService, 
+    AuthService, 
+    DataService, 
+    HttpModule, 
+    MasterScreenerResolverService,
+    EditResolveService,
+    EditQuestionResolverService
+  ]
 })
 export class AdminModule { }

@@ -52,7 +52,7 @@ export class OverviewControlsComponent implements OnInit, OnDestroy {
     if (typeof this.selectedVersion === 'undefined') {
       return;
     }
-    this.router.navigateByUrl('/admin/master-screener/edit/version/' + this.selectedVersion);
+    this.router.navigateByUrl(`/admin/master-screener/edit/version/${this.selectedVersion}`);
   }
 
   checkForUndefined() {

@@ -6,7 +6,7 @@ import {
 } from '@angular/router';
 import { Store } from '@ngrx/store';
 import * as fromRoot from '../../reducer';
-import * as editScreener  from './edit.actions';
+import * as editScreener from './edit.actions';
 import * as keys from '../keys/key.actions';
 import 'rxjs/add/operator/take';
 import 'rxjs/add/operator/do';
@@ -14,7 +14,7 @@ import 'rxjs/add/operator/do';
 @Injectable()
 export class EditGuardService implements CanActivate {
 
-  constructor(private store: Store<fromRoot.State>) {}
+  constructor(private store: Store<fromRoot.State>) { }
 
   canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): boolean {
     const splitUrl = state.url.split('/');
@@ -25,10 +25,8 @@ export class EditGuardService implements CanActivate {
 
   loadScreener(version: number): boolean {
     this.store.let(fromRoot.getCurrentEditWorkingVersion)
-    .do(() => console.log('IN EDIT GUARD'))
-    .take(1)
-    .do( thing => console.log(thing))
-    .subscribe(
+      .take(1)
+      .subscribe(
       (workingVersion: number) => {
         if (workingVersion !== version) {
           this.store.dispatch(new editScreener.InitEdit(version));
@@ -36,7 +34,7 @@ export class EditGuardService implements CanActivate {
         }
       },
       (error) => console.log(`error retrieving working edit version from state: ${error}`)
-    );
+      );
     return true;
   }
 }
