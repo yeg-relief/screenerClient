@@ -33,7 +33,7 @@ import { EditQuestionResolverService } from './master-screener/edit-question/edi
     MaterialModule.forRoot(),
     StoreModule.provideStore(reducer),
     //EffectsModule.run(EditScreenerEffects),
-    //EffectsModule.run(EditQuestionEffects),
+    EffectsModule.run(EditQuestionEffects),
     EffectsModule.run(KeyEffects),
     EffectsModule.run(ProgramOverviewEffects),
     EffectsModule.run(ProgramEditEffects),

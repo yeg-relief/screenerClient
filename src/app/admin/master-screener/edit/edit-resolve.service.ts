@@ -17,13 +17,8 @@ export class EditResolveService {
   ) { }
 
   resolve(route: ActivatedRouteSnapshot) {
-    console.log('EDIT RESOLVE CALLED');
     const version = +route.params['version'];
     return this.data.loadScreener(version)
-            .do( () => this.store.dispatch(new fromEdit.InitEdit(version)))
-            .do(screener => this.store.dispatch(new fromEdit.LoadScreener(screener)))
-            .switchMap(() => this.store.let(fromRoot.getPresentEditScreener))
-            .take(1)
-            .toPromise();
+            .take(1);
   }
 }

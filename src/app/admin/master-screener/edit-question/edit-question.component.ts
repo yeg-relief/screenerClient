@@ -31,6 +31,8 @@ export class EditQuestionComponent implements OnInit, OnDestroy {
   showExpand = true;
   showLabel = true;
   showErrors = true;
+
+  subscription: Subscription
   constructor(
     private store: Store<fromRoot.State>,
     private router: Router,
@@ -39,49 +41,34 @@ export class EditQuestionComponent implements OnInit, OnDestroy {
   ) { }
 
   ngOnInit() {
-    const data$ = this.route.data
+    this.subscription = this.route.data
       .map(data => data['question'])
-      .do(thing => console.log(thing))
+      .subscribe(question => {
+        this.store.dispatch(new fromEditQuestion.EditQuestionInit({
+          originalQuestionKey: question.key,
+          expandableQuestionKey: ''
+        }));
+      });
+
+
+    console.log('IN EDIT QUESTION COMPONENT')
+    console.log('========================')
+    this.store.select(s => s.editScreener).subscribe(screener => console.log(screener));
+    console.log('======================')
+
+    this.editQuestion$ = this.store.let(fromRoot.getPresentQuestionEdit)
+      .map(val => val.question)
       .multicast(new ReplaySubject(1)).refCount();
-
-
-    this.editQuestion$ = data$;
-    this.originalEditQuestionKey$ = data$.map(question => question.key).take(1);
-    this.availableKeys$ = this.findUnusedKeys();
+    this.originalEditQuestionKey$ = this.store.let(fromRoot.getOriginalKeyQuestionEdit);
+    this.availableKeys$ = this.store.let(fromRoot.getPresentQuestionEdit)
+      .map(val => val.unusedKeys);
   }
 
   ngOnDestroy() {
+    if (!this.subscription.closed){
+      this.subscription.unsubscribe();
+    }
   }
-
-  findUnusedKeys() {
-    const version = +this.route.snapshot.params['version'];
-
-    return Observable.combineLatest<Question[], Key[]>(
-      this.dataService.loadScreener(version).map(screener => screener.questions),
-      this.dataService.getKeys()
-    )
-      .map(([questions, keys]) => {
-        const usedKeyNames: string[] = [];
-        questions.forEach(question => {
-          usedKeyNames.push(question.key);
-          if (question.expandable) {
-            question.conditonalQuestions.forEach(conditionalQuestion => {
-              usedKeyNames.push(conditionalQuestion.key);
-            });
-          }
-        });
-        const unusedKeys: Key[] = keys.reduce((acc: Key[], present: Key) => {
-          const presentIndex = usedKeyNames.findIndex(keyName => keyName === present.name);
-          if (presentIndex < 0) {
-            acc = acc.concat(present);
-          }
-          return acc;
-        }, []);
-        return unusedKeys;
-      })
-      .multicast( new ReplaySubject(1)).refCount();
-  }
-
 
   keyToggle($event) {
     this.showKeys = $event;

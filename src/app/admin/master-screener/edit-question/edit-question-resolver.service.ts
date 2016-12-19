@@ -26,6 +26,7 @@ export class EditQuestionResolverService {
   resolve(route: ActivatedRouteSnapshot) {
     const keyParam = route.params['key'];
     const versionParam = +route.params['version'];
+    console.log(versionParam);
     if (keyParam === 'new') {
       return this.newQuestion();
     }

@@ -1,6 +1,8 @@
 import { Component, Input } from '@angular/core';
 import { Key } from '../../../models/key';
-
+import { Store } from '@ngrx/store';
+import * as fromRoot from '../../../reducer';
+import * as fromEditQuestion from '../edit-question.actions';
 
 @Component({
   selector: 'app-edit-question-key',
@@ -10,8 +12,10 @@ import { Key } from '../../../models/key';
 export class EditQuestionKeyComponent {
   @Input() unusedKeys: Key[];
   @Input() currentKey: string;
+  constructor(private store: Store<fromRoot.State>) { }
 
   selectChange(value) {
+    this.store.dispatch(new fromEditQuestion.EditQuestionChangeKey(value));
     this.currentKey = value;
   }
 

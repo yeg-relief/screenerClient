@@ -1,6 +1,6 @@
 <div class="flex flex-column">
   <button md-mini-fab 
-    routerLink="/admin/master-screener/question/edit/{{version}}/{{question.key}}"
+    routerLink="/admin/master-screener/edit/version/{{version}}/question/{{question.key}}"
     color="primary">
     <i class="material-icons">create</i>
   </button>
@@ -11,7 +11,7 @@
   <div *ngIf="question.expandable">
     <div class="py1"></div>
     <button md-mini-fab color="primary"
-      routerLink="/admin/master-screener/question/edit/conditionals/{{question.key}}">
+      routerLink="/admin/master-screener/edit/version/{{version}}/conditionals/question/{{question.key}}">
       <i class="material-icons">add</i>
     </button>
   </div>

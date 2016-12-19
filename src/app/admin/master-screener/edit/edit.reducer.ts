@@ -2,7 +2,7 @@ import '@ngrx/core/add/operator/select';
 import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/startWith';
 import { Observable } from 'rxjs/Observable';
-import {EditScreenerActions, EditScreenerActionsTypes} from './edit.actions';
+import { EditScreenerActions, EditScreenerActionsTypes } from './edit.actions';
 import { MasterScreener } from '../../models/master-screener';
 import { Question } from '../../../shared/models';
 import { cloneDeep } from 'lodash';
@@ -40,19 +40,24 @@ export function reducer(state = initialState, action: EditScreenerActions): Stat
 
     case EditScreenerActionsTypes.INIT_EDIT: {
       const workingVersion = <number>action.payload;
-      return Object.assign({}, state, {
-        workingVersion: workingVersion
-      });
+      if (state.workingVersion === undefined || workingVersion !== state.workingVersion) {
+        return Object.assign({}, state, {
+          workingVersion: workingVersion
+        });
+      }
+      return state;
     }
 
     case EditScreenerActionsTypes.LOAD_SCREENER: {
       const newScreener = <MasterScreener>action.payload;
-      const x = Object.assign({}, state, {
-        past: [],
-        present: cloneDeep(newScreener),
-        future: []
-      });
-      return x;
+      if (state.present.version === undefined || state.present.version !== newScreener.version) {
+        return Object.assign({}, state, {
+          past: [],
+          present: cloneDeep(newScreener),
+          future: []
+        });
+      }
+      return state;
     };
 
     case EditScreenerActionsTypes.SAVE_SCREENER: {
@@ -85,7 +90,7 @@ export function reducer(state = initialState, action: EditScreenerActions): Stat
       const index = present.questions.findIndex(stateQuestion => {
         return stateQuestion.key === removedQuestion.key;
       });
-      if (typeof index === 'undefined') {
+      if (index < 0) {
         return state;
       }
       present.questions.splice(index, 1);
@@ -136,7 +141,7 @@ export function reducer(state = initialState, action: EditScreenerActions): Stat
         return stateQuestion.key === questionB.key;
       });
 
-      if (typeof indexA === 'undefined' || typeof indexB === 'undefined') {
+      if (indexA < 0 || indexB < 0) {
         return state;
       }
       present.questions.splice(indexA, 1, questionB);
@@ -193,12 +198,12 @@ export function reducer(state = initialState, action: EditScreenerActions): Stat
       };
 
       const expandableQuestionIndex = state.present.questions.findIndex(findFnc);
-      if (expandableQuestionIndex < 0 ) {
+      if (expandableQuestionIndex < 0) {
         return state;
       }
       const newState = cloneDeep(state);
       const newPresent = cloneDeep(state.present);
-      const newPast = [ state.present, ...state.past];
+      const newPast = [state.present, ...state.past];
       const expandableQuestion = newPresent.questions[expandableQuestionIndex];
       expandableQuestion.conditonalQuestions.push(conditionalQuestion);
       newState.present = newPresent;
