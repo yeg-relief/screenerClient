@@ -26,7 +26,10 @@ export class EditQuestionEffects {
   @Effect() findUnusedKeys = this.actions$
     .ofType(editQuestion.EditQuestionActionTypes.INIT_EDIT)
     .switchMap( () => this.store.let(fromRoot.findUnusedKeys))
-    .map(keys => new editQuestion.EditQuestionLoadUnusedKeys(<Key[]>keys));
+    .do(() => console.log('findUnsedKeys @Effect EditQuestionEffects'))
+    .do(keys => console.log(keys))
+    .do(() => console.log('============================'))
+    .map(keys => new editQuestion.EditQuestionLoadUnusedKeys(<Key[]>keys))
 
   @Effect() saveQuestion$ = this.actions$
     .ofType(editQuestion.EditQuestionActionTypes.SAVE_QUESTION)

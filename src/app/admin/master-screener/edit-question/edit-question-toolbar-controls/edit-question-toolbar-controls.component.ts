@@ -14,7 +14,9 @@ import 'rxjs/add/operator/take';
 export class EditQuestionToolbarControlsComponent implements OnInit, OnDestroy {
   workingEditVersion: number;
   originalKey: string;
-  subscription: Subscription;
+  handleSaveSubscription: Subscription;
+  isSavedSubscription: Subscription;
+  
   constructor(
     private router: Router,
     private route: ActivatedRoute,
@@ -24,10 +26,17 @@ export class EditQuestionToolbarControlsComponent implements OnInit, OnDestroy {
   ngOnInit() {
     this.workingEditVersion = +this.route.snapshot.params['version'];
     this.originalKey = this.route.snapshot.params['key'];
+
+    this.isSavedSubscription = this.store.let(fromRoot.questionSaved)
+      .subscribe(saved => {
+        if(saved){
+          this.router.navigateByUrl(`/admin/master-screener/edit/version/${this.workingEditVersion}`)
+        }
+      })
   }
 
   handleSave() {
-    this.subscription = this.store.let(fromRoot.getPresentQuestionEdit).take(1)
+    this.handleSaveSubscription = this.store.let(fromRoot.getPresentQuestionEdit).take(1)
       .subscribe(questionState => {
         if (this.originalKey === 'new') {
           this.store.dispatch(new fromEditQuestion.SaveQuestion(questionState.question));
@@ -38,14 +47,16 @@ export class EditQuestionToolbarControlsComponent implements OnInit, OnDestroy {
           }
           this.store.dispatch(new fromEditQuestion.UpdateQuestion(payload))
         }
-        this.router.navigateByUrl(`/admin/master-screener/edit/version/${this.workingEditVersion}`)
       });
   }
 
   ngOnDestroy() {
-    if(!this.subscription.closed){
-      this.subscription.unsubscribe();
+    if(this.handleSaveSubscription !== undefined && !this.handleSaveSubscription.closed){
+      this.handleSaveSubscription.unsubscribe();
+    }
+
+    if (!this.isSavedSubscription.closed){
+      this.isSavedSubscription.unsubscribe();
     }
   }
-
 }

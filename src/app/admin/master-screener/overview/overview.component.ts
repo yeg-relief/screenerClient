@@ -11,6 +11,8 @@ import { Key } from '../../models/key';
 import { Question } from '../../../shared/models';
 import { ActivatedRoute } from '@angular/router';
 import * as masterScreener from '../master-screener.actions';
+import * as fromKeys from '../keys/key.actions';
+import { DataService } from '../../data.service';
 
 @Component({
   templateUrl: './overview.component.html',
@@ -29,7 +31,9 @@ export class OverviewComponent implements OnInit, OnDestroy {
   // flattened array of all questions in screener
   questions$: Observable<Question[]>;
   subscription: Subscription;
-  constructor(private store: Store<fromRoot.State>, private route: ActivatedRoute) { }
+  constructor(
+    private store: Store<fromRoot.State>, 
+    private route: ActivatedRoute) { }
 
   ngOnInit() {
     this.keyToggle = new BehaviorSubject<boolean>(true);
@@ -47,6 +51,7 @@ export class OverviewComponent implements OnInit, OnDestroy {
     // add error catching etc
     this.subscription = this.route.data
       .do(data => this.store.dispatch(new masterScreener.ChangeScreenerVersion(data['masterScreener'])))
+      .do(() => this.store.dispatch(new fromKeys.LoadKeys({})))
       .subscribe();
   }
 
