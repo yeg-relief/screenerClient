@@ -32,7 +32,6 @@
   
   <app-edit-question-type 
     [type]="(editQuestion$ | async)?.question.type"
-    (booleanSelected)="showExpandedSection($event)"
     *ngIf="showQuestionType">
   </app-edit-question-type>
   

@@ -16,11 +16,12 @@
   [showExpand]="showExpand">
 </app-edit-question-display-controls>
 <md-card class="col col-12 overview-wrapper">
+  <!--
   <app-question-errors 
     (errorClick)="focusOnError($event)" 
     *ngIf="showErrors">
   </app-question-errors>
-  
+  -->
   <div class="py3" *ngIf="showErrors"></div>
   <!-- possible abuse of safe navigation operator incoming --> 
   <!-- consider rewriting such that there is one component that relies on the observable 

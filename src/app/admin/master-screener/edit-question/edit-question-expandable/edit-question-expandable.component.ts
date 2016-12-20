@@ -1,4 +1,5 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
 import { Question } from '../../../../shared/models';
 import { Store } from '@ngrx/store';
 import * as fromRoot from '../../../reducer';
@@ -9,17 +10,21 @@ import * as fromEditQuestion from '../edit-question.actions';
   templateUrl: './edit-question-expandable.component.html',
   styleUrls: ['./edit-question-expandable.component.css']
 })
-export class EditQuestionExpandableComponent {
+export class EditQuestionExpandableComponent implements OnInit{
   @Input() expandable: boolean;
   @Input() controlType: string;
   @Input() questionType: string;
   @Input() questionKey: string;
   @Input() conditionalQuestions: Question[];
+  version: number;
+  constructor(private store: Store<fromRoot.State>, private route: ActivatedRoute) { }
 
-  constructor(private store: Store<fromRoot.State>) { }
+  ngOnInit(){
+    this.version = +this.route.snapshot.params['version'];
+  }
 
   checkboxChange(value) {
-    this.store.dispatch(new fromEditQuestion.SetExpandableKey(value));
+    this.store.dispatch(new fromEditQuestion.EditQuestionChangeExpand(value));
     this.expandable = value;
   }
 

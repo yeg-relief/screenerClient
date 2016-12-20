@@ -15,7 +15,7 @@ export class QuestionErrorsComponent implements OnInit {
   constructor(private store: Store<fromRoot.State>) { }
 
   ngOnInit() {
-    this.questionErrors$ = this.store.let(fromRoot.getQuestionErrors).do(thing => console.log(thing));
+    this.questionErrors$ = this.store.let(fromRoot.getQuestionErrors);
   }
 
   handleClick(open: string[]) {

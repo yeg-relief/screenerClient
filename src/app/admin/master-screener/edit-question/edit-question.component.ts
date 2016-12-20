@@ -15,6 +15,7 @@ import 'rxjs/add/operator/do';
 import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/multicast';
 import { DataService } from '../../data.service';
+import * as fromKeys from '../keys/key.actions';
 
 @Component({
   selector: 'app-edit-question',
@@ -43,25 +44,21 @@ export class EditQuestionComponent implements OnInit, OnDestroy {
   ngOnInit() {
     this.subscription = this.route.data
       .map(data => data['question'])
-      .subscribe(question => {
+      .do(() => this.store.dispatch(new fromKeys.LoadKeys({})))
+      .subscribe(key => {
         this.store.dispatch(new fromEditQuestion.EditQuestionInit({
-          originalQuestionKey: question.key,
+          originalQuestionKey: key,
           expandableQuestionKey: ''
         }));
       });
-
-
-    console.log('IN EDIT QUESTION COMPONENT')
-    console.log('========================')
-    this.store.select(s => s.editScreener).subscribe(screener => console.log(screener));
-    console.log('======================')
 
     this.editQuestion$ = this.store.let(fromRoot.getPresentQuestionEdit)
       .map(val => val.question)
       .multicast(new ReplaySubject(1)).refCount();
     this.originalEditQuestionKey$ = this.store.let(fromRoot.getOriginalKeyQuestionEdit);
     this.availableKeys$ = this.store.let(fromRoot.getPresentQuestionEdit)
-      .map(val => val.unusedKeys);
+      .map(val => val.unusedKeys)
+      .do(keys => console.log(keys))
   }
 
   ngOnDestroy() {

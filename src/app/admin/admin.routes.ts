@@ -64,7 +64,7 @@ export const routing: ModuleWithProviders = RouterModule.forChild([
           {
             path: 'edit/version/:version/conditionals/question/:key',
             component: EditConditionalComponent,
-            canActivate: [ConditionalGuardService]
+            //canActivate: [ConditionalGuardService]
           },
           {
             path: '', pathMatch: 'full', redirectTo: 'overview',

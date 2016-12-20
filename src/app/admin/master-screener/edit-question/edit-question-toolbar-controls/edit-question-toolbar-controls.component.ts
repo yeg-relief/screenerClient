@@ -26,6 +26,7 @@ export class EditQuestionToolbarControlsComponent implements OnInit, OnDestroy {
   ngOnInit() {
     this.workingEditVersion = +this.route.snapshot.params['version'];
     this.originalKey = this.route.snapshot.params['key'];
+    
 
     this.isSavedSubscription = this.store.let(fromRoot.questionSaved)
       .subscribe(saved => {

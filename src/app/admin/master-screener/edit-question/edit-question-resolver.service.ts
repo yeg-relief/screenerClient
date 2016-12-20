@@ -26,43 +26,6 @@ export class EditQuestionResolverService {
   resolve(route: ActivatedRouteSnapshot) {
     const keyParam = route.params['key'];
     const versionParam = +route.params['version'];
-    console.log(versionParam);
-    if (keyParam === 'new') {
-      return this.newQuestion();
-    }
-    return this.findQuestion(keyParam, versionParam);
-  }
-
-  findQuestion(keyParam, versionParam) {
-    return this.data.loadScreener(versionParam)
-      .map(screener => screener.questions)
-      .switchMap(x => x)
-      // kind of gross...
-      .filter(question => {
-        if (question.key === keyParam) {
-          return true;
-        } else if (question.expandable) {
-          return question.conditonalQuestions.findIndex(q => q.key === keyParam) > -1;
-        }
-        return false;
-      })
-      // add a reduce incase multiple questions are found??? 
-      // shouldn't be the case... DEFINITELY should not -- will break backend
-      .map(question => cloneDeep(question))
-      .catch(() => Observable.throw('question not found!'))
-  }
-
-  newQuestion() {
-    let newQuestion: Question = {
-      type: undefined,
-      label: undefined,
-      expandable: false,
-      conditonalQuestions: [],
-      options: [],
-      key: 'empty',
-      controlType: undefined
-    };
-
-    return Observable.of(newQuestion);
+    return keyParam;
   }
 }

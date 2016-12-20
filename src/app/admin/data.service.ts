@@ -34,6 +34,9 @@ export class DataService {
         }
       })
       .map(res => res.json().keys)
+      .do( () => console.log('IN DATA SERVICE KEYS'))
+      .do(keys => console.log(keys))
+      .do( () => console.log('================'))
       .multicast(new ReplaySubject(1)).refCount()
       .catch(this.loadError);
   }
