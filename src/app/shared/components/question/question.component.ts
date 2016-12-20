@@ -21,18 +21,25 @@ export class QuestionComponent implements OnInit {
 
   constructor() { }
 
-  ngOnInit() {}
+  ngOnInit() { }
 
-  // this is built to handle true and false as a string.
   handleChange($event) {
     const checked = $event.value;
-
-    if (checked === 'true') {
-      this.expand();
-    } else {
-      this.hide();
+    if (typeof checked === 'string') {
+      if (checked === 'true') {
+        this.expand();
+      } else {
+        this.hide();
+      }
+      this.expanded = checked === 'true';
+    } else if (typeof checked === 'boolean'){
+      if (checked === true) {
+        this.expand();
+      } else {
+        this.hide();
+      }
+      this.expanded = checked;
     }
-    this.expanded = checked === 'true';
   }
 
   expand() {

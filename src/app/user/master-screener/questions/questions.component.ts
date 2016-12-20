@@ -26,6 +26,8 @@ export class QuestionsComponent implements OnInit {
 
   ngOnInit() {
     const data = this.route.snapshot.data['questions'];
+    console.log('IN QUESTIONS COMPONENT');
+    console.log(data);
     if (data.error) {
       // gross object reference data.error.msg or something would be better
       this.errorMessage = 'unable to load data from server, please try later.';
@@ -49,10 +51,12 @@ export class QuestionsComponent implements OnInit {
   }
 
   addControls($event) {
-    this.questionControlService.addQuestions($event.questions, $event.form);
+    console.log($event);
+    this.questionControlService.addQuestions($event, this.form);
   }
 
   removeControls($event) {
-    this.questionControlService.removeQuestions($event.questions, $event.form);
+    console.log($event);
+    this.questionControlService.removeQuestions($event, this.form);
   }
 }

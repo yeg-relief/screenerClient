@@ -22,6 +22,7 @@ export class MasterScreenerService {
   loadQuestions(): Observable<Question[]> {
     return this.http.get('/api/questions/latest')
             .map(res => res.json().response)
+            .do(questions => console.log(questions))
             .catch(this.loadError);
   }
 

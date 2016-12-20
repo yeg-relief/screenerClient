@@ -61,6 +61,10 @@ export function reducer(state = initialState, action: EditScreenerActions): Stat
     };
 
     case EditScreenerActionsTypes.SAVE_SCREENER: {
+      console.log('=======================');
+      console.log(action.type)
+      console.log(action.payload)
+      console.log('========================');
       return Object.assign({}, state, {
         saving: true
       });

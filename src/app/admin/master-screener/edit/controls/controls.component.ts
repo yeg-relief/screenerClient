@@ -52,12 +52,10 @@ export class EditControlsComponent implements OnInit, OnDestroy {
 
   handleSave() {
     this.subscription = this.store.let(fromRoot.getPresentEditScreener)
-      .map(screener => {
-        const updatedVersion = screener;
-        updatedVersion.version += 1;
-        updatedVersion.meta.screener.version += 1;
-        return updatedVersion;
-      })
+      .do(() => console.log('============================='))
+      .do(() => console.log('SAVE SCREENER'))
+      .do(screener => console.log(screener))
+      .do(() => console.log('============================='))
       .switchMap(screener => Observable.fromPromise(this.dataService.saveScreener(screener)))
       .subscribe({
         next: response => {

@@ -197,6 +197,11 @@ export function reducer(state = initialState, action: EditQuestionActions): Stat
     }
 
     case EditQuestionActionTypes.SAVE_QUESTION: {
+      console.log('===========================');
+      console.log(action.type);
+      console.log(action.payload);
+      console.log(state.present);
+      console.log('===========================');
       return state;
     }
 
@@ -240,6 +245,12 @@ export function reducer(state = initialState, action: EditQuestionActions): Stat
 
     case EditQuestionActionTypes.ADD_OPTION: {
       const newOption = <QuestionOption>action.payload;
+      if(newOption.value === 'true'){
+        newOption.value = true;
+      } else if (newOption.value === 'false'){
+        newOption.value = false;
+      }
+
       const findFnc = (option: QuestionOption) => {
         return option.display === newOption.display || option.value === newOption.value;
       };
