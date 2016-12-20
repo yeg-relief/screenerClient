@@ -14,6 +14,6 @@ export interface MasterScreenerMetaData {
   questions: QuestionMeta;
   screener: {
     version: number;
-    created: string;
+    created: number;
   };
 }

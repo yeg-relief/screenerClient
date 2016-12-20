@@ -26,7 +26,7 @@ export class OverviewComponent implements OnInit, OnDestroy {
   loading$: Observable<boolean>;
   error$: Observable<string>;
   keys$: Observable<Key[]>;
-  creationDate$: Observable<string>;
+  creationDate$: Observable<number>;
   questionCount$: Observable<number>;
   // flattened array of all questions in screener
   questions$: Observable<Question[]>;
@@ -49,16 +49,23 @@ export class OverviewComponent implements OnInit, OnDestroy {
     this.questionCount$ = this.store.let(fromRoot.getWorkingQuestionCount);
     this.creationDate$ = this.store.let(fromRoot.getWorkingCreationDate);
     // add error catching etc
+    const data = this.route.snapshot.data['masterScreener'];
+    if (data !== undefined){
+      this.store.dispatch(new masterScreener.ChangeScreenerVersion(data));
+    }
+    this.store.dispatch(new fromKeys.LoadKeys({}));
+    /*
     this.subscription = this.route.data
       .do(data => this.store.dispatch(new masterScreener.ChangeScreenerVersion(data['masterScreener'])))
       // we load keys here... this is used in creating a question etc 
       // should be somewhere else?
       .do(() => this.store.dispatch(new fromKeys.LoadKeys({})))
       .subscribe();
+    */
   }
 
   ngOnDestroy() {
-    if (!this.subscription.closed) {
+    if (this.subscription !== undefined && !this.subscription.closed) {
       this.subscription.unsubscribe();
     }
   }

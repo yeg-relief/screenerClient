@@ -20,18 +20,11 @@ export class EditComponent implements OnInit, OnDestroy {
   constructor(private store: Store<fromRoot.State>, private route: ActivatedRoute) { }
 
   ngOnInit() {
-
-    this.subscription = this.route.data.map(data => data['screener'])
-      .subscribe(screener => {
-        this.store.dispatch(new fromEdit.InitEdit(screener.version))
-        this.store.dispatch(new fromEdit.LoadScreener(screener))
-      })
-
-    console.log('IN EDIT COMPONENT')
-    console.log('========================')
-    this.store.select(s => s.editScreener).subscribe(screener => console.log(screener));
-    console.log('======================')
-
+    const screener = this.route.snapshot.data['screener'];
+    if (screener !== undefined){
+      this.store.dispatch(new fromEdit.InitEdit(screener.version))
+      this.store.dispatch(new fromEdit.LoadScreener(screener))
+    }
 
     this.workingScreener$ = this.store.let(fromRoot.getPresentEditScreener)
       .multicast(new ReplaySubject(1)).refCount();
@@ -39,7 +32,7 @@ export class EditComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
-    if (!this.subscription.closed){
+    if (this.subscription !== undefined && !this.subscription.closed){
       this.subscription.unsubscribe();
     }
   }

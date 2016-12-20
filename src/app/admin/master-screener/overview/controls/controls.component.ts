@@ -49,10 +49,13 @@ export class OverviewControlsComponent implements OnInit, OnDestroy {
   }
 
   editSelectedVersion() {
-    if (typeof this.selectedVersion === 'undefined') {
-      return;
+    if (this.selectedVersion === undefined) {
+      const version = 0;
+      this.router.navigateByUrl(`/admin/master-screener/edit/version/${version}`);
+    } else {
+      this.router.navigateByUrl(`/admin/master-screener/edit/version/${this.selectedVersion}`);
     }
-    this.router.navigateByUrl(`/admin/master-screener/edit/version/${this.selectedVersion}`);
+    
   }
 
   checkForUndefined() {

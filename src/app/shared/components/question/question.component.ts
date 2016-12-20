@@ -43,12 +43,10 @@ export class QuestionComponent implements OnInit {
   }
 
   expand() {
-    console.log('expand called');
     this.onExpand.emit(this.question.conditonalQuestions);
   }
 
   hide() {
-    console.log('hide called');
     this.onHide.emit(this.question.conditonalQuestions);
   }
 }

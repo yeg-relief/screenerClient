@@ -47,10 +47,31 @@ export class DataService {
 
   // attn: this will perform an http call
   loadScreener(version: number): Observable<MasterScreener> {
+    const initialScreener = {
+      version: 0,
+      questions: [],
+      meta: {
+        questions: {
+          totalCount: 0,
+        },
+        screener: {
+          version: 0,
+          created: 0,
+        }
+      }
+    }
+
+
+
+    if (version === 0) {
+      return Observable.of(initialScreener);
+    }
+
     return this.screeners$
       .do(() => console.log(`loadScreener(${version}) called`))
       .switchMap(x => x)
       .filter((screener: MasterScreener) => screener.version === version)
+      .catch(this.loadError)
   }
 
 
@@ -74,8 +95,16 @@ export class DataService {
     return this.http.get('/api/master_screener/')
       .map(res => res.json().response)
       .map((screeners: MasterScreener[]) => {
+        console.log('===============================');
         console.log(screeners);
-        const sorted = screeners.sort((a, b) => a.version - b.version)
+        const sorted = screeners.sort((a, b) => a.meta.screener.version - b.meta.screener.version)
+        console.log(sorted);
+        console.log('================================');
+        /*
+          const sorted = screeners.sort((a, b) => {
+          return (a.meta.screener.created + a.meta.screener.version) - (b.meta.screener.created + b.meta.screener.version);
+        })
+        */
         return sorted[sorted.length - 1]
       });
   }
