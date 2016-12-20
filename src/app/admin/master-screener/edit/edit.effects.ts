@@ -19,13 +19,13 @@ export class EditScreenerEffects {
     .do(() => console.log('IN EDIT EFFECTS'))
     .do(thing => console.log(thing))
     .map((screener: MasterScreener) => new editScreener.LoadScreener(screener));
-
+  /*
   @Effect() saveScreener$ = this.actions$
     .ofType(editScreener.EditScreenerActionsTypes.SAVE_SCREENER)
     .map(action => action.payload)
     .switchMap(masterScreener => this.data.saveScreener(masterScreener))
     .map(() => new editScreener.SaveScreenerSuccess({}));
-
+  */
   constructor(
     // DataService is provided via the admin module
     private data: DataService,
