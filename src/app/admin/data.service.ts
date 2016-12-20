@@ -69,8 +69,12 @@ export class DataService {
 
   // attn: this will perform an http call
   loadLatestScreener(): Observable<MasterScreener> {
-    return this.screeners$
+    console.log('LOAD LATEST SCREENER CALLED')
+    this.loadAllScreeners();
+    return this.http.get('/api/master_screener/')
+      .map(res => res.json().response)
       .map((screeners: MasterScreener[]) => {
+        console.log(screeners);
         const sorted = screeners.sort((a, b) => a.version - b.version)
         return sorted[sorted.length - 1]
       });
