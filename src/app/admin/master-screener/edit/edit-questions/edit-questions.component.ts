@@ -24,10 +24,12 @@ export class EditQuestionsComponent implements OnInit {
   }
 
   addControls(questions) {
+    console.log('add controls called');
     this.questionControlService.addQuestions(questions, this.form);
   }
 
   removeControls(questions) {
+    console.log('remove controls called');
     this.questionControlService.removeQuestions(questions, this.form);
   }
 }

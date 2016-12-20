@@ -24,20 +24,23 @@ export class QuestionComponent implements OnInit {
   ngOnInit() {}
 
   handleChange($event) {
-    const checked: boolean = $event.value;
-    if (checked) {
+    const checked = $event.value;
+
+    if (checked === 'true' || Boolean(checked) === true) {
       this.expand();
     } else {
       this.hide();
     }
-    this.expanded = $event.value;
+    this.expanded = checked === 'true';
   }
 
   expand() {
+    console.log('expand called');
     this.onExpand.emit(this.question.conditonalQuestions);
   }
 
   hide() {
+    console.log('hide called');
     this.onHide.emit(this.question.conditonalQuestions);
   }
 }

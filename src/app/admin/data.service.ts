@@ -26,36 +26,26 @@ export class DataService {
   }
 
   private loadKeys() {
-    let httpCalls = 0;
     this.keys$ = this.http.get('/api/keys/')
-      .do(() => {
-        if (httpCalls > 1) {
-          console.error('multiple http calls from DataService.loadKeys() being made!!');
-        }
-      })
       .map(res => res.json().keys)
+      /*
       .do( () => console.log('IN DATA SERVICE KEYS'))
       .do(keys => console.log(keys))
       .do( () => console.log('================'))
       .multicast(new ReplaySubject(1)).refCount()
+      */
       .catch(this.loadError);
   }
 
   // load every screener again naive, but it works at this point TODO: rewrite to improve scalability
   private loadAllScreeners() {
-    let httpCalls = 0;
     this.screeners$ = this.http.get('/api/master_screener/')
-      .do(() => {
-        if (httpCalls > 1) {
-          console.error('multiple http calls from DataService.loadAllScreeners() being made!!');
-        }
-      })
       .map(res => res.json().response)
-      .multicast(new ReplaySubject(1)).refCount()
+      //.multicast(new ReplaySubject(1)).refCount()
       .catch(this.loadError);
   }
 
-
+  // attn: this will perform an http call
   loadScreener(version: number): Observable<MasterScreener> {
     return this.screeners$
       .do(() => console.log(`loadScreener(${version}) called`))
@@ -77,6 +67,7 @@ export class DataService {
     return Observable.throw(errMsg);
   }
 
+  // attn: this will perform an http call
   loadLatestScreener(): Observable<MasterScreener> {
     return this.screeners$
       .map((screeners: MasterScreener[]) => {
@@ -85,14 +76,16 @@ export class DataService {
       });
   }
 
+  // attn: this will perform an http call
   loadVersionMetaData(): Observable<number[]> {
     return this.screeners$
       .switchMap(x => x)
       .reduce((accum: number[], screener: MasterScreener) => accum.concat(screener.version), []);
   }
 
+  // attn: this will perform an http call
   getKeys(): Observable<Key[]> {
-    return this.keys$.do(thing => console.log(thing));
+    return this.keys$;
   }
 
   saveScreener(screener: MasterScreener) {
