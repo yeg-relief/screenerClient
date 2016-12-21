@@ -2,7 +2,10 @@ import { Component, OnInit } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
 import { ApplicationFacingProgram } from '../../models/program';
 import { Store } from '@ngrx/store';
+import { DataService } from '../../data.service';
 import * as fromRoot from '../../reducer';
+import * as programOverview from './actions';
+import * as fromKeys from '../../master-screener/keys/key.actions';
 
 @Component({
   selector: 'app-program-overview',
@@ -12,10 +15,15 @@ import * as fromRoot from '../../reducer';
 export class ProgramOverviewComponent implements OnInit {
   private programs$: Observable<ApplicationFacingProgram[]>;
   private loading$: Observable<boolean>;
-
-  constructor(private store: Store<fromRoot.State>) { }
+  state$: Observable<any>
+  constructor(private store: Store<fromRoot.State>, private dataService: DataService) { }
 
   ngOnInit() {
+    this.dataService.loadPrograms()
+      .do(programs => this.store.dispatch(new programOverview.LoadProgramsSuccess(programs)))
+      .do(() => this.store.dispatch(new fromKeys.LoadKeys({})))
+      .subscribe()
+
     this.programs$ = this.store.let(fromRoot.getLoadedPrograms);
     // this is not semantic because it will be false when all programs are loaded
     this.loading$ = this.store.let(fromRoot.areProgramsLoaded);

@@ -7,19 +7,19 @@
   </md-button-toggle-group>
   <div class="py1"></div>
   <section *ngIf="selectedView === 'user'">
-    <md-card-title> {{program.user.description.title}}  </md-card-title>
-    <md-card-subtitle> uploaded on: {{ program.user.created }}</md-card-subtitle>
+    <md-card-title> {{program.title}}  </md-card-title>
+    <md-card-subtitle> uploaded on: {{ program.created | date}}</md-card-subtitle>
     <md-card-content>
-      <p>{{ program.user.description.details }} </p>
+      <p>{{ program.details }} </p>
     </md-card-content>
     <md-card-subtitle>
-      link: {{ program.user.description.externalLink }}
+      link: {{ program.externalLink }}
     </md-card-subtitle>
     <div class="p1"></div>
     <div class="clearfix flex">
       <div 
         class="col-2 border bg-silver black center rounded mr1 md-show" 
-        *ngFor="let tag of program.user.tags">
+        *ngFor="let tag of program.tags">
         {{tag}}
       </div>
     </div>

@@ -135,12 +135,17 @@ export class DataService {
     return this.http.get('/api/programs/')
       .map(res => res.json().programs)
       .do(programs => console.log(`programs from getAllPrograms: ${programs}`))
+      /*
+      .switchMap(x => x)
       .reduce((accum, program) => {
+        console.log(program);
         if (program !== undefined){
-          accum.concat(program.application)
+          return [program, ...accum]
         }
         return accum;
       }, [])
+      */
+      .do(programs => console.log(programs))
       .catch(this.loadError)
   }
 

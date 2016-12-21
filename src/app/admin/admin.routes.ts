@@ -81,7 +81,7 @@ export const routing: ModuleWithProviders = RouterModule.forChild([
           {
             path: 'overview',
             component: ProgramOverviewComponent,
-            canActivate: [ProgramOverviewGuardService]
+            //canActivate: [ProgramOverviewGuardService]
           },
           {
             path: 'edit/:guid',
@@ -91,7 +91,7 @@ export const routing: ModuleWithProviders = RouterModule.forChild([
           {
             path: 'delete/:guid',
             component: DeleteConfirmationComponent,
-            canActivate: [ProgramDeleteGuardService]
+            //canActivate: [ProgramDeleteGuardService]
           },
           {
             path: 'query-edit/:guid/:id',

@@ -9,17 +9,15 @@ import 'rxjs/add/operator/take';
   styleUrls: ['./delete-confirmation.component.css']
 })
 export class DeleteConfirmationComponent implements OnInit {
+  // some type of cheap hack to avoid undefined in render
   program: ApplicationFacingProgram = {
     guid: '',
     user: {
       guid: '',
-      description: {
-        guid: '',
-        title: '',
-        details: '',
-        externalLink: ''
-      },
-      created: '',
+      title: '',
+      details: '',
+      externalLink: '',
+      created: 0,
       tags: []
     },
     application: []

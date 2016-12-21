@@ -203,13 +203,10 @@ export const findProgram = function (state$: Observable<State>, guid: string){
     guid: 'new',
     user: {
       guid: 'new',
-      description: {
-        guid: 'new',
-        title: '',
-        details: '',
-        externalLink: ''
-      },
-      created: '',
+      title: '',
+      details: '',
+      externalLink: '',
+      created: 0,
       tags: []
     },
     application: []

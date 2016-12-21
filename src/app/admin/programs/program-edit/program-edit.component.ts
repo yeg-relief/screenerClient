@@ -119,9 +119,9 @@ export class ProgramEditComponent implements OnInit, OnDestroy {
   // called in dispatch$ via program$ subscription
   // sets all the formcontrols to reflect values in memory upon startup
   setControls(program: ApplicationFacingProgram) {
-    this.title.setValue(program.user.description.title);
-    this.details.setValue(program.user.description.details);
-    this.link.setValue(program.user.description.externalLink);
+    this.title.setValue(program.user.title);
+    this.details.setValue(program.user.details);
+    this.link.setValue(program.user.externalLink);
     this.form = new FormGroup({
       title: this.title,
       details: this.details,
@@ -215,15 +215,15 @@ function reducer(actions: Observable<any>): Observable<ApplicationFacingProgram>
         return Object.assign({}, state, action.payload);
       }
       case 'UPDATE_DETAILS': {
-        state.user.description.details = action.payload;
+        state.user.details = action.payload;
         return state;
       }
       case 'UPDATE_LINK': {
-        state.user.description.externalLink = action.payload;
+        state.user.externalLink = action.payload;
         return state;
       }
       case 'UPDATE_TITLE': {
-        state.user.description.title = action.payload;
+        state.user.title = action.payload;
         return state;
       }
       case 'ADD_TAG': {
