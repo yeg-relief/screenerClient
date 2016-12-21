@@ -134,7 +134,13 @@ export class DataService {
   loadPrograms(): Observable<ApplicationFacingProgram[]> {
     return this.http.get('/api/programs/')
       .map(res => res.json().programs)
-      .reduce((accum, program) => accum.concat(program.application), [])
+      .do(programs => console.log(`programs from getAllPrograms: ${programs}`))
+      .reduce((accum, program) => {
+        if (program !== undefined){
+          accum.concat(program.application)
+        }
+        return accum;
+      }, [])
       .catch(this.loadError)
   }
 

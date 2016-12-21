@@ -18,6 +18,11 @@ import 'rxjs/add/operator/multicast';
 import 'rxjs/add/observable/combineLatest';
 import 'rxjs/add/observable/merge';
 import { FormControl, Validators, FormGroup } from '@angular/forms';
+import { Store } from '@ngrx/store';
+import * as fromRoot from '../../reducer';
+import * as fromOverview from '../program-overview/actions';
+import { cloneDeep } from 'lodash';
+import { ActivatedRoute } from '@angular/router';
 
 interface Action {
   type: string;
@@ -66,11 +71,11 @@ export class ProgramEditComponent implements OnInit, OnDestroy {
 
   hide = false;
 
-  constructor( private service: ProgramEditGuardService ) { }
+  constructor(private store: Store<fromRoot.State>, private route: ActivatedRoute) { }
 
   ngOnInit() {
     this.state$ = this.dispatch$()
-      .do( (action: Action) => console.log(`action.type = ${action.type}, action.payload = ${action.payload}`))
+      .do((action: Action) => console.log(`action.type = ${action.type}, action.payload = ${action.payload}`))
       .let(reducer)
       .do(state => console.log(state))
       .takeUntil(this.destroy$)
@@ -78,23 +83,37 @@ export class ProgramEditComponent implements OnInit, OnDestroy {
 
     this.submit$
       .asObservable()
+      .do(() => console.log('submit$ emit'))
       .withLatestFrom(this.state$)
-      .filter( () => this.form.valid)
+      .filter(() => this.form.valid)
       .do(() => this.saving$.next(true))
       .takeUntil(this.destroy$)
-      .do( ([_ , program]) => this.service.save(program))
-      .subscribe();
-
-    this.view$
-      .do(view => {
-        if (view === 'user') {
-          this.hide = false;
+      .do(([_, program]) => {
+        if (program.guid === 'new') {
+          this.store.dispatch(new fromOverview.CreateProgram(program));
         } else {
-          this.hide = true;
+          this.store.dispatch(new fromOverview.UpdateProgram(program));
         }
       })
+      .catch(error => Observable.of('error encountered'))
+      .subscribe({
+        next: val => console.log(val),
+        error: err => console.error(err),
+        complete: () => console.log('submit complete')
+      });
+
+    this.view$
       .takeUntil(this.destroy$)
-      .subscribe();
+      .subscribe({
+        next: view => {
+          if (view !== 'application') {
+            this.hide = false;
+          } else {
+            this.hide = true;
+          }
+        },
+        complete: () => console.log('view subscription complete')
+      });
   }
 
   // called in dispatch$ via program$ subscription
@@ -110,30 +129,33 @@ export class ProgramEditComponent implements OnInit, OnDestroy {
   }
 
   dispatch$() {
-    const initialState$ = this.service.program$.take(1)
+    const guid = this.route.snapshot.params['guid'];
+    const initialState$ = fromRoot.findProgram(this.store, guid)
+      // get rid of object reference
+      .map(program => cloneDeep(program))
       .do(program => this.setControls(program))
       // sideEffects executed once
       .multicast(new ReplaySubject(1)).refCount();
 
     const title$ = this.title.valueChanges.map(title => {
-     return {
-       type: 'UPDATE_TITLE',
-       payload: title
-     };
+      return {
+        type: 'UPDATE_TITLE',
+        payload: title
+      };
     });
 
     const updateDetails$ = this.details.valueChanges.map(details => {
-     return {
-       type: 'UPDATE_DETAILS',
-       payload: details
-     };
+      return {
+        type: 'UPDATE_DETAILS',
+        payload: details
+      };
     });
 
     const updateLink$ = this.link.valueChanges.map(link => {
-     return {
-       type: 'UPDATE_LINK',
-       payload: link
-     };
+      return {
+        type: 'UPDATE_LINK',
+        payload: link
+      };
     });
 
     const initState$ = initialState$.map(p => {
@@ -145,7 +167,7 @@ export class ProgramEditComponent implements OnInit, OnDestroy {
 
     const tagAdd$ = this.tagAdd.asObservable().withLatestFrom(this.tag.valueChanges)
       .do(() => this.tag.reset(''))
-      .map( ([_, tag]) => {
+      .map(([_, tag]) => {
         return {
           type: 'ADD_TAG',
           payload: tag
@@ -186,44 +208,45 @@ export class ProgramEditComponent implements OnInit, OnDestroy {
 }
 
 function reducer(actions: Observable<any>): Observable<ApplicationFacingProgram> {
-  return actions.scan( (state, action) => {;
-      switch (action.type) {
-        case 'INIT_STATE': {
-          return Object.assign({}, state, action.payload);
-        }
-        case 'UPDATE_DETAILS': {
-          state.user.description.details = action.payload;
-          return state;
-        }
-        case 'UPDATE_LINK': {
-          state.user.description.externalLink = action.payload;
-          return state;
-        }
-        case 'UPDATE_TITLE': {
-          state.user.description.title = action.payload;
-          return state;
-        }
-        case 'ADD_TAG': {
-          if (state.user.tags.findIndex(programTag => action.payload === programTag) < 0) {
-            state.user.tags.push(action.payload);
-          }
-          return state;
-        }
-        case 'REMOVE_TAG': {
-          const index = state.user.tags.findIndex(programTag => action.payload === programTag);
-          if (index >= 0) {
-            state.user.tags.splice(index, 1);
-          }
-          return state;
-        }
-        case 'UPDATE_QUERIES': {
-          return Object.assign({}, state, {
-            application: [...action.payload]
-          });
-        }
-        default: {
-          return state;
-        }
+  return actions.scan((state, action) => {
+    ;
+    switch (action.type) {
+      case 'INIT_STATE': {
+        return Object.assign({}, state, action.payload);
       }
-    }, {});
+      case 'UPDATE_DETAILS': {
+        state.user.description.details = action.payload;
+        return state;
+      }
+      case 'UPDATE_LINK': {
+        state.user.description.externalLink = action.payload;
+        return state;
+      }
+      case 'UPDATE_TITLE': {
+        state.user.description.title = action.payload;
+        return state;
+      }
+      case 'ADD_TAG': {
+        if (state.user.tags.findIndex(programTag => action.payload === programTag) < 0) {
+          state.user.tags.push(action.payload);
+        }
+        return state;
+      }
+      case 'REMOVE_TAG': {
+        const index = state.user.tags.findIndex(programTag => action.payload === programTag);
+        if (index >= 0) {
+          state.user.tags.splice(index, 1);
+        }
+        return state;
+      }
+      case 'UPDATE_QUERIES': {
+        return Object.assign({}, state, {
+          application: [...action.payload]
+        });
+      }
+      default: {
+        return state;
+      }
+    }
+  }, {});
 }

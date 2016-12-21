@@ -237,7 +237,7 @@ function reducer(actions: Observable<any>): Observable<ProgramCondition> {
           return cloneDeep(action.payload);
         }
         case 'SELECT_KEY': {
-          if (action.payload.type === 'number') {
+          if (action.payload.type === 'number' || action.payload.type === 'integer') {
             return Object.assign({}, {
               key: action.payload,
               value: 0,
@@ -254,7 +254,7 @@ function reducer(actions: Observable<any>): Observable<ProgramCondition> {
           return state;
         }
         case 'INPUT_QUALIFIER': {
-          if (state.type !== 'number') {
+          if (state.type !== 'integer') {
             return state;
           }
           return Object.assign({}, state, {
@@ -271,7 +271,7 @@ function reducer(actions: Observable<any>): Observable<ProgramCondition> {
         }
 
         case 'NUMBER_INPUT': {
-          if (state.type !== 'number') {
+          if (state.type !== 'integer') {
             return state;
           }
           return Object.assign({}, state, {

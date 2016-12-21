@@ -4,7 +4,7 @@
     <button md-raised-button 
       color="primary"
       [attr.disabled]="!form.valid ? true : null"
-      (click)="this.submit$.next(true)">SAVE</button>
+      (click)="submit$.next(true)">SAVE</button>
     <div class="px2"></div>
     <button md-raised-button 
       color="primary"
@@ -12,6 +12,10 @@
     <div class="flex-grow"></div>
   </div>
 </app-bread-crumb>
+
+{{ views | json }}
+{{ view$ | async | json }}
+{{ submit$ }}
 <!-- SAVE BAR -->
 <md-progress-bar mode="indeterminate" color="warn" *ngIf="saving$ | async"></md-progress-bar>
 <div class="p2 center">

@@ -72,22 +72,6 @@ export const routing: ModuleWithProviders = RouterModule.forChild([
               masterScreener: MasterScreenerResolverService
             }
           },
-          /*
-          {
-            path: 'master-screener/question/edit/:version/:key',
-            component: EditQuestionComponent,
-            //canActivate: [EditQuestionGuardService],
-            resolve: {
-              question: EditQuestionResolverService
-            }
-          },
-          
-          {
-            path: 'master-screener/question/edit/conditionals/:version/:key',
-            component: EditConditionalComponent,
-            canActivate: [ConditionalGuardService]
-          }
-          */
         ]
       },
       {
@@ -102,7 +86,7 @@ export const routing: ModuleWithProviders = RouterModule.forChild([
           {
             path: 'edit/:guid',
             component: ProgramEditComponent,
-            canActivate: [ProgramEditGuardService]
+            //canActivate: [ProgramEditGuardService]
           },
           {
             path: 'delete/:guid',

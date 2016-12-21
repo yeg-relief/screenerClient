@@ -7,7 +7,7 @@
   </select>
   <div class="px2"></div>
   <select class="rounded col-2 center" [formControl]="qualifierInput" 
-    *ngIf="(state$ | async)?.type === 'number'">
+    *ngIf="(state$ | async)?.type === 'number' || (state$ | async)?.type === 'integer'">
     <option *ngFor="let option of qualifierOptions" [value]="option.value">
       {{option.display}}
     </option>
@@ -22,11 +22,11 @@
   <div class="px2"></div>
   <md-input class="col-2" 
     [formControl]="inputNumberValue" 
-    *ngIf="(state$ | async)?.type === 'number'" placeholder="value">
+    *ngIf="(state$ | async)?.type === 'number' || (state$ | async)?.type === 'integer'" placeholder="value">
   </md-input>
   <div class="col-2" *ngIf="(state$ | async)?.type === 'boolean'"></div>
   <div class="col-4" 
-    *ngIf="(state$ | async)?.type !== 'boolean' && (state$ | async)?.type !== 'number'">
+    *ngIf="(state$ | async)?.type !== 'boolean' && (state$ | async)?.type !== 'integer'">
   </div>
   <div class="px2"></div>
   <button 
