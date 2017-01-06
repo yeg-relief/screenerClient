@@ -132,8 +132,8 @@ export class DataService {
   }
 
   loadPrograms(): Observable<ApplicationFacingProgram[]> {
-    return this.http.get('/api/programs/')
-      .map(res => res.json().programs)
+    return this.http.get('/api/programs/application/')
+      .map(res => res.json().data)
       .do(programs => console.log(`programs from getAllPrograms: ${programs}`))
       /*
       .switchMap(x => x)
