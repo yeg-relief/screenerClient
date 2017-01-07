@@ -254,7 +254,7 @@ function reducer(actions: Observable<any>): Observable<ProgramCondition> {
           return state;
         }
         case 'INPUT_QUALIFIER': {
-          if (state.type !== 'integer') {
+          if (state.type !== 'number') {
             return state;
           }
           return Object.assign({}, state, {
@@ -271,7 +271,7 @@ function reducer(actions: Observable<any>): Observable<ProgramCondition> {
         }
 
         case 'NUMBER_INPUT': {
-          if (state.type !== 'integer') {
+          if (state.type !== 'number') {
             return state;
           }
           return Object.assign({}, state, {

@@ -28,12 +28,6 @@ export class DataService {
   private loadKeys() {
     this.keys$ = this.http.get('/api/keys/')
       .map(res => res.json().keys)
-      /*
-      .do( () => console.log('IN DATA SERVICE KEYS'))
-      .do(keys => console.log(keys))
-      .do( () => console.log('================'))
-      .multicast(new ReplaySubject(1)).refCount()
-      */
       .catch(this.loadError);
   }
 
@@ -41,7 +35,6 @@ export class DataService {
   private loadAllScreeners() {
     this.screeners$ = this.http.get('/api/master_screener/')
       .map(res => res.json().response)
-      //.multicast(new ReplaySubject(1)).refCount()
       .catch(this.loadError);
   }
 
@@ -95,16 +88,7 @@ export class DataService {
     return this.http.get('/api/master_screener/')
       .map(res => res.json().response)
       .map((screeners: MasterScreener[]) => {
-        console.log('===============================');
-        console.log(screeners);
         const sorted = screeners.sort((a, b) => a.meta.screener.version - b.meta.screener.version)
-        console.log(sorted);
-        console.log('================================');
-        /*
-          const sorted = screeners.sort((a, b) => {
-          return (a.meta.screener.created + a.meta.screener.version) - (b.meta.screener.created + b.meta.screener.version);
-        })
-        */
         return sorted[sorted.length - 1]
       });
   }
@@ -134,18 +118,6 @@ export class DataService {
   loadPrograms(): Observable<ApplicationFacingProgram[]> {
     return this.http.get('/api/programs/application/')
       .map(res => res.json().data)
-      .do(programs => console.log(`programs from getAllPrograms: ${programs}`))
-      /*
-      .switchMap(x => x)
-      .reduce((accum, program) => {
-        console.log(program);
-        if (program !== undefined){
-          return [program, ...accum]
-        }
-        return accum;
-      }, [])
-      */
-      .do(programs => console.log(programs))
       .catch(this.loadError)
   }
 
@@ -153,7 +125,7 @@ export class DataService {
     const headers = new Headers({ 'Content-Type': 'application/json' });
     const options = new RequestOptions({ headers: headers });
     const body = JSON.stringify({ data: program });
-    return this.http.post('/api/programs/', body, options)
+    return this.http.put('/api/programs/', body, options)
       .map(res => res.json().response)
       .catch(this.loadError)
       .toPromise();
@@ -164,6 +136,7 @@ export class DataService {
     const options = new RequestOptions({ headers: headers });
     const body = JSON.stringify({ data: program });
     return this.http.post('/api/programs/', body, options)
+      .do(() => console.log(program))
       .map(res => res.json().response)
       .catch(this.loadError)
       .toPromise();

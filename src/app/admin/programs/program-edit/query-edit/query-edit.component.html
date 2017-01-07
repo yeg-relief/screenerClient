@@ -1,3 +1,5 @@
+{{ state$ | async | json }}
+
 <div class="flex col-4">
   <div class="px2"></div>
   <button md-raised-button color="primary" 
@@ -17,7 +19,7 @@
   </tr>
   <tr *ngFor="let condition of (state$ | async)?.query.conditions">
     <td>{{condition.key.name}}</td>
-    <td>{{condition.type}}</td>
+    <td>{{condition.key.type}}</td>
     <div [ngSwitch]="condition.qualifier">
       <td *ngSwitchCase="'lessThan'"> &lt; </td>
       <td *ngSwitchCase="'lessThanOrEqual'"> &lt;= </td>

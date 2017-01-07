@@ -33,7 +33,7 @@
           <th>Qualifier</th>
           <th>Value</th>  
         </tr>
-        <tr *ngFor="let condition of query.query">
+        <tr *ngFor="let condition of query.conditions">
           <td>{{condition?.key.name}}</td>
           <td>{{condition?.type}}</td>
           <div [ngSwitch]="condition.qualifier">

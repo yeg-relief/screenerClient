@@ -22,12 +22,14 @@
   <div class="px2"></div>
   <md-input class="col-2" 
     [formControl]="inputNumberValue" 
-    *ngIf="(state$ | async)?.type === 'number' || (state$ | async)?.type === 'integer'" placeholder="value">
+    *ngIf="(state$ | async)?.type === 'number' || ( (state$ | async)?.type === 'integer' || (state$ | async)?.type === 'number' )" placeholder="value">
   </md-input>
   <div class="col-2" *ngIf="(state$ | async)?.type === 'boolean'"></div>
+  <!--
   <div class="col-4" 
-    *ngIf="(state$ | async)?.type !== 'boolean' && (state$ | async)?.type !== 'integer'">
+    *ngIf="(state$ | async)?.type !== 'boolean' && ( (state$ | async)?.type !== 'integer' || (state$ | async)?.type !== 'number' )">
   </div>
+  -->
   <div class="px2"></div>
   <button 
     md-mini-fab color="primary" 
