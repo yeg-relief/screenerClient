@@ -125,8 +125,11 @@ export class DataService {
     const headers = new Headers({ 'Content-Type': 'application/json' });
     const options = new RequestOptions({ headers: headers });
     const body = JSON.stringify({ data: program });
+    console.log('UPDATE PROGRAM CALLED');
+    console.log(body);
     return this.http.put('/api/programs/', body, options)
-      .map(res => res.json().response)
+      .do(res => console.log(res))
+      .map(res => res.json().created)
       .catch(this.loadError)
       .toPromise();
   }

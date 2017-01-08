@@ -1,3 +1,4 @@
+{{ state$ | async | json }}
 <div class="col-12 flex flex-center my-container">
   <select class="rounded col-4" [formControl]="keySelect">
     <option *ngFor="let key of (keys$ | async)" [value]="key.name" 
@@ -22,7 +23,7 @@
   <div class="px2"></div>
   <md-input class="col-2" 
     [formControl]="inputNumberValue" 
-    *ngIf="(state$ | async)?.type === 'number' || ( (state$ | async)?.type === 'integer' || (state$ | async)?.type === 'number' )" placeholder="value">
+    *ngIf="(state$ | async)?.type === 'number' || (state$ | async)?.type === 'integer'" placeholder="value">
   </md-input>
   <div class="col-2" *ngIf="(state$ | async)?.type === 'boolean'"></div>
   <!--
