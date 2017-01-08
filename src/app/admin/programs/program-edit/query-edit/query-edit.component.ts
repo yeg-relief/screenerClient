@@ -85,6 +85,9 @@ export class QueryEditComponent implements OnInit, OnDestroy {
 
     const selectCondition$ = this.select$.asObservable()
       .map(condition => {
+        console.log('===========================')
+        console.log(condition)
+        console.log('============================')
         return {
           type: 'SELECT_CONDITION',
           payload: condition
