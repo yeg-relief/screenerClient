@@ -1,7 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { ApplicationFacingProgram } from '../../../models/program';
-import { ProgramDeleteGuardService } from './route-guard';
 import 'rxjs/add/operator/take';
+import { Store } from '@ngrx/store';
+import * as fromRoot from '../../../reducer';
+import * as fromOverview from '../actions';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-delete-confirmation',
@@ -24,15 +27,17 @@ export class DeleteConfirmationComponent implements OnInit {
   };
   deletionInProgress: boolean;
 
-  constructor(private service: ProgramDeleteGuardService) { }
+  constructor(private store: Store<fromRoot.State>, private route: ActivatedRoute) { }
 
   ngOnInit() {
-    this.service.program$.take(1).subscribe(serviceProgram => this.program = serviceProgram);
+    //this.service.program$.take(1).subscribe(serviceProgram => this.program = serviceProgram);
+    const guid = this.route.snapshot.params['guid'];
+    fromRoot.findProgram(this.store, guid).take(1).subscribe(p => this.program = p);
     this.deletionInProgress = false;
   }
 
   handleDelete() {
-    this.service.dispatchDelete(this.program);
+    this.store.dispatch(new fromOverview.DeleteProgram(this.program));
     this.deletionInProgress = true;
   }
 }

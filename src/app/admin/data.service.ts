@@ -143,9 +143,8 @@ export class DataService {
   }
 
   deleteProgram(program: ApplicationFacingProgram) {
-    const headers = new Headers({ 'Content-Type': 'application/json' });
-    const options = new RequestOptions({ headers: headers });
-    return this.http.delete(`/api/programs/${program.guid}`, options)
+    return this.http.delete(`/api/programs/${program.guid}`)
+      .do(res => console.log(res))
       .map(res => res.json().removed)
       .catch(this.loadError)
       .toPromise()
