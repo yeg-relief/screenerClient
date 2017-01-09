@@ -13,9 +13,6 @@
   </div>
 </app-bread-crumb>
 
-{{ views | json }}
-{{ view$ | async | json }}
-{{ submit$ }}
 <!-- SAVE BAR -->
 <md-progress-bar mode="indeterminate" color="warn" *ngIf="saving$ | async"></md-progress-bar>
 <div class="p2 center">

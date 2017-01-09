@@ -72,7 +72,7 @@ export class ApplicationSideComponent implements OnInit, OnDestroy {
       });
 
     const onQuerySave$ = this.saveQuery$
-      .filter(query => query.conditions !== undefined && query.guid !== undefined && query.id !== undefined)
+      .filter(query => query.conditions !== undefined && query.id !== undefined)
       .filter(query => query.conditions.length > 0)
       .map(query => {
         return {

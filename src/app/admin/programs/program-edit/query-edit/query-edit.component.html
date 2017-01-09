@@ -43,6 +43,7 @@
 </table>
 <div class="py2"></div>
 <app-condition-edit 
+  *ngIf="(state$ | async)?.editCondition !== {}"
   [condition]="editCondition"
   (save)="commitCondition.next($event)">
 </app-condition-edit>

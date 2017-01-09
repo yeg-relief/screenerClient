@@ -90,8 +90,8 @@ export class ConditionEditComponent implements OnInit, OnDestroy {
       .multicast(new ReplaySubject(1)).refCount();
 
     this.state$ = this.dispatch$()
-      .do( (action: Action) => console.log(`action.type = ${action.type}, action.payload = ${action.payload}`))
-      .let(reducer)
+      .do((action: Action) => console.log(`action.type = ${action.type}, action.payload = ${action.payload}`))
+      .let(this.reducer.bind(this))
       .do(state => console.log(state))
       .takeUntil(this.destroy$)
       .multicast(new ReplaySubject(1)).refCount();
@@ -156,13 +156,17 @@ export class ConditionEditComponent implements OnInit, OnDestroy {
       updateKeyDisplayOnChange$,
       clearKeyDisplay$
     )
-    .takeUntil(this.destroy$)
-    .subscribe();
+      .takeUntil(this.destroy$)
+      .subscribe();
   }
 
   dispatch$() {
     const initState$ = this.condition
       .map(condition => {
+        console.log('====================')
+        console.log('initState$')
+        console.log(condition);
+        console.log('--------------------')
         return {
           type: 'INIT_STATE',
           payload: condition
@@ -179,13 +183,13 @@ export class ConditionEditComponent implements OnInit, OnDestroy {
         };
       }).multicast(new ReplaySubject(1)).refCount();
 
-   const qualifierInput$ = this.qualifierInput.valueChanges
-    .map(qualifier => {
-      return {
-        type: 'INPUT_QUALIFIER',
-        payload: qualifier
-      };
-    });
+    const qualifierInput$ = this.qualifierInput.valueChanges
+      .map(qualifier => {
+        return {
+          type: 'INPUT_QUALIFIER',
+          payload: qualifier
+        };
+      });
 
     const booleanSelect$ = this.booleanValueSelect.valueChanges
       .map(boolValue => {
@@ -204,7 +208,7 @@ export class ConditionEditComponent implements OnInit, OnDestroy {
       });
 
     const clear$ = this.clear$.asObservable()
-      .map( () => {
+      .map(() => {
         return {
           type: 'RESET_STATE'
         };
@@ -228,13 +232,18 @@ export class ConditionEditComponent implements OnInit, OnDestroy {
   ngOnDestroy() {
     this.destroy$.next();
   }
-}
 
-function reducer(actions: Observable<any>): Observable<ProgramCondition> {
-  return actions.scan( (state, action) => {
+  reducer(actions: Observable<any>): Observable<ProgramCondition> {
+    return actions.scan((state, action) => {
       switch (action.type) {
         case 'INIT_STATE': {
-          return cloneDeep(action.payload);
+          const condition = cloneDeep(action.payload);
+          if (Object.keys(condition).length === 0 && condition.constructor === Object) {
+            return Object.assign({}, state, condition);
+          }
+          this.setForm(condition);
+          return Object.assign({}, state, condition);
+
         }
         case 'SELECT_KEY': {
           if (action.payload.type === 'number' || action.payload.type === 'integer') {
@@ -290,5 +299,17 @@ function reducer(actions: Observable<any>): Observable<ProgramCondition> {
           return state;
         }
       }
-  }, {});
+    }, {});
+  }
+
+  setForm(condition: ProgramCondition) {
+    if(condition.key.type === 'number'){
+      this.inputNumberValue.setValue(condition.value);
+      const qualifierIndex = this.qualifierOptions.findIndex(qualifier => qualifier.value === condition.qualifier);
+      this.qualifierInput.setValue(this.qualifierOptions[qualifierIndex].value);
+    } else if (condition.key.type === 'boolean') {
+      const booleanIndex = this.booleanValueOptions.findIndex(qualifier => qualifier.value === condition.value);
+      this.booleanValueSelect.setValue(this.booleanValueOptions[booleanIndex].value);
+    }
+  }
 }

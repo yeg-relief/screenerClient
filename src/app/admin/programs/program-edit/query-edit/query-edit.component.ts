@@ -105,6 +105,11 @@ export class QueryEditComponent implements OnInit, OnDestroy {
    // effect refactor 
     const handleSave$ = this.onSave$.asObservable()
       .switchMap(_ => this.state$.map(state => state.query))
+      .do(query => {
+        console.log('+++++++++++++++++')
+        console.log(query)
+        console.log('__________________')
+      })
       .filter(query => query.conditions !== undefined)
       .filter(query => query.conditions.length > 0)
       .do(query => this.save.next(query))
