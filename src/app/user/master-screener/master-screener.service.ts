@@ -32,6 +32,8 @@ export class MasterScreenerService {
     const body = JSON.stringify({ data: form});
     return this.http.post('/api/user_master_screener/', body, options)
             .map(res => res.json().response)
+            .map(unwrappedResponse => unwrappedResponse.map(response => response.value))
+            .do(thing => console.log(thing))
             .catch(this.loadError)
             .toPromise();
   }
