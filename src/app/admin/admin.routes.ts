@@ -13,12 +13,10 @@ import { EditGuardService } from './master-screener/edit/edit-guard.service';
 
 import { ProgramsComponent } from './programs/programs.component';
 import { ProgramOverviewComponent } from './programs/program-overview/program-overview.component';
-import { ProgramOverviewGuardService } from './programs/program-overview/route-guard';
 import { ProgramEditComponent } from './programs/program-edit/program-edit.component';
-import { ProgramEditGuardService } from './programs/program-edit/route-guard';
 import { DeleteConfirmationComponent } from './programs/program-overview/delete-confirmation/delete-confirmation.component';
-import { ProgramDeleteGuardService } from './programs/program-overview/delete-confirmation/route-guard';
 import { QueryEditComponent } from './programs/program-edit/query-edit/query-edit.component';
+import { ProgramsResolverService } from './programs/program-overview/programs-resolver.service';
 
 import { KeysComponent } from './keys/keys.component';
 import { KeysOverviewComponent } from './keys/overview/overview.component';
@@ -81,17 +79,17 @@ export const routing: ModuleWithProviders = RouterModule.forChild([
           {
             path: 'overview',
             component: ProgramOverviewComponent,
-            //canActivate: [ProgramOverviewGuardService]
+            resolve: {
+              programs: ProgramsResolverService
+            }
           },
           {
             path: 'edit/:guid',
             component: ProgramEditComponent,
-            //canActivate: [ProgramEditGuardService]
           },
           {
             path: 'delete/:guid',
             component: DeleteConfirmationComponent,
-            //canActivate: [ProgramDeleteGuardService]
           },
           {
             path: 'query-edit/:guid/:id',
