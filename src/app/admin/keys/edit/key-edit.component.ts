@@ -1,17 +1,20 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { Router } from '@angular/router';
 import { FormControl, Validators, FormGroup } from '@angular/forms';
+import { Router } from '@angular/router';
 import { Key } from '../../models/key';
 import { Store } from '@ngrx/store';
 import * as keysActions from '../actions';
 import * as fromRoot from '../../reducer';
-import { KeyEditService } from './service';
 import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/operator/withLatestFrom';
 import 'rxjs/add/operator/scan';
 import 'rxjs/add/operator/takeUntil';
+import 'rxjs/add/operator/take';
 import 'rxjs/add/operator/map';
+import 'rxjs/add/operator/do';
+import 'rxjs/add/operator/delay';
 import { Subject } from 'rxjs/Subject';
+import { DataService } from '../../data.service';
 
 /*
  for now we will only focus on making new keys and not editing existing keys. 
@@ -45,10 +48,11 @@ export class KeyEditComponent implements OnInit, OnDestroy {
     name: this.nameControl,
     type: this.typeControl
   });
+  saving = false;
 
   constructor(
     private store: Store<fromRoot.State>,
-    private service: KeyEditService,
+    private data: DataService,
     private router: Router
   ) { }
 
@@ -80,10 +84,16 @@ export class KeyEditComponent implements OnInit, OnDestroy {
       name: this.form.value.name,
       type: this.form.value.type
     };
-    this.store.dispatch(new keysActions._UpdateKey(key));
-    this.service.updateKey(key).subscribe({
-      complete: () => this.router.navigateByUrl('/admin/keys/overview')
-    });
+    this.data.updateKey([key])
+      .take(1)
+      .do(() => this.store.dispatch(new keysActions._UpdateKey([key])))
+      .do(() => this.saving = true)
+      .delay(2000)
+      .subscribe({
+        error: err => console.error(err),
+        complete: () => this.router.navigateByUrl('/admin/keys/overview')
+      })
+    
   }
 }
 

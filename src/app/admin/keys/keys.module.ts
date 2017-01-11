@@ -4,13 +4,12 @@ import { KeysComponent } from './keys.component';
 import { KeysOverviewComponent } from './overview/overview.component';
 import { RouterModule } from '@angular/router';
 import { MaterialModule } from '@angular/material';
-import { KeyRouteGuard } from './route-guard.service';
 import { KeyDetailComponent } from './detail/detail.component';
 import { KeyEditComponent } from './edit/key-edit.component';
 import { KeyOverviewControlsComponent } from './overview/key-overview-controls/key-overview-controls.component';
 import { AdminCoreModule } from '../core/admin-core.module';
 import { ReactiveFormsModule } from '@angular/forms';
-import { KeyEditService } from './edit/service';
+import { KeyResolverService } from './overview/key-resolver.service';
 
 @NgModule({
   imports: [
@@ -28,8 +27,7 @@ import { KeyEditService } from './edit/service';
     KeyOverviewControlsComponent
   ],
   providers: [
-    KeyRouteGuard,
-    KeyEditService
+    KeyResolverService
   ]
 })
 export class KeysModule { }

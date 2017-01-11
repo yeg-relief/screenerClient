@@ -33,7 +33,7 @@ export function reducer(state = initialState, action: KeysActions): State {
       });
     }
     case KeysActionsTypes.UPDATE_KEY: {
-      const newKey = <Key>action.payload;
+      const newKey = <Key>action.payload[0];
       const newKeys = state.keys.filter( (key: Key) => key.name !== newKey.name);
       return Object.assign({}, state, {
         keys: [newKey, ...newKeys]

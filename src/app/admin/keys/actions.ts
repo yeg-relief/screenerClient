@@ -30,7 +30,7 @@ export class _LoadKeysFailure implements Action {
 export class _UpdateKey implements Action {
   type = KeysActionsTypes.UPDATE_KEY;
 
-  constructor(public payload: Key) { }
+  constructor(public payload: [Key]) { }
 }
 
 export class _DeleteKey implements Action {

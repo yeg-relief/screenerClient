@@ -1,12 +1,7 @@
 <app-bread-crumb>
-  <div>form valid = {{form.valid}}</div>
-  <div class="px2"></div>
-  <div>form = {{ form.value | json }} </div>
-  <div class="px2"></div>
-  <div>uniqueKeyName = {{ uniqueKeyName }} </div> 
 </app-bread-crumb>
 
-
+<md-progress-bar mode="indeterminate" color="warn" *ngIf="saving"></md-progress-bar>
 <section class="key-edit-container flex flex-center col-12">
   <div class="col-2"></div>
   <md-input class="col-4" placeholder="key name" [formControl]="nameControl"></md-input>
@@ -27,7 +22,13 @@
     (click)="dispatchKeyUpdate()">
     SAVE
   </button>
-  <div class="col-2" *ngIf="form.valid && !uniqueKeyName">
+  <div class="col-1" *ngIf="form.valid && !uniqueKeyName">
     <strong>Pick a unique key name.</strong>
   </div>
+  <div class="col-1"></div>
+  <button class="col-4"
+    md-raised-button color="warn" 
+    (click)="this.router.navigateByUrl('/admin/keys/overview')">
+    CANCEL
+  </button>
 </div>

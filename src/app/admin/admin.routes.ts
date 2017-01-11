@@ -18,9 +18,10 @@ import { DeleteConfirmationComponent } from './programs/program-overview/delete-
 import { QueryEditComponent } from './programs/program-edit/query-edit/query-edit.component';
 import { ProgramsResolverService } from './programs/program-overview/programs-resolver.service';
 
+import { KeyResolverService } from './keys/overview/key-resolver.service';
+
 import { KeysComponent } from './keys/keys.component';
 import { KeysOverviewComponent } from './keys/overview/overview.component';
-import { KeyRouteGuard } from './keys/route-guard.service';
 import { KeyEditComponent } from './keys/edit/key-edit.component';
 import { EditQuestionComponent } from './master-screener/edit-question/edit-question.component'
 import { EditQuestionResolverService } from './master-screener/edit-question/edit-question-resolver.service'
@@ -103,11 +104,13 @@ export const routing: ModuleWithProviders = RouterModule.forChild([
       {
         path: 'keys',
         component: KeysComponent,
-        canActivate: [KeyRouteGuard],
         children: [
           {
             path: 'overview',
-            component: KeysOverviewComponent
+            component: KeysOverviewComponent,
+            resolve: {
+              keys: KeyResolverService
+            }
           },
           {
             path: 'edit/:id',

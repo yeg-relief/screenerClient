@@ -3,8 +3,8 @@
 </app-bread-crumb>
 <div class="py2"></div>
 <md-card-subtitle> 
-  For the momement, only allow to create keys. Edit/delete keys will have effects on questions 
-  and programs. Need to consider how to deal with this.
+  You are only allowed to create keys. Updating or deleting has consequences on the search engine that are 
+  not easily reconciled. It is suggested to create keys and ignore ones not being currently used etc. 
 </md-card-subtitle>
 
 <section class="col-12 flex">
@@ -20,6 +20,7 @@
         <td> {{ key.type }} </td>
         <td>
           <button 
+            disabled
             md-mini-fab color="warn"
             (click)="removeKey(key)">
               <i class="material-icons">clear</i>

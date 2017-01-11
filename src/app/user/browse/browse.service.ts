@@ -9,6 +9,7 @@ import 'rxjs/add/operator/pluck';
 import 'rxjs/add/operator/reduce';
 import 'rxjs/add/operator/multicast';
 import 'rxjs/add/operator/toArray';
+import 'rxjs/add/operator/map';
 
 @Injectable()
 export class BrowseService {

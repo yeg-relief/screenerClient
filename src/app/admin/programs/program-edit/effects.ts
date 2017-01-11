@@ -13,14 +13,14 @@ export class ProgramEditEffects {
   @Effect() savedProgramUpdate$ = this.actions$
     .ofType(programOverview.ProgramOverviewActionsTypes.UPDATE_PROGRAM_SUCCESS)
     // cheap hack in order to ensure that proper results load on navigating back to overview
-    .delay(1000)
+    .delay(2000)
     .do(() => this.router.navigateByUrl('/admin/programs/overview'))
     .map(() => new programEdit.SaveSuccess({}));
 
   @Effect() savedProgramCreate$ = this.actions$
     .ofType(programOverview.ProgramOverviewActionsTypes.CREATE_PROGRAM_SUCCESS)
     // cheap hack in order to ensure that proper results load on navigating back to overview
-    .delay(1000)
+    .delay(2000)
     .do(() => this.router.navigateByUrl('/admin/programs/overview'))
     .map(() => new programEdit.SaveSuccess({}));
 

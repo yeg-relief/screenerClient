@@ -154,12 +154,20 @@ export class DataService {
   }
 
   // not implemented server side as of yet... not really implemented here either jajajaja
-  updateKey(key: Key) {
-    return this.keys$;
+  updateKey(keys: Key[]) {
+    const headers = new Headers({ 'Content-Type': 'application/json' });
+    const options = new RequestOptions({ headers: headers });
+    const body = JSON.stringify({ keys: keys });
+    return this.http.post(`/api/keys/`, body, options)
+      .map(res => res.json().update)
+      .catch(this.loadError)
   }
 
-  // not implemented server side as of yet... not really implemented here either jajajaja
-  delete(key: Key) {
-    return this.keys$;
+  deleteKey(key: Key) {
+    return this.http.delete(`/api/keys/${key.name}`)
+      .do(res => console.log(res))
+      .map(res => res.json().success)
+      .catch(this.loadError)
+      .toPromise()
   }
 }
