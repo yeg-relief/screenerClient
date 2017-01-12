@@ -26,14 +26,14 @@ export class DataService {
   }
 
   private loadKeys() {
-    this.keys$ = this.http.get('/api/keys/')
+    this.keys$ = this.http.get('/protected/keys/')
       .map(res => res.json().keys)
       .catch(this.loadError);
   }
 
   // load every screener again naive, but it works at this point TODO: rewrite to improve scalability
   private loadAllScreeners() {
-    this.screeners$ = this.http.get('/api/master_screener/')
+    this.screeners$ = this.http.get('/protected/master_screener/')
       .map(res => res.json().response)
       .catch(this.loadError);
   }
@@ -85,7 +85,7 @@ export class DataService {
   loadLatestScreener(): Observable<MasterScreener> {
     console.log('LOAD LATEST SCREENER CALLED')
     this.loadAllScreeners();
-    return this.http.get('/api/master_screener/')
+    return this.http.get('/protected/master_screener/')
       .map(res => res.json().response)
       .map((screeners: MasterScreener[]) => {
         const sorted = screeners.sort((a, b) => a.meta.screener.version - b.meta.screener.version)
@@ -109,14 +109,14 @@ export class DataService {
     const headers = new Headers({ 'Content-Type': 'application/json' });
     const options = new RequestOptions({ headers: headers });
     const body = JSON.stringify({ data: screener });
-    return this.http.post('/api/master_screener/', body, options)
+    return this.http.post('/protected/master_screener/', body, options)
       .map(res => res.json().response)
       .catch(this.loadError)
       .toPromise();
   }
 
   loadPrograms(): Observable<ApplicationFacingProgram[]> {
-    return this.http.get('/api/programs/application/')
+    return this.http.get('/protected/programs/application/')
       .map(res => res.json().data)
       .catch(this.loadError)
   }
@@ -127,7 +127,7 @@ export class DataService {
     const body = JSON.stringify({ data: program });
     console.log('UPDATE PROGRAM CALLED');
     console.log(body);
-    return this.http.put('/api/programs/', body, options)
+    return this.http.put('/protected/programs/', body, options)
       .do(res => console.log(res))
       .map(res => res.json().created)
       .catch(this.loadError)
@@ -138,7 +138,7 @@ export class DataService {
     const headers = new Headers({ 'Content-Type': 'application/json' });
     const options = new RequestOptions({ headers: headers });
     const body = JSON.stringify({ data: program });
-    return this.http.post('/api/programs/', body, options)
+    return this.http.post('/protected/programs/', body, options)
       .do(() => console.log(program))
       .map(res => res.json().response)
       .catch(this.loadError)
@@ -146,7 +146,7 @@ export class DataService {
   }
 
   deleteProgram(program: ApplicationFacingProgram) {
-    return this.http.delete(`/api/programs/${program.guid}`)
+    return this.http.delete(`/protected/programs/${program.guid}`)
       .do(res => console.log(res))
       .map(res => res.json().removed)
       .catch(this.loadError)
@@ -158,13 +158,13 @@ export class DataService {
     const headers = new Headers({ 'Content-Type': 'application/json' });
     const options = new RequestOptions({ headers: headers });
     const body = JSON.stringify({ keys: keys });
-    return this.http.post(`/api/keys/`, body, options)
+    return this.http.post(`/protected/keys/`, body, options)
       .map(res => res.json().update)
       .catch(this.loadError)
   }
 
   deleteKey(key: Key) {
-    return this.http.delete(`/api/keys/${key.name}`)
+    return this.http.delete(`/protected/keys/${key.name}`)
       .do(res => console.log(res))
       .map(res => res.json().success)
       .catch(this.loadError)
