@@ -5,6 +5,7 @@ import { Key } from './models/key';
 import { Observable } from 'rxjs/Observable';
 import { ReplaySubject } from 'rxjs/ReplaySubject';
 import { Http, Response, Headers, RequestOptions } from '@angular/http';
+import { AuthService } from './core/services/auth.service'
 import 'rxjs/add/observable/of';
 import 'rxjs/add/operator/switchMap';
 import 'rxjs/add/observable/range';
@@ -20,20 +21,29 @@ export class DataService {
   private screeners$: Observable<MasterScreener[]>;
   private keys$: Observable<Key[]>;
 
-  constructor(private http: Http) {
+  constructor(private http: Http, private authService: AuthService) {
     this.loadAllScreeners();
     this.loadKeys();
   }
 
+  private getCredentials(): Headers{
+    const headers = new Headers();
+    headers.append("Authorization", "Basic " + this.authService.credentials);
+    //const options = new RequestOptions({ headers: headers })
+    return headers;
+  }
+
   private loadKeys() {
-    this.keys$ = this.http.get('/protected/keys/')
+    const options = new RequestOptions({headers: this.getCredentials()})
+    this.keys$ = this.http.get('/protected/keys/', options)
       .map(res => res.json().keys)
       .catch(this.loadError);
   }
 
   // load every screener again naive, but it works at this point TODO: rewrite to improve scalability
   private loadAllScreeners() {
-    this.screeners$ = this.http.get('/protected/master_screener/')
+    const options = new RequestOptions({headers: this.getCredentials()})
+    this.screeners$ = this.http.get('/protected/master_screener/', options)
       .map(res => res.json().response)
       .catch(this.loadError);
   }
@@ -84,8 +94,9 @@ export class DataService {
   // attn: this will perform an http call
   loadLatestScreener(): Observable<MasterScreener> {
     console.log('LOAD LATEST SCREENER CALLED')
-    this.loadAllScreeners();
-    return this.http.get('/protected/master_screener/')
+    //this.loadAllScreeners();
+    const options = new RequestOptions({headers: this.getCredentials()})
+    return this.http.get('/protected/master_screener/', options)
       .map(res => res.json().response)
       .map((screeners: MasterScreener[]) => {
         const sorted = screeners.sort((a, b) => a.meta.screener.version - b.meta.screener.version)
@@ -106,7 +117,8 @@ export class DataService {
   }
 
   saveScreener(screener: MasterScreener) {
-    const headers = new Headers({ 'Content-Type': 'application/json' });
+    const headers = this.getCredentials()
+    headers.append('Content-Type', 'application/json' );
     const options = new RequestOptions({ headers: headers });
     const body = JSON.stringify({ data: screener });
     return this.http.post('/protected/master_screener/', body, options)
@@ -116,13 +128,15 @@ export class DataService {
   }
 
   loadPrograms(): Observable<ApplicationFacingProgram[]> {
+    const options = new RequestOptions({headers: this.getCredentials()})
     return this.http.get('/protected/programs/application/')
       .map(res => res.json().data)
       .catch(this.loadError)
   }
 
   updateProgram(program: ApplicationFacingProgram) {
-    const headers = new Headers({ 'Content-Type': 'application/json' });
+    const headers = this.getCredentials()
+    headers.append('Content-Type', 'application/json' );
     const options = new RequestOptions({ headers: headers });
     const body = JSON.stringify({ data: program });
     console.log('UPDATE PROGRAM CALLED');
@@ -135,7 +149,8 @@ export class DataService {
   }
 
   createProgram(program: ApplicationFacingProgram) {
-    const headers = new Headers({ 'Content-Type': 'application/json' });
+    const headers = this.getCredentials()
+    headers.append('Content-Type', 'application/json' );
     const options = new RequestOptions({ headers: headers });
     const body = JSON.stringify({ data: program });
     return this.http.post('/protected/programs/', body, options)
@@ -146,6 +161,7 @@ export class DataService {
   }
 
   deleteProgram(program: ApplicationFacingProgram) {
+    const options = new RequestOptions({headers: this.getCredentials()})
     return this.http.delete(`/protected/programs/${program.guid}`)
       .do(res => console.log(res))
       .map(res => res.json().removed)
@@ -153,9 +169,10 @@ export class DataService {
       .toPromise()
   }
 
-  // not implemented server side as of yet... not really implemented here either jajajaja
+  // updateKey is really more like createKey
   updateKey(keys: Key[]) {
-    const headers = new Headers({ 'Content-Type': 'application/json' });
+    const headers = this.getCredentials()
+    headers.append('Content-Type', 'application/json' );
     const options = new RequestOptions({ headers: headers });
     const body = JSON.stringify({ keys: keys });
     return this.http.post(`/protected/keys/`, body, options)
@@ -164,6 +181,7 @@ export class DataService {
   }
 
   deleteKey(key: Key) {
+    const options = new RequestOptions({headers: this.getCredentials()})
     return this.http.delete(`/protected/keys/${key.name}`)
       .do(res => console.log(res))
       .map(res => res.json().success)

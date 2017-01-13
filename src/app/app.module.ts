@@ -11,6 +11,8 @@ import { BrowseModule } from './user/browse/browse.module';
 import { HomeComponent } from './user/home/home.component';
 import { MasterScreenerService } from './user/master-screener/master-screener.service';
 
+import { AuthService } from './admin/core/services/auth.service'
+import { AuthGuardService } from './admin/core/services/auth-guard.service';
 
 @NgModule({
   declarations: [
@@ -27,7 +29,11 @@ import { MasterScreenerService } from './user/master-screener/master-screener.se
     routing,
     MaterialModule.forRoot()
   ],
-  providers: [MasterScreenerService ],
+  providers: [
+    MasterScreenerService,
+    AuthService,
+    AuthGuardService 
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

@@ -29,14 +29,13 @@ import { EditConditionalComponent } from './master-screener/edit-conditional/edi
 import { ConditionalGuardService } from './master-screener/edit-conditional/guard.service';
 
 export const routing: ModuleWithProviders = RouterModule.forChild([
-  // commented out for development cycle
-  //{ path: '', component: AdminComponent, canActivate: [AuthGuardService] },
   {
     path: '', component: AdminComponent,
     children: [
       {
         path: 'master-screener',
         component: MasterScreenerComponent,
+        canActivate: [AuthGuardService],
         children: [
           {
             path: 'overview', component: OverviewComponent,
@@ -76,6 +75,7 @@ export const routing: ModuleWithProviders = RouterModule.forChild([
       {
         path: 'programs',
         component: ProgramsComponent,
+        canActivate: [AuthGuardService],
         children: [
           {
             path: 'overview',
@@ -104,6 +104,7 @@ export const routing: ModuleWithProviders = RouterModule.forChild([
       {
         path: 'keys',
         component: KeysComponent,
+        canActivate: [AuthGuardService],
         children: [
           {
             path: 'overview',
@@ -117,7 +118,7 @@ export const routing: ModuleWithProviders = RouterModule.forChild([
             component: KeyEditComponent
           }
         ]
-      }
+      },
     ]
   },
   { path: 'login', component: LoginComponent },

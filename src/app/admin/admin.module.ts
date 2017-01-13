@@ -47,13 +47,11 @@ import { EditQuestionResolverService } from './master-screener/edit-question/edi
     AdminComponent,
   ],
   providers: [
-    AuthGuardService, 
-    AuthService, 
     DataService, 
     HttpModule, 
     MasterScreenerResolverService,
     EditResolveService,
-    EditQuestionResolverService
+    EditQuestionResolverService,
   ]
 })
 export class AdminModule { }
