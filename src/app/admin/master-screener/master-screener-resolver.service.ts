@@ -9,7 +9,6 @@ export class MasterScreenerResolverService {
   constructor(private data: DataService) {}
 
   resolve(route: ActivatedRouteSnapshot) {
-    console.log('MASTER SCREENER RESOLVE CALLED');
     return this.data.loadLatestScreener();
   }
 
