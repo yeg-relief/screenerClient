@@ -90,9 +90,7 @@ export class ConditionEditComponent implements OnInit, OnDestroy {
       .multicast(new ReplaySubject(1)).refCount();
 
     this.state$ = this.dispatch$()
-      .do((action: Action) => console.log(`action.type = ${action.type}, action.payload = ${action.payload}`))
       .let(this.reducer.bind(this))
-      .do(state => console.log(state))
       .takeUntil(this.destroy$)
       .multicast(new ReplaySubject(1)).refCount();
 
@@ -163,10 +161,6 @@ export class ConditionEditComponent implements OnInit, OnDestroy {
   dispatch$() {
     const initState$ = this.condition
       .map(condition => {
-        console.log('====================')
-        console.log('initState$')
-        console.log(condition);
-        console.log('--------------------')
         return {
           type: 'INIT_STATE',
           payload: condition

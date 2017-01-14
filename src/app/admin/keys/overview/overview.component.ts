@@ -19,6 +19,7 @@ export class KeysOverviewComponent implements OnInit {
 
   ngOnInit() {
     const keys = this.route.snapshot.data['keys'];
+    console.log(`keys: ${keys}`);
     this.store.dispatch(new keysActions._LoadKeys({}));
     if (keys !== undefined) {
       this.store.dispatch(new keysActions._LoadKeysSuccess(keys));

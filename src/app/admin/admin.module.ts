@@ -16,7 +16,7 @@ import { AdminCoreModule } from './core/admin-core.module';
 import { ProgramOverviewEffects } from './programs/program-overview/effects';
 import { ProgramEditEffects } from './programs/program-edit/effects';
 import { ProgramDeleteEffects } from './programs/program-overview/delete-confirmation/effects';
-
+import { KeyResolverService } from './keys/overview/key-resolver.service';
 import { ProgramsModule } from './programs/programs.module';
 import { MasterScreenerModule } from './master-screener/master-screener.module';
 import { KeysModule } from './keys/keys.module';
@@ -25,6 +25,8 @@ import { HttpModule } from '@angular/http';
 import { MasterScreenerResolverService } from './master-screener/master-screener-resolver.service';
 import { EditResolveService } from './master-screener/edit/edit-resolve.service';
 import { EditQuestionResolverService } from './master-screener/edit-question/edit-question-resolver.service';
+
+import { ProgramsResolverService } from './programs/program-overview/programs-resolver.service';
 
 @NgModule({
   imports: [
@@ -52,6 +54,8 @@ import { EditQuestionResolverService } from './master-screener/edit-question/edi
     MasterScreenerResolverService,
     EditResolveService,
     EditQuestionResolverService,
+    KeyResolverService,
+    ProgramsResolverService
   ]
 })
 export class AdminModule { }

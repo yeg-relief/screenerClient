@@ -57,8 +57,7 @@ export class EditQuestionComponent implements OnInit, OnDestroy {
       .multicast(new ReplaySubject(1)).refCount();
     this.originalEditQuestionKey$ = this.store.let(fromRoot.getOriginalKeyQuestionEdit);
     this.availableKeys$ = this.store.let(fromRoot.getPresentQuestionEdit)
-      .map(val => val.unusedKeys)
-      .do(keys => console.log(keys))
+      .map(val => val.unusedKeys);
   }
 
   ngOnDestroy() {

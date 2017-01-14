@@ -21,21 +21,21 @@ export class DataService {
   private screeners$: Observable<MasterScreener[]>;
   private keys$: Observable<Key[]>;
 
-  constructor(private http: Http, private authService: AuthService) {
-    this.loadAllScreeners();
-    this.loadKeys();
-  }
+  constructor(private http: Http, private authService: AuthService) {}
 
   private getCredentials(): Headers{
+    if (this.authService.credentials === undefined) {
+      throw new Error('undefined credentials in data service');
+    }
     const headers = new Headers();
     headers.append("Authorization", "Basic " + this.authService.credentials);
     //const options = new RequestOptions({ headers: headers })
     return headers;
   }
 
-  private loadKeys() {
+  getKeys() {
     const options = new RequestOptions({headers: this.getCredentials()})
-    this.keys$ = this.http.get('/protected/keys/', options)
+    return this.keys$ = this.http.get('/protected/keys/', options)
       .map(res => res.json().keys)
       .catch(this.loadError);
   }
@@ -68,6 +68,10 @@ export class DataService {
 
     if (version === 0) {
       return Observable.of(initialScreener);
+    }
+
+    if(this.screeners$ === undefined) {
+      this.loadAllScreeners();
     }
 
     return this.screeners$
@@ -106,14 +110,13 @@ export class DataService {
 
   // attn: this will perform an http call
   loadVersionMetaData(): Observable<number[]> {
+    if(this.screeners$ === undefined) {
+      this.loadAllScreeners();
+    }
+
     return this.screeners$
       .switchMap(x => x)
       .reduce((accum: number[], screener: MasterScreener) => accum.concat(screener.version), []);
-  }
-
-  // attn: this will perform an http call
-  getKeys(): Observable<Key[]> {
-    return this.keys$;
   }
 
   saveScreener(screener: MasterScreener) {
@@ -129,7 +132,7 @@ export class DataService {
 
   loadPrograms(): Observable<ApplicationFacingProgram[]> {
     const options = new RequestOptions({headers: this.getCredentials()})
-    return this.http.get('/protected/programs/application/')
+    return this.http.get('/protected/programs/application/', options)
       .map(res => res.json().data)
       .catch(this.loadError)
   }
@@ -162,7 +165,7 @@ export class DataService {
 
   deleteProgram(program: ApplicationFacingProgram) {
     const options = new RequestOptions({headers: this.getCredentials()})
-    return this.http.delete(`/protected/programs/${program.guid}`)
+    return this.http.delete(`/protected/programs/${program.guid}`, options)
       .do(res => console.log(res))
       .map(res => res.json().removed)
       .catch(this.loadError)
@@ -182,7 +185,7 @@ export class DataService {
 
   deleteKey(key: Key) {
     const options = new RequestOptions({headers: this.getCredentials()})
-    return this.http.delete(`/protected/keys/${key.name}`)
+    return this.http.delete(`/protected/keys/${key.name}`, options)
       .do(res => console.log(res))
       .map(res => res.json().success)
       .catch(this.loadError)

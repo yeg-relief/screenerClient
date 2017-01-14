@@ -35,13 +35,10 @@ export function reducer(state = initialState, action: ProgramOverviewActions): S
     }
 
     case ProgramOverviewActionsTypes.LOAD_PROGRAMS_SUCCESS: {
-      console.log(action.type);
-      console.log(action.payload);
       const newState = cloneDeep(state);
       newState.loading = false;
       newState.error = '';
       newState.programs = [...<ApplicationFacingProgram[]>action.payload];
-      console.log(newState);
       return newState;
     }
 

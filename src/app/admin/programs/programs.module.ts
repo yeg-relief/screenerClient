@@ -14,8 +14,6 @@ import { ApplicationSideComponent } from './program-edit/application-side/applic
 import { ReactiveFormsModule } from '@angular/forms';
 import { ConditionEditComponent } from './program-edit/condition-edit/condition-edit.component';
 import { QueryEditComponent } from './program-edit/query-edit/query-edit.component';
-import { ProgramsResolverService } from './program-overview/programs-resolver.service';
-
 
 @NgModule({
   imports: [
@@ -37,8 +35,6 @@ import { ProgramsResolverService } from './program-overview/programs-resolver.se
     ConditionEditComponent,
     QueryEditComponent
   ],
-  providers: [
-    ProgramsResolverService
-  ]
+  providers: []
 })
 export class ProgramsModule { }

@@ -10,9 +10,7 @@ export class ProgramOverviewEffects {
 
   @Effect() loadPrograms$ = this.actions$
     .ofType(programOverview.ProgramOverviewActionsTypes.LOAD_PROGRAMS)
-    .do( () => console.log('LOAD PROGRAMS CALLED'))
     .switchMap(() => this.data.loadPrograms())
-    .do( programs => console.log(programs))
     .map(programs => new programOverview.LoadProgramsSuccess(programs));
 
   @Effect() updateProgram$ = this.actions$

@@ -45,9 +45,7 @@ export class QueryEditComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.state$ = this.dispatch$()
-      .do( (action: Action) => console.log(`action.type = ${action.type}, action.payload = ${action.payload}`))
       .let(reducer)
-      .do(state => console.log(state))
       .do(state => {
         // gross code
         if (state.query.conditions !== undefined) {
@@ -85,9 +83,6 @@ export class QueryEditComponent implements OnInit, OnDestroy {
 
     const selectCondition$ = this.select$.asObservable()
       .map(condition => {
-        console.log('===========================')
-        console.log(condition)
-        console.log('============================')
         return {
           type: 'SELECT_CONDITION',
           payload: condition
@@ -105,11 +100,6 @@ export class QueryEditComponent implements OnInit, OnDestroy {
    // effect refactor 
     const handleSave$ = this.onSave$.asObservable()
       .switchMap(_ => this.state$.map(state => state.query))
-      .do(query => {
-        console.log('+++++++++++++++++')
-        console.log(query)
-        console.log('__________________')
-      })
       .filter(query => query.conditions !== undefined)
       .filter(query => query.conditions.length > 0)
       .do(query => this.save.next(query))

@@ -74,15 +74,12 @@ export class ProgramEditComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.state$ = this.dispatch$()
-      .do((action: Action) => console.log(`action.type = ${action.type}, action.payload = ${action.payload}`))
       .let(reducer)
-      .do(state => console.log(state))
       .takeUntil(this.destroy$)
       .multicast(new ReplaySubject(1)).refCount();
 
     this.submit$
       .asObservable()
-      .do(() => console.log('submit$ emit'))
       .withLatestFrom(this.state$)
       .filter(() => this.form.valid)
       .do(() => this.saving$.next(true))

@@ -26,8 +26,6 @@ import { KeyResolverService } from './overview/key-resolver.service';
     KeyEditComponent,
     KeyOverviewControlsComponent
   ],
-  providers: [
-    KeyResolverService
-  ]
+  providers: []
 })
 export class KeysModule { }

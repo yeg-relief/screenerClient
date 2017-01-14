@@ -47,9 +47,7 @@ export class ApplicationSideComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.state$ = this.dispatch$()
-      .do( (action: Action) => console.log(`action.type = ${action.type}, action.payload = ${action.payload}`))
       .let(reducer)
-      .do(state => console.log(state))
       .do(state => this.saveQueries.emit(state.queries))
       .takeUntil(this.destroy$)
       .multicast(new ReplaySubject(1)).refCount();

@@ -1,8 +1,6 @@
 import { Injectable } from '@angular/core';
 import {Http, Headers, RequestOptions} from '@angular/http';
 import { Observable } from 'rxjs/Observable';
-import 'rxjs/add/observable/of';
-import 'rxjs/add/operator/do';
 
 @Injectable()
 export class AuthService {
@@ -14,8 +12,9 @@ export class AuthService {
   constructor(private http: Http){}
 
   login(user: string, password: string): Observable<boolean> {
+    const auth = btoa(user + ":" + password)
     const headers = new Headers();
-    headers.append("Authorization", "Basic " + btoa(user + ":" + password));
+    headers.append("Authorization", "Basic " + auth);
     const options = new RequestOptions({ headers: headers })
 
     return this.http.get('/protected/login/', options)
@@ -23,10 +22,9 @@ export class AuthService {
       .do(success => this.isLoggedIn = success)
       .do(success => {
         if(success) {
-          this.credentials = btoa('username:password')
+          this.credentials = auth;
         }
       })
-      .do(success => console.log(`succes: ${success}. isLoggedIn: ${this.isLoggedIn}. credentials: ${this.credentials}`))
   }
 
   logout(): void {

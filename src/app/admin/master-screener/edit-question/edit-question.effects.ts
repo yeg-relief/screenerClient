@@ -26,9 +26,6 @@ export class EditQuestionEffects {
   @Effect() findUnusedKeys = this.actions$
     .ofType(editQuestion.EditQuestionActionTypes.INIT_EDIT)
     .switchMap( () => this.store.let(fromRoot.findUnusedKeys))
-    .do(() => console.log('findUnsedKeys @Effect EditQuestionEffects'))
-    .do(keys => console.log(keys))
-    .do(() => console.log('============================'))
     .map(keys => new editQuestion.EditQuestionLoadUnusedKeys(<Key[]>keys))
 
   @Effect() saveQuestion$ = this.actions$
@@ -88,7 +85,6 @@ export class EditQuestionEffects {
 
   @Effect() addConditional$ = this.actions$
     .ofType(editQuestion.EditQuestionActionTypes.ADD_CONDITIONAL)
-    .do(action => console.log(action))
     .map(action => action.payload)
     .switchMap(payload => {
       const questionKey = <string>payload.questionKey;

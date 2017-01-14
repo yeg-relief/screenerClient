@@ -22,10 +22,6 @@ export class ProgramOverviewComponent implements OnInit {
   ngOnInit() {
     const programs = this.route.snapshot.data['programs'];
     if (programs !== undefined){
-      console.log('+++++++++++++++++++++++++++++')
-      console.log('resolved data')
-      console.log(programs)
-      console.log('_____________________________')
       this.store.dispatch(new programOverview.LoadProgramsSuccess(programs));
       this.store.dispatch(new fromKeys.LoadKeys({}));
     }
