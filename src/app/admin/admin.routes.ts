@@ -9,7 +9,6 @@ import { OverviewComponent } from './master-screener/overview/overview.component
 import { EditComponent } from './master-screener/edit/edit.component';
 import { EditResolveService } from './master-screener/edit/edit-resolve.service';
 import { MasterScreenerResolverService } from './master-screener/master-screener-resolver.service';
-import { EditGuardService } from './master-screener/edit/edit-guard.service';
 
 import { ProgramsComponent } from './programs/programs.component';
 import { ProgramOverviewComponent } from './programs/program-overview/program-overview.component';
@@ -54,7 +53,6 @@ export const routing: ModuleWithProviders = RouterModule.forChild([
           {
             path: 'edit/version/:version/question/:key',
             component: EditQuestionComponent,
-            //canActivate: [EditQuestionGuardService],
             resolve: {
               question: EditQuestionResolverService
             }
@@ -62,7 +60,6 @@ export const routing: ModuleWithProviders = RouterModule.forChild([
           {
             path: 'edit/version/:version/conditionals/question/:key',
             component: EditConditionalComponent,
-            //canActivate: [ConditionalGuardService]
           },
           {
             path: '', pathMatch: 'full', redirectTo: 'overview',

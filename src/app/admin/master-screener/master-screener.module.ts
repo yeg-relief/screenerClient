@@ -9,17 +9,14 @@ import { KeyComponent } from './overview/key/key.component';
 import { OverviewQuestionComponent } from './overview/question/question.component';
 import { EditComponent } from './edit/edit.component';
 import { MaterialModule } from '@angular/material';
-import { EditGuardService } from './edit/edit-guard.service';
 import { EditControlsComponent } from './edit/controls/controls.component';
 import { EditQuestionsComponent } from './edit/edit-questions/edit-questions.component';
 import { ReactiveFormsModule } from '@angular/forms';
 import { UserFacingProgramModule } from '../../shared/modules/user-facing-program.module';
 import { QuestionModule } from '../../shared/modules/question.module';
 import { EditQuestionControlsComponent } from './edit/edit-question-controls/edit-question-controls.component';
-//import { MasterScreenerGuardService } from './master-screener.guard.service';
 import { MasterScreenerResolverService } from './master-screener-resolver.service';
 import { EditQuestionComponent } from './edit-question/edit-question.component';
-import { EditQuestionGuardService } from './edit-question/edit-question.guard.service';
 import { EditQuestionToolbarControlsComponent }
   from './edit-question/edit-question-toolbar-controls/edit-question-toolbar-controls.component';
 import { EditQuestionTypeComponent } from './edit-question/edit-question-type/edit-question-type.component';
@@ -31,7 +28,6 @@ import { EditQuestionDisplayControlsComponent }
   from './edit-question/edit-question-display-controls/edit-question-display-controls.component';
 import { QuestionErrorsComponent } from './edit-question/question-errors/question-errors.component';
 import { EditConditionalComponent } from './edit-conditional/edit-conditional.component';
-import { ConditionalGuardService } from './edit-conditional/guard.service';
 import { EditConditionalDisplayControlsComponent }
   from './edit-conditional/edit-conditional-display-controls/edit-conditional-display-controls.component';
 import { EditConditionalToolbarControlsComponent }
@@ -73,9 +69,6 @@ import { AdminCoreModule } from '../core/admin-core.module';
     EditConditionalToolbarControlsComponent,
   ],
   providers: [
-    EditGuardService,
-    EditQuestionGuardService,
-    ConditionalGuardService,
   ]
 })
 export class MasterScreenerModule { }
