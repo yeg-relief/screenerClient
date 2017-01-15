@@ -25,7 +25,6 @@ import { KeyEditComponent } from './keys/edit/key-edit.component';
 import { EditQuestionComponent } from './master-screener/edit-question/edit-question.component'
 import { EditQuestionResolverService } from './master-screener/edit-question/edit-question-resolver.service'
 import { EditConditionalComponent } from './master-screener/edit-conditional/edit-conditional.component';
-import { ConditionalGuardService } from './master-screener/edit-conditional/guard.service';
 
 export const routing: ModuleWithProviders = RouterModule.forChild([
   {

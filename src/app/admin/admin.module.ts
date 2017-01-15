@@ -6,7 +6,6 @@ import { AuthGuardService } from './core/services/auth-guard.service';
 import { AuthService } from './core/services/auth.service';
 import { StoreModule } from '@ngrx/store';
 import { reducer } from './reducer';
-import { EditScreenerEffects } from './master-screener/edit/edit.effects';
 import { EffectsModule } from '@ngrx/effects';
 import { MaterialModule } from '@angular/material';
 import { DataService } from './data.service';
@@ -34,7 +33,6 @@ import { ProgramsResolverService } from './programs/program-overview/programs-re
     routing,
     MaterialModule.forRoot(),
     StoreModule.provideStore(reducer),
-    //EffectsModule.run(EditScreenerEffects),
     EffectsModule.run(EditQuestionEffects),
     EffectsModule.run(KeyEffects),
     EffectsModule.run(ProgramOverviewEffects),
