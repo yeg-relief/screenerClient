@@ -71,7 +71,6 @@ export class KeyEditComponent implements OnInit, OnDestroy {
       .subscribe(
         (noDuplicate) => this.uniqueKeyName = noDuplicate,
         (err) => console.log(err),
-        () => console.log('completed')
       );
   }
 
@@ -88,9 +87,8 @@ export class KeyEditComponent implements OnInit, OnDestroy {
       .take(1)
       .do(() => this.store.dispatch(new keysActions._UpdateKey([key])))
       .do(() => this.saving = true)
-      .delay(2000)
+      .delay(500)
       .subscribe({
-        error: err => console.error(err),
         complete: () => this.router.navigateByUrl('/admin/keys/overview')
       })
     

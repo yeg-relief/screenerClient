@@ -21,16 +21,10 @@ export class ProgramOverviewComponent implements OnInit {
 
   ngOnInit() {
     const programs = this.route.snapshot.data['programs'];
-    if (programs !== undefined){
+    if (programs !== undefined && Array.isArray(programs)){
       this.store.dispatch(new programOverview.LoadProgramsSuccess(programs));
       this.store.dispatch(new fromKeys.LoadKeys({}));
     }
-    /*
-    this.dataService.loadPrograms()
-      .do(programs => this.store.dispatch(new programOverview.LoadProgramsSuccess(programs)))
-      .do(() => this.store.dispatch(new fromKeys.LoadKeys({})))
-      .subscribe()
-    */
     this.programs$ = this.store.let(fromRoot.getLoadedPrograms);
     // this is not semantic because it will be false when all programs are loaded
     this.loading$ = this.store.let(fromRoot.areProgramsLoaded);

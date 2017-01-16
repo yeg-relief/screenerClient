@@ -29,7 +29,7 @@ export class QuestionsComponent implements OnInit {
     if (data.error) {
       // gross object reference data.error.msg or something would be better
       this.errorMessage = 'unable to load data from server, please try later.';
-    } else {
+    } else if(Array.isArray(data)){
       this.questions = data;
       try {
         this.form = this.questionControlService.toFormGroup(this.questions);

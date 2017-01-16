@@ -93,9 +93,7 @@ export class ProgramEditComponent implements OnInit, OnDestroy {
       })
       .catch(error => Observable.of('error encountered'))
       .subscribe({
-        next: val => console.log(val),
         error: err => console.error(err),
-        complete: () => console.log('submit complete')
       });
 
     this.view$
@@ -107,8 +105,7 @@ export class ProgramEditComponent implements OnInit, OnDestroy {
           } else {
             this.hide = true;
           }
-        },
-        complete: () => console.log('view subscription complete')
+        }
       });
   }
 

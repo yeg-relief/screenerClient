@@ -9,8 +9,7 @@ export class KeyResolverService {
   constructor(private data: DataService) {}
 
   resolve(route: ActivatedRouteSnapshot) {
-    console.log(`KeyResolverService.resolve called with route: ${route}`);
-    return this.data.getKeys().do(thing => console.log(thing))
+    return this.data.getKeys();
   }
 
 }

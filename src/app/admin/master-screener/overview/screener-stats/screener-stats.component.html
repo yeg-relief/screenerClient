@@ -2,16 +2,31 @@
   <div class="border-left border-right bg-silver col-12 py1">
     <div class="clearfix flex ml1">
       <div class="col-1"></div>
-      <div class="col-2 flex-grow border-right unselectable mt1" style="pointer-events:none"> 
-        <p>question count: {{ questionCount }} 
+      <div class="col-2 flex-grow border-right unselectable mt1" style="pointer-events:none">
+        <div *ngIf="questionCount === undefined">
+          <p>question count: n/a
+        </div> 
+        <div *ngIf="questionCount !== undefined">
+          <p>question count: {{ questionCount }}
+        </div>
       </div>
       <div class="col-1"></div>
       <div class= "col-2 flex-grow border-right ml1 unselectable mt1" style="pointer-events:none"> 
-        <p>created on: {{ creationDate | date}} 
+        <div *ngIf="creationDate !== undefined && creationDate !== 0">
+          <p>created on: {{ creationDate | date }} 
+        </div>
+        <div *ngIf="creationDate === undefined || creationDate === 0">
+          <p>created on: n/a
+        </div>
       </div>
       <div class="col-1"></div>
-      <div class= "col-2 flex-grow ml1 unselectable mt1" style="pointer-events:none"> 
-        <p>version: {{ versionNumber }} 
+      <div class= "col-2 flex-grow ml1 unselectable mt1" style="pointer-events:none">
+        <div *ngIf="questionCount === undefined">
+          <p>question count: n/a
+        </div> 
+        <div *ngIf="questionCount !== undefined">   
+          <p>version: {{ versionNumber }}
+        </div> 
       </div>
      </div>
   </div>

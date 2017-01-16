@@ -29,7 +29,6 @@ export class DataService {
     }
     const headers = new Headers();
     headers.append("Authorization", "Basic " + this.authService.credentials);
-    //const options = new RequestOptions({ headers: headers })
     return headers;
   }
 
@@ -75,7 +74,6 @@ export class DataService {
     }
 
     return this.screeners$
-      .do(() => console.log(`loadScreener(${version}) called`))
       .switchMap(x => x)
       .filter((screener: MasterScreener) => screener.version === version)
       .catch(this.loadError)
@@ -97,7 +95,6 @@ export class DataService {
 
   // attn: this will perform an http call
   loadLatestScreener(): Observable<MasterScreener> {
-    console.log('LOAD LATEST SCREENER CALLED')
     //this.loadAllScreeners();
     const options = new RequestOptions({headers: this.getCredentials()})
     return this.http.get('/protected/master_screener/', options)
@@ -142,10 +139,7 @@ export class DataService {
     headers.append('Content-Type', 'application/json' );
     const options = new RequestOptions({ headers: headers });
     const body = JSON.stringify({ data: program });
-    console.log('UPDATE PROGRAM CALLED');
-    console.log(body);
     return this.http.put('/protected/programs/', body, options)
-      .do(res => console.log(res))
       .map(res => res.json().created)
       .catch(this.loadError)
       .toPromise();
@@ -157,7 +151,6 @@ export class DataService {
     const options = new RequestOptions({ headers: headers });
     const body = JSON.stringify({ data: program });
     return this.http.post('/protected/programs/', body, options)
-      .do(() => console.log(program))
       .map(res => res.json().response)
       .catch(this.loadError)
       .toPromise();
@@ -166,7 +159,6 @@ export class DataService {
   deleteProgram(program: ApplicationFacingProgram) {
     const options = new RequestOptions({headers: this.getCredentials()})
     return this.http.delete(`/protected/programs/${program.guid}`, options)
-      .do(res => console.log(res))
       .map(res => res.json().removed)
       .catch(this.loadError)
       .toPromise()
@@ -181,14 +173,5 @@ export class DataService {
     return this.http.post(`/protected/keys/`, body, options)
       .map(res => res.json().update)
       .catch(this.loadError)
-  }
-
-  deleteKey(key: Key) {
-    const options = new RequestOptions({headers: this.getCredentials()})
-    return this.http.delete(`/protected/keys/${key.name}`, options)
-      .do(res => console.log(res))
-      .map(res => res.json().success)
-      .catch(this.loadError)
-      .toPromise()
   }
 }

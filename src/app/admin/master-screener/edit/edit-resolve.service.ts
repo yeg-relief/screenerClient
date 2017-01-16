@@ -18,7 +18,6 @@ export class EditResolveService {
 
   resolve(route: ActivatedRouteSnapshot) {
     const version = +route.params['version'];
-    console.log(`edit resolver version: ${version}`)
     return this.data.loadScreener(version)
             .take(1);
   }

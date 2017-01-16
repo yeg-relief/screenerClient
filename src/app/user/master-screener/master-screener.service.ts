@@ -1,12 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
-import 'rxjs/add/observable/from';
-import 'rxjs/add/operator/toArray';
-import 'rxjs/add/operator/delay';
 import 'rxjs/add/observable/throw';
-import 'rxjs/add/operator/let';
 import 'rxjs/add/operator/toPromise';
-import 'rxjs/add/operator/do';
 import { Question, UserFacingProgram } from '../../shared';
 import { Http, Response, Headers, RequestOptions } from '@angular/http';
 import { FormGroup } from '@angular/forms';
@@ -22,7 +17,6 @@ export class MasterScreenerService {
   loadQuestions(): Observable<Question[]> {
     return this.http.get('/api/questions/latest')
             .map(res => res.json().response)
-            .do(questions => console.log(questions))
             .catch(this.loadError);
   }
 
@@ -33,7 +27,6 @@ export class MasterScreenerService {
     return this.http.post('/api/user_master_screener/', body, options)
             .map(res => res.json().response)
             .map(unwrappedResponse => unwrappedResponse.map(response => response.value))
-            .do(thing => console.log(thing))
             .catch(this.loadError)
             .toPromise();
   }

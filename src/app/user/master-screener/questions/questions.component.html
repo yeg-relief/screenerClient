@@ -1,7 +1,7 @@
 <main>
   <h1 class="center"> Master Screener </h1>
   <div *ngIf="errorMessage" class="center"> <strong>{{errorMessage}} </strong></div>
-  <form (ngSubmit)="onSubmit()" [formGroup]="form" *ngIf="errorMessage.length === 0">
+  <form (ngSubmit)="onSubmit()" [formGroup]="form" *ngIf="errorMessage.length === 0 && questions.length > 0">
     <div>
       <div *ngFor="let question of questions; let i = index" class="clearfix flex">
         <div class="questions">
@@ -30,4 +30,5 @@
       <div class="p2"></div>
     </section>
   </form>
+  <div class="center"*ngIf="errorMessage.length === 0 && questions.length === 0"><strong>There are no questions available</strong></div>
 </main>

@@ -19,7 +19,6 @@ export class KeysOverviewComponent implements OnInit {
 
   ngOnInit() {
     const keys = this.route.snapshot.data['keys'];
-    console.log(`keys: ${keys}`);
     this.store.dispatch(new keysActions._LoadKeys({}));
     if (keys !== undefined) {
       this.store.dispatch(new keysActions._LoadKeysSuccess(keys));
@@ -27,17 +26,5 @@ export class KeysOverviewComponent implements OnInit {
       this.store.dispatch(new keysActions._LoadKeysFailure({}));
     }
     this.loadedKeys$ = this.store.let(fromRoot.allLoadedKeys);
-  }
-
-  removeKey(key) {
-    console.log(`removeKey called on ${key.name} with ${key.type}`);
-    
-    this.data.deleteKey(key)
-      .then(success => {
-        if (success) {
-          this.store.dispatch(new keysActions._DeleteKey(key));
-        }
-      })
-      .catch(error => console.log(error));
   }
 }

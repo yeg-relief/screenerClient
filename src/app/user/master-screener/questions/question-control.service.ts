@@ -7,6 +7,9 @@ export class QuestionControlService {
   constructor() { }
 
   toFormGroup(questions: Question[]): FormGroup {
+    if (questions === undefined || !Array.isArray(questions) ) {
+      return new FormGroup({});
+    }
     const group = questions
       .reduce((acc, question) => {
         acc[question.key] = new FormControl('');

@@ -11,4 +11,8 @@ export class ScreenerStatsComponent {
   @Input() creationDate: number;
   @Input() versionNumber: number;
   @Input() error: string;
+
+  newCreationDate() {
+    return (new Date).getTime();
+  }
 }

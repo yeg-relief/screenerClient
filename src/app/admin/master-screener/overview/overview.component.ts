@@ -54,14 +54,6 @@ export class OverviewComponent implements OnInit, OnDestroy {
       this.store.dispatch(new masterScreener.ChangeScreenerVersion(data));
     }
     this.store.dispatch(new fromKeys.LoadKeys({}));
-    /*
-    this.subscription = this.route.data
-      .do(data => this.store.dispatch(new masterScreener.ChangeScreenerVersion(data['masterScreener'])))
-      // we load keys here... this is used in creating a question etc 
-      // should be somewhere else?
-      .do(() => this.store.dispatch(new fromKeys.LoadKeys({})))
-      .subscribe();
-    */
   }
 
   ngOnDestroy() {
