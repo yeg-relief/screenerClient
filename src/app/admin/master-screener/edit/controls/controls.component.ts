@@ -4,6 +4,7 @@ import { DataService } from '../../../data.service';
 import { Store } from '@ngrx/store';
 import * as fromRoot from '../../../reducer';
 import * as editScreener from '../edit.actions';
+import * as fromOverview from '../../master-screener.actions';
 import { Observable } from 'rxjs/Observable';
 import { Subscription } from 'rxjs/Subscription';
 import 'rxjs/add/observable/fromPromise';
@@ -61,7 +62,7 @@ export class EditControlsComponent implements OnInit, OnDestroy {
       .switchMap(screener => Observable.fromPromise(this.dataService.saveScreener(screener)))
       .subscribe({
         next: response => {
-          console.log(response);
+          this.store.dispatch(new fromOverview.LoadScreeners([response]));
           this.router.navigateByUrl('/admin/master-screener/overview');
         },
         error: error => console.error(error)

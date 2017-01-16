@@ -13,6 +13,7 @@ import { ActivatedRoute } from '@angular/router';
 import * as masterScreener from '../master-screener.actions';
 import * as fromKeys from '../keys/key.actions';
 import { DataService } from '../../data.service';
+import { MasterScreener } from '../../models/master-screener';
 
 @Component({
   templateUrl: './overview.component.html',
@@ -49,9 +50,10 @@ export class OverviewComponent implements OnInit, OnDestroy {
     this.questionCount$ = this.store.let(fromRoot.getWorkingQuestionCount);
     this.creationDate$ = this.store.let(fromRoot.getWorkingCreationDate);
     // add error catching etc
-    const data = this.route.snapshot.data['masterScreener'];
-    if (data !== undefined){
-      this.store.dispatch(new masterScreener.ChangeScreenerVersion(data));
+    const data = <MasterScreener[]>this.route.snapshot.data['masterScreener'];
+    if (data !== undefined && Array.isArray(data)){
+      this.store.dispatch(new masterScreener.LoadScreeners(data));
+      this.store.dispatch(new masterScreener.ChangeToLatest({}));
     }
     this.store.dispatch(new fromKeys.LoadKeys({}));
   }

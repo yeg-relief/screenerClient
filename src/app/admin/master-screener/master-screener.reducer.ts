@@ -6,23 +6,19 @@ import { MasterScreener } from '../models/master-screener';
 import { Key } from '../models/key';
 import { Question } from '../../shared/models';
 import { cloneDeep } from 'lodash';
-// for debugging remove after
-import 'rxjs/add/operator/do';
-
 
 export interface State {
   loading: boolean;
-  // i'm not sure if this is the right place for the versions of the master screener 
-  // but i dont want to make a reducer solely for it
   versions: Array<number>;
   masterScreener: MasterScreener;
   error: string;
   workingVersion: number;
+  cachedVersions: Array<MasterScreener>;
 }
 
 const ERROR_TYPES = {
-  failedVersionLoad: () => {return `failed to load master screener`; },
-  failedMetaDataLoad: () => {return 'unable to load meta data on available screeners'; }
+  failedVersionLoad: () => { return `failed to load master screener`; },
+  failedMetaDataLoad: () => { return 'unable to load meta data on available screeners'; }
 };
 
 export const initialState: State = {
@@ -30,8 +26,13 @@ export const initialState: State = {
   error: '',
   versions: [],
   workingVersion: undefined,
-  masterScreener: {
-    version: undefined,
+  masterScreener: emptyScreener(),
+  cachedVersions: []
+};
+
+function emptyScreener(): MasterScreener{
+  return {
+    version: 0,
     questions: [],
     meta: {
       questions: {
@@ -43,18 +44,23 @@ export const initialState: State = {
       }
     }
   }
-};
+}
 
 
 
 export function reducer(state = initialState, action: MasterScreenerActions): State {
   switch (action.type) {
 
-    case MasterScreenerActionsTypes.LOAD_LATEST_SCREENER_VERSION: {
-      const newState = cloneDeep(state);
-      newState.loading = true;
-      newState.error = '';
-      return newState;
+    case MasterScreenerActionsTypes.CHANGE_TO_LATEST_SCREENER_VERSION: {      
+      const latest = state.cachedVersions.reduce( (accum, screener) => {
+        if(screener.version > accum.version) {
+          accum = cloneDeep(screener);
+        }
+        return accum;
+      }, emptyScreener());
+      state.masterScreener = latest;
+      state.workingVersion = latest.version;
+      return state;
     }
     // load a version from the api server
     case MasterScreenerActionsTypes.LOAD_MASTER_SCREENER_VERSION: {
@@ -64,32 +70,65 @@ export function reducer(state = initialState, action: MasterScreenerActions): St
       return newState;
     }
 
-    case MasterScreenerActionsTypes.CHANGE_MASTER_SCREENER_VERSION: {
-      if (typeof action.payload === 'boolean') {
-        const newState = cloneDeep(state);
-        newState.error = ERROR_TYPES.failedVersionLoad();
+    /* used to load a screener, or array of screeners, into cachedVersions */
+    case MasterScreenerActionsTypes.LOAD_SCREENERS: {
+      const newScreener = <MasterScreener>cloneDeep(action.payload);
+      const newState = cloneDeep(state);
+      if (Array.isArray(newScreener)) {
         newState.loading = false;
-        newState.workingVersion = 0;
-        return newState;
+        newState.error = '';
+        newScreener.forEach(screener => {
+          if (state.versions.find(stateVersions => stateVersions === screener.version) === undefined) {
+            newState.versions.push(screener.version);
+          }
+          if (state.cachedVersions.find(stateScreener => stateScreener.version === screener.version) === undefined) {
+            newState.cachedVersions.push(screener);
+          }
+        })
+      } else {
+        return state;
       }
-      const masterScreener = <MasterScreener>cloneDeep(action.payload);
-      const newState = cloneDeep(state);
-      newState.masterScreener = masterScreener;
-      newState.loading = false;
-      newState.error = '';
-      newState.workingVersion = masterScreener.meta.screener.version;
       return newState;
     }
 
-    case MasterScreenerActionsTypes.LOAD_VERSIONS_INFO: {
-      return state;
-    }
+    case MasterScreenerActionsTypes.CHANGE_MASTER_SCREENER_VERSION: {
 
-    case MasterScreenerActionsTypes.CHANGE_VERSIONS_INFO: {
-      const versions: number[] = [].concat(action.payload);
-      const newState = cloneDeep(state);
-      newState.versions = versions;
-      return newState;
+      switch (typeof action.payload) {
+        case 'boolean': {
+          const newState = cloneDeep(state);
+          newState.error = ERROR_TYPES.failedVersionLoad();
+          newState.loading = false;
+          newState.workingVersion = 0;
+          return newState;
+        }
+
+        case 'number': {
+          const cachedVersionNumber = <number>action.payload;
+          const newState = cloneDeep(state);
+          const screener = state.cachedVersions.find((cachedScreener: MasterScreener) => cachedScreener.version === cachedVersionNumber);
+          if (screener !== undefined) {
+            newState.masterScreener = cloneDeep(screener);
+            newState.loading = false;
+            newState.error = '';
+            newState.workingVersion = screener.version;
+          }
+          return newState;
+        }
+
+        case 'object': {
+          const masterScreener = <MasterScreener>cloneDeep(action.payload);
+          const newState = cloneDeep(state);
+          newState.masterScreener = masterScreener;
+          newState.loading = false;
+          newState.error = '';
+          newState.workingVersion = masterScreener.version;
+          return newState;
+        }
+
+        default: {
+          return state;
+        }
+      }
     }
 
     default: {
@@ -124,14 +163,14 @@ export function getCreatedDate(state$: Observable<State>) {
 
 export function getKeys(state$: Observable<State>) {
   return state$.select(s => s.masterScreener.questions)
-    .switchMap( (questions: Question[]) => {
-      const keys: Key[] = questions.reduce( (acc: Key[], curr: Question) => {
+    .switchMap((questions: Question[]) => {
+      const keys: Key[] = questions.reduce((acc: Key[], curr: Question) => {
         // push the question key doesn't matter if expandable or not
-        acc.push({name: curr.key, type: curr.type});
+        acc.push({ name: curr.key, type: curr.type });
         if (!curr.expandable) {
           return acc;
         }
-        curr.conditonalQuestions.forEach( question => acc.push({name: question.key, type: question.type}));
+        curr.conditonalQuestions.forEach(question => acc.push({ name: question.key, type: question.type }));
         return acc;
       }, []);
       return Observable.of(keys);
@@ -140,13 +179,13 @@ export function getKeys(state$: Observable<State>) {
 
 export function getFlattenedQuestions(state$: Observable<State>) {
   return state$.select(s => s.masterScreener.questions)
-    .switchMap( (questions: Question[]) => {
-      const q: Question[] = questions.reduce( (acc: Question[], curr: Question) => {
+    .switchMap((questions: Question[]) => {
+      const q: Question[] = questions.reduce((acc: Question[], curr: Question) => {
         acc.push(curr);
         if (!curr.expandable) {
           return acc;
         }
-        curr.conditonalQuestions.forEach( question => acc.push(question));
+        curr.conditonalQuestions.forEach(question => acc.push(question));
         return acc;
       }, []);
       return Observable.of(q);

@@ -15,6 +15,7 @@ import 'rxjs/add/operator/multicast';
 import 'rxjs/add/operator/filter';
 import 'rxjs/add/operator/toPromise';
 import 'rxjs/add/operator/reduce';
+import 'rxjs/add/operator/multicast';
 
 @Injectable()
 export class DataService {
@@ -40,11 +41,15 @@ export class DataService {
   }
 
   // load every screener again naive, but it works at this point TODO: rewrite to improve scalability
-  private loadAllScreeners() {
+  loadAllScreeners() {
     const options = new RequestOptions({headers: this.getCredentials()})
-    this.screeners$ = this.http.get('/protected/master_screener/', options)
+    if (this.screeners$ === undefined) {
+      this.screeners$ = this.http.get('/protected/master_screener/', options)
       .map(res => res.json().response)
+      .multicast(new ReplaySubject(1)).refCount()
       .catch(this.loadError);
+    }
+    return this.screeners$;
   }
 
   // attn: this will perform an http call
