@@ -53,6 +53,7 @@ export class OverviewControlsComponent implements OnInit, OnDestroy {
       const version = 0;
       this.router.navigateByUrl(`/admin/master-screener/edit/version/${version}`);
     } else {
+      console.log(this.selectedVersion);
       this.router.navigateByUrl(`/admin/master-screener/edit/version/${this.selectedVersion}`);
     }
     

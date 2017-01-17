@@ -191,3 +191,7 @@ export function getFlattenedQuestions(state$: Observable<State>) {
       return Observable.of(q);
     });
 }
+
+export function getMasterScreener(state$: Observable<State>) {
+  return state$.select(s => s.masterScreener).do(() => 'getMasterScreener called').do(screener => console.log(screener));
+}

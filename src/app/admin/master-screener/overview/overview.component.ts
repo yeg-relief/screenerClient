@@ -34,7 +34,8 @@ export class OverviewComponent implements OnInit, OnDestroy {
   subscription: Subscription;
   constructor(
     private store: Store<fromRoot.State>, 
-    private route: ActivatedRoute) { }
+    private route: ActivatedRoute,
+    public data: DataService) { }
 
   ngOnInit() {
     this.keyToggle = new BehaviorSubject<boolean>(true);

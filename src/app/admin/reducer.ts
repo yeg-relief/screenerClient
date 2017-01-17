@@ -94,6 +94,8 @@ export const getKeys = share(compose(fromMasterScreener.getKeys, getMasterScreen
 export const flattenedQuestions =
   share(compose(fromMasterScreener.getFlattenedQuestions, getMasterScreenerState));
 
+export const getOverviewScreener = share(compose(fromMasterScreener.getMasterScreener, getMasterScreenerState));
+
 
 /* for master-screener edit */
 export const getPresentEditScreener =

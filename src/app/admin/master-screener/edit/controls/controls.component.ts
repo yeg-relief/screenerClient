@@ -23,7 +23,7 @@ export class EditControlsComponent implements OnInit, OnDestroy {
   constructor(
     private store: Store<fromRoot.State>, 
     private route: ActivatedRoute,
-    private dataService: DataService,
+    public dataService: DataService,
     private router: Router
   ){}
 
@@ -55,8 +55,17 @@ export class EditControlsComponent implements OnInit, OnDestroy {
     this.subscription = this.store.let(fromRoot.getPresentEditScreener)
       .map(screener => {
         const updatedVersion = screener;
-        updatedVersion.version += 1;
-        updatedVersion.meta.screener.version += 1;
+        if (updatedVersion.version) {
+          updatedVersion.version += 1;
+        } else {
+          updatedVersion.version = 1;
+        }
+        
+        if (updatedVersion.meta.screener.version) {
+          updatedVersion.meta.screener.version += 1;
+        } else {
+          updatedVersion.meta.screener.version = 1;
+        }
         return updatedVersion;
       })
       .switchMap(screener => Observable.fromPromise(this.dataService.saveScreener(screener)))

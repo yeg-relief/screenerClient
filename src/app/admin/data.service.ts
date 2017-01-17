@@ -6,6 +6,7 @@ import { Observable } from 'rxjs/Observable';
 import { ReplaySubject } from 'rxjs/ReplaySubject';
 import { Http, Response, Headers, RequestOptions } from '@angular/http';
 import { AuthService } from './core/services/auth.service'
+import { cloneDeep } from 'lodash';
 import 'rxjs/add/observable/of';
 import 'rxjs/add/operator/switchMap';
 import 'rxjs/add/observable/range';
@@ -21,6 +22,8 @@ import 'rxjs/add/operator/multicast';
 export class DataService {
   private screeners$: Observable<MasterScreener[]>;
   private keys$: Observable<Key[]>;
+
+  private cachedScreeners: MasterScreener[] = [];
 
   constructor(private http: Http, private authService: AuthService) {}
 
@@ -46,42 +49,9 @@ export class DataService {
     if (this.screeners$ === undefined) {
       this.screeners$ = this.http.get('/protected/master_screener/', options)
       .map(res => res.json().response)
-      .multicast(new ReplaySubject(1)).refCount()
       .catch(this.loadError);
     }
     return this.screeners$;
-  }
-
-  // attn: this will perform an http call
-  loadScreener(version: number): Observable<MasterScreener> {
-    const initialScreener = {
-      version: 0,
-      questions: [],
-      meta: {
-        questions: {
-          totalCount: 0,
-        },
-        screener: {
-          version: 0,
-          created: 0,
-        }
-      }
-    }
-
-
-
-    if (version === 0) {
-      return Observable.of(initialScreener);
-    }
-
-    if(this.screeners$ === undefined) {
-      this.loadAllScreeners();
-    }
-
-    return this.screeners$
-      .switchMap(x => x)
-      .filter((screener: MasterScreener) => screener.version === version)
-      .catch(this.loadError)
   }
 
 

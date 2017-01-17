@@ -61,10 +61,6 @@ export function reducer(state = initialState, action: EditScreenerActions): Stat
     };
 
     case EditScreenerActionsTypes.SAVE_SCREENER: {
-      console.log('=======================');
-      console.log(action.type)
-      console.log(action.payload)
-      console.log('========================');
       return Object.assign({}, state, {
         saving: true
       });
@@ -80,7 +76,12 @@ export function reducer(state = initialState, action: EditScreenerActions): Stat
       const addedQuestion = <Question>action.payload;
       const present = <MasterScreener>cloneDeep(state.present);
       present.questions = present.questions.concat(addedQuestion);
-      present.meta.questions.totalCount = present.meta.questions.totalCount + 1;
+      if (present.meta.questions.totalCount) {
+        present.meta.questions.totalCount = present.meta.questions.totalCount + 1;
+      } else {
+        present.meta.questions.totalCount = 1;
+      }
+      
 
       return Object.assign({}, state, {
         past: state.past.concat(state.present),

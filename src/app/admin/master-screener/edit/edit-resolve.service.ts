@@ -8,6 +8,8 @@ import 'rxjs/add/operator/do';
 import 'rxjs/add/operator/switchMap';
 import 'rxjs/add/operator/toPromise';
 import 'rxjs/add/operator/take';
+import 'rxjs/add/operator/map';
+
 @Injectable()
 export class EditResolveService {
 
@@ -18,7 +20,6 @@ export class EditResolveService {
 
   resolve(route: ActivatedRouteSnapshot) {
     const version = +route.params['version'];
-    return this.data.loadScreener(version)
-            .take(1);
+    return this.data.loadAllScreeners().map(screeners => screeners.find(s => s.version === version))
   }
 }
