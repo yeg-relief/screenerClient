@@ -6,17 +6,12 @@
           <tr>
             <th>key name</th>
             <th>key type</th>
-            <th></th>
-            <th></th>
           </tr>
         </thead>
         <tbody>
           <tr *ngFor="let key of keys">
             <td>{{ key.name }}</td>
             <td>{{ key.type }}</td>
-            <td>
-              <button disabled md-button routerLink="/admin/key/detail/{{key.name}}">VIEW</button>
-            </td>
           </tr>
         </tbody>
       </table>

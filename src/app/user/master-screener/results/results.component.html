@@ -1,24 +1,20 @@
-<main>
+<main class="center">
   <div class="p1"></div>
-  <div *ngIf="results.length > 0">
-    <div class="center">
-      <h1> RESULTS </h1>
-      <div id="result-preface" class="border p2" style="margin-left:25%; width:50%;">
-        <p><strong>NOTE: </strong> These results do <strong>NOT</strong> mean you're qualified for
-        <i>any</i> of these programs. <br>They are meant to help you find programs that can help you.</p>
-      </div>
+  <div *ngIf="errorMessage"> <strong> There was an error loading data, please try later </strong> </div>
+  <div *ngIf="results.length > 0 && errorMessage.length === 0">
+    <h1> RESULTS </h1>
+    <div id="result-preface" class="border p2" style="margin-left:25%; width:50%;">
+      <p><strong>NOTE: </strong> These results do <strong>NOT</strong> mean you're qualified for
+      <i>any</i> of these programs. <br>They are meant to help you find programs that can help you.</p>
     </div>
-    <div *ngIf="errorMessage"> <strong> There was an error loading data, please try later </strong> </div>
-    <div *ngIf="errorMessage.length === 0">
-      <div *ngFor="let response of results" class="clearfix flex">
-        <div class="col col-8 flex-grow center">
-          <app-user-facing-program [program]="response"></app-user-facing-program>
-        </div>
+
+    <div *ngFor="let response of results" class="clearfix flex">
+      <div class="col col-8 flex-grow center">
+        <app-user-facing-program [program]="response"></app-user-facing-program>
       </div>
     </div>
   </div>
-<div class="p3 center">
-  <p>Sorry, no results found. You can <a routerLink="/browse-programs/all">browse programs</a>.</p> 
-
-</div>
+  <div *ngIf="results.length === 0" class="p3 center">
+    <p>Sorry, no results found. You can <a routerLink="/browse-programs/all">browse programs</a>.</p>
+  </div>
 </main>

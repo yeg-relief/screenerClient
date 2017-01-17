@@ -6,7 +6,6 @@ import { BrowseService } from '../browse.service';
 @Component({
   selector: 'app-category',
   templateUrl: './category.component.html',
-  styleUrls: ['./category.component.css']
 })
 export class CategoryComponent implements OnInit{
   programs: UserFacingProgram[] = [];
@@ -18,13 +17,10 @@ export class CategoryComponent implements OnInit{
     private browseService: BrowseService) {}
 
   ngOnInit(){
-    // this code could be refactored by keeping this as an observable and using 
-    // a combination operator in conjuction with route param 
     this.browseService.getAllPrograms()
       .then(programs => {
-        this.programs = programs.reduce( (accum, program) => {
-          return accum.concat(program);
-        }, [])
+        this.programs = [...programs];
+        this.filterByCategory(this.route.snapshot.params['category']);
       })
       .catch(error => console.error(error));
 
@@ -33,11 +29,7 @@ export class CategoryComponent implements OnInit{
     // if this implies subscription is still active.
     this.subscription = this.route.params.subscribe({
         next: (params) => {
-          if (params['category'] === 'all') {
-            this.filteredPrograms = [].concat(this.programs)
-          } else {
-            this.filteredPrograms = this.programs.filter(program => program.tags.indexOf(params['category']) > -1);
-          }
+          this.filterByCategory(params['category'])
         }
       });
   }
@@ -47,5 +39,13 @@ export class CategoryComponent implements OnInit{
       this.subscription.unsubscribe();
     }
     
+  }
+
+  filterByCategory(category: string) {
+    if (category === 'all') {
+      this.filteredPrograms = this.programs;
+    } else {
+      this.filteredPrograms = this.programs.filter(program => program.tags.indexOf(category) >= 0);
+    }
   }
 }

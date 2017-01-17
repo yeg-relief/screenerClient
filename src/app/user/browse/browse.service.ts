@@ -41,7 +41,6 @@ export class BrowseService {
             .catch( Observable.throw('error getting categories'));
   }
 
-  // at this point we're just grabbing all programs... naive but okay at this stage of app
   getAllPrograms()  {
     return this.programs$.toPromise();
   }

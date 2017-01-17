@@ -7,7 +7,6 @@
             <th>key</th>
             <th>control type</th>
             <th>label</th>
-            <th></th>
           </tr>
         </thead>
         <tbody>
@@ -15,15 +14,6 @@
             <td>{{ question.key }}</td>
             <td>{{ question.controlType }}</td>
             <td>{{ question.label }}</td>
-            <td>
-              <button
-                disabled
-                title="view question details"
-                md-button 
-                routerLink="/admin/question/detail/{{question.key}}">
-                VIEW
-              </button> 
-            </td>
           </tr>
         </tbody>
       </table>

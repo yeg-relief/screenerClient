@@ -1,4 +1,4 @@
-<div class="program-container">
-  <app-user-facing-program *ngFor="let program of programs" [program]="program">
+<div class="flex flex-column flex-center">
+  <app-user-facing-program *ngFor="let program of filteredPrograms" [program]="program">
   </app-user-facing-program>
 </div>

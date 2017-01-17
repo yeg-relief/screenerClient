@@ -15,6 +15,7 @@ button[md-button].active {
   min-height: 95vh;
   width: 100vw;
   overflow-y: auto;
+  padding-bottom: 2em;
 }
 
 section {
