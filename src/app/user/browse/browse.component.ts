@@ -16,13 +16,13 @@ import { UserFacingProgram } from '../../shared/models'
   selector: 'app-browse',
   templateUrl: './browse.component.html',
   styleUrls: ['./browse.component.css'],
-  providers: [ BrowseService ]
 })
 export class BrowseComponent implements OnInit, OnDestroy {
   categories: Promise<string[]>;
   errorMsg = '';
   subscription: Subscription;
   currentCategory: string;
+
   constructor(
     private browseService: BrowseService,
     private route: ActivatedRoute,
@@ -30,7 +30,9 @@ export class BrowseComponent implements OnInit, OnDestroy {
   ) { }
 
   ngOnInit() {
-    this.categories = this.browseService.getCategories().catch(error => this.errorMsg = error);
+    this.categories = this.browseService
+      .getCategories()
+      .catch(error => this.errorMsg = error);
 
     this.subscription = this.route.firstChild.params.subscribe(params => {
       this.currentCategory = params['category'];

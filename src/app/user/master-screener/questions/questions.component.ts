@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { FormGroup  } from '@angular/forms';
 import { MasterScreenerService } from '../master-screener.service';
@@ -10,12 +10,14 @@ import { Question } from '../../../shared';
   styleUrls: ['./questions.component.css'],
   providers: [QuestionControlService]
 })
-export class QuestionsComponent implements OnInit {
+export class QuestionsComponent implements OnInit, OnDestroy {
   // having problems passing form through async pipe... 
   // resolving form in `then` statement and using a flag to indicate form is resolved
   form: FormGroup;
   questions: Question[] = [];
   errorMessage = '';
+  timeout;
+  loading = false;
 
   constructor(
     public masterScreenerService: MasterScreenerService,
@@ -40,8 +42,13 @@ export class QuestionsComponent implements OnInit {
     }
   }
 
+  ngOnDestroy() {
+    clearTimeout(this.timeout);
+  }
+
 
   onSubmit() {
+    this.timeout = setTimeout( () => this.loading = true, 60);
     this.masterScreenerService.loadResults(this.form.value)
       .then( results => this.masterScreenerService.results = [].concat(results))
       .then(() => this.router.navigateByUrl('/master-screener/results'))

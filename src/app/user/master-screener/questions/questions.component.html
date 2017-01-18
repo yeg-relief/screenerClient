@@ -1,4 +1,4 @@
-<main>
+<main *ngIf="!loading">
   <h1 class="center"> Master Screener </h1>
   <div *ngIf="errorMessage" class="center"> <strong>{{errorMessage}} </strong></div>
   <form (ngSubmit)="onSubmit()" [formGroup]="form" *ngIf="errorMessage.length === 0 && questions.length > 0">
@@ -31,4 +31,8 @@
     </section>
   </form>
   <div class="center"*ngIf="errorMessage.length === 0 && questions.length === 0"><strong>There are no questions available</strong></div>
+</main>
+
+<main *ngIf="loading">
+  <md-progress-spinner style="margin: 10vh auto 0 auto" *ngIf="loading" color="primary" mode="indeterminate"></md-progress-spinner>
 </main>

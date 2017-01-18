@@ -1,4 +1,5 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Subscription } from 'rxjs/Subscription';
 import { UserFacingProgram } from '../../../shared';
 import { ActivatedRoute, UrlSegment } from '@angular/router';
 import { BrowseService } from '../browse.service';
@@ -6,22 +7,43 @@ import { BrowseService } from '../browse.service';
 @Component({
   selector: 'app-category',
   templateUrl: './category.component.html',
+  styles: [`
+    section {
+      width: 100vw;
+      background-image: url(assets/city-skyline-greyscale.svg);
+      background-position: center bottom;
+      background-repeat: no-repeat;
+      background-size: contain;
+      overflow-x: hidden;
+      height: 90vh;
+      position: fixed;
+      margin: 0 auto;
+    }
+
+    loading-section {
+      background: transparent;
+    }
+
+    md-progress-spinner {
+      margin: 10% auto 0 auto;
+    }
+  `]
 })
 export class CategoryComponent implements OnInit{
   programs: UserFacingProgram[] = [];
-  filteredPrograms = [];
-  subscription: any;
+  filteredPrograms: UserFacingProgram[] = [];
+  subscription: Subscription;
+  loading = false;
+  timeout;
 
   constructor(
     private route: ActivatedRoute, 
     private browseService: BrowseService) {}
 
   ngOnInit(){
+    this.timeout = setTimeout(() => this.loading = true, 100);
     this.browseService.getAllPrograms()
-      .then(programs => {
-        this.programs = [...programs];
-        this.filterByCategory(this.route.snapshot.params['category']);
-      })
+      .then(programs => this.loadPrograms(programs))
       .catch(error => console.error(error));
 
     // no need to unsubscribe https://youtu.be/WWR9nxVx1ec?t=20m18s
@@ -47,5 +69,13 @@ export class CategoryComponent implements OnInit{
     } else {
       this.filteredPrograms = this.programs.filter(program => program.tags.indexOf(category) >= 0);
     }
+  }
+
+  loadPrograms(programs: UserFacingProgram[]): Promise<any> {
+    this.programs = [...programs];
+    this.filterByCategory(this.route.snapshot.params['category']);
+    this.loading = false;
+    clearTimeout(this.timeout);
+    return Promise.resolve();
   }
 }

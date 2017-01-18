@@ -1,4 +1,4 @@
-<main class="home">
+<main class="home py1">
   <header class="center">
     <div class="header-title">You Can Benefit</div>
     <div class="header-description clearfix flex">
@@ -19,7 +19,7 @@
   </header>
   <div class="p2"></div>
   <!-- MEDIUM AND LARGER SCREENS -->
-  <section class="clearfix md-show">
+  <section class="clearfix md-show" *ngIf="!loading">
     <div class="flex">
       <div class="col-3"></div>
       <div class="program-details col-2 flex flex-column">
@@ -43,7 +43,7 @@
     </div>
   </section>
   <!-- MEDIUM AND SMALLER SCREEN -->
-  <section class="md-hide">
+  <section class="md-hide" *ngIf="!loading">
     <div class="flex">
       <div class="col-1 flex-shrink"></div>
       <section class="col-10 flex-grow">
@@ -68,4 +68,10 @@
       <div class="col-1 flex-shrink"></div>
     </div>
   </section>
+
+  <!-- LOADING SPINNER -->
+  <section class="clearfix" *ngIf="loading" style="width: 100%;">
+    <md-progress-spinner style="margin: 10vh auto 0 auto;" color="primary" mode="indeterminate"></md-progress-spinner>
+  </section>
+
 </main>

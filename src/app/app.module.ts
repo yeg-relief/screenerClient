@@ -10,7 +10,7 @@ import { MasterScreenerModule } from './user/master-screener/master-screener.mod
 import { BrowseModule } from './user/browse/browse.module';
 import { HomeComponent } from './user/home/home.component';
 import { MasterScreenerService } from './user/master-screener/master-screener.service';
-
+import { BrowseService } from './user/browse/browse.service';
 import { AuthService } from './admin/core/services/auth.service'
 import { AuthGuardService } from './admin/core/services/auth-guard.service';
 
@@ -32,7 +32,8 @@ import { AuthGuardService } from './admin/core/services/auth-guard.service';
   providers: [
     MasterScreenerService,
     AuthService,
-    AuthGuardService 
+    AuthGuardService, 
+    BrowseService
   ],
   bootstrap: [AppComponent]
 })

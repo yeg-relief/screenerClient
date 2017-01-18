@@ -18,15 +18,7 @@ button[md-button].active {
   padding-bottom: 2em;
 }
 
-section {
-  min-height: 95vh;
-  width: 100vw;
-  background-image: url(assets/city-skyline-greyscale.svg);
-  background-position: center bottom;
-  background-repeat: no-repeat;
-  background-size: contain;
-  overflow-x: hidden;
-}
+
 
 .tag-container {
   display: flex;

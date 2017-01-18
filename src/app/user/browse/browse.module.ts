@@ -4,7 +4,7 @@ import { HttpModule } from '@angular/http';
 import { BrowseComponent } from './browse.component';
 import { CategoryComponent } from './category/category.component';
 import { UserFacingProgramModule } from '../../shared/modules/user-facing-program.module';
-import { MdButtonModule } from '@angular/material';
+import { MaterialModule } from '@angular/material';
 import { RouterModule } from '@angular/router';
 import { BrowseService } from './browse.service';
 
@@ -14,14 +14,14 @@ import { BrowseService } from './browse.service';
     RouterModule,
     HttpModule,
     UserFacingProgramModule,
-    MdButtonModule.forRoot()
+    MaterialModule.forRoot()
   ],
   declarations: [
     BrowseComponent,
     CategoryComponent
   ],
   providers: [
-    BrowseService
+    
   ]
 })
 export class BrowseModule { }

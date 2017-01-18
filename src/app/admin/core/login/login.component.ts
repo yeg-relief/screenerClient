@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Router } from '@angular/router';
 import { AuthService } from '../services/auth.service';
 import { AuthGuardService } from '../services/auth-guard.service';
@@ -9,13 +9,15 @@ import 'rxjs/add/operator/take';
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.css']
 })
-export class LoginComponent implements OnInit {
+export class LoginComponent implements OnInit, OnDestroy {
   credentials = {
     username: '',
     password: ''
   };
   active = false;
   invalidLogin = false;
+  timeout;
+
 
   constructor(
     private authService: AuthService,
@@ -29,8 +31,12 @@ export class LoginComponent implements OnInit {
     }
   }
 
+  ngOnDestroy(){
+    clearTimeout(this.timeout);
+  }
+
   login() {
-    this.active = true;
+    this.timeout = setTimeout(() => this.active = true, 100);
     this.authService.login(this.credentials.username, this.credentials.password)
       .take(1)
       .subscribe({

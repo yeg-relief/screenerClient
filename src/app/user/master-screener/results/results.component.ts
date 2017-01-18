@@ -1,6 +1,5 @@
 import { Component, OnInit } from '@angular/core';
 import { UserFacingProgram } from '../../../shared';
-import { ActivatedRoute } from '@angular/router';
 import { MasterScreenerService } from '../master-screener.service';
 
 @Component({
@@ -11,7 +10,9 @@ import { MasterScreenerService } from '../master-screener.service';
 export class ResultsComponent implements OnInit {
   errorMessage = '';
   results = [];
-  constructor(private route: ActivatedRoute, private masterScreenerService: MasterScreenerService) { }
+  timeout;
+  loading = false;
+  constructor(private masterScreenerService: MasterScreenerService) { }
 
   ngOnInit() {
     if (this.masterScreenerService.results !== undefined &&  Array.isArray(this.masterScreenerService.results)){
@@ -20,5 +21,4 @@ export class ResultsComponent implements OnInit {
       this.errorMessage = 'error loading results, try again later.';
     }
   }
-
 }

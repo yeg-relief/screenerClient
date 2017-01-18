@@ -10,6 +10,8 @@ import 'rxjs/add/operator/reduce';
 import 'rxjs/add/operator/multicast';
 import 'rxjs/add/operator/toArray';
 import 'rxjs/add/operator/map';
+import 'rxjs/add/operator/do';
+
 
 @Injectable()
 export class BrowseService {
@@ -18,9 +20,9 @@ export class BrowseService {
   constructor(private http: Http) {
     this.programs$ =  this.http.get('/api/programs')
                         .map(res => res.json().programs)
-                        .map(wrappedValues => wrappedValues.map(wrapped => wrapped.value))
+                        .map(wrappedValues => wrappedValues.map( wrapped => wrapped.value) )
                         // ensure that only one http call is made with mulitple subscriptions to this obs
-                        .multicast( new ReplaySubject(1)).refCount()
+                        .multicast( new ReplaySubject(1) ).refCount()
                         .catch(this.loadError);
    }
 
@@ -32,7 +34,7 @@ export class BrowseService {
             .reduce( (allTags, programTags) => {
               programTags.forEach(tag => {
                 if (allTags.indexOf(tag) < 0) {
-                  allTags = [tag, ...allTags];
+                  allTags.push(tag);
                 }
               })
               return allTags;

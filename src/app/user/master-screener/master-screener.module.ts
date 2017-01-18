@@ -10,7 +10,7 @@ import { MasterScreenerComponent } from './master-screener.component';
 import { HttpModule } from '@angular/http';
 import { QuestionsResolverService } from './questions/questions-resolver.service';
 import { RouterModule } from '@angular/router';
-import { MdButtonModule } from '@angular/material';
+import { MaterialModule } from '@angular/material';
 
 @NgModule({
   imports: [
@@ -20,7 +20,7 @@ import { MdButtonModule } from '@angular/material';
     ReactiveFormsModule,
     HttpModule,
     RouterModule,
-    MdButtonModule.forRoot()
+    MaterialModule.forRoot()
   ],
   declarations: [
     QuestionsComponent,
