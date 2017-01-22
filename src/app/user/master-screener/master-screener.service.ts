@@ -15,8 +15,9 @@ export class MasterScreenerService {
   constructor(private http: Http) { }
 
   loadQuestions(): Observable<Question[]> {
-    return this.http.get('/api/questions/latest')
+    return this.http.get('/api/screener/')
             .map(res => res.json().response)
+            .do(thing => console.log(thing))
             .catch(this.loadError);
   }
 
@@ -24,8 +25,10 @@ export class MasterScreenerService {
     const headers = new Headers({ 'Content-Type': 'application/json' });
     const options = new RequestOptions({ headers: headers });
     const body = JSON.stringify({ data: form});
-    return this.http.post('/api/user_master_screener/', body, options)
+    console.log(body);
+    return this.http.post('/api/notification/', body, options)
             .map(res => res.json().response)
+            .do( thing => console.log(thing))
             .map(unwrappedResponse => unwrappedResponse.map(response => response.value))
             .catch(this.loadError)
             .toPromise();

@@ -20,7 +20,7 @@ export class BrowseService {
   constructor(private http: Http) {
     this.programs$ =  this.http.get('/api/programs')
                         .map(res => res.json().programs)
-                        .map(wrappedValues => wrappedValues.map( wrapped => wrapped.value) )
+                        .do(programs => console.log(programs))
                         // ensure that only one http call is made with mulitple subscriptions to this obs
                         .multicast( new ReplaySubject(1) ).refCount()
                         .catch(this.loadError);
