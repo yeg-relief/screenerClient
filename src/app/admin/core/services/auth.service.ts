@@ -7,7 +7,7 @@ export class AuthService {
   isLoggedIn: boolean = false;
   credentials: string;
   // store the URL so we can redirect after logging in
-  redirectUrl = 'admin/master-screener/overview';
+  redirectUrl = 'admin/screener/edit';
 
   constructor(private http: Http){}
 

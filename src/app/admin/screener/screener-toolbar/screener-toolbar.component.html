@@ -1,0 +1,18 @@
+<md-card>
+  <md-card-title> Screener Edit </md-card-title>
+  <div class="flex flex-justify">
+    <section>
+      <md-card-subtitle> current version updated on: {{ created | date }} </md-card-subtitle>
+      <md-card-subtitle> this screener has {{ count }} questions </md-card-subtitle>
+    </section>
+    <section class="flex flex-column flex-justify flex-stretch">
+      <md-card-subtitle> {{ edits }} edits made. </md-card-subtitle>
+      <button disabled md-raised-button color="primary"> SAVE </button>
+      <md-card-actions style="display: inline"> 
+        <button disabled> undo </button>
+        <button disabled> redo </button>
+      </md-card-actions>
+    </section>
+  </div>
+  <md-input disabled class="col-4" (keypress)="filter.emit($event.key.toLowerCase())" placeholder="filter by key"></md-input>
+</md-card>

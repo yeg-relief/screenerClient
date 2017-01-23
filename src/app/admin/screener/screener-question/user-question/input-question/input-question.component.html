@@ -1,0 +1,25 @@
+<md-tab-group>
+  <md-tab label="View">
+    <form [formGroup]="form">
+      <md-input [formControlName]="question.key" placeholder="input here"></md-input>
+    </form>
+  </md-tab>
+  <md-tab label="Edit">
+    <form [formGroup]="adminForm">
+      <md-input formControlName="label" placeholder = "label"></md-input>
+      <md-select formControlName="key" >
+        <md-option selected [value]="question.key">  {{ question.key }} </md-option>
+        <md-option disabled [value]="_notit" > Can't pick me </md-option>
+        <md-option disabled>  </md-option>
+      </md-select>
+      <md-select formControlName="controlType">
+        <md-option selected [value]="question.controlType" > {{ question.controlType }} </md-option>
+        <md-option disabled [value]="checkbox" > checkbox </md-option>
+        <md-option disabled [value]="expandable" > expandable </md-option>
+        <md-option disabled [value]="radio" > button </md-option>
+      </md-select>
+    </form>
+  </md-tab>
+</md-tab-group>
+
+

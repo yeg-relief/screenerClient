@@ -13,8 +13,8 @@ interface Section {
 export class SidenavComponent implements OnInit {
   private content: Section[] = [
     {
-      title: 'master-screener',
-      url: 'admin/master-screener/overview',
+      title: 'screener',
+      url: 'screener/edit',
     },
     {
       title: 'programs',

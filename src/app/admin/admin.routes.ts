@@ -26,46 +26,23 @@ import { EditQuestionComponent } from './master-screener/edit-question/edit-ques
 import { EditQuestionResolverService } from './master-screener/edit-question/edit-question-resolver.service'
 import { EditConditionalComponent } from './master-screener/edit-conditional/edit-conditional.component';
 
+
+import { ScreenerOverviewComponent } from './screener/screener-overview/screener-overview.component'
+
+
 export const routing: ModuleWithProviders = RouterModule.forChild([
   {
     path: '', component: AdminComponent,
     children: [
       {
-        path: 'master-screener',
+        path: 'screener',
         component: MasterScreenerComponent,
         canActivate: [AuthGuardService],
         children: [
           {
-            path: 'overview', component: OverviewComponent,
-            resolve: {
-              masterScreener: MasterScreenerResolverService
-            }
-          },
-          {
-            path: 'edit/version/:version',
-            component: EditComponent,
-            resolve: {
-              screener: EditResolveService
-            },
-            children: []
-          },
-          {
-            path: 'edit/version/:version/question/:key',
-            component: EditQuestionComponent,
-            resolve: {
-              question: EditQuestionResolverService
-            }
-          },
-          {
-            path: 'edit/version/:version/conditionals/question/:key',
-            component: EditConditionalComponent,
-          },
-          {
-            path: '', pathMatch: 'full', redirectTo: 'overview',
-            resolve: {
-              masterScreener: MasterScreenerResolverService
-            }
-          },
+            path: 'edit',
+            component: ScreenerOverviewComponent
+          }
         ]
       },
       {

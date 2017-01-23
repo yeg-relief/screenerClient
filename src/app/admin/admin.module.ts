@@ -26,6 +26,15 @@ import { EditResolveService } from './master-screener/edit/edit-resolve.service'
 import { EditQuestionResolverService } from './master-screener/edit-question/edit-question-resolver.service';
 
 import { ProgramsResolverService } from './programs/program-overview/programs-resolver.service';
+import { ScreenerOverviewComponent } from './screener/screener-overview/screener-overview.component';
+import { QuestionModule } from '../shared/modules/question.module';
+import { ScreenerModel } from './screener/screener-model';
+import { ScreenerToolbarComponent } from './screener/screener-toolbar/screener-toolbar.component';
+
+import { ReactiveFormsModule } from '@angular/forms';
+import { ScreenerQuestionComponent } from './screener/screener-question/screener-question.component';
+import { UserQuestionComponent } from './screener/screener-question/user-question/user-question.component';
+import { InputQuestionComponent } from './screener/screener-question/user-question/input-question/input-question.component';
 
 @NgModule({
   imports: [
@@ -41,10 +50,17 @@ import { ProgramsResolverService } from './programs/program-overview/programs-re
     AdminCoreModule,
     ProgramsModule,
     MasterScreenerModule,
-    KeysModule
+    KeysModule,
+    QuestionModule,
+    ReactiveFormsModule
   ],
   declarations: [
     AdminComponent,
+    ScreenerOverviewComponent,
+    ScreenerToolbarComponent,
+    ScreenerQuestionComponent,
+    UserQuestionComponent,
+    InputQuestionComponent,
   ],
   providers: [
     DataService, 
@@ -53,7 +69,8 @@ import { ProgramsResolverService } from './programs/program-overview/programs-re
     EditResolveService,
     EditQuestionResolverService,
     KeyResolverService,
-    ProgramsResolverService
+    ProgramsResolverService,
+    ScreenerModel
   ]
 })
 export class AdminModule { }
