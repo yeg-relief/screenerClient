@@ -23,7 +23,6 @@ export class ScreenerModel implements OnDestroy{
     this.dispatch = new Subject<Screener>()
     this.state$ = this.dispatch
       .scan( (state, screener) => (<any>Object).assign({}, screener), {})
-      .do(screener => console.log(screener))
       .multicast( new ReplaySubject(1)).refCount()
 
     this.subscription = this.state$.subscribe();
@@ -45,30 +44,56 @@ export class ScreenerModel implements OnDestroy{
   }
 
 
-  save() {
+  save(inputObservable: Observable<Screener>) {
     const headers = this.getCredentials()
     headers.append('Content-Type', 'application/json' );
     const options = new RequestOptions({ headers: headers });
-    return this.state$
+    return inputObservable
       .map(screener => JSON.stringify({ screener: screener}))
       .switchMap(body => this.http.post('/protected/screener', body, options))
-      .map(response => response.json().screener)
-      .do( screener => this.dispatch.next(screener) )
+      .do( response => console.log(response.json()))
+      .map(response => response.json().response)
+      .do( screener => console.log(screener) )
       .catch ( this.loadError )
       .retry(2)
-      .timeout(5000)
+      .timeout(50000)
       
    }
 
   load() {
     const headers = this.getCredentials()
     const options = new RequestOptions({ headers: headers });
-    return this.http.get('/protected/screener', options)
+
+    const mockLoad = {
+      version: 1,
+      created: 0,
+      questions: [
+        {
+          controlType: 'NumberInput',
+          key: 'income',
+          label: 'income?',
+          expandable: false
+        },
+        {
+          controlType: 'CheckBox',
+          key: 'married',
+          label: 'married?',
+          expandable: false
+        }
+      ]
+    }
+
+
+
+    return Observable.of(mockLoad)
+      /*
+      this.http.get('/protected/screener', options)
       .map(res => res.json().response)
+      */
       .do( screener => this.dispatch.next(screener) )
       .catch( this.loadError )
       .retry(2)
-      .timeout(5000)
+      .timeout(50000)
   }
 
   loadError(error: Response | any) {

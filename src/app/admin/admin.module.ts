@@ -35,6 +35,7 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { ScreenerQuestionComponent } from './screener/screener-question/screener-question.component';
 import { UserQuestionComponent } from './screener/screener-question/user-question/user-question.component';
 import { InputQuestionComponent } from './screener/screener-question/user-question/input-question/input-question.component';
+import { CheckboxQuestionComponent } from './screener/screener-question/checkbox-question/checkbox-question.component';
 
 @NgModule({
   imports: [
@@ -61,6 +62,7 @@ import { InputQuestionComponent } from './screener/screener-question/user-questi
     ScreenerQuestionComponent,
     UserQuestionComponent,
     InputQuestionComponent,
+    CheckboxQuestionComponent,
   ],
   providers: [
     DataService, 

@@ -3,12 +3,14 @@ import { ScreenerModel } from '../screener-model';
 import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/operator/take';
 import { cloneDeep } from 'lodash';
-import { FormGroup, FormBuilder, Validators } from '@angular/forms';
+import { FormGroup, FormBuilder, Validators, FormControl } from '@angular/forms';
 import { QuestionControlService } from
   '../../../user/master-screener/questions/question-control.service';
 import 'rxjs/add/operator/filter';
 import 'rxjs/add/operator/let';
 import 'rxjs/add/operator/multicast';
+import 'rxjs/add/observable/merge';
+import 'rxjs/add/observable/zip';
 import { ReplaySubject } from 'rxjs/ReplaySubject';
 
 @Component({
@@ -22,23 +24,37 @@ export class ScreenerOverviewComponent implements OnInit {
   private loading = true;
   private initialState;
   private form: FormGroup;
-  private adminForm: FormGroup;
+  private adminForm: Observable<FormGroup>;
   constructor(private model: ScreenerModel, private qcs: QuestionControlService, private fb: FormBuilder) { }
 
   ngOnInit() {
+
+
+    this.adminForm = this.model.load()
+      .map(screener => screener.questions)
+      .switchMap(x => x)
+      .reduce<any>( (rawAdminGroup, question) => {
+        const keyGroup = {};
+        keyGroup['label'] = new FormControl(question.label, Validators.required);
+        keyGroup['controlType'] = new FormControl(question.controlType, Validators.required);
+        keyGroup['key'] = new FormControl(question.key, Validators.required);
+        keyGroup['expandable'] = new FormControl(question.expandable, Validators.required)
+        rawAdminGroup[question.key] = new FormGroup(keyGroup);
+        return rawAdminGroup;
+      }, {})
+      .map( group => new FormGroup(group) )
+      .multicast( new ReplaySubject<any>(1)).refCount()
+      this.adminForm.subscribe();
+      this.state$ = this.model.state$;
+      
+
+
     const intialized = screener => {
       this.loading = false;
       this.state$ = this.model.state$;
       this.initialState = cloneDeep(screener);
       this.form = this.qcs.toFormGroup(screener.questions);
-      this.adminControl().subscribe(thing => this.adminForm = thing);
-
-      this.adminForm.valueChanges.subscribe(val => console.log(val))
     }
-    this.model.load().take(1).subscribe(
-      screener => intialized(screener),
-      error => console.error('ERROR IN SCREENER OVERVIEW')      
-    )
   }
 
   revert() {
@@ -68,12 +84,12 @@ export class ScreenerOverviewComponent implements OnInit {
   }
 
   addControls(questions) {
-    console.log('add controls called');
+
     this.qcs.addQuestions(questions, this.form);
   }
 
   removeControls(questions) {
-    console.log('remove controls called');
+
     this.qcs.removeQuestions(questions, this.form);
   }
 
@@ -81,24 +97,22 @@ export class ScreenerOverviewComponent implements OnInit {
     console.log(term);
   }
 
-
-
-  adminControl(){
-    return this.state$.take(1)
-      .map(screener => screener.questions)
-      .switchMap(x => x)
-      .reduce<any>( (rawAdminGroup, question) => {
-        const keyGroup = {};
-        keyGroup['label'] = [question.label, [Validators.required, Validators.minLength(5)]];
-        keyGroup['controlType'] = [question.controlType, [Validators.required]];
-        keyGroup['key'] = [question.key, [Validators.required]];
-        keyGroup['expandable'] = [question.expandable, [Validators.required]]
-        return (<any>Object).assign({}, rawAdminGroup, keyGroup);
-      }, {})
-      .map( group => this.fb.group(group) )
-      .do( () => console.log('***********************8'))
-      .do ( thing => console.log(thing.value) )
-      .do( () => console.log('***********************8'))
-      .multicast( new ReplaySubject<any>(1)).refCount()
+  handleSave() {
+    Observable.zip(
+      this.state$.take(1),
+      this.adminForm
+    )
+    .do( ([_, adminForm]) => console.log(adminForm.valid))
+    .map( ([state, form]) => {
+      return {
+        version: state.version + 1,
+        questions: Object.keys(form.value).map(key => form.value[key])
+      }
+    }).do(thing => console.log(thing))
+    .let(this.model.save.bind(this.model))
+    .subscribe();
   }
+
+
+  
 }

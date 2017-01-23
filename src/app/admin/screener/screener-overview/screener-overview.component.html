@@ -1,13 +1,16 @@
-<app-screener-toolbar
-  [created]="(state$ | async)?.meta.screener.created"
-  [count]="(state$ | async)?.questions.length"
-  (filter)="handleFilter($event)">
-</app-screener-toolbar>
+
 <div class="p2"></div>
 <div *ngIf=" (state$ | async)?.questions.length > 0" class="question-container">
+<app-screener-toolbar
+  [created]="(state$ | async)?.created"
+  [count]="(state$ | async)?.questions.length"
+  (filter)="handleFilter($event)"
+  [adminForm]="(adminForm | async)"
+  (save)="handleSave()">
+</app-screener-toolbar>
   <app-user-question 
     *ngFor=" let question of (state$ | async)?.questions; let i = index;"
-    [adminForm]="adminForm"
+    [adminForm]="(adminForm | async)"
     [question]="question" 
     (onExpand)="addControls($event)"
     (onHide)="removeControls($event)">

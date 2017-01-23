@@ -9,7 +9,6 @@ import { FormGroup } from '@angular/forms';
 })
 export class UserQuestionComponent implements OnInit {
   @Input() question: Question;
-  @Input() userForm: FormGroup;
   @Input() adminForm: FormGroup ;
   
   text = ''
@@ -17,12 +16,8 @@ export class UserQuestionComponent implements OnInit {
   constructor() { }
 
   ngOnInit() {
-    this.text = this.adminForm.value;
-    this.adminForm.valueChanges 
-      .do(update => this.question = (<any>Object).assign({}, update))
-      .subscribe(next => console.log('^^^^  ^^^^^'));
   }
-  }
+}
 
 
 

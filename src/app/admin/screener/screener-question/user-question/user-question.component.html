@@ -1,31 +1,12 @@
-<md-card class="user-question">
-  <md-slide-toggle
-    class="example-margin"
-    [color]="primary"
-    class="col-2">
-    edit
-  </md-slide-toggle>
-  {{ text | json }}
-
-  <div class="clearfix flex">
-    <div id="meta-information" class="col-4 border-left px1"> question X of Y </div>
-    <div id="spacer" class ="col-6"></div>
-    
-  </div>
-
-  <div class="p1"></div>
-  <md-card-title id="question-label"> {{ question.label}} </md-card-title>
-
-  
+<md-card class="user-question" style="height: 25vh; margin-top: 5vh;">
   <section id="question-switch-case"> 
     
-    <div [ngSwitch]="question.controlType" class="flex">
+    <div [ngSwitch]="question.controlType">
 
-      <app-input-question *ngSwitchCase="'input'" [question] = "question" [adminForm]="adminForm"></app-input-question>
-        
-      <!--  
-      <app-checkbox-question *ngSwitchCase="CheckBox" [question] = "question"></app-checkbox-question>
-
+      <app-input-question *ngSwitchCase="'NumberInput'" [question] = "question" [adminForm]="adminForm"></app-input-question>
+    
+      <app-checkbox-question *ngSwitchCase="'CheckBox'" [question] = "question" [adminForm]="adminForm"></app-checkbox-question>
+      <!-- 
       <app-radio-question *ngSwitchCase="NumberRadio" [question] = "question"></app-radio-question>
       -->
 
@@ -34,11 +15,5 @@
     </div>
   
   </section>
-
-  <section id="debug" class="debug flex flex-column" style="display:hidden">
-    <div> {{ question | json }} </div>
-    <div> {{ questionType  }} </div>
-  </section>
-
 
 </md-card>
