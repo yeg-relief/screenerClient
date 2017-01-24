@@ -1,19 +1,94 @@
-<md-card class="user-question" style="height: 25vh; margin-top: 5vh;">
-  <section id="question-switch-case"> 
+<div class="user-question" style="height: 25vh; margin-top: 2vh;">
+
+
+  <form [className]="!adminForm.valid ? ng-invalid : null" [formGroup]="adminForm" >
+  <md-tab-group style="width: 100%; ">
+    <md-tab label="View" >
+      
+      <div class="flex flex-column space-around col-12 p1" style="background-color: lightblue; height:20vh;">
+        
+        <div id="meta-information" class="col-4 border-left px1"> question X of Y </div>
+        <div id="spacer" class ="col-6"></div>
+        <div class="clearfix flex py1"></div>
+        
+        
+        
+
+        <section [ngSwitch]="question.controlType">
+          
+          <div *ngSwitchCase="'NumberInput'">
+            <md-card-title id="question-label"> {{ question.label }} </md-card-title>
+ 
+            <div class="py1"></div>
+
+            <md-input  placeholder="input here"></md-input>
+          
+          </div>
+
+          <div *ngSwitchCase="'CheckBox'"> 
+            <md-checkbox > {{ question.label }} </md-checkbox>
+          </div>
+
+
+          <div *ngSwitchCase="'NumberSelect'">
+            <md-card-title id="question-label"> {{ question.label }} </md-card-title>
+
+            <md-select> 
+              <md-option *ngFor="let option of question.options"> {{ option }} </md-option>
+            </md-select>
+          </div>
+
+          
+        
+          <div *ngSwitchDefault> <strong> {{ question.controlType }} is invalid </strong> </div>
+
+        </section>
+
+        <div class="py1"></div>
+      </div>
+
+    </md-tab>
+    <md-tab label="Edit" >
+
+       <div class="flex flex-column space-around p1 col-12" style="background-color: lightgray; height:20vh;">
+        
+        
+        <md-input formControlName="label" placeholder = "label"></md-input>
+           
+        <div class="flex">
+          <select formControlName="key" placeholder = "question key">
+            <option selected [value]="question.key"> {{ question.key }} </option>
+            <option *ngFor="let key of (unusedKeys$ | async)" [value]="key.name"> {{ key.name }} </option>
+          </select>
+          <div class="col-1"></div>
+          <select formControlName="controlType" placeholder = " control type ">
+            <option [selected]="question.controlType === 'NumberInput'" [value]="'NumberInput'" > type </option>
+            <option [selected]="question.controlType === 'CheckBox'" [value]="'CheckBox'" > checkbox </option>
+            <option [selected]="question.controlType === 'NumberSelect'" [value]="'NumberSelect'" > button </option>
+          </select>
+        </div>
+
+        
+        <div class="flex col-12 flex-center" *ngIf="question.controlType === 'NumberSelect'">
+          <md-input class="col-4" (input)="handleInput($event)" [value]= "option" placeholder="option value"></md-input>
+          <button md-button (click)="handleOptionAdd()"> => </button>
+          <md-chip-list>
+            <md-chip (click)="removeOption(i)" *ngFor="let option of question.options; let i = index"> {{ option }} </md-chip>
+          </md-chip-list>
+        </div>
+
+      </div>
+
+
+      <div *ngIf="adminForm.errors">
+        {{ adminForm.errors | json }}
+
+      </div>
+
     
-    <div [ngSwitch]="question.controlType">
+    </md-tab>
+  </md-tab-group>
 
-      <app-input-question *ngSwitchCase="'NumberInput'" [question] = "question" [adminForm]="adminForm"></app-input-question>
-    
-      <app-checkbox-question *ngSwitchCase="'CheckBox'" [question] = "question" [adminForm]="adminForm"></app-checkbox-question>
-      <!-- 
-      <app-radio-question *ngSwitchCase="NumberRadio" [question] = "question"></app-radio-question>
-      -->
+  </form>
 
-      <div *ngDefault> <strong> questionType of {{ questionType }} is invalid </strong> </div>  
-
-    </div>
-  
-  </section>
-
-</md-card>
+</div>

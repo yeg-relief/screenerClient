@@ -25,36 +25,20 @@ export class ScreenerOverviewComponent implements OnInit {
   private initialState;
   private form: FormGroup;
   private adminForm: Observable<FormGroup>;
-  constructor(private model: ScreenerModel, private qcs: QuestionControlService, private fb: FormBuilder) { }
+  constructor(public model: ScreenerModel, private qcs: QuestionControlService, private fb: FormBuilder) { }
 
   ngOnInit() {
+    console.log('ScreenerOverviewComponent INIT CALLED')
 
-
+    this.model.init = true;
+    console.log(this.model.init)
     this.adminForm = this.model.load()
-      .map(screener => screener.questions)
-      .switchMap(x => x)
-      .reduce<any>( (rawAdminGroup, question) => {
-        const keyGroup = {};
-        keyGroup['label'] = new FormControl(question.label, Validators.required);
-        keyGroup['controlType'] = new FormControl(question.controlType, Validators.required);
-        keyGroup['key'] = new FormControl(question.key, Validators.required);
-        keyGroup['expandable'] = new FormControl(question.expandable, Validators.required)
-        rawAdminGroup[question.key] = new FormGroup(keyGroup);
-        return rawAdminGroup;
-      }, {})
-      .map( group => new FormGroup(group) )
-      .multicast( new ReplaySubject<any>(1)).refCount()
-      this.adminForm.subscribe();
-      this.state$ = this.model.state$;
-      
+      .map(screener => screener.form)
+      .multicast( new ReplaySubject<any>(1) ).refCount()
+    this.adminForm.subscribe();
+    this.state$ = this.model.state$.map(state => state.screener).multicast(new ReplaySubject<1>()).refCount();
 
-
-    const intialized = screener => {
-      this.loading = false;
-      this.state$ = this.model.state$;
-      this.initialState = cloneDeep(screener);
-      this.form = this.qcs.toFormGroup(screener.questions);
-    }
+    this.state$.subscribe();
   }
 
   revert() {

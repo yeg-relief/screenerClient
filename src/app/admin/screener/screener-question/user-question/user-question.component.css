@@ -1,0 +1,8 @@
+.ng-invalid {
+  color: red;
+}
+
+select:not([multiple]) {
+  height: 3.25rem;
+  vertical-align: middle;
+}

@@ -31,7 +31,7 @@ import { QuestionModule } from '../shared/modules/question.module';
 import { ScreenerModel } from './screener/screener-model';
 import { ScreenerToolbarComponent } from './screener/screener-toolbar/screener-toolbar.component';
 
-import { ReactiveFormsModule } from '@angular/forms';
+import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { ScreenerQuestionComponent } from './screener/screener-question/screener-question.component';
 import { UserQuestionComponent } from './screener/screener-question/user-question/user-question.component';
 import { InputQuestionComponent } from './screener/screener-question/user-question/input-question/input-question.component';
@@ -53,7 +53,8 @@ import { CheckboxQuestionComponent } from './screener/screener-question/checkbox
     MasterScreenerModule,
     KeysModule,
     QuestionModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    FormsModule
   ],
   declarations: [
     AdminComponent,
