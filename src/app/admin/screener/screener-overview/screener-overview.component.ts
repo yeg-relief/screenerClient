@@ -25,78 +25,42 @@ export class ScreenerOverviewComponent implements OnInit {
   private initialState;
   private form: FormGroup;
   private adminForm: Observable<FormGroup>;
+  private questions$: Observable<any>;
   constructor(public model: ScreenerModel, private qcs: QuestionControlService, private fb: FormBuilder) { }
 
   ngOnInit() {
-    console.log('ScreenerOverviewComponent INIT CALLED')
-
     this.model.init = true;
-    console.log(this.model.init)
-    this.adminForm = this.model.load()
+    // unwanted bootstrapping, ie, this load call is required
+    this.model.load()
       .map(screener => screener.form)
-      .multicast( new ReplaySubject<any>(1) ).refCount()
-    this.adminForm.subscribe();
+      .multicast( new ReplaySubject<any>(1) ).refCount().subscribe();
+    // this form we update with controls etc
+    this.adminForm = this.model.publicform$;
     this.state$ = this.model.state$.map(state => state.screener).multicast(new ReplaySubject<1>()).refCount();
+
+    this.questions$ = this.model.questions$.map(questions => questions.sort( (a, b) => a.index - b.index) )
+      .do( () => console.log('~~~~~~~~ QUESITON UPDATE ~~~~~~~~~~~~~'))
+      .do(x => console.log(x))
+      .multicast(new ReplaySubject<1>()).refCount()
 
     this.state$.subscribe();
   }
 
-  revert() {
-    this.model.dispatch.next(this.initialState);
-  }
-
-
-
-  deleteQuestion(index) {
-    this.state$
-      .take(1)
-      .map(screener => screener.questions.splice(index, 1))
-      .subscribe(screener => this.model.dispatch.next(screener));
-  }
-
-  swapQuestions(indexA, indexB){
-    this.state$
-      .take(1)
-      .map(screener => {
-        const a = screener.questions[indexA];
-        const b = screener.questions[indexB];
-        screener.questions[indexA] = b;
-        screener.questions[indexB] = a;
-        return screener;
-      })
-      .subscribe(screener => this.model.dispatch.next(screener));
-  }
-
-  addControls(questions) {
-
-    this.qcs.addQuestions(questions, this.form);
-  }
-
-  removeControls(questions) {
-
-    this.qcs.removeQuestions(questions, this.form);
-  }
-
-  handleFilter(term) {
-    console.log(term);
-  }
-
   handleSave() {
-    Observable.zip(
-      this.state$.take(1),
-      this.adminForm
-    )
-    .do( ([_, adminForm]) => console.log(adminForm.valid))
-    .map( ([state, form]) => {
-      return {
-        version: state.version + 1,
-        questions: Object.keys(form.value).map(key => form.value[key])
-      }
-    }).do(thing => console.log(thing))
-    .let(this.model.save.bind(this.model))
-    .subscribe();
+    this.model.publicform$
+      .take(1)
+      .do(() => console.log('handle save called'))
+      .map( form => {
+        console.log('~~~~~~~~~~~~~~~~~~~~')
+        console.log(form.value);
+        console.log(form)
+        console.log('++++++++++++++++++++')
+        return {
+          version: 15,
+          questions: Object.keys(form.value).map(key => form.value[key])
+        }
+      })
+      .let(this.model.save.bind(this.model))
+      .subscribe();
   }
-
-
-  
 }

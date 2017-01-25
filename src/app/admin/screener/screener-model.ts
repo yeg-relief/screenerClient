@@ -22,6 +22,12 @@ export class ScreenerModel implements OnDestroy, OnInit {
   dispatch: Subject<Screener>;
 
   unusedKeys$: ReplaySubject<any>;
+  questions$: ReplaySubject<any>;
+
+  filterErrors$: ReplaySubject<boolean>;
+  filterKey$: ReplaySubject<string>;
+  publicform$: ReplaySubject<any>;
+
   init = false;
 
   private form$: Observable<FormGroup>;
@@ -82,17 +88,16 @@ export class ScreenerModel implements OnDestroy, OnInit {
         keyGroup['controlType'] = new FormControl(question.controlType, Validators.required);
         keyGroup['key'] = new FormControl(question.key, Validators.required);
         keyGroup['expandable'] = new FormControl(question.expandable, Validators.required);
-        if(question.controlType === 'NumberSelect'){
+        if (question.controlType === 'NumberSelect') {
           keyGroup['options'] = new FormControl(question.options, Validators.required);
         }
-
+        keyGroup['index'] = new FormControl(question.index, Validators.required)
         const key = Math.random().toString()
         rawAdminGroup[key] = new FormGroup(keyGroup);
 
-        
+
         return rawAdminGroup;
       }, {})
-
       // map the object of formgroups into a formgroup (connect the pieces)
       .map(group => new FormGroup(group))
 
@@ -109,16 +114,16 @@ export class ScreenerModel implements OnDestroy, OnInit {
           screener: screener,
           keys: [
             { name: 'key_integer', type: 'integer' },
-            { name: 'key_boolean', type: 'boolean'},
-            { name: 'married', type: 'boolean'},
-            { name: 'income', type: 'integer'},
-            { name: 'incomesss', type: 'integer'}
+            { name: 'key_boolean', type: 'boolean' },
+            { name: 'married', type: 'boolean' },
+            { name: 'income', type: 'integer' },
+            { name: 'incomesss', type: 'integer' }
           ]
         }
       }, {})
 
       // determine keys not in use 
-      .map( (state: any) => {
+      .map((state: any) => {
         const usedKeys = Object.keys(state.form.value).map(k => state.form.value[k].key)
         const keyInUse = key => usedKeys.findIndex(usedName => usedName === key.name) < 0;
 
@@ -130,24 +135,74 @@ export class ScreenerModel implements OnDestroy, OnInit {
       .multicast(new ReplaySubject<any>(1)).refCount();
 
     this.unusedKeys$ = new ReplaySubject<any>(1);
+    this.filterErrors$ = new ReplaySubject<any>(1);
     this.state$.take(1).map(s => s.unusedKeys).subscribe(keys => this.unusedKeys$.next(keys))
+
+    this.filterKey$ = new ReplaySubject<any>(1);
+    this.publicform$ = new ReplaySubject<any>(1);
+    this.questions$ = new ReplaySubject<any>(1);
+    this.state$.take(1)
+      .map(s => s.screener.questions)
+      .subscribe(questions => this.questions$.next(questions) )
+    this.state$.take(1)
+      .map(s => s.form)
+      .subscribe(form => this.publicform$.next(form));
+    
     //this.unusedKeys$.next([]);
     return this.state$;
   }
 
   updateUnusedKeys(keyAdd, keyRemove) {
-      Observable.zip(
-        this.unusedKeys$,
-        this.state$
-      )
-      .subscribe( ([currentUnusedKeys, state]) => {
-        const unusedKeys = currentUnusedKeys.filter(k => k.name !== keyRemove);
-        const usedKey = state.keys.find(k => k.name === keyAdd);
-        const newKeys = [usedKey, ...unusedKeys]
-        this.unusedKeys$.next(newKeys);
+    Observable.zip(
+      this.unusedKeys$,
+      this.state$
+    )
+      .take(1)
+      .subscribe(([currentUnusedKeys, state]) => {
+        let update;
+        if (keyAdd === '' && keyRemove !== undefined){
+          const unusedKeys = currentUnusedKeys.filter(k => k.name !== keyRemove);
+          update = unusedKeys
+        } else {
+          const unusedKeys = currentUnusedKeys.filter(k => k.name !== keyRemove);
+          const usedKey = state.keys.find(k => k.name === keyAdd);
+          update = [usedKey, ...unusedKeys]
+        }
+        this.unusedKeys$.next(update);
       })
   }
 
+  addQuestion(blankQuestion){
+    if (blankQuestion === undefined){
+      return;
+    }
+
+    Observable.zip(
+      this.questions$,
+      this.state$.map(s => s.form)
+    )
+    .take(1)
+    .subscribe( ([questions, form]) => {
+      for(let q of questions) {
+        (<any>q).index++;
+      }
+      blankQuestion.index = 0;
+
+      const hashKey = Math.random().toString();
+      const formGroup = <FormGroup>form;
+      const keyGroup: any  = {};
+      keyGroup['label'] = new FormControl('', [Validators.required, Validators.minLength(5)]);
+      keyGroup['controlType'] = new FormControl('', Validators.required);
+      keyGroup['key'] = new FormControl('', Validators.required);
+      keyGroup['expandable'] = new FormControl(false, Validators.required);
+      const rawAdminGroup = new FormGroup(keyGroup);
+      form.controls[hashKey] = rawAdminGroup;
+      questions.push(blankQuestion)
+      this.questions$.next(questions);
+      this.publicform$.next(form);
+      
+    })
+  }
 
   private serverLoad() {
     const headers = this.getCredentials()
@@ -161,20 +216,26 @@ export class ScreenerModel implements OnDestroy, OnInit {
           controlType: 'NumberInput',
           key: 'income',
           label: 'income?',
-          expandable: false
+          expandable: false,
+          index: 0,
+          id: "djfoisajfoifjosjdofj"
         },
         {
           controlType: 'CheckBox',
           key: 'married',
           label: 'married?',
-          expandable: false
+          expandable: false,
+          index: 1,
+          id: 'gonghokjprj'
         },
         {
           controlType: 'NumberSelect',
           key: 'incomesss',
           label: 'income v2??',
           expandable: false,
-          options: [10, 1000, 1000]
+          options: [10, 1000, 1000],
+          index: 2,
+          id: 'iosdjfiopsjgpdsijg'
         }
       ]
     }

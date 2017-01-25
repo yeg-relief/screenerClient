@@ -8,9 +8,19 @@
     </section>
     <section class="flex flex-column flex-justify flex-stretch">
 
-      <button [disabled]="!adminForm.valid" (click)="save.emit()" md-raised-button color="primary"> SAVE </button>
+      <button style="width: 8vw; height: 5vh" [disabled]="!(adminForm | async).valid" (click)="save.emit()" md-raised-button color="primary"> SAVE </button>
+      <button md-button [disabled]="!(adminForm | async).valid" style="width: 8vw; height: 5vh" color="primary" (click)="handleAdd()">NEW</button>
 
     </section>
   </div>
-  <md-input disabled class="col-4" (keypress)="filter.emit($event.key.toLowerCase())" placeholder="filter by key"></md-input>
+  <form [formGroup]="adminControls">
+    <label> <button disabled md-button>filter by key</button>
+      <select formControlName="keyFilter" class="col-4" placeholder="filter by key">
+        <option [value]="''"> all </option>
+        <option *ngFor="let key of (allKeys$ | async)" [value]="key.name"> {{ key.name }} </option>
+      </select>
+    </label>
+    <md-checkbox disabled formControlName="errorFilter">only errors</md-checkbox>
+  </form>
+  
 </md-card>

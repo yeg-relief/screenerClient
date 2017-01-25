@@ -1,13 +1,13 @@
-<div class="user-question" style="height: 25vh; margin-top: 2vh;">
+<form class="user-question" style="height: 25vh; margin-top: 2vh;" [hidden]=" (errorFilter && !adminForm.errors) || !keyFilter" [formGroup]="adminForm">
 
 
-  <form [className]="!adminForm.valid ? ng-invalid : null" [formGroup]="adminForm" >
+  <div [className]="!adminForm.valid ? ng-invalid : null" [formGroup]="adminForm" >
   <md-tab-group style="width: 100%; ">
     <md-tab label="View" >
       
       <div class="flex flex-column space-around col-12 p1" style="background-color: lightblue; height:20vh;">
         
-        <div id="meta-information" class="col-4 border-left px1"> question X of Y </div>
+        <div id="meta-information" class="col-4 border-left px1"> question {{ question.index }} </div>
         <div id="spacer" class ="col-6"></div>
         <div class="clearfix flex py1"></div>
         
@@ -33,9 +33,9 @@
           <div *ngSwitchCase="'NumberSelect'">
             <md-card-title id="question-label"> {{ question.label }} </md-card-title>
 
-            <md-select> 
-              <md-option *ngFor="let option of question.options"> {{ option }} </md-option>
-            </md-select>
+            <select style="width: 15vw"> 
+              <option *ngFor="let option of question.options"> {{ option }} </option>
+            </select>
           </div>
 
           
@@ -53,19 +53,23 @@
        <div class="flex flex-column space-around p1 col-12" style="background-color: lightgray; height:20vh;">
         
         
-        <md-input formControlName="label" placeholder = "label"></md-input>
+        <md-input formControlName="label" placeholder = "question label"></md-input>
            
-        <div class="flex">
-          <select formControlName="key" placeholder = "question key">
-            <option selected [value]="question.key"> {{ question.key }} </option>
-            <option *ngFor="let key of (unusedKeys$ | async)" [value]="key.name"> {{ key.name }} </option>
-          </select>
+        <div class="flex flex-center col-12">
+          <label>Key Value
+            <select formControlName="key" placeholder = "question key">
+              <option selected [value]="question.key"> {{ question.key }} </option>
+              <option *ngFor="let key of (unusedKeys$ | async)" [value]="key.name"> {{ key.name }} </option>
+            </select>
+          </label>
           <div class="col-1"></div>
-          <select formControlName="controlType" placeholder = " control type ">
-            <option [selected]="question.controlType === 'NumberInput'" [value]="'NumberInput'" > type </option>
-            <option [selected]="question.controlType === 'CheckBox'" [value]="'CheckBox'" > checkbox </option>
-            <option [selected]="question.controlType === 'NumberSelect'" [value]="'NumberSelect'" > button </option>
-          </select>
+          <label>Control Value
+            <select formControlName="controlType" placeholder = " control type ">
+              <option [selected]="question.controlType === 'NumberInput'" [value]="'NumberInput'" > type </option>
+              <option [selected]="question.controlType === 'CheckBox'" [value]="'CheckBox'" > checkbox </option>
+              <option [selected]="question.controlType === 'NumberSelect'" [value]="'NumberSelect'" > button </option>
+            </select>
+          </label>
         </div>
 
         
@@ -89,6 +93,6 @@
     </md-tab>
   </md-tab-group>
 
-  </form>
+  </div>
 
-</div>
+</form>

@@ -6,6 +6,7 @@ import { ReplaySubject } from 'rxjs/ReplaySubject';
 import 'rxjs/add/operator/zip';
 import 'rxjs/add/operator/multicast';
 import 'rxjs/add/operator/combineLatest';
+import 'rxjs/add/operator/debounceTime';
 
 @Component({
   selector: 'app-user-question',
@@ -19,39 +20,70 @@ export class UserQuestionComponent  {
   private form: FormGroup;
   private option = '';
   private unusedKeys$;
-  //@Input() meta;
+  errorFilter = false;
+  keyFilter = true;
+  @Input() meta;
   constructor(public model: ScreenerModel) { }
 
 
   // these are not unsubscribed...
   ngOnInit() {
 
+    this.model.publicform$
+      .map(form => {
+          const controls = form.controls;
+          const values = form.value;
+          console.log('+++++++++++++++++++++++++')
+          console.log(form);
+          console.log(form.value)
+          // our group is obfuscated by a random number to avoid key collisions
+          let key = Object.keys(controls).filter(hashedKey => controls[hashedKey].value.key === this.question.key)
+          if (key.length === 0 ) {
+            key = Object.keys(controls).filter(hashedKey => controls[hashedKey].value.key === '')
+          }
+
+          return [form, key]
+        })
+        .subscribe( ([form, key]) => {
+          console.log(form)
+          console.log('---------------------')
+          // we bind our inputs etc to this FormGroup
+          this.adminForm = (<any>form).get(key);
+        })
+    /*
     const getForm = this.model.state$
         .map(state => {
           const form: FormGroup = state.form;
           const values = form.value;
           // our group is obfuscated by a random number to avoid key collisions
           const  key = Object.keys(values).filter(questionKey => values[questionKey].key === this.question.key)
+          console.log(key)
           return [form, key]
         })
         .take(1)
         .subscribe( ([form, key]) => {
+          console.log(form)
+          console.log(key)
           // we bind our inputs etc to this FormGroup
           this.adminForm = (<any>form).get(key);
         })
+      */
 
-
+    //keyUpdates and updates can be refactored by extracting commonalities
     const updates = 
       this.model.state$
       .switchMap(state => this.adminForm.valueChanges.map(update => [state, update]))
       .filter( ([state, update]) => update.key === this.question.key)
-      //.zip(this.model.state$)
       .subscribe( ([state, update]) => {
  
-        this.question = update
+        this.question = Object.assign({}, update);
         const newKey = state.keys.find(k => k.name === this.question.key);
 
-        if (this.question.controlType === 'CheckBox' && newKey.type !== 'boolean') {
+        if (newKey === undefined){
+          this.adminForm.setErrors({
+            key: 'key is undefined'
+          })
+        } else if (this.question.controlType === 'CheckBox' && newKey.type !== 'boolean') {
           this.adminForm.setErrors({
             controlType: `controlType: ${this.question.controlType} can not have a key of type: ${newKey.type}`
           });
@@ -59,7 +91,11 @@ export class UserQuestionComponent  {
           this.adminForm.setErrors({
             controlType: `controlType: ${this.question.controlType} can not have a key of type: ${newKey.type}`
           });
-        } 
+        }else if (this.question.label.length < 5) {
+          this.adminForm.setErrors({
+            keylength: 'invalid key length'
+          })
+        }
       })
 
     // if it is a key change then we need to alter the unusedKey pool
@@ -71,25 +107,36 @@ export class UserQuestionComponent  {
         this.question = update; 
 
         const newKey = state.keys.find(k => k.name === this.question.key);
-        
-        if (this.question.controlType === 'CheckBox' && newKey.type !== 'boolean') {
+
+        if (newKey === undefined){
           this.adminForm.setErrors({
-            controlType: `controlType: ${this.question.controlType} can not have a key of type: ${newKey.type}`
+            key: 'key is undefined'
+          })
+        }else if (this.question.controlType === 'CheckBox' && newKey.type !== 'boolean') {
+          this.adminForm.setErrors({
+            controlType: ` ${this.question.controlType} can not have a key of type: ${newKey.type}`
           });
         }else if (this.question.controlType !== 'CheckBox' && newKey.type === 'boolean') {
           this.adminForm.setErrors({
-            controlType: `controlType: ${this.question.controlType} can not have a key of type: ${newKey.type}`
+            controlType: `${this.question.controlType} can not have a key of type: ${newKey.type}`
           });
-        } 
-
+        } else if (this.question.label.length < 5) {
+          this.adminForm.setErrors({
+            keylength: `invalid key length: ${this.question.label.length}`
+          })
+      
+        }
       })
 
+    // updates about key pool => which keys are available
     this.unusedKeys$ = this.model.unusedKeys$.asObservable();
+    // this is for admin controls
+    this.model.filterErrors$.subscribe(errorFilter => this.errorFilter = errorFilter)
+    this.model.filterKey$
+      .debounceTime(200)
+      .subscribe(keyFilter => this.keyFilter = new RegExp(keyFilter).test(this.question.key));
   }
 
-  buildListener() {
-
-  }
 
 
 
