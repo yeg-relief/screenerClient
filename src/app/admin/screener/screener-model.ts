@@ -15,37 +15,65 @@ import 'rxjs/add/operator/scan';
 import 'rxjs/add/operator/merge';
 
 type Screener = any;
+interface Model {
+    errors: boolean;
+    questions: any[];
+    created: number;
+    keys: any[];
+    unusedKeys: any[]
+}
+
 
 @Injectable()
 export class ScreenerModel implements OnDestroy, OnInit {
-  state$: Observable<Screener>;
-  dispatch: Subject<Screener>;
+  private model: Model
+  public questions$ = new ReplaySubject(1);
+  public created$ = new ReplaySubject(1);
+  public count$ = new ReplaySubject(1);
+  public keys$ = new ReplaySubject(1);
+  public unusedKeys$ = new ReplaySubject(1);
 
-  unusedKeys$: ReplaySubject<any>;
-  questions$: ReplaySubject<any>;
+  constructor(private http: Http, private authService: AuthService) {
+      this.model = {
+        errors: false,
+        questions: [],
+        created: 0,
+        keys: [],
+        unusedKeys: []
+      }
+      
+  }
 
-  filterErrors$: ReplaySubject<boolean>;
-  filterKey$: ReplaySubject<string>;
-  publicform$: ReplaySubject<any>;
+  load() {
+    return this.serverLoad().do( data => this.setModel(data) )
+  }
 
-  init = false;
+  setModel(data) {
+    this.model = (<any>Object).assign({}, data)
+    this.model.unusedKeys = data.keys.filter(key => data.questions.find(question => key.name === question.key) === undefined)
+    this.model.keys = [...data.keys]
+    // load data into subjects
+    this.questions$.next(this.model.questions);
+    this.created$.next(0);
+    this.count$.next(this.model.questions.length);
+    this.keys$.next(this.model.keys);
+    this.unusedKeys$.next(this.model.unusedKeys);
 
-  private form$: Observable<FormGroup>;
+  }
 
-
-  private subscription: Subscription;
-
-  constructor(private http: Http, private authService: AuthService) { }
-
+  handleKeyChange(new_key: string, old_key: string) {
+    const droppedNewlyChosenKey = this.model.unusedKeys.filter( (key) => key.name !== new_key) 
+    const oldKey = this.model.keys.find( k => k.name === old_key)
+    this.model.unusedKeys = [oldKey, ...droppedNewlyChosenKey]
+    this.unusedKeys$.next(this.model.unusedKeys);
+  }
 
   ngOnInit() {
 
   }
 
   ngOnDestroy() {
-    if (!this.subscription.closed) {
-      this.subscription.unsubscribe()
-    }
+
   }
 
   private getCredentials(): Headers {
@@ -73,7 +101,7 @@ export class ScreenerModel implements OnDestroy, OnInit {
       .timeout(50000)
 
   }
-
+/*
   load() {
     const cachedLoad = this.serverLoad().multicast(new ReplaySubject<any>(1)).refCount();
 
@@ -92,7 +120,8 @@ export class ScreenerModel implements OnDestroy, OnInit {
           keyGroup['options'] = new FormControl(question.options, Validators.required);
         }
         keyGroup['index'] = new FormControl(question.index, Validators.required)
-        const key = Math.random().toString()
+        keyGroup['id'] = new FormControl(question.id, Validators.required)
+        const key = question.id;
         rawAdminGroup[key] = new FormGroup(keyGroup);
 
 
@@ -172,38 +201,28 @@ export class ScreenerModel implements OnDestroy, OnInit {
       })
   }
 
-  addQuestion(blankQuestion){
-    if (blankQuestion === undefined){
-      return;
-    }
-
-    Observable.zip(
+  addQuestion(input: Observable<any>){
+    return Observable.zip(
       this.questions$,
-      this.state$.map(s => s.form)
+      input,
     )
     .take(1)
-    .subscribe( ([questions, form]) => {
-      for(let q of questions) {
-        (<any>q).index++;
-      }
-      blankQuestion.index = 0;
-
-      const hashKey = Math.random().toString();
-      const formGroup = <FormGroup>form;
+    .map( ([questions, input]) => {
       const keyGroup: any  = {};
       keyGroup['label'] = new FormControl('', [Validators.required, Validators.minLength(5)]);
       keyGroup['controlType'] = new FormControl('', Validators.required);
       keyGroup['key'] = new FormControl('', Validators.required);
       keyGroup['expandable'] = new FormControl(false, Validators.required);
       const rawAdminGroup = new FormGroup(keyGroup);
-      form.controls[hashKey] = rawAdminGroup;
-      questions.push(blankQuestion)
-      this.questions$.next(questions);
-      this.publicform$.next(form);
-      
+      keyGroup['index'] = new FormControl(0, Validators.required)
+      const id = Math.random().toString();
+      keyGroup['id'] = new FormControl(id, Validators.required)
+      return [new FormGroup(keyGroup), questions];
     })
+    .do( ([_, questions]) => this.questions$.next(questions))
+    .map( ([formgroup, _]) => formgroup)
   }
-
+*/
   private serverLoad() {
     const headers = this.getCredentials()
     const options = new RequestOptions({ headers: headers });
@@ -237,16 +256,23 @@ export class ScreenerModel implements OnDestroy, OnInit {
           index: 2,
           id: 'iosdjfiopsjgpdsijg'
         }
+      ],
+      keys: [
+        { name: 'key_integer', type: 'integer' },
+        { name: 'key_boolean', type: 'boolean' },
+        { name: 'married', type: 'boolean' },
+        { name: 'income', type: 'integer' },
+        { name: 'incomesss', type: 'integer' }
       ]
     }
 
 
 
     return Observable.of(mockLoad)
-      /*
-      this.http.get('/protected/screener', options)
-      .map(res => res.json().response)
-      */
+      
+      //this.http.get('/protected/screener', options)
+      //.map(res => res.json().response)
+      
       .catch(this.loadError)
       .retry(2)
       .timeout(50000)

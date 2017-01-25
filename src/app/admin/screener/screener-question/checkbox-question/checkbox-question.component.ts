@@ -21,13 +21,6 @@ export class CheckboxQuestionComponent implements OnInit {
    }
 
   ngOnInit() {
-    this.adminForm.valueChanges
-        .map(state => state[this.question.key])
-        .map(question => <any>Object.assign({}, question))
-        .subscribe(update => this.question = update);
-      const group = {}
-      group[this.question.key] = [''];
-      this.form = this.fb.group(group);
 
 
   }

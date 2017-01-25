@@ -1,18 +1,21 @@
 <md-card>
-  
-  <md-card-title> Screener Edit </md-card-title>
+   <md-card-title> Screener Edit </md-card-title>
   <div class="flex flex-justify">
     <section>
-      <md-card-subtitle> latest server update: {{ created | date }} </md-card-subtitle>
+      <md-card-subtitle> latest server update: {{ updated | date }} </md-card-subtitle>
       <md-card-subtitle> this screener has {{ count }} questions </md-card-subtitle>
     </section>
+    <!--
     <section class="flex flex-column flex-justify flex-stretch">
 
       <button style="width: 8vw; height: 5vh" [disabled]="!(adminForm | async).valid" (click)="save.emit()" md-raised-button color="primary"> SAVE </button>
       <button md-button [disabled]="!(adminForm | async).valid" style="width: 8vw; height: 5vh" color="primary" (click)="handleAdd()">NEW</button>
 
     </section>
+    -->
   </div>
+  <!--
+ 
   <form [formGroup]="adminControls">
     <label> <button disabled md-button>filter by key</button>
       <select formControlName="keyFilter" class="col-4" placeholder="filter by key">
@@ -22,5 +25,5 @@
     </label>
     <md-checkbox disabled formControlName="errorFilter">only errors</md-checkbox>
   </form>
-  
+  -->
 </md-card>

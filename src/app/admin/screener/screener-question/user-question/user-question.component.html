@@ -1,7 +1,8 @@
-<form class="user-question" style="height: 25vh; margin-top: 2vh;" [hidden]=" (errorFilter && !adminForm.errors) || !keyFilter" [formGroup]="adminForm">
+<form class="user-question" style="height: 25vh; margin-top: 2vh;">
+ 
 
 
-  <div [className]="!adminForm.valid ? ng-invalid : null" [formGroup]="adminForm" >
+  <div [className]="!form.valid ? ng-invalid : null" [formGroup]="form" >
   <md-tab-group style="width: 100%; ">
     <md-tab label="View" >
       
@@ -58,17 +59,19 @@
         <div class="flex flex-center col-12">
           <label>Key Value
             <select formControlName="key" placeholder = "question key">
-              <option selected [value]="question.key"> {{ question.key }} </option>
-              <option *ngFor="let key of (unusedKeys$ | async)" [value]="key.name"> {{ key.name }} </option>
+              <option disabled selected [value]="question.key"> {{ question.key }} </option>
+              <option *ngFor="let key of unusedKeys" [value]="key.name"> {{ key.name }} </option>
             </select>
           </label>
           <div class="col-1"></div>
           <label>Control Value
+
             <select formControlName="controlType" placeholder = " control type ">
-              <option [selected]="question.controlType === 'NumberInput'" [value]="'NumberInput'" > type </option>
-              <option [selected]="question.controlType === 'CheckBox'" [value]="'CheckBox'" > checkbox </option>
-              <option [selected]="question.controlType === 'NumberSelect'" [value]="'NumberSelect'" > button </option>
+              <option [value]="'NumberInput'" > type </option>
+              <option [value]="'CheckBox'" > checkbox </option>
+              <option [value]="'NumberSelect'" > button </option>
             </select>
+
           </label>
         </div>
 
@@ -84,8 +87,8 @@
       </div>
 
 
-      <div *ngIf="adminForm.errors">
-        {{ adminForm.errors | json }}
+      <div *ngIf="form.errors">
+        {{ form.errors | json }}
 
       </div>
 

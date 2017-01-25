@@ -14,13 +14,9 @@ import { ScreenerModel } from '../screener-model';
   //changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ScreenerToolbarComponent implements OnInit {
-  @Input() created;
-  @Input() count;
-  private adminForm: Observable<any>;
   @Output() save = new EventEmitter<any>();
-  adminControls: FormGroup;
-  valid: boolean;
-  allKeys$: Observable<string[]>;
+  count = 0;
+  updated = 0;
 
   constructor(public model: ScreenerModel) {
 
@@ -32,27 +28,11 @@ export class ScreenerToolbarComponent implements OnInit {
       errorFilter: new FormControl(false)
     }
 
-    this.adminControls =  new FormGroup(group);
-
-    this.adminControls.get('errorFilter').valueChanges.map(val => this.model.filterErrors$.next(val)).subscribe();
-
-    this.adminControls.get('keyFilter').valueChanges.map(val => this.model.filterKey$.next(val)).subscribe();
-
-    const keyFilter = this.adminControls.get('keyFilter');
-    this.allKeys$ = this.model.state$.map(s => s.keys)
-
-    this.adminForm = this.model.publicform$
-
+    this.model.count$.asObservable().do(count => console.log(`count: ${count}`) ).subscribe( (count: number) => this.count = count);
+    this.model.created$.asObservable().do(count => console.log(`created: ${count}`) ).subscribe( (updated: number) => this.updated = updated);
   }
 
   handleAdd() {
-    const blank = {
-      key: '',
-      controlType: '',
-      label: '',
-      expandable: false
-    }
 
-    this.model.addQuestion(blank);
   }
 }
