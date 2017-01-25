@@ -30,4 +30,13 @@ export class ScreenerOverviewComponent implements OnInit {
     
     this.model.questions$.subscribe( (questions: any[]) => this.questions = [...questions])
   }
+
+  handleSave(){
+    console.log(this.questions);
+    //this.model.handleSave();
+  }
+
+  saveControl(control){
+
+  }
 }

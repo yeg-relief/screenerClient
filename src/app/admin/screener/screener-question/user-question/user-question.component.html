@@ -1,5 +1,5 @@
 <form class="user-question" style="height: 25vh; margin-top: 2vh;">
- 
+
 
 
   <div [className]="!form.valid ? ng-invalid : null" [formGroup]="form" >
@@ -49,8 +49,9 @@
       </div>
 
     </md-tab>
+    
     <md-tab label="Edit" >
-
+     
        <div class="flex flex-column space-around p1 col-12" style="background-color: lightgray; height:20vh;">
         
         
@@ -65,19 +66,17 @@
           </label>
           <div class="col-1"></div>
           <label>Control Value
-
             <select formControlName="controlType" placeholder = " control type ">
-              <option [value]="'NumberInput'" > type </option>
-              <option [value]="'CheckBox'" > checkbox </option>
-              <option [value]="'NumberSelect'" > button </option>
+              <option [selected]="question.controlType === 'NumberInput'" [value]="'NumberInput'" > type </option>
+              <option [selected]="question.controlType === 'CheckBox'" [value]="'CheckBox'" > checkbox </option>
+              <option [selected]="question.controlType === 'NumberSelect'" [value]="'NumberSelect'" > button </option>
             </select>
-
           </label>
         </div>
 
         
         <div class="flex col-12 flex-center" *ngIf="question.controlType === 'NumberSelect'">
-          <md-input class="col-4" (input)="handleInput($event)" [value]= "option" placeholder="option value"></md-input>
+          <md-input class="col-4" (input)="handleInput($event)" [value]= "optionValue" placeholder="option value"></md-input>
           <button md-button (click)="handleOptionAdd()"> => </button>
           <md-chip-list>
             <md-chip (click)="removeOption(i)" *ngFor="let option of question.options; let i = index"> {{ option }} </md-chip>
@@ -85,17 +84,18 @@
         </div>
 
       </div>
-
-
-      <div *ngIf="form.errors">
-        {{ form.errors | json }}
-
-      </div>
-
-    
-    </md-tab>
+      
+   </md-tab>
+  
   </md-tab-group>
+
+  
+    <div *ngIf="form.errors">
+      {{ form.errors | json }}
+    </div>
 
   </div>
 
+
+  
 </form>

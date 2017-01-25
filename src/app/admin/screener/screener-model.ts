@@ -20,23 +20,27 @@ interface Model {
     questions: any[];
     created: number;
     keys: any[];
-    unusedKeys: any[]
+    unusedKeys: any[];
+    controls: FormGroup;
 }
 
 
 @Injectable()
 export class ScreenerModel implements OnDestroy, OnInit {
   private model: Model
+  private controls: FormGroup;
   public questions$ = new ReplaySubject(1);
   public created$ = new ReplaySubject(1);
   public count$ = new ReplaySubject(1);
   public keys$ = new ReplaySubject(1);
   public unusedKeys$ = new ReplaySubject(1);
+  public onSave$ = new Subject<boolean>();
 
   constructor(private http: Http, private authService: AuthService) {
       this.model = {
         errors: false,
         questions: [],
+        controls: new FormGroup({}),
         created: 0,
         keys: [],
         unusedKeys: []
@@ -52,14 +56,30 @@ export class ScreenerModel implements OnDestroy, OnInit {
     this.model = (<any>Object).assign({}, data)
     this.model.unusedKeys = data.keys.filter(key => data.questions.find(question => key.name === question.key) === undefined)
     this.model.keys = [...data.keys]
+    this.model.controls = new FormGroup({});
+
+    const modelGroup: any = this.model.questions
+        .forEach( question => {
+          const controls: any = Object.keys(question).reduce( (accum, key) => {
+            accum[key] = new FormControl(question[key], Validators.required);
+            return accum;
+          }, <FormGroup>{})
+          const c = new FormGroup(controls)
+          this.model.controls.addControl(question.id, c);
+        })
+
     // load data into subjects
     this.questions$.next(this.model.questions);
     this.created$.next(0);
     this.count$.next(this.model.questions.length);
     this.keys$.next(this.model.keys);
     this.unusedKeys$.next(this.model.unusedKeys);
-
   }
+
+  getControls(id: string) {
+    return this.model.controls.get(id);
+  }
+
 
   handleKeyChange(new_key: string, old_key: string) {
     const droppedNewlyChosenKey = this.model.unusedKeys.filter( (key) => key.name !== new_key) 
