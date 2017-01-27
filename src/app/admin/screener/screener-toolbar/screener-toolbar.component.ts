@@ -1,4 +1,4 @@
-import { Component, Input, Output, ChangeDetectionStrategy, EventEmitter, OnInit} from '@angular/core';
+import { Component, Input, OnInit} from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
 import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/operator/multicast';
@@ -6,6 +6,7 @@ import 'rxjs/add/operator/map';
 import 'rxjs/add/observable/merge';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 import { ScreenerModel } from '../screener-model';
+import { Subscription } from 'rxjs/Subscription';
 
 @Component({
   selector: 'app-screener-toolbar',
@@ -14,25 +15,57 @@ import { ScreenerModel } from '../screener-model';
   //changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ScreenerToolbarComponent implements OnInit {
-  @Output() save = new EventEmitter<any>();
   count = 0;
   updated = 0;
+  form: any
+  private adminControls: FormGroup;
+  private allKeys: any[] = [];
+  private subscriptions: Subscription[];
 
-  constructor(public model: ScreenerModel) {
-
-  }
+  constructor(public model: ScreenerModel) {}
 
   ngOnInit() {
     const group = {
       keyFilter: new FormControl(''),
       errorFilter: new FormControl(false)
     }
+    this.adminControls = new FormGroup(group);
 
-    this.model.count$.asObservable().do(count => console.log(`count: ${count}`) ).subscribe( (count: number) => this.count = count);
-    this.model.created$.asObservable().do(count => console.log(`created: ${count}`) ).subscribe( (updated: number) => this.updated = updated);
+    this.form = this.model.getModelControls();
+    const count = this.model.count$.asObservable().subscribe( (count: number) => this.count = count);
+    const created  = this.model.created$.asObservable().subscribe( (updated: number) => this.updated = updated);
+    const keys = this.model.keys$.asObservable().subscribe( (allkeys: any[]) => this.allKeys = [...allkeys])
+
+    const errorCheckbox = this.adminControls.valueChanges
+      .map( filter => filter.errorFilter )
+      .do( filter => this.model.filter$.next(filter) )
+      .subscribe();
+
+
+    const errorSelect = this.adminControls.valueChanges
+      .map ( filter => filter.keyFilter)
+      .do( filter => this.model.keyFilter$.next(filter) )
+      .subscribe();
+
+    this.subscriptions = [ count, created, keys, errorCheckbox, errorSelect ]
+  }
+
+  ngOnDestroy() {
+    for (const sub of this.subscriptions) {
+      if (!sub.closed) {
+        sub.unsubscribe();
+      }
+    }
   }
 
   handleAdd() {
+    this.model.addQuestion();
+  }
 
+  handleSave() {
+    this.model.save().subscribe( 
+      data => this.model.pushToNetwork(data),
+      invalidQuestions => this.form.setErrors( {error: invalidQuestions[0].index })
+    );
   }
 }

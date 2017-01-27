@@ -1,8 +1,8 @@
-<form class="user-question" style="height: 25vh; margin-top: 2vh;">
+<form class="user-question" [className]="!form.valid ? ng-invalid : null" [formGroup]="form">
 
 
 
-  <div [className]="!form.valid ? ng-invalid : null" [formGroup]="form" >
+  <div [ngClass]="{ 'filter-question': filterQuestion }">
   <md-tab-group style="width: 100%; ">
     <md-tab label="View" >
       
@@ -54,9 +54,12 @@
      
        <div class="flex flex-column space-around p1 col-12" style="background-color: lightgray; height:20vh;">
         
-        
-        <md-input formControlName="label" placeholder = "question label"></md-input>
-           
+        <div class="clearfix flex flex-center">
+          <md-input formControlName="label"  class="col-8" placeholder = "question label"></md-input>
+          <div class="col-1 flex-grow"></div>
+          <button (click)="deleteQuestion()" md-raised-button color="warn"> X </button>
+        </div>
+
         <div class="flex flex-center col-12">
           <label>Key Value
             <select formControlName="key" placeholder = "question key">
@@ -67,6 +70,7 @@
           <div class="col-1"></div>
           <label>Control Value
             <select formControlName="controlType" placeholder = " control type ">
+              <option selected disabled [value]="question.controlType"> {{ question.controlType }} </option>
               <option [selected]="question.controlType === 'NumberInput'" [value]="'NumberInput'" > type </option>
               <option [selected]="question.controlType === 'CheckBox'" [value]="'CheckBox'" > checkbox </option>
               <option [selected]="question.controlType === 'NumberSelect'" [value]="'NumberSelect'" > button </option>

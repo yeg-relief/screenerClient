@@ -1,4 +1,4 @@
-<md-card>
+<md-card style="height: 25vh;">
    <md-card-title> Screener Edit </md-card-title>
   <div class="flex flex-justify">
     <section>
@@ -6,25 +6,23 @@
       <md-card-subtitle> this screener has {{ count }} questions </md-card-subtitle>
     </section>
     
-    <section class="flex flex-column flex-justify flex-stretch">
+    <section [formGroup]="form" class="flex flex-column flex-justify flex-stretch">
 
-      <button style="width: 8vw; height: 5vh" (click)="save.emit()" md-raised-button color="primary"> SAVE </button>
-      <!--
-      <button md-button [disabled]="!(adminForm | async).valid" style="width: 8vw; height: 5vh" color="primary" (click)="handleAdd()">NEW</button>
-      -->
+      <button [disabled]="form.errors || !form.valid" style="width: 8vw; height: 5vh" (click)="handleSave()" md-raised-button color="primary"> SAVE </button>
+      <button md-button [disabled]="form.errors || !form.valid" style="width: 8vw; height: 5vh" color="primary" (click)="handleAdd()">NEW</button>
+      <div *ngIf="form.errors" style="color:red"> error with types in question: {{ form.errors.error }} </div> 
+
+
     </section>
     
   </div>
-  <!--
- 
   <form [formGroup]="adminControls">
     <label> <button disabled md-button>filter by key</button>
       <select formControlName="keyFilter" class="col-4" placeholder="filter by key">
         <option [value]="''"> all </option>
-        <option *ngFor="let key of (allKeys$ | async)" [value]="key.name"> {{ key.name }} </option>
+        <option *ngFor="let key of allKeys" [value]="key.name"> {{ key.name }} </option>
       </select>
     </label>
-    <md-checkbox disabled formControlName="errorFilter">only errors</md-checkbox>
+    <md-checkbox formControlName="errorFilter">find errors</md-checkbox>
   </form>
-  -->
 </md-card>

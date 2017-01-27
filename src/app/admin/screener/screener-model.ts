@@ -26,7 +26,7 @@ interface Model {
 
 
 @Injectable()
-export class ScreenerModel implements OnDestroy, OnInit {
+export class ScreenerModel {
   private model: Model
   private controls: FormGroup;
   public questions$ = new ReplaySubject(1);
@@ -35,6 +35,11 @@ export class ScreenerModel implements OnDestroy, OnInit {
   public keys$ = new ReplaySubject(1);
   public unusedKeys$ = new ReplaySubject(1);
   public onSave$ = new Subject<boolean>();
+
+
+  public filter$ = new ReplaySubject<boolean>(1);
+  public keyFilter$ = new ReplaySubject<string>(1);
+
 
   constructor(private http: Http, private authService: AuthService) {
       this.model = {
@@ -59,41 +64,78 @@ export class ScreenerModel implements OnDestroy, OnInit {
     this.model.controls = new FormGroup({});
 
     const modelGroup: any = this.model.questions
-        .forEach( question => {
-          const controls: any = Object.keys(question).reduce( (accum, key) => {
-            accum[key] = new FormControl(question[key], Validators.required);
-            return accum;
-          }, <FormGroup>{})
-          const c = new FormGroup(controls)
-          this.model.controls.addControl(question.id, c);
-        })
+                                .forEach( question => {
+                                  const controls: any = Object.keys(question).reduce( (accum, key) => {
+                                    accum[key] = new FormControl(question[key], Validators.required);
+                                    return accum;
+                                  }, <FormGroup>{})
+                                  const c = new FormGroup(controls)
+                                  this.model.controls.addControl(question.id, c);
+                                })
 
     // load data into subjects
     this.questions$.next(this.model.questions);
-    this.created$.next(0);
+    this.created$.next(this.model.created);
     this.count$.next(this.model.questions.length);
     this.keys$.next(this.model.keys);
     this.unusedKeys$.next(this.model.unusedKeys);
+    this.filter$.next(false);
+    this.keyFilter$.next('');
+  }
+
+  addQuestion() {
+    console.log('\n~~~~~~~~~~~~~~~~\n')
+    console.log('ADD QUESTION CALLED')
+    const id = 'temp'.concat(randomString())
+    
+    const blank = {
+      controlType: 'invalid',
+      key: 'invalid',
+      label: '',
+      expandable: false,
+      index: 0,
+      id: id
+    };
+
+    let mutatingQuestions = [...this.model.questions];
+    for(let question of mutatingQuestions) {
+      const incr = question.index + 1;
+      this.model.controls.get(question.id).get('index').setValue(incr)
+      question.index = incr;
+    }
+
+    const newGroup = Object.keys(blank).reduce( (group, key) => {
+      group[key] = new FormControl(blank[key], Validators.required);
+      return group;
+    }, {})
+    const g = new FormGroup(newGroup)
+    this.model.controls.addControl(blank.id, g);
+    const swap = [blank, ...this.model.questions]
+    this.questions$.next(swap);
+    this.model.questions = swap;
+    this.count$.next(this.model.questions.length);
   }
 
   getControls(id: string) {
     return this.model.controls.get(id);
   }
 
+  getModelControls() {
+    return this.model.controls;
+  }
+
 
   handleKeyChange(new_key: string, old_key: string) {
-    const droppedNewlyChosenKey = this.model.unusedKeys.filter( (key) => key.name !== new_key) 
-    const oldKey = this.model.keys.find( k => k.name === old_key)
-    this.model.unusedKeys = [oldKey, ...droppedNewlyChosenKey]
+    const droppedNewlyChosenKey = this.model.unusedKeys.filter( key => key.name !== new_key)
+    if( old_key !== undefined && old_key !== '' && old_key !== 'invalid' ){
+       
+      const oldKey = this.model.keys.find( k => k.name === old_key)
+      this.model.unusedKeys = [oldKey, ...droppedNewlyChosenKey]
+      
+    } else {
+      this.model.unusedKeys = [...droppedNewlyChosenKey]
+    }
     this.unusedKeys$.next(this.model.unusedKeys);
-  }
-
-  ngOnInit() {
-
-  }
-
-  ngOnDestroy() {
-
   }
 
   private getCredentials(): Headers {
@@ -106,143 +148,114 @@ export class ScreenerModel implements OnDestroy, OnInit {
   }
 
 
-  save(inputObservable: Observable<Screener>) {
+
+  save() {
+
+    if ( Object.keys(this.model.controls.controls).length === 0 ) {
+      return Observable.throw<string>('there are no questions to save')
+    }
+
+    if (  this.model.controls.invalid ) {
+      return Observable.throw<string>(' this form is invalid ');
+    }
+
+    const untrackedQuestions = this.model.questions.filter( q => this.model.controls.contains(q.id) );
+
+    if ( untrackedQuestions.length === 0 ) {
+      return Observable.throw<string>(' this has too many questions tracked? ');
+    }
+
+    const presentBoolean = (question) => (key) => question[key] !== undefined && question[key] !== 'invalid' && question[key] !== '';
+
+    const newQuestions = [];
+    for ( const v in this.model.controls.value ) {
+      const checker = presentBoolean(this.model.controls.value[v]);
+      const failedChecking = ['label', 'index', 'controlType', 'key'].filter(checker);
+
+      if ( failedChecking.length !== 4 ) {
+        console.error(failedChecking)
+        const question = this.model.controls.value[v];
+        return Observable.throw<string>(`question at index: ${ question.index } has invalid properties`)
+      }
+
+      newQuestions.push(this.model.controls.value[v]);
+    }
+
+    const findKeyType = key => this.model.keys.find( k => k.name === key).type;
+ 
+    const conflictA = newQuestions.filter( q => q.controlType !== 'CheckBox' && findKeyType(q.key) === 'boolean')
+    const conflictB = newQuestions.filter( q => findKeyType(q.key) === 'integer' && q.controlType === 'CheckBox')
+    const conflicts = [...conflictA, ...conflictB];
+
+    if (conflicts.length !== 0) {
+      return Observable.throw<any>(conflicts);
+    }
+
+    return Observable.of({
+      questions: newQuestions,
+      created: -1,
+    })
+  }
+
+
+
+
+
+  pushToNetwork( data ) {
+    console.log('pushing to network!')
+    console.log(data)
+  }
+
+/*
+  save() {
     const headers = this.getCredentials()
     headers.append('Content-Type', 'application/json');
     const options = new RequestOptions({ headers: headers });
-    return inputObservable
+    return Observable.of({
+        questions: this.model.controls.value,
+        created: -1
+      })
+      .do(_ => console.log('\n ~~~~~~~~~~~~~~~~~~~~~~~~~ \n saving to network'))
+      .do(screener => console.log(screener))
       .map(screener => JSON.stringify({ screener: screener }))
       .switchMap(body => this.http.post('/protected/screener', body, options))
-      .do(response => console.log(response.json()))
       .map(response => response.json().response)
-      .do(screener => console.log(screener))
+      
       .catch(this.loadError)
       .retry(2)
       .timeout(50000)
 
   }
-/*
-  load() {
-    const cachedLoad = this.serverLoad().multicast(new ReplaySubject<any>(1)).refCount();
-
-    const form$ = cachedLoad
-      .map(screener => screener.questions)
-      .switchMap(x => x)
-
-      // turn each question into a FormGroup using a random key to avoid name collisions in form as a whole
-      .reduce<any>((rawAdminGroup, question) => {
-        const keyGroup = {};
-        keyGroup['label'] = new FormControl(question.label, [Validators.required, Validators.minLength(5)]);
-        keyGroup['controlType'] = new FormControl(question.controlType, Validators.required);
-        keyGroup['key'] = new FormControl(question.key, Validators.required);
-        keyGroup['expandable'] = new FormControl(question.expandable, Validators.required);
-        if (question.controlType === 'NumberSelect') {
-          keyGroup['options'] = new FormControl(question.options, Validators.required);
-        }
-        keyGroup['index'] = new FormControl(question.index, Validators.required)
-        keyGroup['id'] = new FormControl(question.id, Validators.required)
-        const key = question.id;
-        rawAdminGroup[key] = new FormGroup(keyGroup);
-
-
-        return rawAdminGroup;
-      }, {})
-      // map the object of formgroups into a formgroup (connect the pieces)
-      .map(group => new FormGroup(group))
-
-    this.state$ = Observable.zip(form$, cachedLoad)
-      .scan((state, zip) => {
-        const form = zip[0];
-        const screener = zip[1];
-
-        console.log(form);
-        console.log(screener);
-
-        return {
-          form: form,
-          screener: screener,
-          keys: [
-            { name: 'key_integer', type: 'integer' },
-            { name: 'key_boolean', type: 'boolean' },
-            { name: 'married', type: 'boolean' },
-            { name: 'income', type: 'integer' },
-            { name: 'incomesss', type: 'integer' }
-          ]
-        }
-      }, {})
-
-      // determine keys not in use 
-      .map((state: any) => {
-        const usedKeys = Object.keys(state.form.value).map(k => state.form.value[k].key)
-        const keyInUse = key => usedKeys.findIndex(usedName => usedName === key.name) < 0;
-
-        const unusedKeys = state.keys.filter(keyInUse)
-
-        state['unusedKeys'] = [...unusedKeys]
-        return state;
-      })
-      .multicast(new ReplaySubject<any>(1)).refCount();
-
-    this.unusedKeys$ = new ReplaySubject<any>(1);
-    this.filterErrors$ = new ReplaySubject<any>(1);
-    this.state$.take(1).map(s => s.unusedKeys).subscribe(keys => this.unusedKeys$.next(keys))
-
-    this.filterKey$ = new ReplaySubject<any>(1);
-    this.publicform$ = new ReplaySubject<any>(1);
-    this.questions$ = new ReplaySubject<any>(1);
-    this.state$.take(1)
-      .map(s => s.screener.questions)
-      .subscribe(questions => this.questions$.next(questions) )
-    this.state$.take(1)
-      .map(s => s.form)
-      .subscribe(form => this.publicform$.next(form));
-    
-    //this.unusedKeys$.next([]);
-    return this.state$;
-  }
-
-  updateUnusedKeys(keyAdd, keyRemove) {
-    Observable.zip(
-      this.unusedKeys$,
-      this.state$
-    )
-      .take(1)
-      .subscribe(([currentUnusedKeys, state]) => {
-        let update;
-        if (keyAdd === '' && keyRemove !== undefined){
-          const unusedKeys = currentUnusedKeys.filter(k => k.name !== keyRemove);
-          update = unusedKeys
-        } else {
-          const unusedKeys = currentUnusedKeys.filter(k => k.name !== keyRemove);
-          const usedKey = state.keys.find(k => k.name === keyAdd);
-          update = [usedKey, ...unusedKeys]
-        }
-        this.unusedKeys$.next(update);
-      })
-  }
-
-  addQuestion(input: Observable<any>){
-    return Observable.zip(
-      this.questions$,
-      input,
-    )
-    .take(1)
-    .map( ([questions, input]) => {
-      const keyGroup: any  = {};
-      keyGroup['label'] = new FormControl('', [Validators.required, Validators.minLength(5)]);
-      keyGroup['controlType'] = new FormControl('', Validators.required);
-      keyGroup['key'] = new FormControl('', Validators.required);
-      keyGroup['expandable'] = new FormControl(false, Validators.required);
-      const rawAdminGroup = new FormGroup(keyGroup);
-      keyGroup['index'] = new FormControl(0, Validators.required)
-      const id = Math.random().toString();
-      keyGroup['id'] = new FormControl(id, Validators.required)
-      return [new FormGroup(keyGroup), questions];
-    })
-    .do( ([_, questions]) => this.questions$.next(questions))
-    .map( ([formgroup, _]) => formgroup)
-  }
 */
+
+  delete(question: any) {
+    const index = question.index;
+    this.model.questions = this.model.questions.filter(q => q.id !== question.id);
+    this.model.controls.removeControl(question.id)
+    
+    if ( question.key !== undefined && question.key !== 'invalid'){
+      this.model.unusedKeys.push( this.model.keys.find(k => k.name === question.key) )
+    }
+
+    let mutatingQuestions = [...this.model.questions];
+    for(let question of mutatingQuestions) {
+      // iterating through the questions in model, if it's higher than the question we're 
+      // deleting then we need to decrement those in higher indices 
+      if (question.index > index){
+        const decr = question.index - 1;
+        this.model.controls.get(question.id).get('index').setValue(decr)
+        question.index = decr;
+      }
+    }
+
+    // update the model and push changes
+    this.model.questions = mutatingQuestions;
+    this.questions$.next( this.model.questions );
+    this.count$.next ( this.model.questions.length )
+  }
+
+
+
   private serverLoad() {
     const headers = this.getCredentials()
     const options = new RequestOptions({ headers: headers });
@@ -286,19 +299,24 @@ export class ScreenerModel implements OnDestroy, OnInit {
       ]
     }
 
+    const keys =  [
+        { name: 'key_integer', type: 'integer' },
+        { name: 'key_boolean', type: 'boolean' },
+        { name: 'married', type: 'boolean' },
+        { name: 'income', type: 'integer' },
+        { name: 'incomesss', type: 'integer' }
+      ]
 
 
-    return Observable.of(mockLoad)
-      
-      //this.http.get('/protected/screener', options)
-      //.map(res => res.json().response)
-      
-      .catch(this.loadError)
+    return this.http.get('/protected/screener', options)
+      .map(res => res.json().response)
+      .map(screener => screener['keys'] = keys)
       .retry(2)
       .timeout(50000)
   }
 
   loadError(error: Response | any) {
+
     let errMsg: string;
     if (error instanceof Response) {
       const body = error.json() || '';
@@ -310,4 +328,14 @@ export class ScreenerModel implements OnDestroy, OnInit {
     console.error(errMsg);
     return Observable.throw(errMsg);
   }
+}
+
+function randomString() {
+    const charSet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+    var randomString = '';
+    for (var i = 0; i < 10; i++) {
+        var randomPoz = Math.floor(Math.random() * charSet.length);
+        randomString += charSet.substring(randomPoz,randomPoz+1);
+    }
+    return randomString;
 }

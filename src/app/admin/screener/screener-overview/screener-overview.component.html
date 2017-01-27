@@ -1,17 +1,9 @@
 <div class="my-wrapper" style="margin: 0vh 0vh 5vh 0vh">
 
-<!--
-<app-screener-toolbar
-  (save)="handleSave()">
-</app-screener-toolbar>
--->
 
-  <app-user-question *ngFor=" let question of questions; let i = index;" [question]="question" >
-  </app-user-question>
+<app-screener-toolbar> </app-screener-toolbar>
 
+<app-user-question *ngFor=" let question of questions; let i = index;" [question]="question" ></app-user-question>
 
-
-
-
-<div class="p2"></div>
+  <div class="p2"></div>
 </div>

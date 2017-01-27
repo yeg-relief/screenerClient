@@ -1,12 +1,3 @@
-.large-admin-wrapper {
-  height: 94vh;
-  width: 100vw;
-  position: fixed;
-  background-color: linen;
-  border-style: solid;
-  border-width: 2px 0 0 0;
-}
-
 .large-sidenav-wrapper {
   width: 240px;
   height: 100%;
