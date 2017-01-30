@@ -21,13 +21,16 @@ export class ScreenerToolbarComponent implements OnInit {
   private adminControls: FormGroup;
   private allKeys: any[] = [];
   private subscriptions: Subscription[];
+  private disabled = false;
+  private errors: any =  { error: '' };
 
   constructor(public model: ScreenerModel) {}
 
   ngOnInit() {
     const group = {
       keyFilter: new FormControl(''),
-      errorFilter: new FormControl(false)
+      // error filter is disabled for the time being
+      errorFilter: new FormControl({value: false, disabled: true})
     }
     this.adminControls = new FormGroup(group);
 
@@ -63,9 +66,21 @@ export class ScreenerToolbarComponent implements OnInit {
   }
 
   handleSave() {
-    this.model.save().subscribe( 
-      data => this.model.pushToNetwork(data),
-      invalidQuestions => this.form.setErrors( {error: invalidQuestions[0].index })
-    );
+    this.model.save()
+      .switchMap( data => this.model.pushToNetwork(data) )
+      .subscribe( {
+        next: data => {
+          this.errors.error = '';
+          this.model.setModel( data );
+        },
+
+        error: err => {
+          console.log('HANDLE ERROR')
+          console.error(err)
+          this.disabled = true;
+          this.errors = (<any>Object).assign({}, { error: err })
+          setTimeout( () => this.disabled = false, 2000);
+        }
+      } );
   }
 }

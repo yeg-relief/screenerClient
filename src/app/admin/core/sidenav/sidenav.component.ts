@@ -18,11 +18,11 @@ export class SidenavComponent implements OnInit {
     },
     {
       title: 'programs',
-      url: 'admin/programs/overview',
+      url: 'programs/overview',
     },
     {
       title: 'keys',
-      url: 'admin/keys/overview'
+      url: 'keys/overview'
     }
   ];
   constructor() { }

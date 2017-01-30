@@ -38,7 +38,7 @@ export class DataService {
 
   getKeys() {
     const options = new RequestOptions({headers: this.getCredentials()})
-    return this.keys$ = this.http.get('/protected/keys/', options)
+    return this.keys$ = this.http.get('/protected/key/', options)
       .map(res => res.json().keys)
       .catch(this.loadError);
   }
@@ -56,6 +56,7 @@ export class DataService {
 
 
   loadError(error: Response | any) {
+    console.error(error);
     let errMsg: string;
     if (error instanceof Response) {
       const body = error.json() || '';
@@ -140,12 +141,12 @@ export class DataService {
   }
 
   // updateKey is really more like createKey
-  updateKey(keys: Key[]) {
+  updateKey(key: Key) {
     const headers = this.getCredentials()
     headers.append('Content-Type', 'application/json' );
     const options = new RequestOptions({ headers: headers });
-    const body = JSON.stringify({ keys: keys });
-    return this.http.post(`/protected/keys/`, body, options)
+    const body = JSON.stringify({ key: key });
+    return this.http.post(`/protected/key/`, body, options)
       .map(res => res.json().update)
       .catch(this.loadError)
   }

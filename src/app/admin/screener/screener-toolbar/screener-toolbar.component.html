@@ -8,9 +8,9 @@
     
     <section [formGroup]="form" class="flex flex-column flex-justify flex-stretch">
 
-      <button [disabled]="form.errors || !form.valid" style="width: 8vw; height: 5vh" (click)="handleSave()" md-raised-button color="primary"> SAVE </button>
-      <button md-button [disabled]="form.errors || !form.valid" style="width: 8vw; height: 5vh" color="primary" (click)="handleAdd()">NEW</button>
-      <div *ngIf="form.errors" style="color:red"> error with types in question: {{ form.errors.error }} </div> 
+      <button [disabled]="disabled" style="width: 8vw; height: 5vh" (click)="handleSave()" md-raised-button color="primary"> SAVE </button>
+      <button md-button [disabled]="disabled" style="width: 8vw; height: 5vh" color="primary" (click)="handleAdd()">NEW</button>
+      <div *ngIf="errors.error !== ''" style="color:red"> error: {{ errors.error }} </div> 
 
 
     </section>

@@ -44,7 +44,9 @@ export class UserQuestionComponent implements OnInit, OnDestroy {
     const localUpdates = this.form.valueChanges.switchMap( update => this.model.keys$.map(keys => [update, keys]))
     .debounceTime(100)
     .subscribe( ([update, keys]) => {
-      
+      const f = <FormGroup>this.form;
+      f.parent.setErrors( {} )
+
       if(update.key === '' || update.key === undefined){
         this.form.setErrors({error: 'no key selected'});
       } else if (update.key !== this.question.key) {

@@ -155,10 +155,6 @@ export class ScreenerModel {
       return Observable.throw<string>('there are no questions to save')
     }
 
-    if (  this.model.controls.invalid ) {
-      return Observable.throw<string>(' this form is invalid ');
-    }
-
     const untrackedQuestions = this.model.questions.filter( q => this.model.controls.contains(q.id) );
 
     if ( untrackedQuestions.length === 0 ) {
@@ -202,31 +198,17 @@ export class ScreenerModel {
 
 
   pushToNetwork( data ) {
-    console.log('pushing to network!')
-    console.log(data)
-  }
-
-/*
-  save() {
     const headers = this.getCredentials()
     headers.append('Content-Type', 'application/json');
     const options = new RequestOptions({ headers: headers });
-    return Observable.of({
-        questions: this.model.controls.value,
-        created: -1
-      })
+    return Observable.of(data)
       .do(_ => console.log('\n ~~~~~~~~~~~~~~~~~~~~~~~~~ \n saving to network'))
       .do(screener => console.log(screener))
       .map(screener => JSON.stringify({ screener: screener }))
       .switchMap(body => this.http.post('/protected/screener', body, options))
       .map(response => response.json().response)
-      
-      .catch(this.loadError)
-      .retry(2)
-      .timeout(50000)
-
+      .timeout(60000)
   }
-*/
 
   delete(question: any) {
     const index = question.index;
@@ -299,18 +281,11 @@ export class ScreenerModel {
       ]
     }
 
-    const keys =  [
-        { name: 'key_integer', type: 'integer' },
-        { name: 'key_boolean', type: 'boolean' },
-        { name: 'married', type: 'boolean' },
-        { name: 'income', type: 'integer' },
-        { name: 'incomesss', type: 'integer' }
-      ]
 
 
     return this.http.get('/protected/screener', options)
       .map(res => res.json().response)
-      .map(screener => screener['keys'] = keys)
+      .do( networkResponse => console.log(networkResponse) )
       .retry(2)
       .timeout(50000)
   }
