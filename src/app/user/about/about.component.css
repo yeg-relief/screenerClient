@@ -1,6 +1,6 @@
 @media(min-width: 52em) {
   main {
-    background-image: url(assets/city-skyline-greyscale.svg);
+    background-image: url(assets/17_01_27_SkylineIllustration_2.svg);
     background-position: bottom right;
     background-repeat: no-repeat;
     background-size: cover;
@@ -28,7 +28,7 @@ section {
 
 @media(min-width: 40em) and (max-width: 52em) {
   main {
-    background-image: url(assets/city-skyline-greyscale.svg);
+    background-image: url(assets/17_01_27_SkylineIllustration_2.svg);
     background-position: bottom right;
     background-repeat: no-repeat;
     background-size: contain;

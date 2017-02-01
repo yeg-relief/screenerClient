@@ -15,7 +15,7 @@ export class MasterScreenerService {
   constructor(private http: Http) { }
 
   loadQuestions(): Observable<Question[]> {
-    return this.http.get('/api/screener/')
+    return this.http.get('/api/questions/latest')
             .map(res => res.json().response)
             .do(thing => console.log(thing))
             .catch(this.loadError);
@@ -26,7 +26,7 @@ export class MasterScreenerService {
     const options = new RequestOptions({ headers: headers });
     const body = JSON.stringify({ data: form});
     console.log(body);
-    return this.http.post('/api/notification/', body, options)
+    return this.http.post('/api/user_master_screener/', body, options)
             .map(res => res.json().response)
             .do( thing => console.log(thing))
             .map(unwrappedResponse => unwrappedResponse.map(response => response.value))

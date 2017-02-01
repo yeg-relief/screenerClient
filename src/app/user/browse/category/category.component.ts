@@ -10,8 +10,8 @@ import { BrowseService } from '../browse.service';
   styles: [`
     section {
       width: 100vw;
-      background-image: url(assets/city-skyline-greyscale.svg);
-      background-position: center bottom;
+      background-image: url(assets/17_01_27_SkylineIllustration_2.svg);
+      background-position: center center;
       background-repeat: no-repeat;
       background-size: contain;
       overflow-x: hidden;

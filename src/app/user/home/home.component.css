@@ -13,17 +13,17 @@ main {
 
 @media(min-width: 40em) {
   .home {
-    background-image: url(assets/city-skyline-greyscale.svg);
+    background-image: url(assets/17_01_27_SkylineIllustration_2.svg);
     background-position: bottom right;
     background-repeat: no-repeat;
-    background-size: cover;
+    background-size: contain;
   }
 }
 
 
 @media(max-width: 40em){
   .home {
-    background-image: url(assets/city-skyline-greyscale.svg);
+    background-image: url(assets/17_01_27_SkylineIllustration_2.svg);
     background-position: center center;
     background-repeat: no-repeat;
     background-size: cover;
