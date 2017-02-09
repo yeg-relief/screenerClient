@@ -16,7 +16,8 @@ export class MasterScreenerService {
 
   loadQuestions(): Observable<Question[]> {
     return this.http.get('/api/screener/')
-            .map(res => res.json().response)
+            .do( res => console.log(res.json()) )
+            .map(res => [res.json().questions, res.json().conditionalQuestions])
             .do(thing => console.log(thing))
             .catch(this.loadError);
   }

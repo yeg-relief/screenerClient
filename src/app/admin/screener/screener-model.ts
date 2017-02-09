@@ -18,6 +18,7 @@ type Screener = any;
 interface Model {
     errors: boolean;
     questions: any[];
+    conditionalQuestions: any[];
     created: number;
     keys: any[];
     unusedKeys: any[];
@@ -45,6 +46,7 @@ export class ScreenerModel {
       this.model = {
         errors: false,
         questions: [],
+        conditionalQuestions: [],
         controls: new FormGroup({}),
         created: 0,
         keys: [],
@@ -57,21 +59,38 @@ export class ScreenerModel {
     return this.serverLoad().do( data => this.setModel(data) )
   }
 
+
+  private createControlGroup(questions: any[]) {
+    const questionToFormGroup = (question): any => {
+      // this seems to break if written as a one-liner... try again some other time?
+      return Object.keys(question)
+        .reduce( (accum, key) => {
+          accum[key] = new FormControl(question[key], Validators.required);
+          return accum;
+        }, <FormGroup>{})
+    }
+
+    return questions.map( q => { 
+      return {
+        group: new FormGroup(questionToFormGroup(q)),
+        id: q.id
+      }
+    });
+  }
+
+
   setModel(data) {
     this.model = (<any>Object).assign({}, data)
+    this.model.questions = this.model.questions.sort( (a, b) => a.index - b.index )
     this.model.unusedKeys = data.keys.filter(key => data.questions.find(question => key.name === question.key) === undefined)
     this.model.keys = [...data.keys]
     this.model.controls = new FormGroup({});
+    this.model.conditionalQuestions = data.conditionalQuestions || [];
 
-    const modelGroup: any = this.model.questions
-                                .forEach( question => {
-                                  const controls: any = Object.keys(question).reduce( (accum, key) => {
-                                    accum[key] = new FormControl(question[key], Validators.required);
-                                    return accum;
-                                  }, <FormGroup>{})
-                                  const c = new FormGroup(controls)
-                                  this.model.controls.addControl(question.id, c);
-                                })
+
+    for( const question of this.createControlGroup([...this.model.questions, ...this.model.conditionalQuestions]) ) {
+      this.model.controls.addControl(question.id, question.group);
+    }
 
     // load data into subjects
     this.questions$.next(this.model.questions);
@@ -83,10 +102,51 @@ export class ScreenerModel {
     this.keyFilter$.next('');
   }
 
+  private swap(sourceQuestion, destinationIndex) {
+    const currentIndex = sourceQuestion.index;
+    const swapQuestion = this.model.questions.find(q => q.index === destinationIndex);
+    let swapped;
+
+    try {
+      swapped = this.model.questions.map( (q, index) => {
+        if (index === destinationIndex) {
+          sourceQuestion.index = index;
+          this.model.controls.get(sourceQuestion.id).get('index').setValue(index);
+          return sourceQuestion;
+        } else if (index === currentIndex) {
+          swapQuestion.index = index;
+          this.model.controls.get(swapQuestion.id).get('index').setValue(index);
+          return swapQuestion;
+        }
+        return q;
+      })
+      // swapQuestion maybe undefined
+    } catch(e) {
+      console.error(e);
+      swapped = this.model.questions;
+    } finally {
+      return swapped;
+    }
+  }
+
+  increaseIndex(question) {
+    if (question.index === this.model.questions.length - 1) {
+      return;
+    }
+    const nextIndex = question.index + 1;
+    this.questions$.next( this.swap(question, nextIndex) );
+  }
+
+  decreaseIndex(question) {
+    if (question.index === 0) {
+      return;
+    }
+    const previousIndex = question.index - 1;
+    this.questions$.next( this.swap(question, previousIndex) );
+  }
+
   addQuestion() {
-    console.log('\n~~~~~~~~~~~~~~~~\n')
-    console.log('ADD QUESTION CALLED')
-    const id = 'temp'.concat(randomString())
+    const id = randomString();
     
     const blank = {
       controlType: 'invalid',
@@ -115,6 +175,62 @@ export class ScreenerModel {
     this.model.questions = swap;
     this.count$.next(this.model.questions.length);
   }
+
+  addConditionalQuestion(question) {
+    console.log(`addConditionalQuestion called on question with ${question.key}`);
+    console.log('~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~')
+    const questionKey = this.model.keys.find(k => k.name === question.key);
+
+    if ( questionKey === undefined || question.controlType !== 'CheckBox' 
+         || questionKey.type !== 'boolean' || question.expandable !== true) 
+    {
+      throw new Error('adding a conditional question to an invalid target');
+    }
+
+    question.conditionalQuestions = question.conditionalQuestions || [];
+
+    const newID = 'temp'.concat(randomString())
+    
+    const blank = {
+      controlType: 'invalid',
+      key: 'invalid',
+      label: '',
+      expandable: false,
+      index: 0,
+      id: newID
+    };
+
+    const newGroup = Object.keys(blank).reduce( (group, key) => {
+      group[key] = new FormControl(blank[key], Validators.required);
+      return group;
+    }, {})
+    const g = new FormGroup(newGroup)
+
+    this.model.controls.addControl(newID, g);
+    
+
+    this.model.conditionalQuestions.push(blank);
+    if ( this.getControls(question.id).get('conditionalQuestions') === null) {
+      const questionForm = <FormGroup>this.getControls(question.id);
+      questionForm.addControl('conditionalQuestions', new FormControl(question.conditionalQuestions, Validators.required));
+    }
+
+    question.conditionalQuestions.push(newID)
+    this.questions$.next( this.model.questions );
+
+    console.log('exiting add conditional');
+    console.log(question)
+    console.log('~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~')
+  }
+
+  findConditionals(question) {
+    const ids = question.conditionalQuestions;
+
+    return ids.map( id => this.model.conditionalQuestions.find(q => q.id === id) )
+              .filter(question => question !== undefined)
+              .sort( (a, b) => a.index - b.index);
+  }
+
 
   getControls(id: string) {
     return this.model.controls.get(id);
@@ -148,7 +264,7 @@ export class ScreenerModel {
   }
 
 
-
+  // this function should be broken into minimum two smaller functions
   save() {
 
     if ( Object.keys(this.model.controls.controls).length === 0 ) {
@@ -161,36 +277,67 @@ export class ScreenerModel {
       return Observable.throw<string>(' this has too many questions tracked? ');
     }
 
-    const presentBoolean = (question) => (key) => question[key] !== undefined && question[key] !== 'invalid' && question[key] !== '';
 
-    const newQuestions = [];
-    for ( const v in this.model.controls.value ) {
-      const checker = presentBoolean(this.model.controls.value[v]);
-      const failedChecking = ['label', 'index', 'controlType', 'key'].filter(checker);
+    /* this should be a function => partitioning values into questions or conditionalQuestions */
+    const questions = [];
+    const conditionalQuestions = [];
+    
+    for (const v in this.model.controls.value ) {
+      const value = this.model.controls.value[v];
+      const conditionalQuestion = this.model.conditionalQuestions.find(q => q.id === value.id);
+      const question = this.model.questions.find(q => q.id === value.id);
 
-      if ( failedChecking.length !== 4 ) {
-        console.error(failedChecking)
-        const question = this.model.controls.value[v];
-        return Observable.throw<string>(`question at index: ${ question.index } has invalid properties`)
+      if (conditionalQuestion === undefined && question !== undefined) {
+        questions.push(value);
+      } else if ( conditionalQuestion !== undefined && question === undefined ) {
+        conditionalQuestions.push(value);
+      } else {
+        throw new Error(`unable to associate form value with a question. id: ${value.id}`)
       }
 
-      newQuestions.push(this.model.controls.value[v]);
+    }
+    /* end partition function */
+
+    /* this should be a function => ensure some degree of data integrity/conformity then assign to return value object*/
+    const presentBoolean = (question) => (key) => question[key] !== undefined && question[key] !== 'invalid' && question[key] !== '';
+
+    for ( const q of [...questions, ...conditionalQuestions] ) {
+      const checker = presentBoolean(q);
+      const failedChecking = ['label', 'index', 'controlType', 'key'].filter(checker);
+
+      if ( failedChecking.length !== 4 ) {   
+        return Observable.throw<string>(`question at index: ${ q.index } has invalid properties`)
+      }
     }
 
     const findKeyType = key => this.model.keys.find( k => k.name === key).type;
  
-    const conflictA = newQuestions.filter( q => q.controlType !== 'CheckBox' && findKeyType(q.key) === 'boolean')
-    const conflictB = newQuestions.filter( q => findKeyType(q.key) === 'integer' && q.controlType === 'CheckBox')
-    const conflicts = [...conflictA, ...conflictB];
+    const key_type_checker = (questions: any[]) => {
+      const conflictA = questions.filter( q => q.controlType !== 'CheckBox' && findKeyType(q.key) === 'boolean')
+      const conflictB = questions.filter( q => findKeyType(q.key) === 'integer' && q.controlType === 'CheckBox')
+      const conflicts = [...conflictA, ...conflictB];
 
-    if (conflicts.length !== 0) {
-      return Observable.throw<any>(conflicts);
+      
+      if (conflicts.length !== 0) {
+        throw new Error('conflicts detected');
+      }
     }
 
-    return Observable.of({
-      questions: newQuestions,
-      created: -1,
-    })
+
+    let dummy;
+
+    try{
+      key_type_checker(questions);
+      key_type_checker(conditionalQuestions);
+      return Observable.of({
+        questions: questions,
+        conditionalQuestions: conditionalQuestions,
+        created: -1
+      })
+    }catch(e){
+      console.error(e);
+      return Observable.throw<string>('conflicts detected')
+    }
   }
 
 
@@ -230,10 +377,19 @@ export class ScreenerModel {
       }
     }
 
+    if (question.expandable === true ) {
+      for(const id of question.conditionalQuestions) {
+        this.model.controls.removeControl(id);
+      }
+      const removed = this.model.conditionalQuestions.filter( q => question.conditionalQuestions.find(id => q.id === id) === undefined )
+      this.model.conditionalQuestions = removed;
+    }
+
     // update the model and push changes
     this.model.questions = mutatingQuestions;
     this.questions$.next( this.model.questions );
     this.count$.next ( this.model.questions.length )
+
   }
 
 
@@ -241,48 +397,6 @@ export class ScreenerModel {
   private serverLoad() {
     const headers = this.getCredentials()
     const options = new RequestOptions({ headers: headers });
-
-    const mockLoad = {
-      version: 1,
-      created: 0,
-      questions: [
-        {
-          controlType: 'NumberInput',
-          key: 'income',
-          label: 'income?',
-          expandable: false,
-          index: 0,
-          id: "djfoisajfoifjosjdofj"
-        },
-        {
-          controlType: 'CheckBox',
-          key: 'married',
-          label: 'married?',
-          expandable: false,
-          index: 1,
-          id: 'gonghokjprj'
-        },
-        {
-          controlType: 'NumberSelect',
-          key: 'incomesss',
-          label: 'income v2??',
-          expandable: false,
-          options: [10, 1000, 1000],
-          index: 2,
-          id: 'iosdjfiopsjgpdsijg'
-        }
-      ],
-      keys: [
-        { name: 'key_integer', type: 'integer' },
-        { name: 'key_boolean', type: 'boolean' },
-        { name: 'married', type: 'boolean' },
-        { name: 'income', type: 'integer' },
-        { name: 'incomesss', type: 'integer' }
-      ]
-    }
-
-
-
     return this.http.get('/protected/screener', options)
       .map(res => res.json().response)
       .do( networkResponse => console.log(networkResponse) )
@@ -303,12 +417,30 @@ export class ScreenerModel {
     console.error(errMsg);
     return Observable.throw(errMsg);
   }
+
+  pushQuestions(){
+    this.questions$.next(this.model.questions);
+  }
+
+  deleteConditional(hostQuestion, hiddenQuestion){
+    hostQuestion.conditionalQuestions = hostQuestion.conditionalQuestions.filter( q => q !== hiddenQuestion.id);
+    this.model.controls.removeControl(hiddenQuestion.id);
+    this.model.controls.get(hostQuestion.id).get('conditionalQuestions').setValue(hostQuestion.conditionalQuestions);
+    this.model.conditionalQuestions = this.model.conditionalQuestions.filter(q => q.id !== hiddenQuestion.id)
+  }
+
+  setConditionalIndices(questions) {
+    for(const q of questions) {
+      this.model.controls.get(q.id).get('index').setValue(q.index);
+    }
+  }
+
 }
 
 function randomString() {
     const charSet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
     var randomString = '';
-    for (var i = 0; i < 10; i++) {
+    for (var i = 0; i < 20; i++) {
         var randomPoz = Math.floor(Math.random() * charSet.length);
         randomString += charSet.substring(randomPoz,randomPoz+1);
     }

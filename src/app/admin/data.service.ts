@@ -142,6 +142,7 @@ export class DataService {
 
   // updateKey is really more like createKey
   updateKey(key: Key) {
+    const k = [key];
     const headers = this.getCredentials()
     headers.append('Content-Type', 'application/json' );
     const options = new RequestOptions({ headers: headers });

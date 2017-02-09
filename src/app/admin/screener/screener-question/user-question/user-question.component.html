@@ -1,4 +1,4 @@
-<form class="user-question" [className]="!form.valid ? ng-invalid : null" [formGroup]="form">
+<form class="user-question"  [formGroup]="form">
 
 
 
@@ -57,7 +57,6 @@
         <div class="clearfix flex flex-center">
           <md-input formControlName="label"  class="col-8" placeholder = "question label"></md-input>
           <div class="col-1 flex-grow"></div>
-          <button (click)="deleteQuestion()" md-raised-button color="warn"> X </button>
         </div>
 
         <div class="flex flex-center col-12">
@@ -75,6 +74,10 @@
               <option [selected]="question.controlType === 'CheckBox'" [value]="'CheckBox'" > checkbox </option>
               <option [selected]="question.controlType === 'NumberSelect'" [value]="'NumberSelect'" > button </option>
             </select>
+          </label>
+          <div class="col-1"></div>
+          <label *ngIf="question.controlType === 'CheckBox'"> Expandable
+            <md-checkbox class="pl2" formControlName="expandable"></md-checkbox>
           </label>
         </div>
 

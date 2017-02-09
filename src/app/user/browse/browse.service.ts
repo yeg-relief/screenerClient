@@ -8,9 +8,7 @@ import 'rxjs/add/operator/switchMap';
 import 'rxjs/add/operator/pluck';
 import 'rxjs/add/operator/reduce';
 import 'rxjs/add/operator/multicast';
-import 'rxjs/add/operator/toArray';
 import 'rxjs/add/operator/map';
-import 'rxjs/add/operator/do';
 
 
 @Injectable()
@@ -20,7 +18,6 @@ export class BrowseService {
   constructor(private http: Http) {
     this.programs$ =  this.http.get('/api/programs')
                         .map(res => res.json().programs)
-                        .do(programs => console.log(programs))
                         // ensure that only one http call is made with mulitple subscriptions to this obs
                         .multicast( new ReplaySubject(1) ).refCount()
                         .catch(this.loadError);

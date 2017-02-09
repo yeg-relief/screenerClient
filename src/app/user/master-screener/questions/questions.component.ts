@@ -32,7 +32,16 @@ export class QuestionsComponent implements OnInit, OnDestroy {
       // gross object reference data.error.msg or something would be better
       this.errorMessage = 'unable to load data from server, please try later.';
     } else if(Array.isArray(data)){
-      this.questions = data;
+      this.questions = data[0].sort( (a, b) => a.index - b.index );
+      const conditionalQuestions = data[1];
+      for (const q of this.questions) {
+        if ( q.expandable && Array.isArray(q.conditonalQuestions) ) {
+          q.conditonalQuestions = q.conditonalQuestions.map(id => conditionalQuestions.find(q => q.id === id))
+                                   .filter(question => question !== undefined)
+                                   .sort( (a, b) => a.index - b.index )
+        }
+      }
+
       try {
         this.form = this.questionControlService.toFormGroup(this.questions);
       } catch (error) {

@@ -18,7 +18,7 @@ import 'rxjs/add/operator/debounceTime';
 })
 export class UserQuestionComponent implements OnInit, OnDestroy {
   @Input() question: any;
-  @Output() saveControl = new EventEmitter<FormGroup>();
+  @Output() makeExpandable = new EventEmitter<boolean>();
   private form: any;
   private unusedKeys: string[];
   private internalErrors: string;
@@ -82,7 +82,11 @@ export class UserQuestionComponent implements OnInit, OnDestroy {
         }
       })
 
-    this.subscriptions = [updateUnusedKeys, localUpdates, errorFilter, keyFilter];
+    const expandChange = this.form.get('expandable').valueChanges
+      .do(value => this.makeExpandable.emit(value)  )
+      .subscribe();
+
+    this.subscriptions = [updateUnusedKeys, localUpdates, errorFilter, keyFilter, expandChange];
   }
 
   ngOnDestroy() {
@@ -125,12 +129,6 @@ export class UserQuestionComponent implements OnInit, OnDestroy {
       this.question.options.splice(index, 1);
     }
   }
-
-
-  deleteQuestion() {
-    this.model.delete(this.question);
-  }
-
 }
 
 

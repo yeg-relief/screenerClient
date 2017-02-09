@@ -1,0 +1,32 @@
+<md-card>
+  <md-card-subtitle class="border-left px2"> Question {{ question.index }}</md-card-subtitle>
+
+  <form [formGroup]="form">
+    <section [ngSwitch]="question.controlType">
+
+      <div *ngSwitchCase="'NumberInput'">
+        <md-card-title id="question-label"> {{ question.label }} </md-card-title>
+
+        <div class="py1"></div>
+
+        <md-input formControlName="question.key" placeholder="input here"></md-input>
+
+      </div>
+
+      <div *ngSwitchCase="'CheckBox'">
+        <md-checkbox formControlName="{{question.key}}"> {{ question.label }} </md-checkbox>
+      </div>
+
+
+      <div *ngSwitchCase="'NumberSelect'">
+        <md-card-title id="question-label"> {{ question.label }} </md-card-title>
+        <select style="width: 15vw" formControlName="question.key">
+          <option *ngFor="let option of question.options"> {{ option }} </option>
+        </select>
+      </div>
+
+      <div *ngSwitchDefault> <strong> {{ question.controlType }} is invalid </strong> </div>
+    </section>
+  </form>
+  <div class="py1"></div>
+</md-card>
