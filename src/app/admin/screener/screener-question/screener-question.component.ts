@@ -9,6 +9,7 @@ import { ScreenerModel } from '../screener-model';
 export class ScreenerQuestionComponent implements OnInit {
   @Input() question;
   private conditionalQuestions = [];
+  private showConditionals = true;
   constructor(public model: ScreenerModel) { }
 
   ngOnInit() {
@@ -33,6 +34,10 @@ export class ScreenerQuestionComponent implements OnInit {
     this.model.decreaseIndex(this.question);
   }
 
+  toggleConditionals() {
+    this.showConditionals = !this.showConditionals;
+  }
+
   addConditionalQuestion() {
     this.model.addConditionalQuestion(this.question);
     this.conditionalQuestions = this.model.findConditionals(this.question);
@@ -40,6 +45,9 @@ export class ScreenerQuestionComponent implements OnInit {
 
   makeExpandable($event) {
     this.question.expandable = $event;
+    if (!this.question.expandable && this.question.conditionalQuestions.length > 0) {
+      this.model.clearCondtionals(this.question);
+    }
   }
 
   deleteConditionalQuestion(question) {

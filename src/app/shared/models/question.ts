@@ -8,5 +8,7 @@ export interface Question {
   conditonalQuestions?: Question[];
   options?: QuestionOption[];
   key: string;
+  id: string;
+  index: number;
   controlType: 'radio' | 'input';
 }

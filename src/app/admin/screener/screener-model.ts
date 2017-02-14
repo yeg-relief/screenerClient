@@ -16,13 +16,13 @@ import 'rxjs/add/operator/merge';
 
 type Screener = any;
 interface Model {
-    errors: boolean;
-    questions: any[];
-    conditionalQuestions: any[];
-    created: number;
-    keys: any[];
-    unusedKeys: any[];
-    controls: FormGroup;
+  errors: boolean;
+  questions: any[];
+  conditionalQuestions: any[];
+  created: number;
+  keys: any[];
+  unusedKeys: any[];
+  controls: FormGroup;
 }
 
 
@@ -43,20 +43,20 @@ export class ScreenerModel {
 
 
   constructor(private http: Http, private authService: AuthService) {
-      this.model = {
-        errors: false,
-        questions: [],
-        conditionalQuestions: [],
-        controls: new FormGroup({}),
-        created: 0,
-        keys: [],
-        unusedKeys: []
-      }
-      
+    this.model = {
+      errors: false,
+      questions: [],
+      conditionalQuestions: [],
+      controls: new FormGroup({}),
+      created: 0,
+      keys: [],
+      unusedKeys: []
+    }
+
   }
 
   load() {
-    return this.serverLoad().do( data => this.setModel(data) )
+    return this.serverLoad().do(data => this.setModel(data))
   }
 
 
@@ -64,13 +64,13 @@ export class ScreenerModel {
     const questionToFormGroup = (question): any => {
       // this seems to break if written as a one-liner... try again some other time?
       return Object.keys(question)
-        .reduce( (accum, key) => {
+        .reduce((accum, key) => {
           accum[key] = new FormControl(question[key], Validators.required);
           return accum;
         }, <FormGroup>{})
     }
 
-    return questions.map( q => { 
+    return questions.map(q => {
       return {
         group: new FormGroup(questionToFormGroup(q)),
         id: q.id
@@ -81,14 +81,14 @@ export class ScreenerModel {
 
   setModel(data) {
     this.model = (<any>Object).assign({}, data)
-    this.model.questions = this.model.questions.sort( (a, b) => a.index - b.index )
+    this.model.questions = this.model.questions.sort((a, b) => a.index - b.index)
     this.model.unusedKeys = data.keys.filter(key => data.questions.find(question => key.name === question.key) === undefined)
     this.model.keys = [...data.keys]
     this.model.controls = new FormGroup({});
     this.model.conditionalQuestions = data.conditionalQuestions || [];
 
 
-    for( const question of this.createControlGroup([...this.model.questions, ...this.model.conditionalQuestions]) ) {
+    for (const question of this.createControlGroup([...this.model.questions, ...this.model.conditionalQuestions])) {
       this.model.controls.addControl(question.id, question.group);
     }
 
@@ -108,7 +108,7 @@ export class ScreenerModel {
     let swapped;
 
     try {
-      swapped = this.model.questions.map( (q, index) => {
+      swapped = this.model.questions.map((q, index) => {
         if (index === destinationIndex) {
           sourceQuestion.index = index;
           this.model.controls.get(sourceQuestion.id).get('index').setValue(index);
@@ -121,7 +121,7 @@ export class ScreenerModel {
         return q;
       })
       // swapQuestion maybe undefined
-    } catch(e) {
+    } catch (e) {
       console.error(e);
       swapped = this.model.questions;
     } finally {
@@ -134,7 +134,7 @@ export class ScreenerModel {
       return;
     }
     const nextIndex = question.index + 1;
-    this.questions$.next( this.swap(question, nextIndex) );
+    this.questions$.next(this.swap(question, nextIndex));
   }
 
   decreaseIndex(question) {
@@ -142,12 +142,12 @@ export class ScreenerModel {
       return;
     }
     const previousIndex = question.index - 1;
-    this.questions$.next( this.swap(question, previousIndex) );
+    this.questions$.next(this.swap(question, previousIndex));
   }
 
   addQuestion() {
     const id = randomString();
-    
+
     const blank = {
       controlType: 'invalid',
       key: 'invalid',
@@ -158,13 +158,13 @@ export class ScreenerModel {
     };
 
     let mutatingQuestions = [...this.model.questions];
-    for(let question of mutatingQuestions) {
+    for (let question of mutatingQuestions) {
       const incr = question.index + 1;
       this.model.controls.get(question.id).get('index').setValue(incr)
       question.index = incr;
     }
 
-    const newGroup = Object.keys(blank).reduce( (group, key) => {
+    const newGroup = Object.keys(blank).reduce((group, key) => {
       group[key] = new FormControl(blank[key], Validators.required);
       return group;
     }, {})
@@ -181,16 +181,15 @@ export class ScreenerModel {
     console.log('~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~')
     const questionKey = this.model.keys.find(k => k.name === question.key);
 
-    if ( questionKey === undefined || question.controlType !== 'CheckBox' 
-         || questionKey.type !== 'boolean' || question.expandable !== true) 
-    {
+    if (questionKey === undefined || question.controlType !== 'CheckBox'
+      || questionKey.type !== 'boolean' || question.expandable !== true) {
       throw new Error('adding a conditional question to an invalid target');
     }
 
     question.conditionalQuestions = question.conditionalQuestions || [];
 
-    const newID = 'temp'.concat(randomString())
-    
+    const newID = randomString();
+
     const blank = {
       controlType: 'invalid',
       key: 'invalid',
@@ -200,23 +199,23 @@ export class ScreenerModel {
       id: newID
     };
 
-    const newGroup = Object.keys(blank).reduce( (group, key) => {
+    const newGroup = Object.keys(blank).reduce((group, key) => {
       group[key] = new FormControl(blank[key], Validators.required);
       return group;
     }, {})
     const g = new FormGroup(newGroup)
 
     this.model.controls.addControl(newID, g);
-    
+
 
     this.model.conditionalQuestions.push(blank);
-    if ( this.getControls(question.id).get('conditionalQuestions') === null) {
+    if (this.getControls(question.id).get('conditionalQuestions') === null) {
       const questionForm = <FormGroup>this.getControls(question.id);
       questionForm.addControl('conditionalQuestions', new FormControl(question.conditionalQuestions, Validators.required));
     }
 
     question.conditionalQuestions.push(newID)
-    this.questions$.next( this.model.questions );
+    this.questions$.next(this.model.questions);
 
     console.log('exiting add conditional');
     console.log(question)
@@ -226,9 +225,25 @@ export class ScreenerModel {
   findConditionals(question) {
     const ids = question.conditionalQuestions;
 
-    return ids.map( id => this.model.conditionalQuestions.find(q => q.id === id) )
-              .filter(question => question !== undefined)
-              .sort( (a, b) => a.index - b.index);
+    return ids.map(id => this.model.conditionalQuestions.find(q => q.id === id))
+      .filter(question => question !== undefined)
+      .sort((a, b) => a.index - b.index);
+  }
+
+  clearCondtionals(question) {
+
+    for (const id of question.conditionalQuestions) {
+      if (this.model.controls.contains(id)) {
+        this.model.controls.removeControl(id);
+      }
+
+    }
+    const removed = this.model.conditionalQuestions.filter(q => question.conditionalQuestions.find(id => q.id === id) === undefined)
+    this.model.conditionalQuestions = removed;
+
+    const q = this.model.questions.find(modelQuestion => modelQuestion.id === question.id);
+    q.conditionalQuestions = [];
+    this.questions$.next( this.model.questions );
   }
 
 
@@ -242,12 +257,12 @@ export class ScreenerModel {
 
 
   handleKeyChange(new_key: string, old_key: string) {
-    const droppedNewlyChosenKey = this.model.unusedKeys.filter( key => key.name !== new_key)
-    if( old_key !== undefined && old_key !== '' && old_key !== 'invalid' ){
-       
-      const oldKey = this.model.keys.find( k => k.name === old_key)
+    const droppedNewlyChosenKey = this.model.unusedKeys.filter(key => key.name !== new_key)
+    if (old_key !== undefined && old_key !== '' && old_key !== 'invalid') {
+
+      const oldKey = this.model.keys.find(k => k.name === old_key)
       this.model.unusedKeys = [oldKey, ...droppedNewlyChosenKey]
-      
+
     } else {
       this.model.unusedKeys = [...droppedNewlyChosenKey]
     }
@@ -267,13 +282,13 @@ export class ScreenerModel {
   // this function should be broken into minimum two smaller functions
   save() {
 
-    if ( Object.keys(this.model.controls.controls).length === 0 ) {
+    if (Object.keys(this.model.controls.controls).length === 0) {
       return Observable.throw<string>('there are no questions to save')
     }
 
-    const untrackedQuestions = this.model.questions.filter( q => this.model.controls.contains(q.id) );
+    const untrackedQuestions = this.model.questions.filter(q => this.model.controls.contains(q.id));
 
-    if ( untrackedQuestions.length === 0 ) {
+    if (untrackedQuestions.length === 0) {
       return Observable.throw<string>(' this has too many questions tracked? ');
     }
 
@@ -281,15 +296,15 @@ export class ScreenerModel {
     /* this should be a function => partitioning values into questions or conditionalQuestions */
     const questions = [];
     const conditionalQuestions = [];
-    
-    for (const v in this.model.controls.value ) {
+
+    for (const v in this.model.controls.value) {
       const value = this.model.controls.value[v];
       const conditionalQuestion = this.model.conditionalQuestions.find(q => q.id === value.id);
       const question = this.model.questions.find(q => q.id === value.id);
 
       if (conditionalQuestion === undefined && question !== undefined) {
         questions.push(value);
-      } else if ( conditionalQuestion !== undefined && question === undefined ) {
+      } else if (conditionalQuestion !== undefined && question === undefined) {
         conditionalQuestions.push(value);
       } else {
         throw new Error(`unable to associate form value with a question. id: ${value.id}`)
@@ -301,23 +316,23 @@ export class ScreenerModel {
     /* this should be a function => ensure some degree of data integrity/conformity then assign to return value object*/
     const presentBoolean = (question) => (key) => question[key] !== undefined && question[key] !== 'invalid' && question[key] !== '';
 
-    for ( const q of [...questions, ...conditionalQuestions] ) {
+    for (const q of [...questions, ...conditionalQuestions]) {
       const checker = presentBoolean(q);
       const failedChecking = ['label', 'index', 'controlType', 'key'].filter(checker);
 
-      if ( failedChecking.length !== 4 ) {   
-        return Observable.throw<string>(`question at index: ${ q.index } has invalid properties`)
+      if (failedChecking.length !== 4) {
+        return Observable.throw<string>(`question at index: ${q.index} has invalid properties`)
       }
     }
 
-    const findKeyType = key => this.model.keys.find( k => k.name === key).type;
- 
+    const findKeyType = key => this.model.keys.find(k => k.name === key).type;
+
     const key_type_checker = (questions: any[]) => {
-      const conflictA = questions.filter( q => q.controlType !== 'CheckBox' && findKeyType(q.key) === 'boolean')
-      const conflictB = questions.filter( q => findKeyType(q.key) === 'integer' && q.controlType === 'CheckBox')
+      const conflictA = questions.filter(q => q.controlType !== 'CheckBox' && findKeyType(q.key) === 'boolean')
+      const conflictB = questions.filter(q => findKeyType(q.key) === 'integer' && q.controlType === 'CheckBox')
       const conflicts = [...conflictA, ...conflictB];
 
-      
+
       if (conflicts.length !== 0) {
         throw new Error('conflicts detected');
       }
@@ -326,7 +341,7 @@ export class ScreenerModel {
 
     let dummy;
 
-    try{
+    try {
       key_type_checker(questions);
       key_type_checker(conditionalQuestions);
       return Observable.of({
@@ -334,7 +349,7 @@ export class ScreenerModel {
         conditionalQuestions: conditionalQuestions,
         created: -1
       })
-    }catch(e){
+    } catch (e) {
       console.error(e);
       return Observable.throw<string>('conflicts detected')
     }
@@ -344,7 +359,7 @@ export class ScreenerModel {
 
 
 
-  pushToNetwork( data ) {
+  pushToNetwork(data) {
     const headers = this.getCredentials()
     headers.append('Content-Type', 'application/json');
     const options = new RequestOptions({ headers: headers });
@@ -360,35 +375,39 @@ export class ScreenerModel {
   delete(question: any) {
     const index = question.index;
     this.model.questions = this.model.questions.filter(q => q.id !== question.id);
-    this.model.controls.removeControl(question.id)
-    
-    if ( question.key !== undefined && question.key !== 'invalid'){
-      this.model.unusedKeys.push( this.model.keys.find(k => k.name === question.key) )
+    if (this.model.controls.contains(question.id)) {
+      this.model.controls.removeControl(question.id);
+    }
+
+    if (question.key !== undefined && question.key !== 'invalid') {
+      this.model.unusedKeys.push(this.model.keys.find(k => k.name === question.key))
     }
 
     let mutatingQuestions = [...this.model.questions];
-    for(let question of mutatingQuestions) {
+    for (let question of mutatingQuestions) {
       // iterating through the questions in model, if it's higher than the question we're 
       // deleting then we need to decrement those in higher indices 
-      if (question.index > index){
+      if (question.index > index) {
         const decr = question.index - 1;
         this.model.controls.get(question.id).get('index').setValue(decr)
         question.index = decr;
       }
     }
 
-    if (question.expandable === true ) {
-      for(const id of question.conditionalQuestions) {
-        this.model.controls.removeControl(id);
+    if (question.expandable === true) {
+      for (const id of question.conditionalQuestions) {
+        if (this.model.controls.contains(id)) {
+          this.model.controls.removeControl(id);
+        }
       }
-      const removed = this.model.conditionalQuestions.filter( q => question.conditionalQuestions.find(id => q.id === id) === undefined )
+      const removed = this.model.conditionalQuestions.filter(q => question.conditionalQuestions.find(id => q.id === id) === undefined)
       this.model.conditionalQuestions = removed;
     }
 
     // update the model and push changes
     this.model.questions = mutatingQuestions;
-    this.questions$.next( this.model.questions );
-    this.count$.next ( this.model.questions.length )
+    this.questions$.next(this.model.questions);
+    this.count$.next(this.model.questions.length)
 
   }
 
@@ -399,7 +418,7 @@ export class ScreenerModel {
     const options = new RequestOptions({ headers: headers });
     return this.http.get('/protected/screener', options)
       .map(res => res.json().response)
-      .do( networkResponse => console.log(networkResponse) )
+      .do(networkResponse => console.log(networkResponse))
       .retry(2)
       .timeout(50000)
   }
@@ -418,19 +437,19 @@ export class ScreenerModel {
     return Observable.throw(errMsg);
   }
 
-  pushQuestions(){
+  pushQuestions() {
     this.questions$.next(this.model.questions);
   }
 
-  deleteConditional(hostQuestion, hiddenQuestion){
-    hostQuestion.conditionalQuestions = hostQuestion.conditionalQuestions.filter( q => q !== hiddenQuestion.id);
+  deleteConditional(hostQuestion, hiddenQuestion) {
+    hostQuestion.conditionalQuestions = hostQuestion.conditionalQuestions.filter(q => q !== hiddenQuestion.id);
     this.model.controls.removeControl(hiddenQuestion.id);
     this.model.controls.get(hostQuestion.id).get('conditionalQuestions').setValue(hostQuestion.conditionalQuestions);
     this.model.conditionalQuestions = this.model.conditionalQuestions.filter(q => q.id !== hiddenQuestion.id)
   }
 
   setConditionalIndices(questions) {
-    for(const q of questions) {
+    for (const q of questions) {
       this.model.controls.get(q.id).get('index').setValue(q.index);
     }
   }
@@ -438,11 +457,11 @@ export class ScreenerModel {
 }
 
 function randomString() {
-    const charSet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
-    var randomString = '';
-    for (var i = 0; i < 20; i++) {
-        var randomPoz = Math.floor(Math.random() * charSet.length);
-        randomString += charSet.substring(randomPoz,randomPoz+1);
-    }
-    return randomString;
+  const charSet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+  var randomString = '';
+  for (var i = 0; i < 20; i++) {
+    var randomPoz = Math.floor(Math.random() * charSet.length);
+    randomString += charSet.substring(randomPoz, randomPoz + 1);
+  }
+  return randomString;
 }

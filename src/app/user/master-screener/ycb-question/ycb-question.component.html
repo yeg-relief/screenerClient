@@ -1,5 +1,5 @@
 <md-card>
-  <md-card-subtitle class="border-left px2"> Question {{ question.index }}</md-card-subtitle>
+  
 
   <form [formGroup]="form">
     <section [ngSwitch]="question.controlType">
@@ -14,13 +14,13 @@
       </div>
 
       <div *ngSwitchCase="'CheckBox'">
-        <md-checkbox formControlName="{{question.key}}"> {{ question.label }} </md-checkbox>
+        <md-card-title> <md-checkbox formControlName="{{question.key}}"> {{ question.label }} </md-checkbox> </md-card-title>
       </div>
 
 
       <div *ngSwitchCase="'NumberSelect'">
         <md-card-title id="question-label"> {{ question.label }} </md-card-title>
-        <select style="width: 15vw" formControlName="question.key">
+        <select style="width: 15vw; height: 5vh;" formControlName="{{ question.key }}">
           <option *ngFor="let option of question.options"> {{ option }} </option>
         </select>
       </div>
@@ -28,5 +28,13 @@
       <div *ngSwitchDefault> <strong> {{ question.controlType }} is invalid </strong> </div>
     </section>
   </form>
+  <div *ngIf="showQuestions">
+    <app-ycb-question
+      *ngFor="let expandableQuestion of conditionalQuestions" 
+      [question]="expandableQuestion" 
+      [form]="form">
+    </app-ycb-question>
+  </div>
+  
   <div class="py1"></div>
 </md-card>

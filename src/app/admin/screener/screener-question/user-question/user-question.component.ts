@@ -53,6 +53,13 @@ export class UserQuestionComponent implements OnInit, OnDestroy {
         this.model.handleKeyChange(update.key, this.question.key);
       } else if (this.question.controlType === 'NumberSelect' && update.controlType !== 'NumberSelect') {
         this.form.removeControl('options')
+      } else if (this.question.controlType === 'CheckBox' && update.controlType !== 'CheckBox' && update.conditionalQuestions.length > 0) {
+        // add some user confirmation dialog here
+        //this.model.clearCondtionals(this.question);
+        this.question.conditionalQuestions = [];
+      } else if (this.question.expandable && !update.expandable  && update.conditionalQuestions.length > 0) {
+        //this.model.clearCondtionals(this.question);
+        this.question.conditionalQuestions = [];
       }
         
       this.question = (<any>Object).assign( {}, update );
