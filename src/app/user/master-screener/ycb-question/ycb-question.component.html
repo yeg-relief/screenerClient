@@ -1,4 +1,4 @@
-<md-card>
+<md-card style="margin-top: 3vh; margin-bottom: 3vh;">
   
 
   <form [formGroup]="form">
@@ -20,7 +20,7 @@
 
       <div *ngSwitchCase="'NumberSelect'">
         <md-card-title id="question-label"> {{ question.label }} </md-card-title>
-        <select style="width: 15vw; height: 5vh;" formControlName="{{ question.key }}">
+        <select style="width: 15vw; height: 5vh; min-width:200px" formControlName="{{ question.key }}">
           <option *ngFor="let option of question.options"> {{ option }} </option>
         </select>
       </div>
