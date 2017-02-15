@@ -9,8 +9,6 @@ import { reducer } from './reducer';
 import { EffectsModule } from '@ngrx/effects';
 import { MaterialModule } from '@angular/material';
 import { DataService } from './data.service';
-import { EditQuestionEffects } from './master-screener/edit-question/edit-question.effects';
-import { KeyEffects } from './master-screener/keys/key.effects';
 import { AdminCoreModule } from './core/admin-core.module';
 import { ProgramOverviewEffects } from './programs/program-overview/effects';
 import { ProgramEditEffects } from './programs/program-edit/effects';
@@ -20,10 +18,6 @@ import { ProgramsModule } from './programs/programs.module';
 import { MasterScreenerModule } from './master-screener/master-screener.module';
 import { KeysModule } from './keys/keys.module';
 import { HttpModule } from '@angular/http';
-
-import { MasterScreenerResolverService } from './master-screener/master-screener-resolver.service';
-import { EditResolveService } from './master-screener/edit/edit-resolve.service';
-import { EditQuestionResolverService } from './master-screener/edit-question/edit-question-resolver.service';
 
 import { ProgramsResolverService } from './programs/program-overview/programs-resolver.service';
 import { ScreenerOverviewComponent } from './screener/screener-overview/screener-overview.component';
@@ -42,8 +36,6 @@ import { ExpandableQuestionComponent } from './screener/screener-question/expand
     routing,
     MaterialModule.forRoot(),
     StoreModule.provideStore(reducer),
-    EffectsModule.run(EditQuestionEffects),
-    EffectsModule.run(KeyEffects),
     EffectsModule.run(ProgramOverviewEffects),
     EffectsModule.run(ProgramEditEffects),
     EffectsModule.run(ProgramDeleteEffects),
@@ -66,9 +58,6 @@ import { ExpandableQuestionComponent } from './screener/screener-question/expand
   providers: [
     DataService, 
     HttpModule, 
-    MasterScreenerResolverService,
-    EditResolveService,
-    EditQuestionResolverService,
     KeyResolverService,
     ProgramsResolverService,
     ScreenerModel

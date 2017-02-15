@@ -1,7 +1,0 @@
-<div class="flex flex-column error-wrapper">
-  <div *ngFor="let error of (questionErrors$ | async )" 
-    class="border rounded bg-maroon white center error"
-    (click)="handleClick(error.open)">
-    {{ error.msg }} 
-  </div>
-</div>

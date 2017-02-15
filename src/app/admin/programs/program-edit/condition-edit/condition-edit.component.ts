@@ -79,7 +79,8 @@ export class ConditionEditComponent implements OnInit, OnDestroy {
       key: this.keySelect
     });
 
-    this.keys$ = this.store.let(fromRoot.getPresentKeys).take(1)
+    this.keys$ = this.store.let(fromRoot.allLoadedKeys).take(1)
+      .do(keys => console.log(keys))
       .map(keys => {
         const sentKey = {
           name: 'select a key',

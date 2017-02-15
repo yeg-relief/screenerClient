@@ -5,12 +5,6 @@ import { ReplaySubject } from 'rxjs/ReplaySubject';
 import { Observable } from 'rxjs/Observable';
 import { combineReducers } from '@ngrx/store';
 import { compose } from '@ngrx/core/compose';
-import * as fromMasterScreener from './master-screener/master-screener.reducer';
-import * as fromEditScreener from './master-screener/edit/edit.reducer';
-import * as fromEditQuestion from './master-screener/edit-question/edit-question.reducer';
-
-// need to figure out or refactor these Key reducer duplication
-import * as fromKeys from './master-screener/keys/key.reducer';
 import * as fromKeyOverview from './keys/reducer';
 
 import * as fromProgramOverview from './programs/program-overview/reducer';
@@ -24,19 +18,11 @@ import { cloneDeep } from 'lodash';
 import { ApplicationFacingProgram } from './models/program';
 
 export interface State {
-  masterScreener: fromMasterScreener.State;
-  editScreener: fromEditScreener.State;
-  editQuestion: fromEditQuestion.State;
-  keys: fromKeys.State;
   keyOverview: fromKeyOverview.State;
   programOverview: fromProgramOverview.State;
 }
 
 const reducers = {
-  masterScreener: fromMasterScreener.reducer,
-  editScreener: fromEditScreener.reducer,
-  editQuestion: fromEditQuestion.reducer,
-  keys: fromKeys.reducer,
   keyOverview: fromKeyOverview.reducer,
   programOverview: fromProgramOverview.reducer
 };
@@ -47,21 +33,6 @@ export function reducer(state: any, action: any) {
   return productionReducer(state, action);
 }
 
-export function getMasterScreenerState(state$: Observable<State>) {
-  return state$.select(state => state.masterScreener);
-}
-
-export function getEditScreenerState(state$: Observable<State>) {
-  return state$.select(state => state.editScreener);
-}
-
-export function getEditQuestionState(state$: Observable<State>) {
-  return state$.select(state => state.editQuestion);
-}
-
-export function getKeysState(state$: Observable<State>) {
-  return state$.select(state => state.keys);
-}
 
 export function getProgramOverviewState(state$: Observable<State>) {
   return state$.select(state => state.programOverview);
@@ -71,124 +42,6 @@ export function getKeyOverview(state$: Observable<State>) {
   return state$.select(state => state.keyOverview);
 }
 
-/* for master-screener overview */
-export const getVersions = share(compose(fromMasterScreener.getVersions, getMasterScreenerState));
-
-export const getWorkingQuestionCount =
-  share(compose(fromMasterScreener.getQuestionCount, getMasterScreenerState));
-
-export const getWorkingCreationDate =
-  share(compose(fromMasterScreener.getCreatedDate, getMasterScreenerState));
-
-export const getWorkingNumber =
-  share(compose(fromMasterScreener.getWorkingVersionNumber, getMasterScreenerState));
-
-export const getLoading =
-  share(compose(fromMasterScreener.getLoading, getMasterScreenerState));
-
-export const getErrors = share(compose(fromMasterScreener.getErrors, getMasterScreenerState));
-
-
-export const getKeys = share(compose(fromMasterScreener.getKeys, getMasterScreenerState));
-
-export const flattenedQuestions =
-  share(compose(fromMasterScreener.getFlattenedQuestions, getMasterScreenerState));
-
-export const getOverviewScreener = share(compose(fromMasterScreener.getMasterScreener, getMasterScreenerState));
-
-
-/* for master-screener edit */
-export const getPresentEditScreener =
-  share(compose(fromEditScreener.getPresentScreener, getEditScreenerState));
-
-// the following two questions have confusing names #REFACTOR
-export const getPresentEditQuestions =
-  share(compose(fromEditScreener.getPresentQuestions, getEditScreenerState));
-
-export const unsavedEdits = share(compose(fromEditScreener.unsavedEdits, getEditScreenerState));
-
-// this function returns the edit version for the current screener in state
-export const getPresentEditScreenerVersion =
-  share(compose(fromEditScreener.getPresentVersion, getEditScreenerState));
-// this function returns the "WORKING VERSION" which is found from init version derived from route
-export const getCurrentEditWorkingVersion =
-  share(compose(fromEditScreener.getWorkingEditVersion, getEditScreenerState));
-/*
-  if the previous two versions dont match then we must load a new version from the 
-  data service
-*/
-export const getEditScreenerSaving = share(compose(fromEditScreener.getSavingState, getEditScreenerState));
-
-
-
-/* for question edit */
-export const getPresentQuestionEdit =
-  share(compose(fromEditQuestion.getPresentQuestion, getEditQuestionState));
-
-export const getOriginalKeyQuestionEdit =
-  share(compose(fromEditQuestion.getEditQuestionKey, getEditQuestionState));
-
-export const getQuestionErrors =
-  share(compose(fromEditQuestion.getQuestionErrors, getEditQuestionState));
-
-export const unsavedQuestionEdits = share(compose(fromEditQuestion.unsavedEdits, getEditQuestionState));
-
-export const questionSaved = share(compose(fromEditQuestion.savedQuestion, getEditQuestionState));
-
-export const expandableKey = share(compose(fromEditQuestion.expandableQuestionKey, getEditQuestionState));
-
-
-/* for keys */
-export const getPresentKeys =
-  share(compose(fromKeys.getPresentKeys, getKeysState));
-
-export const findEditQuestion = function (state$: Observable<State>) {
-  return Observable.combineLatest<string, Question[]>(
-    state$.let(getOriginalKeyQuestionEdit),
-    state$.let(getPresentEditQuestions)
-  )
-  .map(([key, questions]) => {
-    const q: Question = questions.find((question: Question) => question.key === key);
-    if (typeof q === 'undefined') {
-      return {
-        type: undefined,
-        label: undefined,
-        expandable: false,
-        conditonalQuestions: [],
-        options: [],
-        key: 'empty',
-        controlType: undefined
-      };
-    }
-    return cloneDeep(q);
-  });
-};
-
-export const findUnusedKeys = function (state$: Observable<State>) {
-  return Observable.combineLatest<Question[], Key[]>(
-    state$.let(getPresentEditQuestions),
-    state$.let(getPresentKeys)
-  )
-  .map(([questions, keys]) => {
-    const usedKeyNames: string[] = [];
-    questions.forEach( question => {
-      usedKeyNames.push(question.key);
-      if (question.expandable) {
-        question.conditonalQuestions.forEach(conditionalQuestion => {
-          usedKeyNames.push(conditionalQuestion.key);
-        });
-      }
-    });
-    const unusedKeys: Key[] = keys.reduce( (acc: Key[], present: Key) => {
-      const presentIndex = usedKeyNames.findIndex(keyName => keyName === present.name);
-      if (presentIndex < 0) {
-        acc = acc.concat(present);
-      }
-      return acc;
-    }, []);
-    return unusedKeys;
-  });
-};
 
 /* for programs */
 export const getLoadedPrograms = share(compose(fromProgramOverview.getPrograms, getProgramOverviewState));

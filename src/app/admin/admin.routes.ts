@@ -5,10 +5,6 @@ import { AuthGuardService } from './core/services/auth-guard.service';
 import { LoginComponent } from './core/login/login.component';
 
 import { MasterScreenerComponent } from './master-screener/master-screener.component';
-import { OverviewComponent } from './master-screener/overview/overview.component';
-import { EditComponent } from './master-screener/edit/edit.component';
-import { EditResolveService } from './master-screener/edit/edit-resolve.service';
-import { MasterScreenerResolverService } from './master-screener/master-screener-resolver.service';
 
 import { ProgramsComponent } from './programs/programs.component';
 import { ProgramOverviewComponent } from './programs/program-overview/program-overview.component';
@@ -22,9 +18,6 @@ import { KeyResolverService } from './keys/overview/key-resolver.service';
 import { KeysComponent } from './keys/keys.component';
 import { KeysOverviewComponent } from './keys/overview/overview.component';
 import { KeyEditComponent } from './keys/edit/key-edit.component';
-import { EditQuestionComponent } from './master-screener/edit-question/edit-question.component'
-import { EditQuestionResolverService } from './master-screener/edit-question/edit-question-resolver.service'
-import { EditConditionalComponent } from './master-screener/edit-conditional/edit-conditional.component';
 
 
 import { ScreenerOverviewComponent } from './screener/screener-overview/screener-overview.component'

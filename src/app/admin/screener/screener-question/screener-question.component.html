@@ -16,7 +16,7 @@
 </md-card>
 
 <div *ngIf="question.expandable && showConditionals" style="background-color: silver; padding-top: 3vh; padding-bottom: 3vh;">
-  <md-card *ngFor="let condQuestion of conditionalQuestions" style="margin-left: 3vw; margin-right: 3vw;">
+  <md-card *ngFor="let condQuestion of conditionalQuestions" style="margin-left: 15vw; margin-right: 15vw;">
     <app-user-question [question]="condQuestion"></app-user-question>
     <md-card-actions>
       <!-- up arrow -->

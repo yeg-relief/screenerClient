@@ -1,9 +1,0 @@
-button:hover:not(.clear) {
-  background-color: pink;
-  color: black;
-  font-family: 'Roboto Mono', monospace;
-}
-
-.warn {
-  border: 1px solid red;
-}
