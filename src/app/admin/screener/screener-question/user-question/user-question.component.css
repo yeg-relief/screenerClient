@@ -1,0 +1,18 @@
+.ng-invalid {
+  color: red;
+}
+
+select:not([multiple]) {
+  height: 3.25rem;
+  vertical-align: middle;
+}
+
+.user-question {
+  height: 25vh; 
+  margin: 2vh auto;
+  max-width: 60vw
+}
+
+.filter-question {
+  display: none;
+}

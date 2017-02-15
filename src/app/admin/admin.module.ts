@@ -9,8 +9,6 @@ import { reducer } from './reducer';
 import { EffectsModule } from '@ngrx/effects';
 import { MaterialModule } from '@angular/material';
 import { DataService } from './data.service';
-import { EditQuestionEffects } from './master-screener/edit-question/edit-question.effects';
-import { KeyEffects } from './master-screener/keys/key.effects';
 import { AdminCoreModule } from './core/admin-core.module';
 import { ProgramOverviewEffects } from './programs/program-overview/effects';
 import { ProgramEditEffects } from './programs/program-edit/effects';
@@ -21,11 +19,16 @@ import { MasterScreenerModule } from './master-screener/master-screener.module';
 import { KeysModule } from './keys/keys.module';
 import { HttpModule } from '@angular/http';
 
-import { MasterScreenerResolverService } from './master-screener/master-screener-resolver.service';
-import { EditResolveService } from './master-screener/edit/edit-resolve.service';
-import { EditQuestionResolverService } from './master-screener/edit-question/edit-question-resolver.service';
-
 import { ProgramsResolverService } from './programs/program-overview/programs-resolver.service';
+import { ScreenerOverviewComponent } from './screener/screener-overview/screener-overview.component';
+import { QuestionModule } from '../shared/modules/question.module';
+import { ScreenerModel } from './screener/screener-model';
+import { ScreenerToolbarComponent } from './screener/screener-toolbar/screener-toolbar.component';
+
+import { ReactiveFormsModule, FormsModule } from '@angular/forms';
+import { ScreenerQuestionComponent } from './screener/screener-question/screener-question.component';
+import { UserQuestionComponent } from './screener/screener-question/user-question/user-question.component';
+import { ExpandableQuestionComponent } from './screener/screener-question/expandable-question/expandable-question.component';
 
 @NgModule({
   imports: [
@@ -33,27 +36,31 @@ import { ProgramsResolverService } from './programs/program-overview/programs-re
     routing,
     MaterialModule.forRoot(),
     StoreModule.provideStore(reducer),
-    EffectsModule.run(EditQuestionEffects),
-    EffectsModule.run(KeyEffects),
     EffectsModule.run(ProgramOverviewEffects),
     EffectsModule.run(ProgramEditEffects),
     EffectsModule.run(ProgramDeleteEffects),
     AdminCoreModule,
     ProgramsModule,
     MasterScreenerModule,
-    KeysModule
+    KeysModule,
+    QuestionModule,
+    ReactiveFormsModule,
+    FormsModule
   ],
   declarations: [
     AdminComponent,
+    ScreenerOverviewComponent,
+    ScreenerToolbarComponent,
+    ScreenerQuestionComponent,
+    UserQuestionComponent,
+    ExpandableQuestionComponent,
   ],
   providers: [
     DataService, 
     HttpModule, 
-    MasterScreenerResolverService,
-    EditResolveService,
-    EditQuestionResolverService,
     KeyResolverService,
-    ProgramsResolverService
+    ProgramsResolverService,
+    ScreenerModel
   ]
 })
 export class AdminModule { }

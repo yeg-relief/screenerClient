@@ -4,6 +4,8 @@ import { FormGroup  } from '@angular/forms';
 import { MasterScreenerService } from '../master-screener.service';
 import { QuestionControlService } from './question-control.service';
 import { Question } from '../../../shared';
+import { ReplaySubject } from 'rxjs/ReplaySubject';
+import 'rxjs/add/operator/take';
 
 @Component({
   templateUrl: './questions.component.html',
@@ -13,8 +15,9 @@ import { Question } from '../../../shared';
 export class QuestionsComponent implements OnInit, OnDestroy {
   // having problems passing form through async pipe... 
   // resolving form in `then` statement and using a flag to indicate form is resolved
-  form: FormGroup;
+  form: ReplaySubject<FormGroup>;
   questions: Question[] = [];
+  conditionalQuestions: Question[] = [];
   errorMessage = '';
   timeout;
   loading = false;
@@ -29,12 +32,13 @@ export class QuestionsComponent implements OnInit, OnDestroy {
   ngOnInit() {
     const data = this.route.snapshot.data['questions'];
     if (data.error) {
-      // gross object reference data.error.msg or something would be better
       this.errorMessage = 'unable to load data from server, please try later.';
     } else if(Array.isArray(data)){
-      this.questions = data;
+      this.form = new ReplaySubject<FormGroup>(1);
+      this.questions = data[0].sort( (a, b) => a.index - b.index );
+      this.conditionalQuestions = data[1];
       try {
-        this.form = this.questionControlService.toFormGroup(this.questions);
+        this.form.next( this.questionControlService.toFormGroup(this.questions) );
       } catch (error) {
         console.error(error);
         this.errorMessage = 'internal program error, please contact admin.';
@@ -49,17 +53,35 @@ export class QuestionsComponent implements OnInit, OnDestroy {
 
   onSubmit() {
     this.timeout = setTimeout( () => this.loading = true, 60);
-    this.masterScreenerService.loadResults(this.form.value)
-      .then( results => this.masterScreenerService.results = [].concat(results))
+    let value;
+    this.form.take(1).subscribe(val => value = val.value)
+    this.masterScreenerService.loadResults(value)
+      .then( results => this.masterScreenerService.results = [...results] )
       .then(() => this.router.navigateByUrl('/master-screener/results'))
       .catch( () => this.errorMessage = 'unable to load results, try later.');
-  }
+}
 
   addControls($event) {
-    this.questionControlService.addQuestions($event, this.form);
+    let form;
+    this.form.take(1).subscribe(f => form = f);
+    const conditionalQuestions = this.conditionalQuestions.filter( q => $event.find(id => q.id === id) );
+    this.questionControlService.addQuestions(conditionalQuestions, form);
+    this.form.next( form );
   }
 
   removeControls($event) {
-    this.questionControlService.removeQuestions($event, this.form);
+    let form;
+    this.form.take(1).subscribe(f => form = f);
+    const conditionalQuestions = this.conditionalQuestions.filter( q => $event.find(id => q.id === id) ).sort( (a, b) => a.index - b.index);
+    this.questionControlService.removeQuestions(conditionalQuestions, form);
+    this.form.next( form );
+  }
+
+  gatherConditionals(question) {
+    if (!question.expandable || !Array.isArray(question.conditionalQuestions) || question.conditionalQuestions.length === 0){
+      return [];
+    }
+    const conditionals = question.conditionalQuestions;
+    return this.conditionalQuestions.filter( q => conditionals.find(id => id === q.id))
   }
 }

@@ -83,7 +83,7 @@ export class KeyEditComponent implements OnInit, OnDestroy {
       name: this.form.value.name,
       type: this.form.value.type
     };
-    this.data.updateKey([key])
+    this.data.updateKey(key)
       .take(1)
       .do(() => this.store.dispatch(new keysActions._UpdateKey([key])))
       .do(() => this.saving = true)

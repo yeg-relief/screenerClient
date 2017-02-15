@@ -1,7 +1,5 @@
 import { Component, OnInit, ViewEncapsulation } from '@angular/core';
 import { DataService } from './data.service';
-import { EditResolveService } from './master-screener/edit/edit-resolve.service';
-import { EditQuestionResolverService } from './master-screener/edit-question/edit-question-resolver.service';
 import { AuthGuardService } from './core/services/auth-guard.service';
 import { AuthService } from './core/services/auth.service';
 
@@ -10,11 +8,7 @@ import { AuthService } from './core/services/auth.service';
   templateUrl: './admin.component.html',
   styleUrls: ['./admin.component.css'],
   encapsulation: ViewEncapsulation.None,
-  providers: [ 
-    DataService, 
-    EditResolveService, 
-    EditQuestionResolverService, 
-  ]
+  providers: [ DataService ]
 })
 export class AdminComponent implements OnInit {
 

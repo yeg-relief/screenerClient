@@ -1,16 +1,11 @@
 <main *ngIf="!loading">
   <h1 class="center"> Master Screener </h1>
   <div *ngIf="errorMessage" class="center"> <strong>{{errorMessage}} </strong></div>
-  <form (ngSubmit)="onSubmit()" [formGroup]="form" *ngIf="errorMessage.length === 0 && questions.length > 0">
+  <form (ngSubmit)="onSubmit()" [formGroup]="(form | async)" *ngIf="errorMessage.length === 0 && questions.length > 0">
     <div>
-      <div *ngFor="let question of questions; let i = index" class="clearfix flex">
+      <div *ngFor="let question of questions" class="clearfix flex">
         <div class="questions">
-          <app-question [question]="question" 
-            [index]="i + 1" 
-            [length]="questions.length" 
-            [conditional]="false" [form]="form"
-            (onExpand)="addControls($event)" (onHide)="removeControls($event)">
-          </app-question>
+          <app-ycb-question [question]="question" [conditionalQuestions]="gatherConditionals(question)" [form]="(form | async)" (onExpand)="addControls($event)" (onHide)="removeControls($event)"></app-ycb-question>
         </div>
       </div>
     </div>
@@ -22,7 +17,7 @@
           <button 
               class="flex-grow" 
               md-raised-button color="primary"
-              type="submit" [disabled]="form.untouched">
+              type="submit" [disabled]="(form | async)?.untouched">
             SUBMIT
           </button>
         </div>

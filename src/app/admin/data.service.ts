@@ -38,24 +38,14 @@ export class DataService {
 
   getKeys() {
     const options = new RequestOptions({headers: this.getCredentials()})
-    return this.keys$ = this.http.get('/protected/keys/', options)
+    return this.keys$ = this.http.get('/protected/key/', options)
       .map(res => res.json().keys)
       .catch(this.loadError);
   }
 
-  // load every screener again naive, but it works at this point TODO: rewrite to improve scalability
-  loadAllScreeners() {
-    const options = new RequestOptions({headers: this.getCredentials()})
-    if (this.screeners$ === undefined) {
-      this.screeners$ = this.http.get('/protected/master_screener/', options)
-      .map(res => res.json().response)
-      .catch(this.loadError);
-    }
-    return this.screeners$;
-  }
-
 
   loadError(error: Response | any) {
+    console.error(error);
     let errMsg: string;
     if (error instanceof Response) {
       const body = error.json() || '';
@@ -68,44 +58,25 @@ export class DataService {
     return Observable.throw(errMsg);
   }
 
-  // attn: this will perform an http call
-  loadLatestScreener(): Observable<MasterScreener> {
-    //this.loadAllScreeners();
-    const options = new RequestOptions({headers: this.getCredentials()})
-    return this.http.get('/protected/master_screener/', options)
-      .map(res => res.json().response)
-      .map((screeners: MasterScreener[]) => {
-        const sorted = screeners.sort((a, b) => a.meta.screener.version - b.meta.screener.version)
-        return sorted[sorted.length - 1]
-      });
-  }
-
-  // attn: this will perform an http call
-  loadVersionMetaData(): Observable<number[]> {
-    if(this.screeners$ === undefined) {
-      this.loadAllScreeners();
-    }
-
-    return this.screeners$
-      .switchMap(x => x)
-      .reduce((accum: number[], screener: MasterScreener) => accum.concat(screener.version), []);
-  }
-
-  saveScreener(screener: MasterScreener) {
-    const headers = this.getCredentials()
-    headers.append('Content-Type', 'application/json' );
-    const options = new RequestOptions({ headers: headers });
-    const body = JSON.stringify({ data: screener });
-    return this.http.post('/protected/master_screener/', body, options)
-      .map(res => res.json().response)
-      .catch(this.loadError)
-      .toPromise();
-  }
-
   loadPrograms(): Observable<ApplicationFacingProgram[]> {
     const options = new RequestOptions({headers: this.getCredentials()})
-    return this.http.get('/protected/programs/application/', options)
-      .map(res => res.json().data)
+    return this.http.get('/protected/program/', options)
+      .map( res => res.json())
+      .reduce( (accum, obj) => {
+        const programs = obj.programs;
+        const queries = obj.queries;
+        const p: ApplicationFacingProgram[] = programs.map( program => {
+          const pp: ApplicationFacingProgram = (<any>Object).assign({}, {
+            guid: program.guid,
+            application: queries.filter(query => query.guid === program.guid),
+            user: program
+          })
+          console.log(pp);
+          return pp;
+        })
+        return p;
+      }, [])
+      .do(_ => console.error(_))
       .catch(this.loadError)
   }
 
@@ -114,7 +85,7 @@ export class DataService {
     headers.append('Content-Type', 'application/json' );
     const options = new RequestOptions({ headers: headers });
     const body = JSON.stringify({ data: program });
-    return this.http.put('/protected/programs/', body, options)
+    return this.http.put('/protected/program/', body, options)
       .map(res => res.json().created)
       .catch(this.loadError)
       .toPromise();
@@ -125,7 +96,7 @@ export class DataService {
     headers.append('Content-Type', 'application/json' );
     const options = new RequestOptions({ headers: headers });
     const body = JSON.stringify({ data: program });
-    return this.http.post('/protected/programs/', body, options)
+    return this.http.post('/protected/program/', body, options)
       .map(res => res.json().response)
       .catch(this.loadError)
       .toPromise();
@@ -133,19 +104,20 @@ export class DataService {
 
   deleteProgram(program: ApplicationFacingProgram) {
     const options = new RequestOptions({headers: this.getCredentials()})
-    return this.http.delete(`/protected/programs/${program.guid}`, options)
-      .map(res => res.json().removed)
+    return this.http.delete(`/protected/program/${program.guid}`, options)
+      .map(res => res.json())
       .catch(this.loadError)
       .toPromise()
   }
 
   // updateKey is really more like createKey
-  updateKey(keys: Key[]) {
+  updateKey(key: Key) {
+    const k = [key];
     const headers = this.getCredentials()
     headers.append('Content-Type', 'application/json' );
     const options = new RequestOptions({ headers: headers });
-    const body = JSON.stringify({ keys: keys });
-    return this.http.post(`/protected/keys/`, body, options)
+    const body = JSON.stringify({ key: key });
+    return this.http.post(`/protected/key/`, body, options)
       .map(res => res.json().update)
       .catch(this.loadError)
   }

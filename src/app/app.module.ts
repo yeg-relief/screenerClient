@@ -14,13 +14,15 @@ import { BrowseService } from './user/browse/browse.service';
 import { AuthService } from './admin/core/services/auth.service'
 import { AuthGuardService } from './admin/core/services/auth-guard.service';
 
+
+
 @NgModule({
   declarations: [
     AppComponent,
     ToolbarComponent,
     PageNotFoundComponent,
     AboutComponent,
-    HomeComponent
+    HomeComponent,
   ],
   imports: [
     BrowserModule,

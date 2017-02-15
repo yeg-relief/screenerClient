@@ -57,15 +57,8 @@ export class ConditionEditComponent implements OnInit, OnDestroy {
   ];
   qualifierInput = new FormControl(this.qualifierOptions[0].value);
 
-  booleanValueOptions = [
-    {
-      display: 'true', value: true
-    },
-    {
-      display: 'false', value: false
-    }
-  ];
-  booleanValueSelect = new FormControl(this.booleanValueOptions[0].value);
+  booleanValueOptions = [true, false];
+  booleanValueSelect = new FormControl(this.booleanValueOptions[0]);
   inputNumberValue = new FormControl(0, Validators.pattern('^\\d+$'));
 
   state$: Observable<ProgramCondition>;
@@ -79,7 +72,8 @@ export class ConditionEditComponent implements OnInit, OnDestroy {
       key: this.keySelect
     });
 
-    this.keys$ = this.store.let(fromRoot.getPresentKeys).take(1)
+    this.keys$ = this.store.let(fromRoot.allLoadedKeys).take(1)
+      .do(keys => console.log(keys))
       .map(keys => {
         const sentKey = {
           name: 'select a key',
@@ -91,6 +85,7 @@ export class ConditionEditComponent implements OnInit, OnDestroy {
 
     this.state$ = this.dispatch$()
       .let(this.reducer.bind(this))
+      .do(_ => console.log(_))
       .takeUntil(this.destroy$)
       .multicast(new ReplaySubject(1)).refCount();
 
@@ -108,7 +103,7 @@ export class ConditionEditComponent implements OnInit, OnDestroy {
     // booleanKey -> numberKey
     const addNumberControl$ = drivers.key
       .filter(action => action.payload !== undefined)
-      .filter(action => action.payload.type === 'number')
+      .filter(action => action.payload.type === 'integer' )
       .filter(() => !this.form.contains('inputNumberValue'))
       .do(() => this.form.addControl('inputNumberValue', this.inputNumberValue))
       .do(() => this.qualifierInput.setValue(this.qualifierOptions[0].value))
@@ -117,7 +112,7 @@ export class ConditionEditComponent implements OnInit, OnDestroy {
     // numberKey -> numberKey
     const changeNumberKey$ = drivers.key
       .filter(action => action.payload !== undefined)
-      .filter(action => action.payload.type === 'number')
+      .filter(action => action.payload.type === 'integer')
       .filter(() => this.form.contains('inputNumberValue'))
       .do(() => this.inputNumberValue.setValue(0))
       // this is not working... use html encoding or whatever it's called? &<number>;
@@ -135,7 +130,7 @@ export class ConditionEditComponent implements OnInit, OnDestroy {
       .filter(action => action.payload !== undefined)
       .filter(action => action.payload.type === 'boolean')
       .filter(() => !this.form.contains('inputNumberValue'))
-      .do(() => this.booleanValueSelect.setValue(this.booleanValueOptions[0].value));
+      .do(() => this.booleanValueSelect.setValue(this.booleanValueOptions[0]));
 
     const updateKeyDisplayOnChange$ = drivers.inputChange
       .filter((action) => action.payload.key !== undefined)
@@ -183,23 +178,29 @@ export class ConditionEditComponent implements OnInit, OnDestroy {
           type: 'INPUT_QUALIFIER',
           payload: qualifier
         };
-      });
+      })
+     // .do(_ => console.log(_))
 
     const booleanSelect$ = this.booleanValueSelect.valueChanges
       .map(boolValue => {
+        if (typeof boolValue === 'string' && boolValue === 'false') {
+          boolValue = false;
+        }
+        
         return {
           type: 'BOOLEAN_SELECT',
           payload: boolValue
         };
       });
-
+    
     const numberInput$ = this.inputNumberValue.valueChanges
       .map(val => {
         return {
           type: 'NUMBER_INPUT',
           payload: Number.parseInt(val, 10)
         };
-      });
+      })
+      //.do(_ => console.log(_))
 
     const clear$ = this.clear$.asObservable()
       .map(() => {
@@ -240,7 +241,7 @@ export class ConditionEditComponent implements OnInit, OnDestroy {
 
         }
         case 'SELECT_KEY': {
-          if (action.payload.type === 'number' || action.payload.type === 'integer') {
+          if (action.payload.type === 'integer') {
             return Object.assign({}, {
               key: action.payload,
               value: 0,
@@ -257,7 +258,7 @@ export class ConditionEditComponent implements OnInit, OnDestroy {
           return state;
         }
         case 'INPUT_QUALIFIER': {
-          if (state.type !== 'number') {
+          if (state.type !== 'integer') {
             return state;
           }
           return Object.assign({}, state, {
@@ -274,9 +275,11 @@ export class ConditionEditComponent implements OnInit, OnDestroy {
         }
 
         case 'NUMBER_INPUT': {
-          if (state.type !== 'number') {
+          if (state.type !== 'integer') {
+            console.log("RETURN STATE")
             return state;
           }
+          console.log(`value: ${parseInt(action.payload, 10)}`)
           return Object.assign({}, state, {
             value: parseInt(action.payload, 10)
           });
@@ -297,13 +300,13 @@ export class ConditionEditComponent implements OnInit, OnDestroy {
   }
 
   setForm(condition: ProgramCondition) {
-    if(condition.key.type === 'number'){
+    if(condition.key.type === 'integer'){
       this.inputNumberValue.setValue(condition.value);
       const qualifierIndex = this.qualifierOptions.findIndex(qualifier => qualifier.value === condition.qualifier);
       this.qualifierInput.setValue(this.qualifierOptions[qualifierIndex].value);
     } else if (condition.key.type === 'boolean') {
-      const booleanIndex = this.booleanValueOptions.findIndex(qualifier => qualifier.value === condition.value);
-      this.booleanValueSelect.setValue(this.booleanValueOptions[booleanIndex].value);
+      const booleanIndex = this.booleanValueOptions.findIndex(qualifier => qualifier === condition.value);
+      this.booleanValueSelect.setValue(this.booleanValueOptions[booleanIndex]);
     }
   }
 }

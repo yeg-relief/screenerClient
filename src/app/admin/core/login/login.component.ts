@@ -27,7 +27,7 @@ export class LoginComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     if (this.authService.isLoggedIn) {
-      this.router.navigateByUrl('/admin/master-screener/overview');
+      this.router.navigateByUrl('/admin/screener/edit');
     }
   }
 
@@ -44,7 +44,7 @@ export class LoginComponent implements OnInit, OnDestroy {
           if (success) {
             // Get the redirect URL from our auth service
             // If no redirect has been set, use the default
-            let redirect = this.authService.redirectUrl ? this.authService.redirectUrl : '/admin/master-screener/overview';
+            let redirect = this.authService.redirectUrl ? this.authService.redirectUrl : '/admin/screener/edit';
             this.authGuard.isLoggedIn = true;
             this.active = false;
             // Redirect the user

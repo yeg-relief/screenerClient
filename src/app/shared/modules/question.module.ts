@@ -1,9 +1,7 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule } from '@angular/forms';
-import { MdCardModule } from '@angular/material/card';
-import { MdRadioModule } from '@angular/material/radio';
-import { MdInputModule } from '@angular/material/input';
+import { MaterialModule } from '@angular/material'
 import { QuestionComponent } from
   '../components/question/question.component';
 
@@ -11,9 +9,7 @@ import { QuestionComponent } from
   imports: [
     CommonModule,
     ReactiveFormsModule,
-    MdCardModule.forRoot(),
-    MdRadioModule.forRoot(),
-    MdInputModule.forRoot()
+    MaterialModule.forRoot()
   ],
   declarations: [
     QuestionComponent

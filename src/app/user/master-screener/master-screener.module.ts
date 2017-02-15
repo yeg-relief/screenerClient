@@ -11,6 +11,7 @@ import { HttpModule } from '@angular/http';
 import { QuestionsResolverService } from './questions/questions-resolver.service';
 import { RouterModule } from '@angular/router';
 import { MaterialModule } from '@angular/material';
+import { YcbQuestionComponent } from './ycb-question/ycb-question.component';
 
 @NgModule({
   imports: [
@@ -25,7 +26,8 @@ import { MaterialModule } from '@angular/material';
   declarations: [
     QuestionsComponent,
     ResultsComponent,
-    MasterScreenerComponent
+    MasterScreenerComponent,
+    YcbQuestionComponent
   ],
   providers: [ 
     QuestionsResolverService

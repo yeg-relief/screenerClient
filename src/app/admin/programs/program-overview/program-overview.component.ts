@@ -4,8 +4,8 @@ import { ApplicationFacingProgram } from '../../models/program';
 import { Store } from '@ngrx/store';
 import { DataService } from '../../data.service';
 import * as fromRoot from '../../reducer';
+import * as fromKeys from '../../keys/actions';
 import * as programOverview from './actions';
-import * as fromKeys from '../../master-screener/keys/key.actions';
 import { ActivatedRoute } from '@angular/router'
 
 @Component({
@@ -22,8 +22,8 @@ export class ProgramOverviewComponent implements OnInit {
   ngOnInit() {
     const programs = this.route.snapshot.data['programs'];
     if (programs !== undefined && Array.isArray(programs)){
-      this.store.dispatch(new programOverview.LoadProgramsSuccess(programs));
-      this.store.dispatch(new fromKeys.LoadKeys({}));
+      this.store.dispatch(new programOverview.LoadProgramsSuccess(programs[0]));
+      this.store.dispatch(new fromKeys._LoadKeysSuccess(programs[1]));
     }
     this.programs$ = this.store.let(fromRoot.getLoadedPrograms);
     // this is not semantic because it will be false when all programs are loaded

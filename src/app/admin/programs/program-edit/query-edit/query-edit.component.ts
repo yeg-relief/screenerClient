@@ -74,6 +74,7 @@ export class QueryEditComponent implements OnInit, OnDestroy {
       });
 
     const committedCondition$ = this.commitCondition.asObservable()
+      .do( _ => console.log(_))
       .map(condition => {
         return {
           type: 'COMMIT_CONDITION',

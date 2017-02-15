@@ -34,9 +34,18 @@
       </div>
     </div>
 
-    <div *ngSwitchCase="'input'">
-      <md-input [formControlName]="question.key" placeholder="input here"></md-input>
-    </div>
+
+    <md-input *ngSwitchCase="'NumberInput'" [formControlName]="question.key" placeholder="input here"></md-input>
+
+
+
+    <md-checkbox *ngSwitchCase="'CheckBox'" [formControlName]="question.key"></md-checkbox>
+
+
+    <md-select *ngSwitchCase="'NumberSelect'" [formControlName]="question.key">
+      <md-option selected disabled> Make Selection </md-option>
+      <md-option *ngFor="let option of question.options" [value]="option"> {{ option }} </md-option>
+    </md-select>
 
     <div *ngSwitchDefault>
       <md-card-title> invalid question.controlType </md-card-title>

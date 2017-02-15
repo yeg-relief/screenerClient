@@ -5,10 +5,6 @@ import { AuthGuardService } from './core/services/auth-guard.service';
 import { LoginComponent } from './core/login/login.component';
 
 import { MasterScreenerComponent } from './master-screener/master-screener.component';
-import { OverviewComponent } from './master-screener/overview/overview.component';
-import { EditComponent } from './master-screener/edit/edit.component';
-import { EditResolveService } from './master-screener/edit/edit-resolve.service';
-import { MasterScreenerResolverService } from './master-screener/master-screener-resolver.service';
 
 import { ProgramsComponent } from './programs/programs.component';
 import { ProgramOverviewComponent } from './programs/program-overview/program-overview.component';
@@ -22,50 +18,24 @@ import { KeyResolverService } from './keys/overview/key-resolver.service';
 import { KeysComponent } from './keys/keys.component';
 import { KeysOverviewComponent } from './keys/overview/overview.component';
 import { KeyEditComponent } from './keys/edit/key-edit.component';
-import { EditQuestionComponent } from './master-screener/edit-question/edit-question.component'
-import { EditQuestionResolverService } from './master-screener/edit-question/edit-question-resolver.service'
-import { EditConditionalComponent } from './master-screener/edit-conditional/edit-conditional.component';
+
+
+import { ScreenerOverviewComponent } from './screener/screener-overview/screener-overview.component'
+
 
 export const routing: ModuleWithProviders = RouterModule.forChild([
   {
     path: '', component: AdminComponent,
     children: [
       {
-        path: 'master-screener',
+        path: 'screener',
         component: MasterScreenerComponent,
         canActivate: [AuthGuardService],
         children: [
           {
-            path: 'overview', component: OverviewComponent,
-            resolve: {
-              masterScreener: MasterScreenerResolverService
-            }
-          },
-          {
-            path: 'edit/version/:version',
-            component: EditComponent,
-            resolve: {
-              screener: EditResolveService
-            },
-            children: []
-          },
-          {
-            path: 'edit/version/:version/question/:key',
-            component: EditQuestionComponent,
-            resolve: {
-              question: EditQuestionResolverService
-            }
-          },
-          {
-            path: 'edit/version/:version/conditionals/question/:key',
-            component: EditConditionalComponent,
-          },
-          {
-            path: '', pathMatch: 'full', redirectTo: 'overview',
-            resolve: {
-              masterScreener: MasterScreenerResolverService
-            }
-          },
+            path: 'edit',
+            component: ScreenerOverviewComponent
+          }
         ]
       },
       {
