@@ -13,11 +13,10 @@ main {
 
 @media(min-width: 40em) {
   .home {
-    
     background-image: url(assets/17_01_27_SkylineIllustration_2.svg);
     background-position: bottom right;
     background-repeat: no-repeat;
-    background-size: cover;
+    background-size: contain;
   }
 }
 
