@@ -17,6 +17,7 @@ export class ResultsComponent implements OnInit {
   ngOnInit() {
     if (this.masterScreenerService.results !== undefined &&  Array.isArray(this.masterScreenerService.results)){
       this.results = [].concat(this.masterScreenerService.results);
+      console.log(this.results);
     } else {
       this.errorMessage = 'error loading results, try again later.';
     }

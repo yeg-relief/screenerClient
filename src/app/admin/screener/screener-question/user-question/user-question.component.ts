@@ -53,11 +53,11 @@ export class UserQuestionComponent implements OnInit, OnDestroy {
         this.model.handleKeyChange(update.key, this.question.key);
       } else if (this.question.controlType === 'NumberSelect' && update.controlType !== 'NumberSelect') {
         this.form.removeControl('options')
-      } else if (this.question.controlType === 'CheckBox' && update.controlType !== 'CheckBox' && update.conditionalQuestions.length > 0) {
+      } else if (this.question.controlType === 'CheckBox' && update.controlType !== 'CheckBox' && Array.isArray(update.conditionalQuestions)) {
         // add some user confirmation dialog here
         //this.model.clearCondtionals(this.question);
         this.question.conditionalQuestions = [];
-      } else if (this.question.expandable && !update.expandable  && update.conditionalQuestions.length > 0) {
+      } else if (this.question.expandable && !update.expandable  && Array.isArray(update.conditionalQuestions)) {
         //this.model.clearCondtionals(this.question);
         this.question.conditionalQuestions = [];
       }
