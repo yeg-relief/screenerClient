@@ -105,7 +105,7 @@ export class DataService {
   deleteProgram(program: ApplicationFacingProgram) {
     const options = new RequestOptions({headers: this.getCredentials()})
     return this.http.delete(`/protected/program/${program.guid}`, options)
-      .map(res => res.json().removed)
+      .map(res => res.json())
       .catch(this.loadError)
       .toPromise()
   }
