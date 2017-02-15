@@ -15,8 +15,8 @@
   <div class="px1"></div>
   <select class="rounded col-2" *ngIf="(state$ | async)?.key?.type === 'boolean'" 
     [formControl]="booleanValueSelect">
-    <option *ngFor="let option of booleanValueOptions" [value]="option.value">
-      {{option.display}}
+    <option *ngFor="let option of booleanValueOptions" [value]="option">
+      {{option}}
     </option>
   </select>
   <div class="px2"></div>
