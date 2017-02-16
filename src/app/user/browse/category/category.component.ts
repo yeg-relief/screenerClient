@@ -11,7 +11,7 @@ import { BrowseService } from '../browse.service';
     section {
       width: 100vw;
       overflow-x: hidden;
-      height: 90vh;
+      height: 95vh;
       position: fixed;
       margin: 0 auto;
     }
