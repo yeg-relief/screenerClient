@@ -1,33 +1,9 @@
-main {
-  max-height: 94vh;
-  width: 100%;
-}
 
 .home {
   height: 100%;
   width: 100%;
   overflow: auto;
   position: fixed;
-}
-
-
-@media(min-width: 40em) {
-  .home {
-    background-image: url(assets/17_01_27_SkylineIllustration_2.svg);
-    background-position: bottom right;
-    background-repeat: no-repeat;
-    background-size: contain;
-  }
-}
-
-
-@media(max-width: 40em){
-  .home {
-    background-image: url(assets/17_01_27_SkylineIllustration_2.svg);
-    background-position: center center;
-    background-repeat: no-repeat;
-    background-size: cover;
-  }
 }
 
 main > header > .header-title {

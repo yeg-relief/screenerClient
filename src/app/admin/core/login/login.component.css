@@ -2,10 +2,6 @@ main {
   height: 96vh;
   width: 100vw;
   position: fixed;
-  background-image: url(assets/city-skyline-greyscale.svg);
-  background-position: bottom left;
-  background-repeat: no-repeat;
-  background-size: cover;
 }
 
 md-card {

@@ -1,20 +1,23 @@
-import { Component, ViewEncapsulation } from '@angular/core';
-import { MasterScreenerService } from './user/master-screener/master-screener.service';
+import { Component } from '@angular/core';
 @Component({
   selector: 'app-root',
   template: `
     <app-toolbar></app-toolbar>
-    <router-outlet></router-outlet>
+    <main>
+      <router-outlet></router-outlet>
+    </main>
   `,
   styles: [
     `
       main {
-        height: 100vh;
+        background-image: url(assets/17_01_27_SkylineIllustration_2.svg);
+        background-position: center bottom;
+        background-repeat: no-repeat;
+        background-size: contain;
+        height: 94vh;
         width: 100vw;
       }
     `
   ],
-  encapsulation: ViewEncapsulation.None,
-  providers: [MasterScreenerService]
 })
 export class AppComponent {}
