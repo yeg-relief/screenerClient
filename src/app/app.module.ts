@@ -16,6 +16,7 @@ import { AuthGuardService } from './admin/core/services/auth-guard.service';
 
 
 
+
 @NgModule({
   declarations: [
     AppComponent,
@@ -27,7 +28,7 @@ import { AuthGuardService } from './admin/core/services/auth-guard.service';
   imports: [
     BrowserModule,
     MasterScreenerModule,
-    BrowseModule, //browse programs not related to BrowserModule... i.e "browse benefit programs"
+    BrowseModule,
     routing,
     MaterialModule.forRoot()
   ],
