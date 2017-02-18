@@ -13,7 +13,11 @@ export class QuickLinksComponent implements OnInit {
   ngOnInit() {
     this.route.fragment.subscribe(f => {
       const element = document.querySelector("#" + f)
-      if (element) element.scrollIntoView(element)
+      if (element) {
+        element.scrollIntoView(element)
+      } else {
+        console.log(`can't find element: ${f}`)
+      }
     })
   }
 
