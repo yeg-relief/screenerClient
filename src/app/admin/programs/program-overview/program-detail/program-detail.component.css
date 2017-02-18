@@ -1,8 +1,8 @@
 md-card {
-  font-family: 'Roboto Mono', monospace;
+  font-family: 'Open Sans', sans-serif;
   overflow-x: hidden;
 }
 
 md-button-toggle {
-  font-family: 'Roboto Mono', monospace;
+  font-family: 'Open Sans', sans-serif;
 }

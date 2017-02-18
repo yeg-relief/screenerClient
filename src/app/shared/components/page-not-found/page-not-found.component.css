@@ -6,18 +6,12 @@ main {
 
 md-card {
   background-color: silver;
-  font-family: 'Roboto Mono', monospace;
+  font-family: 'Open Sans', sans-serif;
 }
 
 
 @media(min-width: 40em) {
-  main {
-    background-image: url(assets/city-skyline-greyscale.svg);
-    background-position: bottom right;
-    background-repeat: no-repeat;
-    background-size: cover;
-  }
-  
+ 
   md-card {
     height: 50vh;
     
@@ -26,13 +20,7 @@ md-card {
 
 
 @media(max-width: 40em){
-  main {
-    background-image: url(assets/city-skyline-greyscale.svg);
-    background-position: center center;
-    background-repeat: no-repeat;
-    background-size: cover;
-  }
-  
+
   md-card {
     height: 40vh;
     margin-top: 5%;

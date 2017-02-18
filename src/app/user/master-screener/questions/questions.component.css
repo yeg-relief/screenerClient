@@ -5,28 +5,8 @@ main {
   position: fixed;
 }
 
-
-@media(min-width: 40em) {
-  main {
-    background-image: url(assets/17_01_27_SkylineIllustration_2.svg);
-    background-position: bottom right;
-    background-repeat: no-repeat;
-    background-size: contain;
-  }
-}
-
-
-@media(max-width: 40em){
-  main {
-    background-image: url(assets/17_01_27_SkylineIllustration_2.svg);
-    background-position: center bottom;
-    background-repeat: no-repeat;
-    background-size: contain;
-  }
-}
-
 h1 {
-  font-family: 'Roboto Mono', monospace;
+  font-family: 'Open Sans', sans-serif;
 }
 
 .questions {
@@ -34,7 +14,7 @@ h1 {
 }
 
 button {
-  font-family: 'Roboto Mono', monospace;
+  font-family: 'Open Sans', sans-serif;
 }
 
 
