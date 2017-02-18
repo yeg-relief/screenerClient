@@ -13,6 +13,7 @@ import { MasterScreenerService } from './user/master-screener/master-screener.se
 import { BrowseService } from './user/browse/browse.service';
 import { AuthService } from './admin/core/services/auth.service'
 import { AuthGuardService } from './admin/core/services/auth-guard.service';
+import { QuickLinksComponent } from './user/quick-links/quick-links.component';
 
 
 
@@ -24,6 +25,7 @@ import { AuthGuardService } from './admin/core/services/auth-guard.service';
     PageNotFoundComponent,
     AboutComponent,
     HomeComponent,
+    QuickLinksComponent,
   ],
   imports: [
     BrowserModule,

@@ -18,9 +18,10 @@ import 'rxjs/add/operator/multicast';
   styles: [
     `
       main {
-        height: 94vh;
+        height: 93vh;
         width: 100vw;
         overflow-x: hidden;
+
       }
     `,
     `
@@ -29,6 +30,16 @@ import 'rxjs/add/operator/multicast';
         background-position: center bottom;
         background-repeat: no-repeat;
         background-size: contain;
+      }
+    `,
+    `
+      @media(max-width: 600px) {
+        .background {
+          background-image: url(assets/17_01_27_SkylineIllustration_2.svg);
+          background-position: center center;
+          background-repeat: no-repeat;
+          background-size: cover;
+        }
       }
     `
 
@@ -51,6 +62,7 @@ export class AppComponent implements OnInit {
         }
         return "don't care";
       })
+      .filter(url => url !== "don't care")
       .debounceTime(60)
       .map( url => url.substring(0, 7) === '/admin/' )
       .subscribe( val => this.backgroundClass.background = !val );

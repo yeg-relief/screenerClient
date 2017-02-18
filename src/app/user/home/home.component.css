@@ -5,6 +5,14 @@
   position: fixed;
 }
 
+.section-text {
+  height: 6vh;
+}
+
+main {
+  overflow-x: hidden;
+}
+
 main > header > .header-title {
   background-color: rgba(248,248,255, 0.5);
 }
@@ -20,7 +28,7 @@ p {
 }
 
 button {
-  width: 100%;
+  width: 75%;
 }
 
 button:hover {
@@ -34,15 +42,9 @@ button:hover {
     font-size: 80px;
   }
   
-  main > section > div > .program-details {
+  .program-details {
     min-width: 25em;
   }
-  
-  main {
-    overflow-x: hidden;
-    overflow-y: hidden;
-  }
-
   .logo-image {
     width: 50vw;
   }
@@ -58,15 +60,11 @@ button:hover {
     max-width: 28em;
   }
   
-  main > section > div > .program-details {
-    min-width: 20em;
-    min-height: 10vh;
+  .program-details {
+    width: 52em;
+    height: 10vh;
   }
   
-  main {
-    overflow: hidden;
-    overflow-y: hidden;
-  }
 
   .logo-image {
     width: 55vw;
@@ -83,14 +81,12 @@ button:hover {
     max-width: 28em;
   }
   
-  main > section > div > .program-details {
-    min-width: 20em;
-    min-height: 10vh;
+  .program-details {
+    width: 40em;
+    height: 10vh;
+    padding-bottom: 1em;
   }
-  main {
-    overflow-x: hidden;
-    overflow-y: auto;
-  }
+
 
   .logo-image {
     width: 65vw;
@@ -106,15 +102,17 @@ button:hover {
     max-width: 28em;
     font-size: 90%;
   }
-  
-  main {
-    overflow-x: hidden;
-    overflow-y: auto;
-  }
 
   .logo-image {
     width: 75vw;
   }
+
+  .program-details {
+    width: 30em;
+    height: 10vh;
+    padding-bottom: 2em;
+  }
+
 }
 
 
@@ -126,18 +124,15 @@ button:hover {
     max-width: 28em;
     font-size: 80%;
   }
-  
-  main {
-    overflow-x: hidden;
-    overflow-y: auto;
-  }
 
   .logo-image {
     width: 80vw;
   }
+
+  .program-details {
+    width: 20em;
+    height: 10vh;
+    padding-bottom: 2em;
+  }
 }
 
-
-.home {
-  min-height: 95vh;
-}

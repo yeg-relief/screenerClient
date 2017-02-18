@@ -9,6 +9,7 @@ import { ResultsComponent } from './user/master-screener/results/results.compone
 import { HomeComponent } from './user/home/home.component';
 import { BrowseComponent } from './user/browse/browse.component';
 import { CategoryComponent } from './user/browse/category/category.component';
+import { QuickLinksComponent } from './user/quick-links/quick-links.component';
 
 const appRoutes: Routes = [
   { 
@@ -38,6 +39,7 @@ const appRoutes: Routes = [
     path: 'admin', loadChildren: 'app/admin/admin.module#AdminModule'
   },
   { path: 'about', component: AboutComponent},
+  { path: 'quick-links', component: QuickLinksComponent },
   { path: '', component: HomeComponent },
   { path: '**', component: PageNotFoundComponent }
 ];

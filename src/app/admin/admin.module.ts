@@ -21,7 +21,6 @@ import { HttpModule } from '@angular/http';
 
 import { ProgramsResolverService } from './programs/program-overview/programs-resolver.service';
 import { ScreenerOverviewComponent } from './screener/screener-overview/screener-overview.component';
-import { QuestionModule } from '../shared/modules/question.module';
 import { ScreenerModel } from './screener/screener-model';
 import { ScreenerToolbarComponent } from './screener/screener-toolbar/screener-toolbar.component';
 
@@ -43,7 +42,6 @@ import { ExpandableQuestionComponent } from './screener/screener-question/expand
     ProgramsModule,
     MasterScreenerModule,
     KeysModule,
-    QuestionModule,
     ReactiveFormsModule,
     FormsModule
   ],

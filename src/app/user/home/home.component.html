@@ -4,53 +4,74 @@
   </header>
   <div class="p2"></div>
   <!-- MEDIUM AND LARGER SCREENS -->
-  <section class="clearfix md-show" *ngIf="!loading">
-    <div class="flex">
-      <div class="col-3"></div>
-      <div class="program-details col-2 flex flex-column">
-        <div>
-          <p> Our team has compiled information on various benefits available to Albertans. Take a look at what we've found!
+  <section class="clearfix lg-show" *ngIf="!loading">
+    <div class="flex flex-justify center">
+
+      <div class="col-4">
+        <div style="height: 5vh; padding-bottom: 2em;">
+          <p> Answer a few questions to find out some helpful benefits you could apply for.
+        </div>
+        <a routerLink="/master-screener/questions">
+          <button md-raised-button color="primary">Questionnaire</button>
+        </a>
+      </div>
+
+      <div class="col-4" >
+        <div style="height: 5vh; padding-bottom: 2em;">
+          <p> See the benefits available in Edmonton for people with a lower income.
         </div>
         <a routerLink="/browse-programs/all">
           <button md-raised-button color="primary">BROWSE</button>
         </a>
       </div>
-      <div class="col-1 flex-grow"></div>
-      <div class="program-details col-2 flex flex-column">
-        <div>
-          <p> We've also developed a questionnaire that can help you find programs that should interest you.
+
+      <div class="col-4">
+        <div style="height: 5vh; padding-bottom: 2em;">
+          <p> How to obtain relevant documentation
         </div>
-        <a routerLink="/master-screener/questions">
-          <button md-raised-button color="primary">START</button>
+        <a routerLink="/quick-links"  fragment="documentation">
+          <button md-raised-button color="primary">DOCUMENTATION</button>
         </a>
       </div>
-      <div class="col-3"></div>
+
     </div>
   </section>
-  <!-- MEDIUM AND SMALLER SCREEN -->
-  <section class="md-hide" *ngIf="!loading">
+  <!-- SMALLER SCREEN -->
+  <section class="lg-hide" *ngIf="!loading">
     <div class="flex">
-      <div class="col-1 flex-shrink"></div>
-      <section class="col-10 flex-grow">
+      <div class="col-1"></div>
+      <section class="col-10">
         <div class="program-details col-12 flex flex-column">
           <div>
-            <p> Our team has compiled information on various benefits available to Albertans. Take a look at what we've found!
+            <p> Answer a few questions to find out some helpful benefits you could apply for.
           </div>
-          <a routerLink="/browse-programs/all">
-            <button md-raised-button color="primary">BROWSE</button>
+          <a class="center" routerLink="/master-screener/questions">
+            <button md-raised-button color="primary">Questionnaire</button>
           </a>
         </div>
+
         <div class="py2 xs-hide"></div>
         <div class="program-details col-12 flex flex-column">
           <div>
-            <p> We've also developed a questionnaire that can help you find programs that should interest you.
+            <p> See the benefits available in Edmonton for people with a lower income.
           </div>
-          <a routerLink="/master-screener/questions">
-            <button md-raised-button color="primary">START</button>
+          <a class="center" routerLink="/browse-programs/all">
+            <button md-raised-button color="primary">BROWSE</button>
           </a>
         </div>
+
+        <div class="py2 xs-hide"></div>
+        <div class="program-details col-12 flex flex-column">
+          <div>
+            <p> How to obtain relevant documentation
+          </div>
+          <a class="center" routerLink="/quick-links"  fragment="documentation">
+            <button md-raised-button color="primary">DOCUMENTATION</button>
+          </a>
+        </div>
+
       </section>
-      <div class="col-1 flex-shrink"></div>
+      <div class="col-1"></div>
     </div>
   </section>
 
