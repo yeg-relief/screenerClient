@@ -14,17 +14,17 @@ main {
 }
 
 main > header > .header-title {
-  background-color: rgba(248,248,255, 0.5);
+  background-color: rgba(248,248,255, 0.7);
 }
 
 .program-details {
-  background-color: rgba(248,248,255, 0.5);
+  background-color: rgba(248,248,255, 0.7);
 }
 
 p {
-  font-family: 'Roboto Mono', monospace;
+  font-family: 'Open Sans', sans-serif;
   display: inline-block;
-  background-color: rgba(248,248,255, 0.5);
+  background-color: rgba(248,248,255, 0.7);
 }
 
 button {

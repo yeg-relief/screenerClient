@@ -5,7 +5,7 @@ main {
 }
 
 md-card {
-  font-family: 'Roboto Mono', monospace;
+  font-family: 'Open Sans', sans-serif;
 }
 
 button[md-raised-button]:not([disabled]):hover {

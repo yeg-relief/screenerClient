@@ -48,16 +48,16 @@ option {
 }
 
 .category {
-  font-family: 'Roboto Mono', monospace;
+  font-family: 'Open Sans', sans-serif;
   display: inline-block;
 }
 
 select > option {
-  font-family: 'Roboto Mono', monospace;
+  font-family: 'Open Sans', sans-serif;
 }
 
 select {
-  font-family: 'Roboto Mono', monospace;
+  font-family: 'Open Sans', sans-serif;
   padding-bottom: 4px;
 }
 
@@ -67,7 +67,7 @@ button[md-button]:not(.active):hover {
 }
 
 button[md-button] {
-  font-family: 'Roboto Mono', monospace;
+  font-family: 'Open Sans', sans-serif;
   font-size: 110%;
 }
 

@@ -19,35 +19,35 @@
 .container-item > div,
 .container-item > md-input,
 .container-item > button {
-  font-family: 'Roboto Mono', monospace;
+  font-family: 'Open Sans', sans-serif;
 }
 
 text-area {
   margin-top: 5px;
-  font-family: 'Roboto Mono', monospace;
+  font-family: 'Open Sans', sans-serif;
 }
 
 button {
-  font-family: 'Roboto Mono', monospace;
+  font-family: 'Open Sans', sans-serif;
 }
 
 
 .error {
   background-color: maroon;
   color: white;
-  font-family: 'Roboto Mono', monospace;
+  font-family: 'Open Sans', sans-serif;
   margin-top: 3px;
   width: 70%;
 }
 
 md-button-toggle {
-  font-family: 'Roboto Mono', monospace;
+  font-family: 'Open Sans', sans-serif;
 }
 
 select {
-  font-family: 'Roboto Mono', monospace;
+  font-family: 'Open Sans', sans-serif;
   padding-bottom: 5px;
 }
 select > option {
-  font-family: 'Roboto Mono', monospace;
+  font-family: 'Open Sans', sans-serif;
 }

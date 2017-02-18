@@ -1,9 +1,9 @@
 select {
-  font-family: 'Roboto Mono', monospace;
+  font-family: 'Open Sans', sans-serif;
   padding-bottom: 5px;
 }
 select > option {
-  font-family: 'Roboto Mono', monospace;
+  font-family: 'Open Sans', sans-serif;
 }
 
 .ng-invalid {
