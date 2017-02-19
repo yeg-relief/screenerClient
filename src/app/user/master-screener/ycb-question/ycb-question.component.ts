@@ -5,7 +5,7 @@ import { ReplaySubject } from 'rxjs/ReplaySubject';
 import { Observable } from 'rxjs/Observable';
 import { QuestionControlService } from '../questions/question-control.service';
 import 'rxjs/add/observable/merge';
-import 'rxjs/add/operator/mapTo';
+import 'rxjs/add/operator/multicast'
 
 @Component({
   selector: 'app-ycb-question',
@@ -35,13 +35,17 @@ export class YcbQuestionComponent implements OnInit, OnDestroy {
 
       const hide = change.filter(val => val === false)
         .do( _ => this.onHide.emit( this.question.conditionalQuestions) ); 
+
+      
   
       const merged = Observable.merge(expand, hide)
         .subscribe(hide => this.showQuestions = hide);
 
-      this.subscriptions = [ merged ]
+      
+      this.subscriptions = [ merged ];
+      
     }
-    
+ 
   }
 
   ngOnDestroy(){

@@ -76,6 +76,7 @@
   md-sidenav-container {
     height: 94vh;
     width: 100vw;
+    position: fixed;
   }
 
   md-sidenav {

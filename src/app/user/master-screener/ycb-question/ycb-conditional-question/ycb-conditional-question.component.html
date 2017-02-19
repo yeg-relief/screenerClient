@@ -1,16 +1,11 @@
-<md-card style="margin-top: 3vh; margin-bottom: 3vh; background-color: lightyellow">
-  
-
+<section class="rounded">
   <form [formGroup]="form">
-    <section [ngSwitch]="question.controlType">
-
+    <div [ngSwitch]="question.controlType">
+      
       <div *ngSwitchCase="'NumberInput'">
         <md-card-title id="question-label"> {{ question.label }} </md-card-title>
-
-        <div class="py1"></div>
-
+          <div class="py1"></div>
         <md-input formControlName="{{ question.key }}" placeholder="input here"></md-input>
-
       </div>
 
       <div *ngSwitchCase="'CheckBox'">
@@ -25,17 +20,8 @@
           <option *ngFor="let option of question.options"> {{ option }} </option>
         </select>
       </div>
-
       <div *ngSwitchDefault> <strong> {{ question.controlType }} is invalid </strong> </div>
-    </section>
+      
+    </div>
   </form>
-  <div *ngIf="showQuestions">
-    <app-ycb-conditional-question 
-      *ngFor="let expandableQuestion of conditionalQuestions"
-      [question]="expandableQuestion"
-      [form]="form">
-    </app-ycb-conditional-question>
-  </div>
-  
-  <div class="py1"></div>
-</md-card>
+</section>
