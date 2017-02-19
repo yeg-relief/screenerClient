@@ -12,20 +12,12 @@ main {
   width: 100vw;
   overflow-x: hidden;
   position: fixed;
-  background-image: url(assets/17_01_27_SkylineIllustration_2.svg);
-  background-position: bottom right;
-  background-repeat: no-repeat;
-  background-size: cover;
 }
 
 @media(min-width: 40em) {
   main {
     height: 95vh;
     width: 100vw;
-    background-image: url(assets/17_01_27_SkylineIllustration_2.svg);
-    background-position: bottom right;
-    background-repeat: no-repeat;
-    background-size: cover;
   }
 }
 
@@ -34,9 +26,5 @@ main {
   main {
     height: 95vh;
     width: 100vw;
-    background-image: url(assets/17_01_27_SkylineIllustration_2.svg);
-    background-position: center bottom;
-    background-repeat: no-repeat;
-    background-size: contain;
   }
 }

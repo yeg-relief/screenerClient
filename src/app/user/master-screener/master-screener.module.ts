@@ -11,6 +11,7 @@ import { QuestionsResolverService } from './questions/questions-resolver.service
 import { RouterModule } from '@angular/router';
 import { MaterialModule } from '@angular/material';
 import { YcbQuestionComponent } from './ycb-question/ycb-question.component';
+import { YcbConditionalQuestionComponent } from './ycb-question/ycb-conditional-question/ycb-conditional-question.component';
 
 @NgModule({
   imports: [
@@ -25,7 +26,8 @@ import { YcbQuestionComponent } from './ycb-question/ycb-question.component';
     QuestionsComponent,
     ResultsComponent,
     MasterScreenerComponent,
-    YcbQuestionComponent
+    YcbQuestionComponent,
+    YcbConditionalQuestionComponent
   ],
   providers: [ 
     QuestionsResolverService
