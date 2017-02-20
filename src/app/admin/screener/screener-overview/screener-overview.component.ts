@@ -33,7 +33,6 @@ export class ScreenerOverviewComponent implements OnInit {
     const bootstrap = this.model.load().subscribe(data => console.log(data));
     
     const questions = this.model.questions$.subscribe( (questions: any[]) => {
-      console.log('questions update');
       this.questions = [ ...questions.sort( (a,b) => a.index - b.index) ];
       if (this.questions.length > 0 && this.selectedQuestion.length === 0) {
         this.selectedQuestion = [ this.questions[0] ];

@@ -40,11 +40,17 @@ export class UserQuestionComponent implements OnInit, OnDestroy {
     this.form = this.model.getControls(this.question.id);
 
     const updateUnusedKeys = this.model.unusedKeys$.asObservable()
-      .subscribe( (keys: any) => this.unusedKeys = [...keys])
+      .subscribe( (keys: any) => {
+        this.unusedKeys = [...keys.filter(key => key !== undefined)];
+      })
 
     const localUpdates = this.form.valueChanges.switchMap( update => this.model.keys$.map(keys => [update, keys]))
     .debounceTime(100)
     .subscribe( ([update, keys]) => {
+      if (update === undefined || this.question === undefined) {
+        return;
+      }
+
       const f = <FormGroup>this.form;
       f.parent.setErrors( {} )
 
@@ -65,7 +71,6 @@ export class UserQuestionComponent implements OnInit, OnDestroy {
       }
         
       this.question = (<any>Object).assign( {}, update );
-      
     })
 
     const errorFilter = this.model.filter$

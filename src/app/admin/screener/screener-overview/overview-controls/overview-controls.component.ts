@@ -31,11 +31,13 @@ export class OverviewControlsComponent implements OnInit {
   }
 
   selectQuestion(question) {
+
     if (question === this.selectQuestion) {
       return;
     }
-
+  
     this.selectedQuestion = question;
+
     for(const key in this.styles) {
       this.styles[key].selected = false;
     }
@@ -47,6 +49,7 @@ export class OverviewControlsComponent implements OnInit {
     }
     
     this.questionSelected.emit(this.selectedQuestion);
+
   }
 
   dragStart(question, $event) {

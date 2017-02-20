@@ -3,17 +3,13 @@
 }
 
 #conditional-overview {
-  width: 8vw;
-  padding: 1vw;
-  height: 100%;
-  background-color: lightyellow;
-  overflow: scroll;
+  background-color: darkslateblue;
+  overflow-y: scroll;
+  overflow-x: hidden;
+  width: 10vw;
 }
 
 .question-select {
-  border: solid 1px lightgray;
-  padding: 5px;
-  color: blue;
   cursor: pointer;
 }
 
@@ -26,5 +22,9 @@
 }
 
 .selected {
-  background: yellow !important;
+  background-color: #0074d9;
+}
+
+.wrapper {
+  min-height: 45vh;
 }

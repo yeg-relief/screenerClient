@@ -46,11 +46,29 @@ export class ConditionalQuestionsComponent implements OnInit {
   deleteConditionalQuestion(selectedQuestion) {
     this.questions = this.questions.filter(question => question.id !== selectedQuestion.id);
     this.removeConditional.emit(selectedQuestion[0]);
-    this.selectedQuestion = [];
+
     const selected = Object.keys(this.styles).filter(key => this.styles[key].selected = true)
     for(const key of selected) {
       this.styles[key].selected = false;
     }
+
+    if (this.questions.length > 0){
+      const q = this.questions[0] 
+      this.selectedQuestion = [ q ];
+      if (this.styles[q.id]) {
+        this.styles[q.id].selected = true;
+      } else {
+        this.styles[q.id] = {
+          selected: true,
+          dragStart: false,
+          dragOver: false
+        }
+      }
+    } else {
+      this.selectedQuestion = [ ];
+    }
+    
+    
   }
 
   updateOverview(question, $event) {
@@ -124,7 +142,14 @@ export class ConditionalQuestionsComponent implements OnInit {
   }
 
   drop(question, $event) {
-    
+    if($event.preventDefault){
+      $event.preventDefault();
+    }
+
+    if($event.stopPropagation) {
+      $event.stopPropagation();
+    }
+
     const targetKey = $event.target.innerText;
     const draggingKey = Object.keys(this.styles).filter(key => this.styles[key].dragStart === true)
     if (draggingKey.length !== 1) {
@@ -139,9 +164,7 @@ export class ConditionalQuestionsComponent implements OnInit {
       })
     }
     
-    if($event.preventDefault){
-      $event.preventDefault();
-    }
+    
     return false;
   }
 

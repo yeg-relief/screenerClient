@@ -153,9 +153,14 @@ export class ScreenerModel {
   }
 
   swapQuestions(sourceQuestion, targetKeyName) {
-
+    console.log(sourceQuestion);
+    console.log(targetKeyName);
     const targetQuestion = this.model.questions.filter(q => q.key === targetKeyName);
     const srcQuestion = this.model.questions.find(q => q.id === sourceQuestion.id)
+
+    console.log(targetQuestion);
+    console.log(srcQuestion);
+    
     if (targetQuestion.length !== 1) {
       throw new Error(`${targetQuestion.length} questions found with key: ${targetKeyName} in swapConditionals`);
     }
@@ -192,10 +197,11 @@ export class ScreenerModel {
 
   addQuestion() {
     const id = randomString();
+    const key = 'invalid'.concat(randomString())
     const index = this.model.questions.length;
     const blank = {
       controlType: 'invalid',
-      key: 'invalid',
+      key: key,
       label: '',
       expandable: false,
       index: index,
@@ -224,11 +230,11 @@ export class ScreenerModel {
     question.conditionalQuestions = question.conditionalQuestions || [];
 
     const newID = randomString();
-    const index = question.conditionalQuestions.length;
-
+    const index = question.conditionalQuestions.length - 1;
+    const key = 'invalid'.concat(randomString())
     const blank = {
       controlType: 'invalid',
-      key: 'invalid',
+      key: key,
       label: '',
       expandable: false,
       index: index,
@@ -412,7 +418,10 @@ export class ScreenerModel {
     }
 
     if (question.key !== undefined && question.key !== 'invalid') {
-      this.model.unusedKeys.push(this.model.keys.find(k => k.name === question.key))
+      const key = this.model.keys.find(k => k.name === question.key);
+      if (key){
+        this.model.unusedKeys.push()
+      }
     }
 
     let mutatingQuestions = [...this.model.questions];
@@ -440,7 +449,6 @@ export class ScreenerModel {
     this.model.questions = mutatingQuestions;
     this.questions$.next(this.model.questions);
     this.count$.next(this.model.questions.length)
-
   }
 
 
@@ -479,14 +487,13 @@ export class ScreenerModel {
     this.model.controls.removeControl(hiddenQuestion.id);
     this.model.controls.get(hostQuestion.id).get('conditionalQuestions').setValue(hostQuestion.conditionalQuestions);
     this.model.conditionalQuestions = this.model.conditionalQuestions.filter(q => q.id !== hiddenQuestion.id)
-
+    
     for(const id of hostQuestion.conditionalQuestions) {
       const q = this.model.conditionalQuestions.find(qq => qq.id === id);
-      if (q.index > hiddenQuestion.index) {
+      if (q !== undefined && q.index > hiddenQuestion.index) {
         q.index--;
       }
     }
-
     const key = this.model.keys.find(key => key.name === hiddenQuestion.key);
     if (key) {
       this.model.unusedKeys = [key, ...this.model.unusedKeys];

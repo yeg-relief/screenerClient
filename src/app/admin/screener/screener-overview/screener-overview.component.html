@@ -1,10 +1,10 @@
-<div class="my-wrapper" style="margin: 0 auto; padding-left: 10vw; padding-right: 10vw;">
+<div class="my-wrapper" style="margin: 0 auto; padding-left: 5vw; padding-right: 5vw;">
   <app-screener-toolbar> </app-screener-toolbar>
 
   <div id="screener-content" class="flex col-12">
-    <app-overview-controls class="col-3" 
+    <app-overview-controls class="col-3" style="min-height: 85vh"
       *ngIf="questions" 
-      [questions]="questions" 
+      [questions]="(model.questions$ | async)" 
       (questionSelected)="handleSelect($event)"
       (swapQuestions)="handleSwap($event)"
       [selectedQuestion]="selectedQuestion$">

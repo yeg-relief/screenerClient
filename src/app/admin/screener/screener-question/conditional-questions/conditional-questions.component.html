@@ -1,5 +1,6 @@
-<div class="flex col-12">
+<div class="flex col-12 wrapper">
   <section id="conditional-overview" class="flex-column">
+    <div class="center border rounded" style="width: 100%"> [ + ] </div>
     <div class="question-select" 
       *ngFor="let question of questions"
       draggable="true"
@@ -14,12 +15,12 @@
       {{ question.key }}
     </div>
   </section>
-  <md-card class="conditional-question flex-grow" *ngIf="selectedQuestion.length > 0">
-    <md-card-actions class="flex">
+  <md-card class="conditional-question flex-grow" *ngIf="selectedQuestion.length > 0"> 
+    <app-user-question [question]="q" *ngFor="let q of selectedQuestion" (keyChange)="updateOverview(selectedQuestion, $event)"></app-user-question>
+    <div class="flex">
       <div class="flex-grow"></div>
       <button md-raised-button color="warn" (click)="deleteConditionalQuestion(selectedQuestion)" style="font-size: 125%"> &#10006; </button>
-    </md-card-actions>  
-    <app-user-question [question]="q" *ngFor="let q of selectedQuestion" (keyChange)="updateOverview(selectedQuestion, $event)"></app-user-question>
+    </div> 
   </md-card>
   <div class="flex flex-center blue" *ngIf="selectedQuestion.length === 0 && questions.length === 0">
     <div>No conditional questions assigned.</div>
