@@ -27,7 +27,7 @@ import { ScreenerToolbarComponent } from './screener/screener-toolbar/screener-t
 import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { ScreenerQuestionComponent } from './screener/screener-question/screener-question.component';
 import { UserQuestionComponent } from './screener/screener-question/user-question/user-question.component';
-import { ExpandableQuestionComponent } from './screener/screener-question/expandable-question/expandable-question.component';
+import { ConditionalQuestionsComponent } from './screener/screener-question/conditional-questions/conditional-questions.component';
 
 @NgModule({
   imports: [
@@ -51,7 +51,7 @@ import { ExpandableQuestionComponent } from './screener/screener-question/expand
     ScreenerToolbarComponent,
     ScreenerQuestionComponent,
     UserQuestionComponent,
-    ExpandableQuestionComponent,
+    ConditionalQuestionsComponent,
   ],
   providers: [
     DataService, 

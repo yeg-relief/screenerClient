@@ -1,5 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { ScreenerModel } from '../screener-model';
+import { FormGroup } from '@angular/forms';
 
 @Component({
   selector: 'app-screener-question',
@@ -10,14 +11,15 @@ export class ScreenerQuestionComponent implements OnInit {
   @Input() question;
   private conditionalQuestions = [];
   private showConditionals = true;
+  //private form: FormGroup;
   constructor(public model: ScreenerModel) { }
 
   ngOnInit() {
+    //this.form = this.model.getModelControls();
     if (this.question.expandable && Array.isArray(this.question.conditionalQuestions)  
         && this.question.conditionalQuestions.length > 0)
     {
       this.conditionalQuestions = this.model.findConditionals(this.question);
-      console.log(this.conditionalQuestions);
     }
 
   }
@@ -52,8 +54,10 @@ export class ScreenerQuestionComponent implements OnInit {
 
   deleteConditionalQuestion(question) {
     console.log('deleteConditionalQuestion called')
-    const index = this.conditionalQuestions.findIndex(q => q.id === question.id);
-    this.conditionalQuestions.splice(index, 1);
+    console.log(question)
+    console.log(this.conditionalQuestions)
+    this.conditionalQuestions = this.conditionalQuestions.filter(q => q.id !== question.id);
+    console.log(this.conditionalQuestions)
     this.model.deleteConditional(this.question, question);
   }
 

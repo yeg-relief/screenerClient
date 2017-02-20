@@ -19,6 +19,7 @@ import 'rxjs/add/operator/debounceTime';
 export class UserQuestionComponent implements OnInit, OnDestroy {
   @Input() question: any;
   @Output() makeExpandable = new EventEmitter<boolean>();
+  @Output() keyChange = new EventEmitter<any>();
   private form: any;
   private unusedKeys: string[];
   private internalErrors: string;
@@ -31,7 +32,9 @@ export class UserQuestionComponent implements OnInit, OnDestroy {
   private subscriptions: Subscription[];
 
 
-  constructor(public model: ScreenerModel) { }
+  constructor(public model: ScreenerModel) {
+    console.log('USER QUESTION CREATED')
+   }
 
 
   
@@ -51,6 +54,7 @@ export class UserQuestionComponent implements OnInit, OnDestroy {
         this.form.setErrors({error: 'no key selected'});
       } else if (update.key !== this.question.key) {
         this.model.handleKeyChange(update.key, this.question.key);
+        this.keyChange.emit(update.key)
       } else if (this.question.controlType === 'NumberSelect' && update.controlType !== 'NumberSelect') {
         this.form.removeControl('options')
       } else if (this.question.controlType === 'CheckBox' && update.controlType !== 'CheckBox' && Array.isArray(update.conditionalQuestions)) {

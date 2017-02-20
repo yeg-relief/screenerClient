@@ -82,7 +82,10 @@ export class ScreenerModel {
   setModel(data) {
     this.model = (<any>Object).assign({}, data)
     this.model.questions = this.model.questions.sort((a, b) => a.index - b.index)
-    this.model.unusedKeys = data.keys.filter(key => data.questions.find(question => key.name === question.key) === undefined)
+    this.model.unusedKeys = data.keys.filter(key => {
+      return data.questions.find(question => key.name === question.key) === undefined  
+             && data.conditionalQuestions.find(question => key.name === question.key) === undefined
+    })
     this.model.keys = [...data.keys]
     this.model.controls = new FormGroup({});
     this.model.conditionalQuestions = data.conditionalQuestions || [];
@@ -189,13 +192,14 @@ export class ScreenerModel {
     question.conditionalQuestions = question.conditionalQuestions || [];
 
     const newID = randomString();
+    const index = question.conditionalQuestions.length;
 
     const blank = {
       controlType: 'invalid',
       key: 'invalid',
       label: '',
       expandable: false,
-      index: 0,
+      index: index,
       id: newID
     };
 
@@ -442,10 +446,26 @@ export class ScreenerModel {
   }
 
   deleteConditional(hostQuestion, hiddenQuestion) {
+    
+
     hostQuestion.conditionalQuestions = hostQuestion.conditionalQuestions.filter(q => q !== hiddenQuestion.id);
     this.model.controls.removeControl(hiddenQuestion.id);
     this.model.controls.get(hostQuestion.id).get('conditionalQuestions').setValue(hostQuestion.conditionalQuestions);
     this.model.conditionalQuestions = this.model.conditionalQuestions.filter(q => q.id !== hiddenQuestion.id)
+
+    for(const id of hostQuestion.conditionalQuestions) {
+      const q = this.model.conditionalQuestions.find(qq => qq.id === id);
+      if (q.index > hiddenQuestion.index) {
+        q.index--;
+      }
+    }
+
+    const key = this.model.keys.find(key => key.name === hiddenQuestion.key);
+    if (key) {
+      this.model.unusedKeys = [key, ...this.model.unusedKeys];
+      this.unusedKeys$.next(this.model.unusedKeys);
+    }
+    this.questions$.next(this.model.questions);
   }
 
   setConditionalIndices(questions) {
