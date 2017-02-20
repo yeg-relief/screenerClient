@@ -230,7 +230,7 @@ export class ScreenerModel {
     question.conditionalQuestions = question.conditionalQuestions || [];
 
     const newID = randomString();
-    const index = question.conditionalQuestions.length - 1;
+    const index = question.conditionalQuestions.length;
     const key = 'invalid'.concat(randomString())
     const blank = {
       controlType: 'invalid',
