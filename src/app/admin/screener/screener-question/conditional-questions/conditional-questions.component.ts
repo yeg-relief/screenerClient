@@ -8,6 +8,7 @@ import { FormGroup } from '@angular/forms';
 })
 export class ConditionalQuestionsComponent implements OnInit {
   @Input() questions: any[];
+  @Output() addQuestion = new EventEmitter<any>();
   @Output() removeConditional = new EventEmitter<any>();
   @Output() swapConditionals = new EventEmitter<any>();
   //@Input() form: FormGroup;
@@ -23,6 +24,11 @@ export class ConditionalQuestionsComponent implements OnInit {
         dragStart: false,
         dragOver: false
       }
+    }
+
+    if (this.questions.length > 0) {
+      this.selectedQuestion = [ this.questions[0] ];
+      this.styles[ this.questions[0].id ].selected = true;
     }
   }
 
@@ -44,8 +50,12 @@ export class ConditionalQuestionsComponent implements OnInit {
   }
 
   deleteConditionalQuestion(selectedQuestion) {
+    if (!selectedQuestion){
+      console.error('invalid deleteConditionalQuestion')
+      return;
+    }
     this.questions = this.questions.filter(question => question.id !== selectedQuestion.id);
-    this.removeConditional.emit(selectedQuestion[0]);
+    this.removeConditional.emit(selectedQuestion);
 
     const selected = Object.keys(this.styles).filter(key => this.styles[key].selected = true)
     for(const key of selected) {
@@ -65,10 +75,9 @@ export class ConditionalQuestionsComponent implements OnInit {
         }
       }
     } else {
-      this.selectedQuestion = [ ];
+      this.selectedQuestion = [];
     }
-    
-    
+
   }
 
   updateOverview(question, $event) {

@@ -10,6 +10,7 @@ import { FormGroup } from '@angular/forms';
 export class ScreenerQuestionComponent implements OnInit {
   @Input() question;
   @Output() keyChange = new EventEmitter<any>();
+  @Output() onDelete = new EventEmitter<any>();
   private conditionalQuestions = [];
   private showConditionals = true;
   //private form: FormGroup;
@@ -27,6 +28,7 @@ export class ScreenerQuestionComponent implements OnInit {
 
   deleteQuestion() {
     this.model.delete(this.question);
+    this.onDelete.emit(this.question);
   }
 
   toggleConditionals() {
@@ -49,6 +51,7 @@ export class ScreenerQuestionComponent implements OnInit {
     this.conditionalQuestions = this.conditionalQuestions.filter(q => q.id !== question.id);
     this.model.deleteConditional(this.question, question);
   }
+
 
   swapConditionalQuestions($event) {
     this.model.swapConditionals($event.sourceQuestion, $event.targetKeyName);

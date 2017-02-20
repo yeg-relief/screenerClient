@@ -9,10 +9,11 @@
       (swapQuestions)="handleSwap($event)"
       [selectedQuestion]="selectedQuestion$">
     </app-overview-controls>
-    <div class="col-9" *ngIf="questions">
+    <div class="col-9" *ngIf="selectedQuestion.length > 0">
       <app-screener-question 
         *ngFor=" let question of selectedQuestion " 
         (keyChange)="updateOverview(question, $event)" 
+        (onDelete)="handleDelete($event)"
         [question]="question">
       </app-screener-question>
     </div>

@@ -92,5 +92,15 @@ export class ScreenerOverviewComponent implements OnInit {
     this.model.swapQuestions($event.sourceQuestion, $event.targetKeyName);
   }
 
+  handleDelete(question) {
+    this.questions = this.questions.filter(q => q.id !== question.id);
+    if (this.questions.length > 0) {
+      this.handleSelect(this.questions[0])
+      this.selectedQuestion$.next(this.questions[0])
+    } else {
+      this.selectedQuestion = [];
+      this.selectedQuestion$.next({});
+    }
+  }
 
 }

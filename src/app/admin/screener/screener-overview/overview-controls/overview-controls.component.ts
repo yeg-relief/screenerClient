@@ -1,5 +1,6 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { ReplaySubject } from 'rxjs/ReplaySubject';
+import { ScreenerModel } from '../../screener-model';
 
 @Component({
   selector: 'app-overview-controls',
@@ -13,7 +14,7 @@ export class OverviewControlsComponent implements OnInit {
   @Output() swapQuestions = new EventEmitter<any>();
   private styles = {};
 
-  constructor() { }
+  constructor(public model: ScreenerModel) { }
 
   ngOnInit() {
     if (this.questions && this.questions.length > 0) {
@@ -28,6 +29,10 @@ export class OverviewControlsComponent implements OnInit {
     }
 
     this.selectedQuestion.subscribe(question => this.selectQuestion(question));
+  }
+
+  addQuestion(){
+    this.model.addQuestion();
   }
 
   selectQuestion(question) {

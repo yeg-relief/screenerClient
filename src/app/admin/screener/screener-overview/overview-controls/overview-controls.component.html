@@ -1,5 +1,13 @@
 <main>
-  <div class="border rounded center m1"> <md-card-title>screener</md-card-title></div>
+  <div class="border rounded m1 flex flex-center col-12">
+    <div class="col-2"></div> 
+    <md-card-title class="col-5">screener questions </md-card-title>
+    <div class="col-2 flex-grow"></div>
+    <button class="col-2" md-mini-fab style="background-color:#0074d9" (click)="addQuestion()"> 
+      <i class="material-icons">add</i>
+    </button>
+    <div class="col-1"></div>
+  </div>
   <div class="ml1 question" 
     [ngClass]="styles[question.id]" 
     *ngFor="let question of questions" 

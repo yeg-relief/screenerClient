@@ -11,6 +11,10 @@
 
 .question-select {
   cursor: pointer;
+  padding-top: 1em;
+  padding-left: 0.25em;
+  padding-bottom: 1em;
+  min-width: 10em;
 }
 
 .dragStart {

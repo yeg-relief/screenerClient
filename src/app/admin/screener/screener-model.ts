@@ -230,7 +230,7 @@ export class ScreenerModel {
     question.conditionalQuestions = question.conditionalQuestions || [];
 
     const newID = randomString();
-    const index = question.conditionalQuestions.length;
+    const index = question.conditionalQuestions.length - 1;
     const key = 'invalid'.concat(randomString())
     const blank = {
       controlType: 'invalid',
@@ -295,6 +295,10 @@ export class ScreenerModel {
 
 
   handleKeyChange(new_key: string, old_key: string) {
+    if (new_key === undefined || old_key === undefined) {
+      return;
+    }
+
     const droppedNewlyChosenKey = this.model.unusedKeys.filter(key => key.name !== new_key)
     if (old_key !== undefined && old_key !== '' && old_key !== 'invalid') {
 

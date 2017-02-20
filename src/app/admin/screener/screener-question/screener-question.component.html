@@ -1,20 +1,15 @@
 <md-card>
+  <div class="col-12 flex">
+    <md-card-title> Selected Question </md-card-title>
+    <div class="flex-grow"></div>
+    <button md-raised-button color="warn" (click)="deleteQuestion()"  style="font-size: 125%; width: 10vw"> &#10006; </button>
+  </div>
   <app-user-question [question]="question" (makeExpandable)="makeExpandable($event)" (keyChange)="keyChange.emit($event)"></app-user-question>
-  <md-card-actions class="flex">
-
-    <div *ngIf="question.expandable" >
-      <button md-button (click)="addConditionalQuestion()"> 	&#10133; </button> 
-      <button md-button *ngIf="!showConditionals" (click)="toggleConditionals()"> SHOW </button>
-      <button md-button *ngIf="showConditionals" (click)="toggleConditionals()"> HIDE </button>
-    </div>
-    
-    <button md-raised-button color="warn" (click)="deleteQuestion()"  style="font-size: 125%"> &#10006; </button>
-  
-  </md-card-actions>
 </md-card>
 
 <div *ngIf="question.expandable && showConditionals" class="conditional-questions-container">
-  <app-conditional-questions 
+  <app-conditional-questions
+    (addQuestion)="addConditionalQuestion()" 
     (swapConditionals)="swapConditionalQuestions($event)"
     (removeConditional)="deleteConditionalQuestion($event)" 
     [questions]="conditionalQuestions">

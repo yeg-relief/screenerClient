@@ -61,10 +61,6 @@ export class ScreenerToolbarComponent implements OnInit {
     }
   }
 
-  handleAdd() {
-    this.model.addQuestion();
-  }
-
   handleSave() {
     this.model.save()
       .switchMap( data => this.model.pushToNetwork(data) )
