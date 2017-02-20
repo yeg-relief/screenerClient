@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnInit, Output, EventEmitter } from '@angular/core';
 import { ScreenerModel } from '../screener-model';
 import { FormGroup } from '@angular/forms';
 
@@ -9,6 +9,7 @@ import { FormGroup } from '@angular/forms';
 })
 export class ScreenerQuestionComponent implements OnInit {
   @Input() question;
+  @Output() keyChange = new EventEmitter<any>();
   private conditionalQuestions = [];
   private showConditionals = true;
   //private form: FormGroup;
@@ -26,14 +27,6 @@ export class ScreenerQuestionComponent implements OnInit {
 
   deleteQuestion() {
     this.model.delete(this.question);
-  }
-
-  increaseIndex() {
-    this.model.increaseIndex(this.question);
-  }
-
-  decreaseIndex() {
-    this.model.decreaseIndex(this.question);
   }
 
   toggleConditionals() {

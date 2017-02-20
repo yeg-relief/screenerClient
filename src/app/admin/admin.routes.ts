@@ -4,8 +4,6 @@ import { AdminComponent } from './admin.component';
 import { AuthGuardService } from './core/services/auth-guard.service';
 import { LoginComponent } from './core/login/login.component';
 
-import { MasterScreenerComponent } from './master-screener/master-screener.component';
-
 import { ProgramsComponent } from './programs/programs.component';
 import { ProgramOverviewComponent } from './programs/program-overview/program-overview.component';
 import { ProgramEditComponent } from './programs/program-edit/program-edit.component';
@@ -28,15 +26,9 @@ export const routing: ModuleWithProviders = RouterModule.forChild([
     path: '', component: AdminComponent,
     children: [
       {
-        path: 'screener',
-        component: MasterScreenerComponent,
+        path: 'screener/edit',
+        component: ScreenerOverviewComponent,
         canActivate: [AuthGuardService],
-        children: [
-          {
-            path: 'edit',
-            component: ScreenerOverviewComponent
-          }
-        ]
       },
       {
         path: 'programs',

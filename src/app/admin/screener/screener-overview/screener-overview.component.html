@@ -1,9 +1,22 @@
-<div class="my-wrapper" style="margin: 0vh 0vh 5vh 0vh">
-
-
+<div class="my-wrapper" style="margin: 0 auto; padding-left: 10vw; padding-right: 10vw;">
   <app-screener-toolbar> </app-screener-toolbar>
 
-  <app-screener-question *ngFor=" let question of questions" [question]="question"></app-screener-question>
+  <div id="screener-content" class="flex col-12">
+    <app-overview-controls class="col-3" 
+      *ngIf="questions" 
+      [questions]="questions" 
+      (questionSelected)="handleSelect($event)"
+      (swapQuestions)="handleSwap($event)"
+      [selectedQuestion]="selectedQuestion$">
+    </app-overview-controls>
+    <div class="col-9" *ngIf="questions">
+      <app-screener-question 
+        *ngFor=" let question of selectedQuestion " 
+        (keyChange)="updateOverview(question, $event)" 
+        [question]="question">
+      </app-screener-question>
+    </div>
 
+  </div>
   <div class="p2"></div>
 </div>

@@ -83,19 +83,12 @@ export class UserQuestionComponent implements OnInit, OnDestroy {
         this.filterQuestion = this.errorFilter;
       })
 
-    const keyFilter = this.model.keyFilter$
-      .subscribe( keyName => {
-        const regexp = new RegExp(keyName);
-        if (!this.errorFilter){
-          this.filterQuestion = regexp.test(this.question.key) ? false : true;
-        }
-      })
 
     const expandChange = this.form.get('expandable').valueChanges
       .do(value => this.makeExpandable.emit(value)  )
       .subscribe();
 
-    this.subscriptions = [updateUnusedKeys, localUpdates, errorFilter, keyFilter, expandChange];
+    this.subscriptions = [updateUnusedKeys, localUpdates, errorFilter, expandChange];
   }
 
   ngOnDestroy() {

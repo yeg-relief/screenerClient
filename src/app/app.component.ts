@@ -10,14 +10,14 @@ import 'rxjs/add/operator/multicast';
   selector: 'app-root',
   template: `
     <app-toolbar></app-toolbar>
-    <main [ngClass]="backgroundClass">
+    <main id="main-outlet" [ngClass]="backgroundClass">
       <router-outlet></router-outlet>
     <main>
 
   `,
   styles: [
     `
-      main {
+      #main-outlet {
         height: 93vh;
         width: 100vw;
         overflow-x: hidden;

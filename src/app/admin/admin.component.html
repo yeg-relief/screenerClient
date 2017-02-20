@@ -1,18 +1,9 @@
-<div class="flex">
-  <div class="flex-none large-sidenav-wrapper rounded-right lg-show">
-    <app-sidenav></app-sidenav>
-  </div>
-  <div class="col col-12" style="height:100%;">
-    <div class="p2"></div>
-    <div class="col col-12 flex" style="height:100%;">
-      <div class="px1 md-show"></div>
-      <div class="col col-10  large-admin-content-wrapper flex-grow">
-        <div class="ml2 mr2">
-          <router-outlet></router-outlet>
-        </div>
-      </div>
-      <div class="px1 md-show"></div>
-    </div>
-  </div>
-  <div class="p2 lg-show"></div>
-</div>
+<md-toolbar style="height: 4vh; top:6vh; background-color: darkslateblue">
+  <span class="flex">
+    <div> <a routerLink="screener/edit">SCREENER</a> </div>
+    <div class="ml1 mr1"> <a routerLink="programs/overview">PROGRAMS</a> </div>
+    <div> <a routerLink="keys/overview">KEYS</a> </div>
+  </span>
+</md-toolbar>
+<router-outlet></router-outlet>
+

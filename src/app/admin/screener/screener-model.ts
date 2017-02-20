@@ -133,7 +133,7 @@ export class ScreenerModel {
   }
 
   swapConditionals(sourceQuestion, targetKeyName) {
-    console.log(`swapConditionals called`)
+
     const targetQuestion = this.model.conditionalQuestions.filter(q => q.key === targetKeyName);
     const srcQuestion = this.model.conditionalQuestions.find(q => q.id === sourceQuestion.id)
     if (targetQuestion.length !== 1) {
@@ -143,27 +143,35 @@ export class ScreenerModel {
       throw new Error(`srcQuestion is undefined in swapConditionals`)
     }
 
-    console.log('-----------------')
-    console.log(targetQuestion)
-    console.log(srcQuestion)
-    console.log('-----------------')
+    const swapIndex = srcQuestion.index;
+    srcQuestion.index = targetQuestion[0].index;
+    targetQuestion[0].index = swapIndex;
+
+
+    this.model.controls.get(srcQuestion.id).get('index').setValue(srcQuestion.index);
+    this.model.controls.get(targetQuestion[0].id).get('index').setValue(targetQuestion[0].index);
+  }
+
+  swapQuestions(sourceQuestion, targetKeyName) {
+
+    const targetQuestion = this.model.questions.filter(q => q.key === targetKeyName);
+    const srcQuestion = this.model.questions.find(q => q.id === sourceQuestion.id)
+    if (targetQuestion.length !== 1) {
+      throw new Error(`${targetQuestion.length} questions found with key: ${targetKeyName} in swapConditionals`);
+    }
+    if (!srcQuestion) {
+      throw new Error(`srcQuestion is undefined in swapQuestions`)
+    }
 
     const swapIndex = srcQuestion.index;
     srcQuestion.index = targetQuestion[0].index;
     targetQuestion[0].index = swapIndex;
 
-    console.log('-----------------')
-    console.log(targetQuestion)
-    console.log(srcQuestion)
-    console.log('-----------------')
 
     this.model.controls.get(srcQuestion.id).get('index').setValue(srcQuestion.index);
     this.model.controls.get(targetQuestion[0].id).get('index').setValue(targetQuestion[0].index);
-
-    console.log(this.model.conditionalQuestions)
-    console.log(this.model.controls.value[srcQuestion.id])
-    console.log(this.model.controls.value[targetQuestion[0].id])
-    console.log('````````````````````````````````')
+    
+    this.questions$.next(this.model.questions);
   }
 
   increaseIndex(question) {
