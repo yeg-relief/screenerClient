@@ -32,9 +32,7 @@ export class UserQuestionComponent implements OnInit, OnDestroy {
   private subscriptions: Subscription[];
 
 
-  constructor(public model: ScreenerModel) {
-    console.log('USER QUESTION CREATED')
-   }
+  constructor(public model: ScreenerModel) {}
 
 
   

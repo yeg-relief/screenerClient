@@ -17,6 +17,14 @@
   cursor: pointer;
 }
 
+.dragStart {
+  opacity: 0.4;
+}
+
+.dragOver {
+  border: 2px dashed #000;
+}
+
 .selected {
   background: yellow !important;
 }

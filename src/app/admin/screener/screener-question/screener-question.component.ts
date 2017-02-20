@@ -53,83 +53,12 @@ export class ScreenerQuestionComponent implements OnInit {
   }
 
   deleteConditionalQuestion(question) {
-    console.log('deleteConditionalQuestion called')
-    console.log(question)
-    console.log(this.conditionalQuestions)
     this.conditionalQuestions = this.conditionalQuestions.filter(q => q.id !== question.id);
-    console.log(this.conditionalQuestions)
     this.model.deleteConditional(this.question, question);
   }
 
-
-  decreaseConditionalIndex(condQuestion) {
-    if (condQuestion.index === 0 || this.conditionalQuestions.length === 1) {
-      return;
-    }
-
-    this.conditionalQuestions = this.conditionalQuestions.map( (q, index) => {
-      if (index > condQuestion.index) {
-        return q;
-      } 
-
-      if (index === condQuestion.index) {
-        const swap = this.conditionalQuestions[index - 1];
-        if (swap === undefined) {
-          return q;
-        }
-        swap.index = index;
-        return swap;
-      }
-
-      if (index === condQuestion.index - 1) {
-        const swap = (<any>Object).assign({}, condQuestion);
-        swap.index = index;
-        return swap;
-      }
-
-      if (index < condQuestion.index - 1) {
-        q.index = index + 1;
-        return q;
-      }
-
-    });
-
-    this.model.setConditionalIndices(this.conditionalQuestions);
-
-  }
-
-  increaseConditionalIndex(condQuestion) {
-    if (condQuestion.index === this.conditionalQuestions.length - 1) {
-      return;
-    }
-
-    this.conditionalQuestions = this.conditionalQuestions.map( (q, index) => {
-      if (index < condQuestion.index) {
-        return q;
-      } 
-
-      if (index === condQuestion.index) {
-        const swap = this.conditionalQuestions[index + 1];
-        if (swap === undefined) {
-          return q;
-        }
-        swap.index = index;
-        return swap;
-      }
-
-      if (index === condQuestion.index + 1) {
-        const swap = (<any>Object).assign({}, condQuestion);
-        swap.index = index;
-        return swap;
-      }
-
-      if (index > condQuestion.index + 1) {
-        q.index = index - 1;
-        return q;
-      }
-
-    });
-
-    this.model.setConditionalIndices(this.conditionalQuestions);
+  swapConditionalQuestions($event) {
+    this.model.swapConditionals($event.sourceQuestion, $event.targetKeyName);
+    this.conditionalQuestions = this.model.findConditionals(this.question).sort( (a, b) => a.index - b.index)
   }
 }

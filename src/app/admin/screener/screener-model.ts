@@ -132,6 +132,40 @@ export class ScreenerModel {
     }
   }
 
+  swapConditionals(sourceQuestion, targetKeyName) {
+    console.log(`swapConditionals called`)
+    const targetQuestion = this.model.conditionalQuestions.filter(q => q.key === targetKeyName);
+    const srcQuestion = this.model.conditionalQuestions.find(q => q.id === sourceQuestion.id)
+    if (targetQuestion.length !== 1) {
+      throw new Error(`${targetQuestion.length} questions found with key: ${targetKeyName} in swapConditionals`);
+    }
+    if (!srcQuestion) {
+      throw new Error(`srcQuestion is undefined in swapConditionals`)
+    }
+
+    console.log('-----------------')
+    console.log(targetQuestion)
+    console.log(srcQuestion)
+    console.log('-----------------')
+
+    const swapIndex = srcQuestion.index;
+    srcQuestion.index = targetQuestion[0].index;
+    targetQuestion[0].index = swapIndex;
+
+    console.log('-----------------')
+    console.log(targetQuestion)
+    console.log(srcQuestion)
+    console.log('-----------------')
+
+    this.model.controls.get(srcQuestion.id).get('index').setValue(srcQuestion.index);
+    this.model.controls.get(targetQuestion[0].id).get('index').setValue(targetQuestion[0].index);
+
+    console.log(this.model.conditionalQuestions)
+    console.log(this.model.controls.value[srcQuestion.id])
+    console.log(this.model.controls.value[targetQuestion[0].id])
+    console.log('````````````````````````````````')
+  }
+
   increaseIndex(question) {
     if (question.index === this.model.questions.length - 1) {
       return;
@@ -150,22 +184,15 @@ export class ScreenerModel {
 
   addQuestion() {
     const id = randomString();
-
+    const index = this.model.questions.length;
     const blank = {
       controlType: 'invalid',
       key: 'invalid',
       label: '',
       expandable: false,
-      index: 0,
+      index: index,
       id: id
     };
-
-    let mutatingQuestions = [...this.model.questions];
-    for (let question of mutatingQuestions) {
-      const incr = question.index + 1;
-      this.model.controls.get(question.id).get('index').setValue(incr)
-      question.index = incr;
-    }
 
     const newGroup = Object.keys(blank).reduce((group, key) => {
       group[key] = new FormControl(blank[key], Validators.required);
@@ -173,15 +200,12 @@ export class ScreenerModel {
     }, {})
     const g = new FormGroup(newGroup)
     this.model.controls.addControl(blank.id, g);
-    const swap = [blank, ...this.model.questions]
-    this.questions$.next(swap);
-    this.model.questions = swap;
+    this.model.questions = [...this.model.questions, blank];
+    this.questions$.next( this.model.questions );
     this.count$.next(this.model.questions.length);
   }
 
   addConditionalQuestion(question) {
-    console.log(`addConditionalQuestion called on question with ${question.key}`);
-    console.log('~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~')
     const questionKey = this.model.keys.find(k => k.name === question.key);
 
     if (questionKey === undefined || question.controlType !== 'CheckBox'
@@ -220,10 +244,6 @@ export class ScreenerModel {
 
     question.conditionalQuestions.push(newID)
     this.questions$.next(this.model.questions);
-
-    console.log('exiting add conditional');
-    console.log(question)
-    console.log('~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~')
   }
 
   findConditionals(question) {
@@ -422,7 +442,6 @@ export class ScreenerModel {
     const options = new RequestOptions({ headers: headers });
     return this.http.get('/protected/screener', options)
       .map(res => res.json().response)
-      .do(networkResponse => console.log(networkResponse))
       .retry(2)
       .timeout(50000)
   }

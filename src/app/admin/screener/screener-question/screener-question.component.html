@@ -16,5 +16,9 @@
 </md-card>
 
 <div *ngIf="question.expandable && showConditionals" class="conditional-questions-container">
-  <app-conditional-questions (removeConditional)="deleteConditionalQuestion($event)" [questions]="conditionalQuestions"></app-conditional-questions>
+  <app-conditional-questions 
+    (swapConditionals)="swapConditionalQuestions($event)"
+    (removeConditional)="deleteConditionalQuestion($event)" 
+    [questions]="conditionalQuestions">
+  </app-conditional-questions>
 </div>

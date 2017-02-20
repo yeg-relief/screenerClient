@@ -2,6 +2,13 @@
   <section id="conditional-overview" class="flex-column">
     <div class="question-select" 
       *ngFor="let question of questions"
+      draggable="true"
+      (dragstart)="dragStart(question, $event)"
+      (dragenter)="dragEnter(question, $event)"
+      (dragover)="dragOver(question, $event)"
+      (dragleave)="dragLeave(question)"
+      (drop)="drop(question, $event)"
+      (dragend)="dragEnd()"
       (click)="selectQuestion(question)"
       [ngClass]="styles[question.id]">
       {{ question.key }}
