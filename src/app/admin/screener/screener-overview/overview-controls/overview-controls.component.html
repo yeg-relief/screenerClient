@@ -20,5 +20,8 @@
     (drop)="drop(question, $event)"
     (dragend)="dragEnd()">
     {{ question.key }}
+      <div *ngIf="question.expandable" style="margin-left: 0.75em">
+        [+] {{ question.conditionalQuestions.length }} hidden questions
+      </div>
   </div>
 </main>

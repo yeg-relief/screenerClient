@@ -41,7 +41,14 @@ export class ScreenerQuestionComponent implements OnInit {
   }
 
   makeExpandable($event) {
+    if ($event && !Array.isArray(this.question.conditionalQuestions)) {
+      this.question.conditionalQuestions = [];
+      this.model.makeExpandable(this.question);
+    }
+
     this.question.expandable = $event;
+    
+
     if (!this.question.expandable && Array.isArray(this.question.conditionalQuestions) ){
       this.model.clearCondtionals(this.question);
     }

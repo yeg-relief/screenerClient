@@ -159,11 +159,19 @@ export class ConditionalQuestionsComponent implements OnInit {
       $event.stopPropagation();
     }
 
+    for(const key in this.styles){
+      this.styles[key].dragStart = false;
+      this.styles[key].dragOver = false;
+    }
+
     const targetKey = $event.target.innerText;
     const draggingKey = Object.keys(this.styles).filter(key => this.styles[key].dragStart === true)
     if (draggingKey.length !== 1) {
       console.error(`Strange behaviour with conditional drag and drop index swap: dragging.length = ${draggingKey.length}`);
+      return false;
     }
+
+    
 
     const q = this.questions.find(qq => qq.id === draggingKey[0]);
     if (q) {
