@@ -1,5 +1,6 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnInit, Output, EventEmitter } from '@angular/core';
 import { ScreenerModel } from '../screener-model';
+import { FormGroup } from '@angular/forms';
 
 @Component({
   selector: 'app-screener-question',
@@ -8,30 +9,24 @@ import { ScreenerModel } from '../screener-model';
 })
 export class ScreenerQuestionComponent implements OnInit {
   @Input() question;
+  @Output() keyChange = new EventEmitter<any>();
   private conditionalQuestions = [];
   private showConditionals = true;
+  //private form: FormGroup;
   constructor(public model: ScreenerModel) { }
 
   ngOnInit() {
+    //this.form = this.model.getModelControls();
     if (this.question.expandable && Array.isArray(this.question.conditionalQuestions)  
         && this.question.conditionalQuestions.length > 0)
     {
       this.conditionalQuestions = this.model.findConditionals(this.question);
-      console.log(this.conditionalQuestions);
     }
 
   }
 
   deleteQuestion() {
     this.model.delete(this.question);
-  }
-
-  increaseIndex() {
-    this.model.increaseIndex(this.question);
-  }
-
-  decreaseIndex() {
-    this.model.decreaseIndex(this.question);
   }
 
   toggleConditionals() {
@@ -51,81 +46,12 @@ export class ScreenerQuestionComponent implements OnInit {
   }
 
   deleteConditionalQuestion(question) {
-    console.log('deleteConditionalQuestion called')
-    const index = this.conditionalQuestions.findIndex(q => q.id === question.id);
-    this.conditionalQuestions.splice(index, 1);
+    this.conditionalQuestions = this.conditionalQuestions.filter(q => q.id !== question.id);
     this.model.deleteConditional(this.question, question);
   }
 
-
-  decreaseConditionalIndex(condQuestion) {
-    if (condQuestion.index === 0 || this.conditionalQuestions.length === 1) {
-      return;
-    }
-
-    this.conditionalQuestions = this.conditionalQuestions.map( (q, index) => {
-      if (index > condQuestion.index) {
-        return q;
-      } 
-
-      if (index === condQuestion.index) {
-        const swap = this.conditionalQuestions[index - 1];
-        if (swap === undefined) {
-          return q;
-        }
-        swap.index = index;
-        return swap;
-      }
-
-      if (index === condQuestion.index - 1) {
-        const swap = (<any>Object).assign({}, condQuestion);
-        swap.index = index;
-        return swap;
-      }
-
-      if (index < condQuestion.index - 1) {
-        q.index = index + 1;
-        return q;
-      }
-
-    });
-
-    this.model.setConditionalIndices(this.conditionalQuestions);
-
-  }
-
-  increaseConditionalIndex(condQuestion) {
-    if (condQuestion.index === this.conditionalQuestions.length - 1) {
-      return;
-    }
-
-    this.conditionalQuestions = this.conditionalQuestions.map( (q, index) => {
-      if (index < condQuestion.index) {
-        return q;
-      } 
-
-      if (index === condQuestion.index) {
-        const swap = this.conditionalQuestions[index + 1];
-        if (swap === undefined) {
-          return q;
-        }
-        swap.index = index;
-        return swap;
-      }
-
-      if (index === condQuestion.index + 1) {
-        const swap = (<any>Object).assign({}, condQuestion);
-        swap.index = index;
-        return swap;
-      }
-
-      if (index > condQuestion.index + 1) {
-        q.index = index - 1;
-        return q;
-      }
-
-    });
-
-    this.model.setConditionalIndices(this.conditionalQuestions);
+  swapConditionalQuestions($event) {
+    this.model.swapConditionals($event.sourceQuestion, $event.targetKeyName);
+    this.conditionalQuestions = this.model.findConditionals(this.question).sort( (a, b) => a.index - b.index)
   }
 }

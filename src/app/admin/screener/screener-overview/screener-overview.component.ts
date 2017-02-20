@@ -22,7 +22,9 @@ import { Subscription } from 'rxjs/Subscription';
   providers: [ QuestionControlService ]
 })
 export class ScreenerOverviewComponent implements OnInit {
-  questions: any[]
+  questions: any[];
+  selectedQuestion: any[] = [];
+  selectedQuestion$ = new ReplaySubject<any>(1);
   subscriptions: Subscription[];
   constructor(public model: ScreenerModel, private qcs: QuestionControlService, private fb: FormBuilder) { }
 
@@ -30,9 +32,41 @@ export class ScreenerOverviewComponent implements OnInit {
     // small bootstrap...
     const bootstrap = this.model.load().subscribe(data => console.log(data));
     
-    const questions = this.model.questions$.subscribe( (questions: any[]) => this.questions = [...questions])
-  
-    this.subscriptions = [bootstrap, questions];
+    const questions = this.model.questions$.subscribe( (questions: any[]) => {
+      console.log('questions update');
+      this.questions = [ ...questions.sort( (a,b) => a.index - b.index) ];
+      if (this.questions.length > 0 && this.selectedQuestion.length === 0) {
+        this.selectedQuestion = [ this.questions[0] ];
+        this.selectedQuestion$.next( this.questions[0] );
+      }
+    })
+
+    const keyFilter = this.model.keyFilter$
+      .subscribe( keyName => {
+        const regexp = new RegExp(keyName);
+
+        let filterQuestion = this.questions.find(question => regexp.test(question.key))
+        if (filterQuestion) {
+          this.selectedQuestion = [ filterQuestion ];
+          this.selectedQuestion$.next( filterQuestion );
+        } else {
+          for(const q of this.questions) {
+            if (q.expandable) {
+              const conditionalQuestions = this.model.findConditionals(q);
+              filterQuestion = conditionalQuestions.find(question => regexp.test(question.key));
+              if (filterQuestion){
+                this.selectedQuestion = [ q ];
+                this.selectedQuestion$.next( q );
+                console.log(this.selectedQuestion);
+                break;
+              }
+            }
+          }
+        }
+        
+      });
+
+    this.subscriptions = [bootstrap, questions, keyFilter];
   }
 
   ngOnDestroy() {
@@ -42,5 +76,22 @@ export class ScreenerOverviewComponent implements OnInit {
       }
     }
   }
+
+  handleSelect(question) {
+    const newSelection = this.questions.find(q => q.id === question.id);
+    if (newSelection) this.selectedQuestion = [ newSelection ];
+  }
+
+  updateOverview(selectedQuestion, $event){
+    const updateQuestion = this.questions.find(question => question.id === selectedQuestion.id);
+    if (updateQuestion) {
+      updateQuestion.key = $event;
+    }
+  }
+
+  handleSwap($event) {
+    this.model.swapQuestions($event.sourceQuestion, $event.targetKeyName);
+  }
+
 
 }

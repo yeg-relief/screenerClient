@@ -15,7 +15,6 @@ import { ProgramEditEffects } from './programs/program-edit/effects';
 import { ProgramDeleteEffects } from './programs/program-overview/delete-confirmation/effects';
 import { KeyResolverService } from './keys/overview/key-resolver.service';
 import { ProgramsModule } from './programs/programs.module';
-import { MasterScreenerModule } from './master-screener/master-screener.module';
 import { KeysModule } from './keys/keys.module';
 import { HttpModule } from '@angular/http';
 
@@ -27,7 +26,8 @@ import { ScreenerToolbarComponent } from './screener/screener-toolbar/screener-t
 import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { ScreenerQuestionComponent } from './screener/screener-question/screener-question.component';
 import { UserQuestionComponent } from './screener/screener-question/user-question/user-question.component';
-import { ExpandableQuestionComponent } from './screener/screener-question/expandable-question/expandable-question.component';
+import { ConditionalQuestionsComponent } from './screener/screener-question/conditional-questions/conditional-questions.component';
+import { OverviewControlsComponent } from './screener/screener-overview/overview-controls/overview-controls.component';
 
 @NgModule({
   imports: [
@@ -40,7 +40,6 @@ import { ExpandableQuestionComponent } from './screener/screener-question/expand
     EffectsModule.run(ProgramDeleteEffects),
     AdminCoreModule,
     ProgramsModule,
-    MasterScreenerModule,
     KeysModule,
     ReactiveFormsModule,
     FormsModule
@@ -51,7 +50,8 @@ import { ExpandableQuestionComponent } from './screener/screener-question/expand
     ScreenerToolbarComponent,
     ScreenerQuestionComponent,
     UserQuestionComponent,
-    ExpandableQuestionComponent,
+    ConditionalQuestionsComponent,
+    OverviewControlsComponent,
   ],
   providers: [
     DataService, 

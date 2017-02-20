@@ -1,4 +1,4 @@
-<form class="user-question"  [formGroup]="form">
+<form class="user-question"  [formGroup]="form" *ngIf="question">
 
 
 
@@ -41,7 +41,7 @@
 
           
         
-          <div *ngSwitchDefault> <strong> {{ question.controlType }} is invalid </strong> </div>
+          <div *ngSwitchDefault> {{ question.label }} </div>
 
         </section>
 

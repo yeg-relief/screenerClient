@@ -82,7 +82,10 @@ export class ScreenerModel {
   setModel(data) {
     this.model = (<any>Object).assign({}, data)
     this.model.questions = this.model.questions.sort((a, b) => a.index - b.index)
-    this.model.unusedKeys = data.keys.filter(key => data.questions.find(question => key.name === question.key) === undefined)
+    this.model.unusedKeys = data.keys.filter(key => {
+      return data.questions.find(question => key.name === question.key) === undefined  
+             && data.conditionalQuestions.find(question => key.name === question.key) === undefined
+    })
     this.model.keys = [...data.keys]
     this.model.controls = new FormGroup({});
     this.model.conditionalQuestions = data.conditionalQuestions || [];
@@ -129,6 +132,48 @@ export class ScreenerModel {
     }
   }
 
+  swapConditionals(sourceQuestion, targetKeyName) {
+
+    const targetQuestion = this.model.conditionalQuestions.filter(q => q.key === targetKeyName);
+    const srcQuestion = this.model.conditionalQuestions.find(q => q.id === sourceQuestion.id)
+    if (targetQuestion.length !== 1) {
+      throw new Error(`${targetQuestion.length} questions found with key: ${targetKeyName} in swapConditionals`);
+    }
+    if (!srcQuestion) {
+      throw new Error(`srcQuestion is undefined in swapConditionals`)
+    }
+
+    const swapIndex = srcQuestion.index;
+    srcQuestion.index = targetQuestion[0].index;
+    targetQuestion[0].index = swapIndex;
+
+
+    this.model.controls.get(srcQuestion.id).get('index').setValue(srcQuestion.index);
+    this.model.controls.get(targetQuestion[0].id).get('index').setValue(targetQuestion[0].index);
+  }
+
+  swapQuestions(sourceQuestion, targetKeyName) {
+
+    const targetQuestion = this.model.questions.filter(q => q.key === targetKeyName);
+    const srcQuestion = this.model.questions.find(q => q.id === sourceQuestion.id)
+    if (targetQuestion.length !== 1) {
+      throw new Error(`${targetQuestion.length} questions found with key: ${targetKeyName} in swapConditionals`);
+    }
+    if (!srcQuestion) {
+      throw new Error(`srcQuestion is undefined in swapQuestions`)
+    }
+
+    const swapIndex = srcQuestion.index;
+    srcQuestion.index = targetQuestion[0].index;
+    targetQuestion[0].index = swapIndex;
+
+
+    this.model.controls.get(srcQuestion.id).get('index').setValue(srcQuestion.index);
+    this.model.controls.get(targetQuestion[0].id).get('index').setValue(targetQuestion[0].index);
+    
+    this.questions$.next(this.model.questions);
+  }
+
   increaseIndex(question) {
     if (question.index === this.model.questions.length - 1) {
       return;
@@ -147,22 +192,15 @@ export class ScreenerModel {
 
   addQuestion() {
     const id = randomString();
-
+    const index = this.model.questions.length;
     const blank = {
       controlType: 'invalid',
       key: 'invalid',
       label: '',
       expandable: false,
-      index: 0,
+      index: index,
       id: id
     };
-
-    let mutatingQuestions = [...this.model.questions];
-    for (let question of mutatingQuestions) {
-      const incr = question.index + 1;
-      this.model.controls.get(question.id).get('index').setValue(incr)
-      question.index = incr;
-    }
 
     const newGroup = Object.keys(blank).reduce((group, key) => {
       group[key] = new FormControl(blank[key], Validators.required);
@@ -170,15 +208,12 @@ export class ScreenerModel {
     }, {})
     const g = new FormGroup(newGroup)
     this.model.controls.addControl(blank.id, g);
-    const swap = [blank, ...this.model.questions]
-    this.questions$.next(swap);
-    this.model.questions = swap;
+    this.model.questions = [...this.model.questions, blank];
+    this.questions$.next( this.model.questions );
     this.count$.next(this.model.questions.length);
   }
 
   addConditionalQuestion(question) {
-    console.log(`addConditionalQuestion called on question with ${question.key}`);
-    console.log('~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~')
     const questionKey = this.model.keys.find(k => k.name === question.key);
 
     if (questionKey === undefined || question.controlType !== 'CheckBox'
@@ -189,13 +224,14 @@ export class ScreenerModel {
     question.conditionalQuestions = question.conditionalQuestions || [];
 
     const newID = randomString();
+    const index = question.conditionalQuestions.length;
 
     const blank = {
       controlType: 'invalid',
       key: 'invalid',
       label: '',
       expandable: false,
-      index: 0,
+      index: index,
       id: newID
     };
 
@@ -216,10 +252,6 @@ export class ScreenerModel {
 
     question.conditionalQuestions.push(newID)
     this.questions$.next(this.model.questions);
-
-    console.log('exiting add conditional');
-    console.log(question)
-    console.log('~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~')
   }
 
   findConditionals(question) {
@@ -418,7 +450,6 @@ export class ScreenerModel {
     const options = new RequestOptions({ headers: headers });
     return this.http.get('/protected/screener', options)
       .map(res => res.json().response)
-      .do(networkResponse => console.log(networkResponse))
       .retry(2)
       .timeout(50000)
   }
@@ -442,10 +473,26 @@ export class ScreenerModel {
   }
 
   deleteConditional(hostQuestion, hiddenQuestion) {
+    
+
     hostQuestion.conditionalQuestions = hostQuestion.conditionalQuestions.filter(q => q !== hiddenQuestion.id);
     this.model.controls.removeControl(hiddenQuestion.id);
     this.model.controls.get(hostQuestion.id).get('conditionalQuestions').setValue(hostQuestion.conditionalQuestions);
     this.model.conditionalQuestions = this.model.conditionalQuestions.filter(q => q.id !== hiddenQuestion.id)
+
+    for(const id of hostQuestion.conditionalQuestions) {
+      const q = this.model.conditionalQuestions.find(qq => qq.id === id);
+      if (q.index > hiddenQuestion.index) {
+        q.index--;
+      }
+    }
+
+    const key = this.model.keys.find(key => key.name === hiddenQuestion.key);
+    if (key) {
+      this.model.unusedKeys = [key, ...this.model.unusedKeys];
+      this.unusedKeys$.next(this.model.unusedKeys);
+    }
+    this.questions$.next(this.model.questions);
   }
 
   setConditionalIndices(questions) {

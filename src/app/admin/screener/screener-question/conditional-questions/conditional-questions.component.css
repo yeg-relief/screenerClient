@@ -1,0 +1,30 @@
+.conditional-question { 
+  margin-right: 1vw;
+}
+
+#conditional-overview {
+  width: 8vw;
+  padding: 1vw;
+  height: 100%;
+  background-color: lightyellow;
+  overflow: scroll;
+}
+
+.question-select {
+  border: solid 1px lightgray;
+  padding: 5px;
+  color: blue;
+  cursor: pointer;
+}
+
+.dragStart {
+  opacity: 0.4;
+}
+
+.dragOver {
+  border: 2px dashed #000;
+}
+
+.selected {
+  background: yellow !important;
+}
