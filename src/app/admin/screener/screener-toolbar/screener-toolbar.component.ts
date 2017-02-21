@@ -63,19 +63,20 @@ export class ScreenerToolbarComponent implements OnInit {
 
   handleSave() {
     this.model.save()
+      .do(_ => console.error(_))
       .switchMap( data => this.model.pushToNetwork(data) )
       .subscribe( {
         next: data => {
           this.errors.error = '';
           this.model.setModel( data );
+          this.model.errors$.next( [] );
         },
 
         error: err => {
-          console.log('HANDLE ERROR')
-          console.error(err)
           this.disabled = true;
           this.errors = (<any>Object).assign({}, { error: err })
           setTimeout( () => this.disabled = false, 2000);
+          this.model.errors$.next(err);
         }
       } );
   }
