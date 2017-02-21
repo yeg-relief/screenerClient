@@ -43,7 +43,8 @@ export class ScreenerOverviewComponent implements OnInit {
     const keyFilter = this.model.keyFilter$
       .subscribe( keyName => {
         const regexp = new RegExp(keyName);
-
+        this.selectedQuestion = [  ];
+        this.selectedQuestion$.next({});
         let filterQuestion = this.questions.find(question => regexp.test(question.key))
         if (filterQuestion) {
           this.selectedQuestion = [ filterQuestion ];
