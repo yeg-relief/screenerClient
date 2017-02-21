@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, OnDestroy, Input, Output, EventEmitter } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 
 @Component({
@@ -6,15 +6,16 @@ import { FormGroup } from '@angular/forms';
   templateUrl: './conditional-questions.component.html',
   styleUrls: ['./conditional-questions.component.css']
 })
-export class ConditionalQuestionsComponent implements OnInit {
+export class ConditionalQuestionsComponent implements OnInit, OnDestroy {
   @Input() questions: any[];
+  @Input() selectedQuestion: any[];
   @Output() addQuestion = new EventEmitter<any>();
   @Output() removeConditional = new EventEmitter<any>();
   @Output() swapConditionals = new EventEmitter<any>();
   //@Input() form: FormGroup;
   //private questionControl: FormGroup;
-  private selectedQuestion: any[] = [];
   private styles = {};
+  private timeout;
   constructor() { }
 
   ngOnInit() {
@@ -30,6 +31,20 @@ export class ConditionalQuestionsComponent implements OnInit {
       this.selectedQuestion = [ this.questions[0] ];
       this.styles[ this.questions[0].id ].selected = true;
     }
+  }
+
+  ngOnDestroy(){
+    if (this.timeout){
+      clearTimeout(this.timeout);
+    }
+  }
+
+  handleAddQuestion() {
+    this.addQuestion.emit();
+    this.timeout = setTimeout(() => {
+      if (this.questions.length > 0) this.selectQuestion(this.questions[this.questions.length - 1])
+    }, 60)
+    
   }
 
   selectQuestion(question) {

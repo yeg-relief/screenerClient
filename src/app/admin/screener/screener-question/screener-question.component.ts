@@ -13,6 +13,7 @@ export class ScreenerQuestionComponent implements OnInit {
   @Output() onDelete = new EventEmitter<any>();
   private conditionalQuestions = [];
   private showConditionals = true;
+  private selectedQuestion = [];
   //private form: FormGroup;
   constructor(public model: ScreenerModel) { }
 
@@ -38,6 +39,13 @@ export class ScreenerQuestionComponent implements OnInit {
   addConditionalQuestion() {
     this.model.addConditionalQuestion(this.question);
     this.conditionalQuestions = this.model.findConditionals(this.question);
+    if (this.conditionalQuestions.length > 0){
+      this.selectedQuestion = [ 
+        this.conditionalQuestions[this.conditionalQuestions.length - 1] 
+      ];
+    } 
+
+    console.log(this.selectedQuestion);
   }
 
   makeExpandable($event) {

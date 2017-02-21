@@ -1,6 +1,7 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { ReplaySubject } from 'rxjs/ReplaySubject';
 import { ScreenerModel } from '../../screener-model';
+import 'rxjs/add/operator/take';
 
 @Component({
   selector: 'app-overview-controls',
@@ -18,12 +19,12 @@ export class OverviewControlsComponent implements OnInit {
 
   ngOnInit() {
     if (this.questions && this.questions.length > 0) {
-      this.styles = this.questions.reduce( (styles, question) => {
+      this.styles = this.questions.reduce((styles, question) => {
         const style = {};
         style[question.id] = {
           selected: false
         };
-        
+
         return (<any>Object).assign(styles, style);
       }, {});
     }
@@ -31,8 +32,24 @@ export class OverviewControlsComponent implements OnInit {
     this.selectedQuestion.subscribe(question => this.selectQuestion(question));
   }
 
-  addQuestion(){
+  addQuestion() {
     this.model.addQuestion();
+    this.model.questions$.map( (questions: any[]) => questions[questions.length - 1])
+      .take(1)
+      .subscribe(question => {
+        if (question) {
+          for (const key in this.styles) {
+            this.styles[key].selected = false;
+          }
+          if (this.styles[question.id]) {
+            this.styles[question.id].selected = true;
+          } else {
+            this.styles[question.id] = {};
+            this.styles[question.id].selected = true;
+          }
+          this.questionSelected.emit(question);
+        }
+      });
   }
 
   selectQuestion(question) {
@@ -40,10 +57,10 @@ export class OverviewControlsComponent implements OnInit {
     if (question === this.selectQuestion) {
       return;
     }
-  
+
     this.selectedQuestion = question;
 
-    for(const key in this.styles) {
+    for (const key in this.styles) {
       this.styles[key].selected = false;
     }
     if (this.styles[question.id]) {
@@ -52,14 +69,14 @@ export class OverviewControlsComponent implements OnInit {
       this.styles[question.id] = {};
       this.styles[question.id].selected = true;
     }
-    
+
     this.questionSelected.emit(this.selectedQuestion);
 
   }
 
   dragStart(question, $event) {
     if (this.styles[question.id]) {
-      this.styles[question.id] = (<any>Object).assign({}, this.styles[question.id], { dragStart: true})
+      this.styles[question.id] = (<any>Object).assign({}, this.styles[question.id], { dragStart: true })
     } else {
       this.styles[question.id] = (<any>Object).assign({}, {
         selected: false,
@@ -67,18 +84,18 @@ export class OverviewControlsComponent implements OnInit {
         dragOver: false
       })
     }
-    
+
     // hack to make elements draggable in firefox
     // http://mereskin.github.io/dnd/
     $event.dataTransfer.setData('text', 'foo');
   }
 
   dragEnter(question, $event) {
-    if($event.preventDefault) {
+    if ($event.preventDefault) {
       $event.preventDefault();
     }
     if (this.styles[question.id]) {
-      this.styles[question.id] = (<any>Object).assign({}, this.styles[question.id], { dragOver: true})
+      this.styles[question.id] = (<any>Object).assign({}, this.styles[question.id], { dragOver: true })
     } else {
       this.styles[question.id] = (<any>Object).assign({}, {
         selected: false,
@@ -88,12 +105,12 @@ export class OverviewControlsComponent implements OnInit {
     }
   }
 
-  dragOver(question, $event){
+  dragOver(question, $event) {
     if ($event.preventDefault) {
       $event.preventDefault();
     }
     if (this.styles[question.id]) {
-      this.styles[question.id] = (<any>Object).assign({}, this.styles[question.id], { dragOver: true})
+      this.styles[question.id] = (<any>Object).assign({}, this.styles[question.id], { dragOver: true })
     } else {
       this.styles[question.id] = (<any>Object).assign({}, {
         selected: false,
@@ -106,7 +123,7 @@ export class OverviewControlsComponent implements OnInit {
 
   dragLeave(question) {
     if (this.styles[question.id]) {
-      this.styles[question.id] = (<any>Object).assign({}, this.styles[question.id], { dragOver: false})
+      this.styles[question.id] = (<any>Object).assign({}, this.styles[question.id], { dragOver: false })
     } else {
       this.styles[question.id] = (<any>Object).assign({}, {
         selected: false,
@@ -117,15 +134,15 @@ export class OverviewControlsComponent implements OnInit {
   }
 
   drop(question, $event) {
-    if($event.preventDefault){
+    if ($event.preventDefault) {
       $event.preventDefault();
     }
 
-    if($event.stopPropagation) {
+    if ($event.stopPropagation) {
       $event.stopPropagation();
     }
 
-    for(const key in this.styles){
+    for (const key in this.styles) {
       this.styles[key].dragStart = false;
       this.styles[key].dragOver = false;
     }
@@ -137,7 +154,7 @@ export class OverviewControlsComponent implements OnInit {
       return false;
     }
 
-    
+
 
     const q = this.questions.find(qq => qq.id === draggingKey[0]);
     if (q) {
@@ -146,13 +163,13 @@ export class OverviewControlsComponent implements OnInit {
         targetKeyName: targetKey
       })
     }
-    
-    
+
+
     return false;
   }
 
   dragEnd() {
-    for(const key in this.styles) {
+    for (const key in this.styles) {
       this.styles[key].dragOver = false;
       this.styles[key].dragStart = false;
     }
