@@ -1,5 +1,7 @@
 import { Component, OnInit, OnDestroy, Input, Output, EventEmitter } from '@angular/core';
 import { FormGroup } from '@angular/forms';
+import { ScreenerModel } from '../../screener-model';
+import { Subscription } from 'rxjs/Subscription';
 
 @Component({
   selector: 'app-conditional-questions',
@@ -12,18 +14,20 @@ export class ConditionalQuestionsComponent implements OnInit, OnDestroy {
   @Output() addQuestion = new EventEmitter<any>();
   @Output() removeConditional = new EventEmitter<any>();
   @Output() swapConditionals = new EventEmitter<any>();
+  private subscription: Subscription;
   //@Input() form: FormGroup;
   //private questionControl: FormGroup;
   private styles = {};
   private timeout;
-  constructor() { }
+  constructor(public model: ScreenerModel) { }
 
   ngOnInit() {
     for(const question of this.questions) {
       this.styles[question.id] = {
         selected: false,
         dragStart: false,
-        dragOver: false
+        dragOver: false,
+        error: false
       }
     }
 
@@ -31,11 +35,47 @@ export class ConditionalQuestionsComponent implements OnInit, OnDestroy {
       this.selectedQuestion = [ this.questions[0] ];
       this.styles[ this.questions[0].id ].selected = true;
     }
+
+    this.subscription = this.model.errors$.subscribe( (errors: string[]) => {
+      if (errors.length > 0) {
+        const errorQuestions = this.questions.filter(q => errors.find(id => q.id === id));
+
+        // mark errors
+        for(const errorQuestion of errorQuestions) {
+          if(this.styles[errorQuestion.id]) {
+            this.styles[errorQuestion.id].error = true;
+          } else {
+            this.styles[errorQuestion.id] = {
+              selected: false,
+              dragStart: false,
+              dragOver: false,
+              error: true
+            }
+          }
+        }
+        // unmark questions no longer in error
+        for(const key in this.styles) {
+          if (errorQuestions.find(q => q.id === key) === undefined && this.styles[key].error === true) {
+            this.styles[key].error = false;
+          }
+        }
+
+      } else {
+        // no errors at all => unmark all
+        for(const key in this.styles) {
+          this.styles[key].error = false;
+        }
+      }
+    })
   }
 
   ngOnDestroy(){
     if (this.timeout){
       clearTimeout(this.timeout);
+    }
+
+    if (!this.subscription.closed) {
+      this.subscription.unsubscribe();
     }
   }
 
@@ -113,7 +153,8 @@ export class ConditionalQuestionsComponent implements OnInit, OnDestroy {
       this.styles[question.id] = (<any>Object).assign({}, {
         selected: false,
         dragStart: true,
-        dragOver: false
+        dragOver: false,
+        error: false
       })
     }
     
@@ -132,7 +173,8 @@ export class ConditionalQuestionsComponent implements OnInit, OnDestroy {
       this.styles[question.id] = (<any>Object).assign({}, {
         selected: false,
         dragStart: false,
-        dragOver: true
+        dragOver: true,
+        error: false
       })
     }
   }
@@ -147,7 +189,8 @@ export class ConditionalQuestionsComponent implements OnInit, OnDestroy {
       this.styles[question.id] = (<any>Object).assign({}, {
         selected: false,
         dragStart: false,
-        dragOver: true
+        dragOver: true,
+        error: false
       })
     }
     return false;
@@ -160,7 +203,8 @@ export class ConditionalQuestionsComponent implements OnInit, OnDestroy {
       this.styles[question.id] = (<any>Object).assign({}, {
         selected: false,
         dragStart: false,
-        dragOver: false
+        dragOver: false,
+        error: false
       })
     }
   }
@@ -172,15 +216,11 @@ export class ConditionalQuestionsComponent implements OnInit, OnDestroy {
 
     if($event.stopPropagation) {
       $event.stopPropagation();
-    }
-
-    for(const key in this.styles){
-      this.styles[key].dragStart = false;
-      this.styles[key].dragOver = false;
-    }
+    }    
 
     const targetKey = $event.target.innerText;
     const draggingKey = Object.keys(this.styles).filter(key => this.styles[key].dragStart === true)
+
     if (draggingKey.length !== 1) {
       console.error(`Strange behaviour with conditional drag and drop index swap: dragging.length = ${draggingKey.length}`);
       return false;
@@ -196,6 +236,11 @@ export class ConditionalQuestionsComponent implements OnInit, OnDestroy {
       })
     }
     
+    for(const key in this.styles){
+      this.styles[key].dragStart = false;
+      this.styles[key].dragOver = false;
+    }
+
     
     return false;
   }

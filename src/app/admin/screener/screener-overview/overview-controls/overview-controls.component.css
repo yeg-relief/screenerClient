@@ -25,3 +25,7 @@ main {
 .selected {
   background-color: #0074d9;
 }
+
+.error {
+  background-color: darkred;
+}

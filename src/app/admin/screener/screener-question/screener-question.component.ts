@@ -1,6 +1,7 @@
-import { Component, Input, OnInit, Output, EventEmitter } from '@angular/core';
+import { Component, Input, OnInit, OnDestroy, Output, EventEmitter } from '@angular/core';
 import { ScreenerModel } from '../screener-model';
 import { FormGroup } from '@angular/forms';
+import { Subscription } from 'rxjs/Subscription';
 
 @Component({
   selector: 'app-screener-question',
@@ -14,6 +15,7 @@ export class ScreenerQuestionComponent implements OnInit {
   private conditionalQuestions = [];
   private showConditionals = true;
   private selectedQuestion = [];
+  
   //private form: FormGroup;
   constructor(public model: ScreenerModel) { }
 
@@ -24,7 +26,6 @@ export class ScreenerQuestionComponent implements OnInit {
     {
       this.conditionalQuestions = this.model.findConditionals(this.question);
     }
-
   }
 
   deleteQuestion() {
@@ -44,8 +45,6 @@ export class ScreenerQuestionComponent implements OnInit {
         this.conditionalQuestions[this.conditionalQuestions.length - 1] 
       ];
     } 
-
-    console.log(this.selectedQuestion);
   }
 
   makeExpandable($event) {

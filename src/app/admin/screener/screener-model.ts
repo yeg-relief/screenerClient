@@ -35,6 +35,7 @@ export class ScreenerModel {
   public count$ = new ReplaySubject(1);
   public keys$ = new ReplaySubject(1);
   public unusedKeys$ = new ReplaySubject(1);
+  public errors$ = new ReplaySubject(1);
   public onSave$ = new Subject<boolean>();
 
 
@@ -78,6 +79,9 @@ export class ScreenerModel {
     });
   }
 
+  hasKey(keyname) {
+    return this.model.keys.find(key => key.name === keyname) !== undefined;
+  }
 
   setModel(data) {
     this.model = (<any>Object).assign({}, data)
@@ -411,21 +415,25 @@ export class ScreenerModel {
       } else if (conditionalQuestion !== undefined && question === undefined) {
         conditionalQuestions.push(value);
       } else {
-        throw new Error(`unable to associate form value with a question. id: ${value.id}`)
+        return Observable.throw<string>(`unable to associate form value with a question. id: ${value.id}`)
       }
 
     }
     /* end partition function */
 
     /* this should be a function => ensure some degree of data integrity/conformity then assign to return value object*/
-    const presentBoolean = (question) => (key) => question[key] !== undefined && question[key] !== 'invalid' && question[key] !== '';
+    const presentBoolean = (question) => (key) => {
+      if (key === 'key' && typeof question[key] === 'string' && question[key].substr(0, 7) == 'invalid') return false;
+
+      return question[key] !== undefined && question[key] !== 'invalid' && question[key] !== ''
+    };
 
     for (const q of [...questions, ...conditionalQuestions]) {
       const checker = presentBoolean(q);
       const failedChecking = ['label', 'index', 'controlType', 'key'].filter(checker);
 
       if (failedChecking.length !== 4) {
-        return Observable.throw<string>(`question at index: ${q.index} has invalid properties`)
+        return Observable.throw<string[]>([q.id])
       }
     }
 
@@ -438,16 +446,24 @@ export class ScreenerModel {
 
 
       if (conflicts.length !== 0) {
-        throw new Error('conflicts detected');
+        console.log('conflicts');
+        return Observable.throw<string[]>(conflicts.map(conflict => conflict.id));
       }
+      return undefined;
     }
 
 
     let dummy;
 
     try {
-      key_type_checker(questions);
-      key_type_checker(conditionalQuestions);
+      let error = key_type_checker(questions);
+      if (error){
+        return error;
+      }
+      error = key_type_checker(conditionalQuestions);
+      if (error){
+        return error;
+      }
       return Observable.of({
         questions: questions,
         conditionalQuestions: conditionalQuestions,

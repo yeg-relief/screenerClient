@@ -8,8 +8,10 @@
     
     <section [formGroup]="form" class="flex flex-column flex-justify flex-stretch">
 
-      <button [disabled]="disabled" style="width: 8vw; height: 5vh" (click)="handleSave()" md-raised-button color="primary"> SAVE </button>
-      <div *ngIf="errors.error !== ''" style="color:red"> error: {{ errors.error }} </div> 
+      <button [disabled]="disabled" style="width: 20vw; height: 5vh" (click)="handleSave()" md-raised-button color="primary"> SAVE </button>
+      <div *ngIf="errors.error !== ''" style="color:red; width: 20vw;">  
+        <p>Errors detected during last save attempt. Questions highlighted red are invalid.  
+      </div> 
 
 
     </section>
@@ -22,6 +24,5 @@
         <option *ngFor="let key of allKeys" [value]="key.name"> {{ key.name }} </option>
       </select>
     </label>
-    <md-checkbox formControlName="errorFilter">find errors</md-checkbox>
   </form>
 </md-card>
