@@ -220,7 +220,7 @@ export class ConditionalQuestionsComponent implements OnInit, OnDestroy {
 
     const targetKey = $event.target.innerText;
     const draggingKey = Object.keys(this.styles).filter(key => this.styles[key].dragStart === true)
-
+    console.log('here 1');
     if (draggingKey.length !== 1) {
       console.error(`Strange behaviour with conditional drag and drop index swap: dragging.length = ${draggingKey.length}`);
       return false;
@@ -229,6 +229,9 @@ export class ConditionalQuestionsComponent implements OnInit, OnDestroy {
     
 
     const q = this.questions.find(qq => qq.id === draggingKey[0]);
+    console.log(q);
+    console.log(targetKey);
+    console.log(draggingKey);
     if (q) {
       this.swapConditionals.emit({
         sourceQuestion: q,
@@ -240,7 +243,7 @@ export class ConditionalQuestionsComponent implements OnInit, OnDestroy {
       this.styles[key].dragStart = false;
       this.styles[key].dragOver = false;
     }
-
+    console.log('here 2');
     
     return false;
   }

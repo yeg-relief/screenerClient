@@ -154,16 +154,14 @@ export class ScreenerModel {
 
     this.model.controls.get(srcQuestion.id).get('index').setValue(srcQuestion.index);
     this.model.controls.get(targetQuestion[0].id).get('index').setValue(targetQuestion[0].index);
+    this.questions$.next( [...this.model.questions] );
   }
 
   swapQuestions(sourceQuestion, targetKeyName) {
-    console.log(sourceQuestion);
-    console.log(targetKeyName);
+
     const targetQuestion = this.model.questions.filter(q => q.key === targetKeyName);
     const srcQuestion = this.model.questions.find(q => q.id === sourceQuestion.id)
 
-    console.log(targetQuestion);
-    console.log(srcQuestion);
     
     if (targetQuestion.length !== 1) {
       throw new Error(`${targetQuestion.length} questions found with key: ${targetKeyName} in swapConditionals`);

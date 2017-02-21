@@ -207,7 +207,7 @@ export class OverviewControlsComponent implements OnInit, OnDestroy {
       this.styles[key].dragOver = false;
     }
 
-    if (!this.model.hasKey(targetKey)){
+    if (!this.model.hasKey(targetKey) && targetKey.substr(0, 7) !== 'invalid'){
       return false;
     }
 
