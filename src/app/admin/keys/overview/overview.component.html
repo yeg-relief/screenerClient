@@ -1,8 +1,8 @@
 <app-bread-crumb>
-  <app-key-overview-controls></app-key-overview-controls>
+  <app-key-overview-controls (onFilter)="handleFilter($event)"></app-key-overview-controls>
 </app-bread-crumb>
 <div class="py2"></div>
-<md-card-subtitle> 
+<md-card-subtitle class="center"> 
   You are only allowed to create keys. Updating or deleting has consequences on the search engine that are 
   not easily reconciled. It is suggested to create keys and ignore ones not being currently used etc. 
 </md-card-subtitle>
