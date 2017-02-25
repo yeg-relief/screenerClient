@@ -1,0 +1,7 @@
+option[value="invalid"][disabled] {
+  display: none;
+}
+
+:host {
+  width: 100%;
+}

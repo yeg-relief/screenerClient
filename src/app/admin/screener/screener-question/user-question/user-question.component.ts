@@ -6,7 +6,6 @@ import { ScreenerModel } from '../../screener-model';
 import { Observable } from 'rxjs/Observable';
 import { Subscription } from 'rxjs/Subscription';
 import 'rxjs/add/operator/zip';
-import 'rxjs/add/operator/multicast';
 import 'rxjs/add/operator/combineLatest';
 import 'rxjs/add/operator/debounceTime';
 

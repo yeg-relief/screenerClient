@@ -189,7 +189,7 @@ export class OverviewControlsComponent implements OnInit, OnDestroy {
     
 
     let targetKey = $event.target.innerText;
-    var stringArray = targetKey.split(/(\s+)/);
+    let stringArray = targetKey.split(/(\s+)/);
     if (stringArray[0] === '[+]'){
       stringArray = $event.target.parentNode.innerText.split(/(\s+)/);
       targetKey = stringArray[0];

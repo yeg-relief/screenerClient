@@ -1,8 +1,28 @@
-<div class="col-3"></div>
-<button 
-  md-mini-fab color="primary" 
-  *ngIf="loaded" 
-  routerLink="/admin/programs/edit/new"
-  [attr.disabled]="deleteInitiated? true : null">
-    <i class="material-icons">add</i>
-</button>
+<div [formGroup]="form" class="flex flex-center col-12">
+  <div class="col-1"></div>
+  <button 
+    md-mini-fab color="primary" 
+    *ngIf="loaded" 
+    routerLink="/admin/programs/edit/new"
+    [attr.disabled]="deleteInitiated? true : null">
+      <i class="material-icons">add</i>
+  </button>
+
+  <div class="col-1"></div>
+
+  <select class="col-3" formControlName="type">
+    <option selected disabled [value]="''"> select filter type </option>
+    <option [value]="'none'"> no filter </option>
+    <option [value]="'tag'"> filter by tag </option>
+    <option [value]="'title'"> filter by title </option>
+  </select>
+  
+
+  <div class="px2"></div>
+
+  <md-input placeholder="filter" formControlName="value"></md-input>
+
+  <div class="col-1 flex-grow"></div>
+
+</div>
+

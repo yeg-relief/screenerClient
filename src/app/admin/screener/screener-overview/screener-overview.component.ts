@@ -8,7 +8,6 @@ import { QuestionControlService } from
   '../../../user/master-screener/questions/question-control.service';
 import 'rxjs/add/operator/filter';
 import 'rxjs/add/operator/let';
-import 'rxjs/add/operator/multicast';
 import 'rxjs/add/observable/merge';
 import 'rxjs/add/observable/zip';
 import { ReplaySubject } from 'rxjs/ReplaySubject';

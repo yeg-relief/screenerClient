@@ -1,7 +1,6 @@
 import { Component, Input, OnInit} from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
 import { Observable } from 'rxjs/Observable';
-import 'rxjs/add/operator/multicast';
 import 'rxjs/add/operator/map';
 import 'rxjs/add/observable/merge';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';

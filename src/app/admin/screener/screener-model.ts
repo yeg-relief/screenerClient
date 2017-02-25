@@ -10,7 +10,6 @@ import { AuthService } from '../core/services/auth.service'
 import 'rxjs/add/observable/throw';
 import 'rxjs/add/operator/retry';
 import 'rxjs/add/operator/timeout';
-import 'rxjs/add/operator/multicast';
 import 'rxjs/add/operator/scan';
 import 'rxjs/add/operator/merge';
 
