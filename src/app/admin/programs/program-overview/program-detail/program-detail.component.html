@@ -1,5 +1,5 @@
 <div class="py1"></div>
-<md-card>
+<md-card style="height:100%;">
   <md-button-toggle-group (change)="viewChange($event.value)" [value]="views[0].value">
     <md-button-toggle *ngFor="let view of views" [value]="view.value">
         {{view.value}}
