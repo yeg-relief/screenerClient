@@ -118,6 +118,11 @@ function applyFilter(source: Observable<ProgramState>): Observable<ApplicationFa
         }
 
         case 'title': {
+          if (state.filter.value === ''){
+            return Observable.of([]);
+          }
+
+
           const regexp = new RegExp(state.filter.value);
 
           return Observable.from(programs)

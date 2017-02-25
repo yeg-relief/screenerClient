@@ -115,7 +115,6 @@ export class OverviewControlsComponent implements OnInit, OnDestroy {
     }
 
     this.questionSelected.emit(this.selectedQuestion);
-
   }
 
   dragStart(question, $event) {

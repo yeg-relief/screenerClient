@@ -14,7 +14,7 @@ export class ConditionalQuestionsComponent implements OnInit, OnDestroy {
   @Output() addQuestion = new EventEmitter<any>();
   @Output() removeConditional = new EventEmitter<any>();
   @Output() swapConditionals = new EventEmitter<any>();
-  private subscription: Subscription;
+  private subscriptions: Subscription[] = [];
   //@Input() form: FormGroup;
   //private questionControl: FormGroup;
   private styles = {};
@@ -36,7 +36,7 @@ export class ConditionalQuestionsComponent implements OnInit, OnDestroy {
       this.styles[ this.questions[0].id ].selected = true;
     }
 
-    this.subscription = this.model.errors$.subscribe( (errors: string[]) => {
+    const errors = this.model.errors$.subscribe( (errors: string[]) => {
       if (errors.length > 0) {
         const errorQuestions = this.questions.filter(q => errors.find(id => q.id === id));
 
@@ -67,15 +67,36 @@ export class ConditionalQuestionsComponent implements OnInit, OnDestroy {
         }
       }
     })
+    
+    const keyFilter = this.model.keyFilter$
+      .subscribe( keyName => {
+        const regexp = new RegExp(keyName);
+        let filterQuestion = this.questions.find(question => regexp.test(question.key))
+        if (filterQuestion) {
+          this.selectQuestion(filterQuestion);
+        } else {
+          this.selectedQuestion = [];
+          const selected = Object.keys(this.styles).filter(key => this.styles[key].selected = true);
+          for(const key of selected) {
+            this.styles[key].selected = false;
+          }
+        }
+    });
+    
+    this.subscriptions = [ keyFilter, errors ]
   }
+
+
 
   ngOnDestroy(){
     if (this.timeout){
       clearTimeout(this.timeout);
     }
 
-    if (!this.subscription.closed) {
-      this.subscription.unsubscribe();
+    for(const sub of this.subscriptions){
+      if (!sub.closed) {
+        sub.unsubscribe();
+      }
     }
   }
 

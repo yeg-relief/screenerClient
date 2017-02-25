@@ -12,6 +12,7 @@ import 'rxjs/add/operator/retry';
 import 'rxjs/add/operator/timeout';
 import 'rxjs/add/operator/scan';
 import 'rxjs/add/operator/merge';
+import { Key } from '../models/key';
 
 type Screener = any;
 interface Model {
@@ -89,6 +90,8 @@ export class ScreenerModel {
       return data.questions.find(question => key.name === question.key) === undefined  
              && data.conditionalQuestions.find(question => key.name === question.key) === undefined
     })
+
+
     this.model.keys = [...data.keys]
     this.model.controls = new FormGroup({});
     this.model.conditionalQuestions = data.conditionalQuestions || [];
@@ -103,7 +106,7 @@ export class ScreenerModel {
     this.created$.next(this.model.created);
     this.count$.next(this.model.questions.length);
     this.keys$.next(this.model.keys);
-    this.unusedKeys$.next(this.model.unusedKeys);
+    this.unusedKeys$.next(this.model.unusedKeys.sort(keyComparator));
     this.filter$.next(false);
     this.keyFilter$.next('');
   }
@@ -344,7 +347,7 @@ export class ScreenerModel {
     const q = this.model.questions.find(modelQuestion => modelQuestion.id === question.id);
     q.conditionalQuestions = [];
     this.questions$.next( [...this.model.questions] );
-    this.unusedKeys$.next( [...this.model.unusedKeys] );
+    this.unusedKeys$.next( [...this.model.unusedKeys].sort(keyComparator) );
   }
 
 
@@ -371,7 +374,7 @@ export class ScreenerModel {
     } else {
       this.model.unusedKeys = [...droppedNewlyChosenKey].filter(key => key !== undefined);
     }
-    this.unusedKeys$.next([...this.model.unusedKeys]);
+    this.unusedKeys$.next([...this.model.unusedKeys].sort(keyComparator));
   }
 
   private getCredentials(): Headers {
@@ -532,7 +535,7 @@ export class ScreenerModel {
     this.model.questions = mutatingQuestions;
     this.questions$.next(this.model.questions);
     this.count$.next(this.model.questions.length);
-    this.unusedKeys$.next(this.model.unusedKeys);
+    this.unusedKeys$.next(this.model.unusedKeys.sort(keyComparator));
   }
 
 
@@ -581,7 +584,7 @@ export class ScreenerModel {
     const key = this.model.keys.find(key => key.name === hiddenQuestion.key);
     if (key) {
       this.model.unusedKeys = [key, ...this.model.unusedKeys];
-      this.unusedKeys$.next(this.model.unusedKeys);
+      this.unusedKeys$.next(this.model.unusedKeys.sort(keyComparator));
     }
     this.questions$.next(this.model.questions);
   }
@@ -602,4 +605,15 @@ function randomString() {
     randomString += charSet.substring(randomPoz, randomPoz + 1);
   }
   return randomString;
+}
+
+function keyComparator(a: Key, b: Key): number {
+  const titleA = a.name.toUpperCase();
+  const titleB = b.name.toUpperCase();
+
+  if (titleA < titleB) return -1;
+
+  if (titleB < titleA) return 1;
+
+  return 0;
 }

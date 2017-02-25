@@ -17,6 +17,9 @@
         [question]="question">
       </app-screener-question>
     </div>
+    <div class="col-9 center" *ngIf="selectedQuestion.length === 0" style="margin-top: 5em; color: #0074d9">
+      No question selected.
+    </div> 
 
   </div>
   <div class="p2"></div>
