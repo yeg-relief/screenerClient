@@ -2,6 +2,13 @@ option[value="invalid"][disabled] {
   display: none;
 }
 
+select{
+  min-height: 3em;
+}
+
+
 :host {
   width: 100%;
+  min-height: 5em;
 }
+

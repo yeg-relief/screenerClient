@@ -1,0 +1,5 @@
+@media(max-width: 30em){
+  md-card {
+    width: 90%;
+  }
+}

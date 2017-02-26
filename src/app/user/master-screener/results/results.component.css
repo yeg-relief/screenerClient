@@ -8,23 +8,46 @@ p {
 }
 
 main {
-  height: 95vh;
   width: 100vw;
-  overflow-x: hidden;
-  position: fixed;
 }
 
-@media(min-width: 40em) {
-  main {
-    height: 95vh;
-    width: 100vw;
+
+
+@media(min-width: 64em) {
+  #result-preface {
+    width: 60%;
+    margin: 0 auto;
   }
 }
 
 
-@media(max-width: 40em){
-  main {
-    height: 95vh;
-    width: 100vw;
+@media(min-width: 52em) and (max-width:64em) {
+  #result-preface {
+    width: 60%;
+    margin: 0 auto;
+  }
+}
+
+
+@media(min-width: 40em) and (max-width: 52em) {
+  #result-preface {
+    width: 60%;
+    margin: 0 auto;
+  }
+}
+
+
+@media(min-width: 30em) and (max-width: 40em){
+  #result-preface {
+    width: 75%;
+    margin: 0 auto;
+  }
+}
+
+
+@media(max-width: 30em){
+  #result-preface {
+    width: 95%;
+    margin: 0 auto;
   }
 }

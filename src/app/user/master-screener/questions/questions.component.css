@@ -2,7 +2,6 @@ main {
   height: 94vh;
   width: 100vw;
   overflow-x: hidden;
-  position: fixed;
 }
 
 h1 {
@@ -17,7 +16,6 @@ button {
   font-family: 'Open Sans', sans-serif;
 }
 
-
 @media(min-width: 64em) {
   .questions {
    width: 60%;
@@ -27,6 +25,10 @@ button {
     width: 60%;
     margin: 0% 20%;
   }
+  .floating-submit {
+    display: none;
+  }
+
 }
 
 
@@ -39,6 +41,10 @@ button {
   .submit-wrapper {
     width: 70%;
     margin: 0% 15%;
+  }
+
+  .floating-submit {
+    display: none;
   }
 }
 
@@ -53,6 +59,13 @@ button {
     width: 80%;
     margin: 0% 10%;
   }
+
+  .floating-submit {
+    right: 5vw;
+    top: 10vh;
+    position: absolute;
+    z-index: 999;
+  }
 }
 
 
@@ -66,16 +79,32 @@ button {
     width: 90%;
     margin: 0% 2%;
   }
+
+  .floating-submit {
+    right: 4vw;
+    top: 8vh;
+    position: absolute;
+    z-index: 999;
+  }
 }
 
 
 @media(max-width: 30em){
   .questions {
-    width: 90%;
+    width: 95%;
+    margin: 0 auto;
   }
   
   .submit-wrapper {
-    width: 90%;
+    width: 95%;
+    margin: 0 auto;
+  }
+
+  .floating-submit {
+    right: 3vw;
+    top: 8vh;
+    position: absolute;
+    z-index: 999;
   }
 }
 

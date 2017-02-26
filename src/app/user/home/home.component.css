@@ -1,8 +1,12 @@
+:host {
+  margin-top: 2em;
+  margin-bottom: 5em;
+}
+
 .home {
   height: 100%;
   width: 100%;
   overflow: auto;
-  position: fixed;
 }
 
 .section-text {
@@ -85,7 +89,7 @@ button:hover {
   
   .program-details {
     width: 40em;
-    height: 10vh;
+    height: 15vh;
     padding-bottom: 1em;
   }
 
@@ -111,7 +115,7 @@ button:hover {
 
   .program-details {
     width: 30em;
-    height: 10vh;
+    height: 15vh;
     padding-bottom: 2em;
   }
 
@@ -133,7 +137,7 @@ button:hover {
 
   .program-details {
     width: 20em;
-    height: 10vh;
+    height: 15vh;
     padding-bottom: 2em;
   }
 }

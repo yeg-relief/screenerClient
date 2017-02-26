@@ -1,9 +1,8 @@
-<main class="center">
+<main>
   <div class="p1"></div>
   <div *ngIf="errorMessage"> <strong> There was an error loading data, please try later </strong> </div>
   <div *ngIf="results.length > 0 && errorMessage.length === 0">
-    <h1> RESULTS </h1>
-    <div id="result-preface" class="border p2" style="margin-left:25%; width:50%;">
+    <div id="result-preface" class="border p2 center">
       <p><strong>NOTE: </strong> These results do <strong>NOT</strong> mean you're qualified for
       <i>any</i> of these programs. <br>They are meant to help you find programs that can help you.</p>
     </div>

@@ -10,9 +10,6 @@ import { BrowseService } from '../browse.service';
   styles: [`
     section {
       width: 100vw;
-      overflow-x: hidden;
-      height: 95vh;
-      position: fixed;
       margin: 0 auto;
     }
 
