@@ -18,10 +18,9 @@ import 'rxjs/add/operator/multicast';
   styles: [
     `
       #main-outlet {
-        height: 93vh;
+        min-height: 93vh;
         width: 100vw;
         overflow-x: hidden;
-
       }
     `,
     `
@@ -41,6 +40,11 @@ import 'rxjs/add/operator/multicast';
           background-size: cover;
         }
       }
+    `,
+    `
+      .backgroundcolor {
+        background-color: lightgoldenrodyellow;
+      }
     `
 
   ]
@@ -49,6 +53,7 @@ export class AppComponent implements OnInit {
 
   backgroundClass = {
     background: true,
+    backgroundcolor: false 
   }
 
   constructor(private router: Router){}
@@ -65,6 +70,10 @@ export class AppComponent implements OnInit {
       .filter(url => url !== "don't care")
       .debounceTime(60)
       .map( url => url.substring(0, 7) === '/admin/' )
-      .subscribe( val => this.backgroundClass.background = !val );
+      .subscribe( val => {
+        this.backgroundClass.background = !val;
+        this.backgroundClass.backgroundcolor = val;
+        console.log(this.backgroundClass);
+      });
   }
 }
