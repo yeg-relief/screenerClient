@@ -23,6 +23,243 @@ interface Model {
   keys: any[];
   unusedKeys: any[];
   controls: FormGroup;
+};
+
+type QuestionType = 'conditional' | 'constant' | 'invalid';
+const CONSTANT_QUESTION: QuestionType = 'constant';
+const CONDITIONAL_QUESTION: QuestionType = 'conditional';
+const INVALID_QUESTION: QuestionType = 'invalid';
+
+type Id = string;
+type Question = {
+  conditionalQuestions?: Id[],
+  controlType: '' | 'invalid' | 'NumberSelect' | 'NumberInput' | 'CheckBox',
+  expandable: boolean,
+  id: Id,
+  index: number,
+  key: string,
+  label: string
+};
+type NewModel = {
+  conditionalQuestions: Question[]
+  created: number,
+  keys: Key[]
+  questions: Question[],
+  unusedKeys: Key[]
+};
+
+
+@Injectable()
+export class Network {
+  constructor(private http: Http, private authService: AuthService) {}
+
+  private getCredentials(): Headers {
+    if (this.authService.credentials === undefined) {
+      throw new Error('undefined credentials in data service');
+    }
+    const headers = new Headers();
+    headers.append("Authorization", "Basic " + this.authService.credentials);
+    return headers;
+  }
+
+  push(data): Observable<Response>  {
+    const headers = this.getCredentials()
+    headers.append('Content-Type', 'application/json');
+    const options = new RequestOptions({ headers: headers });
+    return Observable.of(data)
+      .map(screener => JSON.stringify({ screener: screener }))
+      .switchMap(body => this.http.post('/protected/screener', body, options))
+      .map(response => response.json().response)
+      .timeout(30000);
+  }
+
+  pull(): Observable<Response>  {
+    const headers = this.getCredentials()
+    const options = new RequestOptions({ headers: headers });
+    return this.http.get('/protected/screener', options)
+      .map(res => res.json().response)
+      .retry(2)
+      .timeout(50000)
+  }
+}
+
+@Injectable() 
+export class NewScreenerModel {
+  private model: NewModel;
+  private controls: FormGroup;
+
+  constructor(data: any) {
+    this.model = {
+      created: data.created || 0,
+      questions: data.questions.sort(this.questionComparator) || [],
+      conditionalQuestions: data.questions.sort(this.questionComparator) || [],
+      keys: data.keys.sort(this.keyComparator) || [],
+      unusedKeys: []
+    };
+
+    this.controls = new FormGroup({})
+
+    const allQuestions = [ ...this.model.questions, ...this.model.conditionalQuestions ];
+
+    this.model.unusedKeys = this.model.keys
+      .filter(key => allQuestions.find(q => q.key === key.name) === undefined)
+      .sort(this.keyComparator);
+
+    for (const q of allQuestions) {
+      const control = this.createFormGroup(q);
+      this.controls.addControl(q.id, control);
+    }
+  }
+
+  findKey(name: string): Key {
+    return this.model.keys.find(k => k.name === name);
+  }
+
+  findQuestion(id: Id): Question {
+    return this.model.questions.find(q => q.id === id);
+  }
+
+  findCondiitonalQuestion(id: Id): Question {
+    return this.model.conditionalQuestions.find(q => q.id === id);
+  }
+
+  getQuestionType(question): QuestionType {
+    if(question === undefined || question.id === undefined) return INVALID_QUESTION;
+
+    const searchInQuestions: Question = this.findQuestion(question.id);
+    const searchInConditionals: Question = this.findCondiitonalQuestion(question.id);
+
+    if(searchInQuestions !== undefined && searchInConditionals === undefined) {
+      return CONSTANT_QUESTION;
+    }
+
+    if(searchInQuestions === undefined && searchInConditionals !== undefined) {
+      return CONDITIONAL_QUESTION;
+    }
+      
+    return INVALID_QUESTION;
+  }
+
+  private createFormGroup(question): FormGroup {
+    const assignControl = (accum: FormGroup, key: string) => {
+      accum[key] = key !== 'conditionalQuestions' ? 
+                   new FormControl(question[key], Validators.required) : 
+                   new FormControl(question[key]);
+
+      return accum;
+    }
+
+    const approvedProperties = [
+      'conditionalQuestions',
+      'controlType',
+      'expandable',
+      'id',
+      'index',
+      'key',
+      'label'
+    ]
+
+    return Object.keys(question)
+        .filter(key => approvedProperties.find(p => p === key) !== undefined)
+        .reduce(assignControl, <FormGroup>{})
+  }
+
+  private keyComparator(a: Key, b: Key): number {
+    const titleA = a.name.toUpperCase();
+    const titleB = b.name.toUpperCase();
+
+    if (titleA === undefined || titleB === undefined) return -1;
+
+    if (titleA < titleB) return -1;
+
+    if (titleB < titleA) return 1;
+
+    return 0;
+  }
+
+  private questionComparator(a: Question, b: Question): number {
+    let aIndex = a.index,
+        bIndex = b.index;
+
+    if (aIndex === undefined || bIndex === undefined ) return -1;
+
+    return a.index - b.index;
+  }
+
+  swapQuestions(questionA: Question, questionB: Question) {
+    const typeA = this.getQuestionType(questionA);
+    const typeB = this.getQuestionType(questionB);
+
+    if(!this.controls.contains(questionA.id) || !this.controls.contains(questionB.id)) {
+      throw new Error('unable to find controls for both questions');
+    }
+
+    const questionA_index_controls = this.controls.get([questionA.id, 'index']);
+    const questionB_index_controls = this.controls.get([questionB.id, 'index']);
+
+    if (questionA_index_controls === null || questionB_index_controls === null){
+      throw new Error('unable to find index control for both questions')
+    }
+
+    if(typeA === INVALID_QUESTION || typeB === INVALID_QUESTION ) return;
+
+    questionA_index_controls.setValue(questionB.index);
+    questionB_index_controls.setValue(questionB_index_controls);
+
+    if (typeA === CONSTANT_QUESTION && typeB == CONSTANT_QUESTION){
+      this.model.questions.splice(questionA.index, 1, questionB);
+      this.model.questions.splice(questionB.index, 1, questionA);
+    } 
+    else if (typeA === CONSTANT_QUESTION && typeB === CONDITIONAL_QUESTION) {
+      this.model.questions.splice(questionA.index, 1, questionB);
+      this.model.conditionalQuestions.filter(question => question.id !== questionB.id);
+      this.model.conditionalQuestions.push(questionA);
+    } 
+    else if (typeA === CONDITIONAL_QUESTION && typeB === CONSTANT_QUESTION ) {
+      this.model.questions.splice(questionB.index, 1, questionA);
+      this.model.conditionalQuestions.filter(question => question.id !== questionA.id);
+      this.model.conditionalQuestions.push(questionB);
+    }
+  }
+
+  addQuestion() {
+    const id = randomString();
+    const key = 'invalid'.concat(randomString())
+    const index = this.model.questions.length;
+    const blank: Question = {
+      controlType: 'invalid',
+      key: key,
+      label: '',
+      expandable: false,
+      index: index,
+      id: id,
+      conditionalQuestions: []
+    };
+
+    const control: FormGroup = this.createFormGroup(blank);
+    this.controls.addControl(id, control);
+  }
+}
+
+@Injectable()
+export class ScreenerController {
+  private model: NewScreenerModel;
+  public state$ = new ReplaySubject<NewScreenerModel>(15);
+
+  constructor(private network: Network) {}
+
+  populate() {
+    this.network.pull().subscribe(
+      response => {
+        this.model = new NewScreenerModel(response);
+        this.state$.next(this.model);
+      },
+      error => console.error(error),
+      () => console.log('[ScreenerController.populate()]  NETWORK PULL COMPLETED')
+    )
+  }
+
+
 }
 
 
