@@ -1,25 +1,30 @@
-<div class="flex col-12 wrapper">
-  <section id="conditional-overview" class="flex-column">
-    <div class="center p1">
-      <button md-mini-fab class="center" style="background-color:#0074d9" (click)="handleAddQuestion()"> 
-        <i class="material-icons">add</i>
+<div class="flex col-12" style="min-height:45vh;">
+  <md-list class="col-3">
+    <div class="flex col-12">
+      <div class="col-1"></div>
+      <button class="col-10" md-button style="background-color:#0074d9" (click)="addQuestion.emit()"> 
+        add question
       </button>
+      <div class="col-1"></div>
     </div>
-    <div class="question-select" 
-      *ngFor="let question of questions"
+
+    <br><br>
+    <md-divider></md-divider>
+
+    <md-list-item class="question" [ngClass]="styles[question.id]" *ngFor="let question of questions"
+      (click)="selectQuestion(question)"
       draggable="true"
       (dragstart)="dragStart(question, $event)"
       (dragenter)="dragEnter(question, $event)"
       (dragover)="dragOver(question, $event)"
       (dragleave)="dragLeave(question)"
       (drop)="drop(question, $event)"
-      (dragend)="dragEnd()"
-      (click)="selectQuestion(question)"
-      [ngClass]="styles[question.id]">
-      {{ question.key }}
-    </div>
-  </section>
-  <md-card class="conditional-question flex-grow" *ngIf="selectedQuestion.length > 0">
+      (dragend)="dragEnd()">
+      <h4 md-line>{{question.key}}</h4>
+      <h4 md-line>{{question.controlType}}</h4>
+    </md-list-item>
+  </md-list>
+  <md-card class="conditional-question col-9 flex-grow" *ngIf="selectedQuestion.length > 0" style="min-height: 40vh;">
     <div class="flex col-12"> 
       <md-card-title> Selected Expandable Question </md-card-title>
       <div class="flex-grow"></div>

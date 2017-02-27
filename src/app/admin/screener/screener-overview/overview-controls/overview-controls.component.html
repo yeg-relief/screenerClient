@@ -1,16 +1,12 @@
-<main>
-  <div class="border rounded m1 flex flex-center col-12">
-    <div class="col-2"></div> 
-    <md-card-title class="col-5">screener questions </md-card-title>
-    <div class="col-2 flex-grow"></div>
+<md-list class="col-12">
+  <div class="flex flex-justify flex-center control-header">
+    <h3 md-subheader>Screener Questions</h3>
     <button class="col-2" md-mini-fab style="background-color:#0074d9" (click)="addQuestion()"> 
       <i class="material-icons">add</i>
     </button>
-    <div class="col-1"></div>
   </div>
-  <div class="ml1 question" 
-    [ngClass]="styles[question.id]" 
-    *ngFor="let question of questions" 
+  
+  <md-list-item class="question" [ngClass]="styles[question.id]" *ngFor="let question of questions"
     (click)="selectQuestion(question)"
     draggable="true"
     (dragstart)="dragStart(question, $event)"
@@ -19,9 +15,12 @@
     (dragleave)="dragLeave(question)"
     (drop)="drop(question, $event)"
     (dragend)="dragEnd()">
-    {{ question.key }}
-      <div *ngIf="question.expandable" style="margin-left: 0.75em">
-        [+] {{ question.conditionalQuestions.length }} hidden questions
-      </div>
-  </div>
-</main>
+      <md-icon md-list-avatar *ngIf="question.expandable" [style.width]="'1em'">content_copy</md-icon>
+      <md-icon md-list-avatar *ngIf="!question.expandable" [style.width]="'1em'"></md-icon>
+      <h4 md-line>{{question.key}}</h4>
+      <h4 md-line>{{question.controlType}}</h4>
+      <p md-line *ngIf="question.expandable"> 
+        [+] {{ question.conditionalQuestions.length }} hidden question(s) 
+      </p>
+  </md-list-item>
+</md-list>

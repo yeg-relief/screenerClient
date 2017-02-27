@@ -9,12 +9,16 @@
   width: 10vw;
 }
 
-.question-select {
+
+md-list {
+  overflow: scroll;
+  background-color: darkslateblue;
+  max-width: 10vw;
+  height: 45vh;
+}
+
+.question {
   cursor: pointer;
-  padding-top: 1em;
-  padding-left: 0.25em;
-  padding-bottom: 1em;
-  min-width: 10em;
 }
 
 .dragStart {
@@ -27,10 +31,6 @@
 
 .selected {
   background-color: #0074d9;
-}
-
-.wrapper {
-  min-height: 45vh;
 }
 
 .error {

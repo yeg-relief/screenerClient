@@ -73,7 +73,6 @@ export class AppComponent implements OnInit {
       .subscribe( val => {
         this.backgroundClass.background = !val;
         this.backgroundClass.backgroundcolor = val;
-        console.log(this.backgroundClass);
       });
   }
 }

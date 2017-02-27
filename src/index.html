@@ -11,7 +11,14 @@
 </head>
 <body>
   <app-root>
-    Loading...
+    <style>
+      .app-loading {
+        width: 50vw;
+        margin: 10vh 25vw;
+      }
+    </style>
+    <img src="assets/logo.svg" id="app-loading-image" class="app-loading">
+    <div id="app-loading-text" class="app-loading">Loading...</div>
   </app-root>
   <!--
   <script>
