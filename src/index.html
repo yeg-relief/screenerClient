@@ -1,5 +1,6 @@
 <!doctype html>
 <html>
+
 <head>
   <meta charset="utf-8">
   <title>YouCanBenefit</title>
@@ -9,28 +10,135 @@
   <link href="https://fonts.googleapis.com/css?family=Open+Sans:600" rel="stylesheet">
   <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 </head>
+
 <body>
   <app-root>
     <style>
-      .app-loading {
-        width: 50vw;
-        margin: 10vh 25vw;
+      @media(min-width: 64em) {
+        #slm-loading-image {
+          width: 50vw;
+          margin: 10vh 25vw;
+        }
       }
+
+
+      @media(min-width: 52em) and (max-width:64em) {
+        #slm-loading-image {
+          width: 55vw;
+          margin: 10vh 27.5vw;
+        }
+      }
+
+
+      @media(min-width: 40em) and (max-width: 52em) {
+        #slm-loading-image {
+          width: 65vw;
+          margin: 10vh 17.5vw
+        }
+      }
+
+
+      @media(min-width: 30em) and (max-width: 40em){
+        #slm-loading-image {
+          width: 75vw;
+          margin: 10vh 12.5vw;
+        }
+      }
+
+
+      @media(max-width: 30em){
+        #slm-loading-image {
+          width: 80vw;
+          margin: 10vh 10vw;
+        }   
+      }
+
+      .progress-line, .progress-line:before {
+        height: 3px;
+        width: 100%;
+        margin: 0;
+      }
+
+      #slm-loading-text{
+        position: fixed;
+        margin: 0 50vw;
+        font-family: 'Open Sans', sans-serif;
+      }
+
+      .progress-line {
+        background-color: #b3d4fc;
+        display: -webkit-flex;
+        display: flex;
+      }
+      .progress-line:before {
+        background-color: #3f51b5;
+        content: '';
+        -webkit-animation: running-progress 2s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+        animation: running-progress 2s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+      }
+      @-webkit-keyframes running-progress {
+        0% { margin-left: 0px; margin-right: 100%; }
+        50% { margin-left: 25%; margin-right: 0%; }
+        100% { margin-left: 100%; margin-right: 0; }
+      }
+      @keyframes running-progress {
+        0% { margin-left: 0px; margin-right: 100%; }
+        50% { margin-left: 25%; margin-right: 0%; }
+        100% { margin-left: 100%; margin-right: 0; }
+      }
+
     </style>
-    <img src="assets/logo.svg" id="app-loading-image" class="app-loading">
-    <div id="app-loading-text" class="app-loading">Loading...</div>
+    <img src="assets/logo.svg" id="slm-loading-image" class="slm-loading">
+    <div class="progress-line"></div>
+    <div id="slm-loading-text" class="slm-loading">Loading...</div>
+
+    <script>
+      (function(){
+        console.log('loading function started');
+        var text        = document.getElementById('slm-loading-text'),
+            content     = 'Loading',
+            val         = 0,
+            max         = 20,
+            suffixCount = 0, //how many periods appear after 'Loading'
+            animate     = undefined;
+
+        console.log(max)
+
+        var loading = function(){
+          console.log('loading called')
+          if (val >= max) clearInterval(animate);
+
+          val += 1;
+          if (text) {
+            var numPeriods = suffixCount % 5;
+            var newContent = content;
+            for(var i = 0; i < numPeriods; i++){
+              newContent = newContent + '.';
+            }
+            text.textContent = newContent;
+            suffixCount++;
+          }
+        }
+
+        animate = setInterval(function(){
+          loading();
+        }, 500)
+      })();
+    </script>
+
   </app-root>
-  <!--
-  <script>
-    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
-    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
-    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
-    })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+    <!--
+      <script>
+        (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+        (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+        m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+        })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
 
-    ga('create', 'UA-92644937-1', 'auto');
-    ga('send', 'pageview');
+        ga('create', 'UA-92644937-1', 'auto');
+        ga('send', 'pageview');
 
-  </script>
-  -->
-</body>
+      </script>
+      -->
+  </body>
+
 </html>
