@@ -50,7 +50,13 @@
         #slm-loading-image {
           width: 80vw;
           margin: 10vh 10vw;
+        
         }   
+      }
+
+      .slm-loaded{
+        border: 1px solid lightslategray;
+        background-color: green;
       }
 
       .progress-line, .progress-line:before {
@@ -93,19 +99,25 @@
     <div id="slm-loading-text" class="slm-loading">Loading...</div>
 
     <script>
+      // app-root is rebuilt when this event is called...
+      window.addEventListener("load", function(event) {
+        const target = document.getElementById('slm-loading-text');
+        if(target !== null){
+          target.textContent = 'Content Loaded... App Starting'
+          target.classList.add('slm-loaded');
+        }
+      });
+
+
       (function(){
-        console.log('loading function started');
         var text        = document.getElementById('slm-loading-text'),
             content     = 'Loading',
             val         = 0,
             max         = 20,
-            suffixCount = 0, //how many periods appear after 'Loading'
+            suffixCount = 0,
             animate     = undefined;
 
-        console.log(max)
-
         var loading = function(){
-          console.log('loading called')
           if (val >= max) clearInterval(animate);
 
           val += 1;
@@ -125,6 +137,8 @@
         }, 500)
       })();
     </script>
+
+    
 
   </app-root>
     <!--
