@@ -1,7 +1,10 @@
 import { Component, Input, OnInit, OnDestroy, Output, EventEmitter } from '@angular/core';
-import { ScreenerModel } from '../screener-model';
-import { FormGroup } from '@angular/forms';
+import { ScreenerController, Id, Question } from '../services';
+import { Observable } from 'rxjs/Observable';
 import { Subscription } from 'rxjs/Subscription';
+import { BehaviorSubject } from 'rxjs/BehaviorSubject';
+import 'rxjs/add/operator/multicast';
+import 'rxjs/add/operator/startWith';
 
 @Component({
   selector: 'app-screener-question',
@@ -9,66 +12,63 @@ import { Subscription } from 'rxjs/Subscription';
   styleUrls: ['./screener-question.component.css']
 })
 export class ScreenerQuestionComponent implements OnInit {
-  @Input() question;
-  @Output() keyChange = new EventEmitter<any>();
-  @Output() onDelete = new EventEmitter<any>();
-  private conditionalQuestions = [];
-  private showConditionals = true;
-  private selectedQuestion = [];
+  @Input() question: BehaviorSubject<Id>;
+  @Output() onDelete = new EventEmitter<Id>();
+  @Output() onAddConditional = new EventEmitter<Id>();
+
+  private questionUpdate: Observable<Id>;
+  private conditionalQuestions = new Observable<Id[]>();
+  private selectedQuestion = new BehaviorSubject<Id>('');
   
-  //private form: FormGroup;
-  constructor(public model: ScreenerModel) { }
+  constructor(public controller: ScreenerController) { }
 
   ngOnInit() {
-    //this.form = this.model.getModelControls();
-    if (this.question.expandable && Array.isArray(this.question.conditionalQuestions)  
-        && this.question.conditionalQuestions.length > 0)
-    {
-      this.conditionalQuestions = this.model.findConditionals(this.question);
-    }
+    this.questionUpdate = this.question.asObservable().multicast(new BehaviorSubject<Id>('')).refCount()
+
+    this.conditionalQuestions = this.questionUpdate
+      .map( id => {
+        const q = this.controller.findQuestionById(id);
+        if( q !== undefined && Array.isArray(q.conditionalQuestions) )  {
+          if(q.conditionalQuestions[0] !== undefined) this.selectedQuestion.next(q.conditionalQuestions[0]);
+          return q.conditionalQuestions;
+        }
+        return [];
+      })
+      .startWith([]);
   }
 
-  deleteQuestion() {
-    this.model.delete(this.question);
-    this.onDelete.emit(this.question);
-  }
+  handleSelect(questionID: Id) { this.selectedQuestion.next( questionID ) }
 
-  toggleConditionals() {
-    this.showConditionals = !this.showConditionals;
-  }
+  deleteQuestion() { this.questionUpdate.take(1).subscribe(id => this.onDelete.emit(id)) }
 
-  addConditionalQuestion() {
-    this.model.addConditionalQuestion(this.question);
-    this.conditionalQuestions = this.model.findConditionals(this.question);
-    if (this.conditionalQuestions.length > 0){
-      this.selectedQuestion = [ 
-        this.conditionalQuestions[this.conditionalQuestions.length - 1] 
-      ];
-    } 
-  }
+
+  addConditionalQuestion() { this.questionUpdate.take(1).subscribe(id => this.onAddConditional.emit( id ) ) }
 
   makeExpandable($event) {
-    if ($event && !Array.isArray(this.question.conditionalQuestions)) {
-      this.question.conditionalQuestions = [];
-      this.model.makeExpandable(this.question);
-    }
-
-    this.question.expandable = $event;
-    
-
-    if (!this.question.expandable && Array.isArray(this.question.conditionalQuestions) ){
-      this.model.clearCondtionals(this.question);
-    }
+    this.questionUpdate.take(1).subscribe(id => {
+      const question = this.controller.findQuestionById(id);
+      if (!$event && question.expandable) {
+        // launch some type of confirmation dialog here.
+        this.controller.command$.next( {
+          fn: this.controller.commands.clearConditionals,
+          args: [ id ]
+        })
+      }
+    })
   }
 
-  deleteConditionalQuestion(question) {
-    this.conditionalQuestions = this.conditionalQuestions.filter(q => q.id !== question.id);
-    this.model.deleteConditional(this.question, question);
+  deleteConditionalQuestion(questionID: Id) {
+    this.controller.command$.next( {
+      fn: this.controller.commands.deleteQuestion,
+      args: [ questionID ]
+    })
   }
 
 
   swapConditionalQuestions($event) {
-    this.model.swapConditionals($event.sourceQuestion, $event.targetKeyName);
-    this.conditionalQuestions = this.model.findConditionals(this.question).sort( (a, b) => a.index - b.index)
+    this.controller.command$.next( {
+      fn: this.controller.commands.swapQuestions,
+      args: [ $event.sourceID, $event.targetKeyName ]
+    });
   }
 }

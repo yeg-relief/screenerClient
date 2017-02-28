@@ -1,8 +1,13 @@
 import { Component, OnInit, Output, EventEmitter } from '@angular/core';
-import { ScreenerModel } from '../screener-model';
+import { ScreenerController, Question, Id } from '../services';
 import { ReplaySubject } from 'rxjs/ReplaySubject';
-import { Subscription } from 'rxjs/Subscription';
-
+import { Observable } from 'rxjs/Observable';
+import { BehaviorSubject } from 'rxjs/BehaviorSubject';
+import 'rxjs/add/operator/mergeMap';
+import 'rxjs/add/operator/take';
+import 'rxjs/add/operator/filter';
+import 'rxjs/add/operator/map';
+import 'rxjs/add/observable/of';
 
 @Component({
   selector: 'app-screener-overview',
@@ -10,84 +15,59 @@ import { Subscription } from 'rxjs/Subscription';
   styleUrls: ['./screener-overview.component.css'],
 })
 export class ScreenerOverviewComponent implements OnInit {
-  questions: any[];
-  selectedQuestion: any[] = [];
-  selectedQuestion$ = new ReplaySubject<any>(1);
-  subscriptions: Subscription[];
-  constructor(public model: ScreenerModel) { }
+  questions: Observable<string[]>;
+  selectedQuestion = new BehaviorSubject('');
+
+  constructor(public controller: ScreenerController) { }
 
   ngOnInit() {
-    // small bootstrap...
-    const bootstrap = this.model.load().subscribe(data => console.log(data));
+    this.controller.populateModel();
+    const questions = this.controller.state$.asObservable().map(state => state.questions)
+  }
+
+  ngOnDestroy() {}
+
+  handleKeyFilter(keyName: string) {
+    const q = this.controller.findQuestionByKey(keyName);
+    if (q === undefined) {
+      this.selectedQuestion.next('');
+    } else {
+      this.selectedQuestion.next(q.id);
+    }
+  }
+
+  handleSelect(id) {    
+    const newSelection = this.questions.take(1)
+                             .map(ids => ids.filter(i => i === id) )
+                             .map(id => id[0])
+                             .subscribe( (update: string) => { if(update !== undefined) this.selectedQuestion.next( update ) } )
     
-    const questions = this.model.questions$.subscribe( (questions: any[]) => {
-      this.questions = [ ...questions.sort( (a,b) => a.index - b.index) ];
-      if (this.questions.length > 0 && this.selectedQuestion.length === 0) {
-        this.selectedQuestion = [ this.questions[0] ];
-        this.selectedQuestion$.next( this.questions[0] );
-      }
-    })
-
-    const keyFilter = this.model.keyFilter$
-      .subscribe( keyName => {
-        const regexp = new RegExp(keyName);
-        this.selectedQuestion = [  ];
-        this.selectedQuestion$.next({});
-        let filterQuestion = this.questions.find(question => regexp.test(question.key))
-        if (filterQuestion) {
-          this.selectedQuestion = [ filterQuestion ];
-          this.selectedQuestion$.next( filterQuestion );
-        } else {
-          for(const q of this.questions) {
-            if (q.expandable) {
-              const conditionalQuestions = this.model.findConditionals(q);
-              filterQuestion = conditionalQuestions.find(question => regexp.test(question.key));
-              if (filterQuestion){
-                this.selectedQuestion = [ q ];
-                this.selectedQuestion$.next( q );
-                break;
-              }
-            }
-          }
-        }
-        
-      });
-    this.subscriptions = [bootstrap, questions, keyFilter];
-  }
-
-  ngOnDestroy() {
-    for(const sub of this.subscriptions) {
-      if (!sub.closed){
-        sub.unsubscribe();
-      }
-    }
-  }
-
-  handleSelect(question) {
-    const newSelection = this.questions.find(q => q.id === question.id);
-    if (newSelection) this.selectedQuestion = [ newSelection ];
-  }
-
-  updateOverview(selectedQuestion, $event){
-    const updateQuestion = this.questions.find(question => question.id === selectedQuestion.id);
-    if (updateQuestion) {
-      updateQuestion.key = $event;
-    }
   }
 
   handleSwap($event) {
-    this.model.swapQuestions($event.sourceQuestion, $event.targetKeyName);
+    this.controller.command$.next({
+        fn: this.controller.commands.swapQuestions, 
+        args: [$event.sourceID, $event.targetKeyName] 
+    });
   }
 
-  handleDelete(question) {
-    this.questions = this.questions.filter(q => q.id !== question.id);
-    if (this.questions.length > 0) {
-      this.handleSelect(this.questions[0])
-      this.selectedQuestion$.next(this.questions[0])
-    } else {
-      this.selectedQuestion = [];
-      this.selectedQuestion$.next({});
-    }
+  handleDelete(questionID: Id) {
+    this.controller.command$.next({
+        fn: this.controller.commands.deleteQuestion, 
+        args:  [ questionID ] 
+    });
+
+    this.questions.take(1)
+        .filter( ids => ids.length > 0 )
+        .mergeMap( ids => Observable.of(ids[0]) )
+        .subscribe( (update: string) => { if(update !== undefined) this.selectedQuestion.next( update ) } )
+  }
+
+  handleAddConditional(questionID: Id) {
+    this.controller.command$.next({
+      fn: this.controller.commands.addConditionalQuestion,
+      args: [ questionID ]
+    })
   }
 
 }

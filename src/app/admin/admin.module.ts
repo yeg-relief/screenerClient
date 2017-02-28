@@ -20,7 +20,7 @@ import { HttpModule } from '@angular/http';
 
 import { ProgramsResolverService } from './programs/program-overview/programs-resolver.service';
 import { ScreenerOverviewComponent } from './screener/screener-overview/screener-overview.component';
-import { ScreenerModel } from './screener/screener-model';
+import { ScreenerModel, ScreenerNetwork, ScreenerController } from './screener/services';
 import { ScreenerToolbarComponent } from './screener/screener-toolbar/screener-toolbar.component';
 
 import { ReactiveFormsModule, FormsModule } from '@angular/forms';
@@ -58,7 +58,7 @@ import { OverviewControlsComponent } from './screener/screener-overview/overview
     HttpModule, 
     KeyResolverService,
     ProgramsResolverService,
-    ScreenerModel
+    ScreenerModel, ScreenerNetwork, ScreenerController
   ]
 })
 export class AdminModule { }

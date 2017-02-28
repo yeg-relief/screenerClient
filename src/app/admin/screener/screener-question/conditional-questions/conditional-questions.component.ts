@@ -1,7 +1,12 @@
 import { Component, OnInit, OnDestroy, Input, Output, EventEmitter } from '@angular/core';
 import { FormGroup } from '@angular/forms';
-import { ScreenerModel } from '../../screener-model';
+import { ScreenerController, Id, Question } from '../../services';
+import { BehaviorSubject } from 'rxjs/BehaviorSubject';
+import { Observable } from 'rxjs/Observable';
 import { Subscription } from 'rxjs/Subscription';
+import 'rxjs/add/operator/take';
+import 'rxjs/add/operator/multicast';
+import 'rxjs/add/observable/combineLatest';
 
 @Component({
   selector: 'app-conditional-questions',
@@ -9,81 +14,85 @@ import { Subscription } from 'rxjs/Subscription';
   styleUrls: ['./conditional-questions.component.css']
 })
 export class ConditionalQuestionsComponent implements OnInit, OnDestroy {
-  @Input() questions: any[];
-  @Input() selectedQuestion: any[];
+  @Input() questionIDs: Observable<Id[]>;
+  @Input() selectedQuestion: Observable<Id>;
+  @Output() handleSelect = new EventEmitter<Id>();
+
   @Output() addQuestion = new EventEmitter<any>();
-  @Output() removeConditional = new EventEmitter<any>();
+  @Output() removeConditional = new EventEmitter<Id>();
   @Output() swapConditionals = new EventEmitter<any>();
   private subscriptions: Subscription[] = [];
   //@Input() form: FormGroup;
   //private questionControl: FormGroup;
   private styles = {};
+  private questions: Observable<Question[]>;
   private timeout;
-  constructor(public model: ScreenerModel) { }
+  constructor(public controller: ScreenerController) { }
 
   ngOnInit() {
-    for(const question of this.questions) {
-      this.styles[question.id] = {
-        selected: false,
+
+    const buildStyle = (id, isSelected) => {
+      const style = {};
+      style[id] = {
+        selected: isSelected,
         dragStart: false,
         dragOver: false,
         error: false
+      };
+      this.styles = (<any>Object.assign({}, this.styles, style))
+    }
+
+    const selectedSub = this.selectedQuestion.subscribe( id => {
+      for(const styleID in this.styles) {
+        if (this.styles[styleID].selected !== undefined) {
+          this.styles[styleID].selected = false;
+        } else {
+          buildStyle(styleID, false);
+        }
       }
-    }
 
-    if (this.questions.length > 0) {
-      this.selectedQuestion = [ this.questions[0] ];
-      this.styles[ this.questions[0].id ].selected = true;
-    }
-
-    const errors = this.model.errors$.subscribe( (errors: string[]) => {
-      if (errors.length > 0) {
-        const errorQuestions = this.questions.filter(q => errors.find(id => q.id === id));
-
-        // mark errors
-        for(const errorQuestion of errorQuestions) {
-          if(this.styles[errorQuestion.id]) {
-            this.styles[errorQuestion.id].error = true;
-          } else {
-            this.styles[errorQuestion.id] = {
-              selected: false,
-              dragStart: false,
-              dragOver: false,
-              error: true
-            }
-          }
-        }
-        // unmark questions no longer in error
-        for(const key in this.styles) {
-          if (errorQuestions.find(q => q.id === key) === undefined && this.styles[key].error === true) {
-            this.styles[key].error = false;
-          }
-        }
-
-      } else {
-        // no errors at all => unmark all
-        for(const key in this.styles) {
-          this.styles[key].error = false;
-        }
+      if (this.styles[id] === undefined || this.styles[id].selected === undefined) {
+        buildStyle(id, true);
+      } 
+      else if (this.styles[id].selected !== undefined) {
+        this.styles[id].selected = true;
       }
     })
-    
-    const keyFilter = this.model.keyFilter$
-      .subscribe( keyName => {
-        const regexp = new RegExp(keyName);
-        let filterQuestion = this.questions.find(question => regexp.test(question.key))
-        if (filterQuestion) {
-          this.selectQuestion(filterQuestion);
-        } else {
-          this.selectedQuestion = [];
-          const selected = Object.keys(this.styles).filter(key => this.styles[key].selected = true);
-          for(const key of selected) {
-            this.styles[key].selected = false;
-          }
+
+    this.questions = this.questionIDs
+      .map(ids => ids.reduce( (accum, id) => [this.controller.findQuestionById(id), ...accum], []) )
+      .multicast( new BehaviorSubject( [] ) ).refCount();
+
+    const errors = Observable.combineLatest(
+        this.controller.state$.map(state => state.errors),
+        this.questions
+    )
+      .subscribe( ([errors , questions ]) => {
+
+        // add style for question not in styles
+        for (const q of questions ) {
+          if (this.styles[q.id] === undefined) buildStyle(q.id, false);
         }
-    });
-    
-    this.subscriptions = [ keyFilter, errors ]
+
+        for(const id in this.styles) {
+
+          // set errors
+          if (!errors.has(id) ) {
+            this.styles[id] = (<any>Object).assign({}, this.styles[id], { error: false })
+          } else {
+            this.styles[id] = (<any>Object).assign({}, this.styles[id], { error: true })
+          }
+
+          // delete styles for deleted questions
+          if (!errors.has(id) && questions.find(q => q.id === id) === undefined) {
+            delete this.styles[id];
+          }
+
+        }
+
+      })
+
+    this.subscriptions = [ selectedSub, errors ]
   }
 
 
@@ -100,71 +109,34 @@ export class ConditionalQuestionsComponent implements OnInit, OnDestroy {
     }
   }
 
-  handleAddQuestion() {
+  handleAddQuestion() {  
     this.addQuestion.emit();
-    this.timeout = setTimeout(() => {
-      if (this.questions.length > 0) this.selectQuestion(this.questions[this.questions.length - 1])
-    }, 60)
+    const update = () => this.questionIDs.take(1).subscribe(ids => {
+       if (ids.length > 0) {
+         this.selectQuestion( this.controller.findQuestionById(ids[ids.length - 1]) );
+       } 
+    }) 
+    setTimeout(update, 60);
+  }
+
+  selectQuestion(question: Question) {  this.handleSelect.emit(question.id) }
+
+  deleteConditionalQuestion() {
+    this.selectedQuestion.take(1).subscribe( (questionID: Id) => {
+      this.removeConditional.emit(questionID);
+    })
     
-  }
-
-  selectQuestion(question) {
-    this.selectedQuestion = [question];
-    const selected = Object.keys(this.styles).filter(key => this.styles[key].selected = true)
-    for(const key of selected) {
-      this.styles[key].selected = false;
-    }
-    if (this.styles[question.id]){
-      this.styles[question.id].selected = true;
-    } else {
-      this.styles[question.id] = {
-        selected: true,
-        dragStart: false,
-        dragOver: false
-      }
-    }
-  }
-
-  deleteConditionalQuestion(selectedQuestion) {
-    if (!selectedQuestion){
-      console.error('invalid deleteConditionalQuestion')
-      return;
-    }
-    this.questions = this.questions.filter(question => question.id !== selectedQuestion.id);
-    this.removeConditional.emit(selectedQuestion);
 
     const selected = Object.keys(this.styles).filter(key => this.styles[key].selected = true)
     for(const key of selected) {
       this.styles[key].selected = false;
     }
-
-    if (this.questions.length > 0){
-      const q = this.questions[0] 
-      this.selectedQuestion = [ q ];
-      if (this.styles[q.id]) {
-        this.styles[q.id].selected = true;
-      } else {
-        this.styles[q.id] = {
-          selected: true,
-          dragStart: false,
-          dragOver: false
-        }
-      }
-    } else {
-      this.selectedQuestion = [];
-    }
-
-  }
-
-  updateOverview(question, $event) {
-    const qq = question[0];
-    let updateQuestion;
-    if (qq) {
-      updateQuestion = this.questions.find(q => q.id === qq.id);
-    }
-    if (updateQuestion) {
-      updateQuestion.key = $event;
-    }
+    const update = () => this.questionIDs.take(1).subscribe(ids => {
+       if (ids.length > 0) {
+         this.selectQuestion( this.controller.findQuestionById(ids[ids.length - 1]) );
+       } 
+    }) 
+    setTimeout(update, 60);
   }
 
   dragStart(question, $event) {
@@ -240,26 +212,21 @@ export class ConditionalQuestionsComponent implements OnInit, OnDestroy {
     }    
 
     const targetKey = $event.target.innerText;
-    const draggingKey = Object.keys(this.styles).filter(key => this.styles[key].dragStart === true);
-    if (draggingKey.length !== 1) {
-      console.error(`Strange behaviour with conditional drag and drop index swap: dragging.length = ${draggingKey.length}`);
+    const draggingID = Object.keys(this.styles).filter(key => this.styles[key].dragStart === true)[0];
+    if (draggingID === undefined) {
+      console.error(`[OverviewControlsComponent].drop: Strange behaviour with conditional drag and drop index swap: ${draggingID}`);
       return false;
     }
 
-    
-
-    const q = this.questions.find(qq => qq.id === draggingKey[0]);
-    if (q) {
-      this.swapConditionals.emit({
-        sourceQuestion: q,
-        targetKeyName: targetKey
-      })
-    }
-    
-    for(const key in this.styles){
+    for (const key in this.styles) {
       this.styles[key].dragStart = false;
       this.styles[key].dragOver = false;
     }
+
+    if (!this.controller.hasKey(targetKey) && targetKey.substr(0, 7) !== 'invalid'){
+      return false;
+    }
+    this.swapConditionals.emit({ sourceID: draggingID, targetKeyName: targetKey });
  
     return false;
   }

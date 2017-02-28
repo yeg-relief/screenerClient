@@ -1,47 +1,43 @@
-<form class="user-question"  [formGroup]="form" *ngIf="question">
-
-
-
-  <div [ngClass]="{ 'filter-question': filterQuestion }">
-  <md-tab-group style="width: 100%; ">
+<form class="user-question"  [formGroup]="form" *ngIf="form !== undefined">
+  <md-tab-group style="width: 100%;">
     <md-tab label="View" >
       
       <div class="flex flex-column space-around col-12 p1" style="background-color: lightblue; height:20vh;">
         
-        <div id="meta-information" class="col-4 border-left px1"> question {{ question.index }} </div>
+        <div id="meta-information" class="col-4 border-left px1"> question {{ form.value.index }} </div>
         <div id="spacer" class ="col-6"></div>
         <div class="clearfix flex py1"></div>
         
         
         
 
-        <section [ngSwitch]="question.controlType">
+        <section [ngSwitch]="form.value.controlType">
           
           <div *ngSwitchCase="'NumberInput'">
-            <md-card-title id="question-label"> {{ question.label }} </md-card-title>
+            <md-card-title id="question-label"> {{ form.value.label }} </md-card-title>
  
             <div class="py1"></div>
 
-            <md-input  placeholder="input here"></md-input>
+            <md-input placeholder="input here"></md-input>
           
           </div>
 
           <div *ngSwitchCase="'CheckBox'"> 
-            <md-checkbox > {{ question.label }} </md-checkbox>
+            <md-checkbox > {{ form.value.label }} </md-checkbox>
           </div>
 
 
           <div *ngSwitchCase="'NumberSelect'">
-            <md-card-title id="question-label"> {{ question.label }} </md-card-title>
+            <md-card-title id="question-label"> {{ form.value.label }} </md-card-title>
 
             <select style="width: 15vw"> 
-              <option *ngFor="let option of question.options"> {{ option }} </option>
+              <option *ngFor="let option of form.value.options"> {{ option }} </option>
             </select>
           </div>
 
           
         
-          <div *ngSwitchDefault> {{ question.label }} </div>
+          <div *ngSwitchDefault> {{ form.value.label  }} </div>
 
         </section>
 
@@ -62,31 +58,31 @@
         <div class="flex flex-center col-12">
           <label>Key Value
             <select formControlName="key" placeholder = "question key">
-              <option disabled selected [value]="question.key"> {{ question.key }} </option>
-              <option *ngFor="let key of unusedKeys" [value]="key.name"> {{ key.name }} </option>
+              <option selected disabled  [value]="form.value.key"> {{ form.value.key }} </option>
+              <option *ngFor="let key of unusedKeys" [value]="key"> {{ key }} </option>
             </select>
           </label>
           <div class="col-1"></div>
           <label>Control Value
             <select formControlName="controlType" placeholder = " control type ">
               <option selected disabled [value]="question.controlType"> {{ question.controlType }} </option>
-              <option [selected]="question.controlType === 'NumberInput'" [value]="'NumberInput'" > type </option>
-              <option [selected]="question.controlType === 'CheckBox'" [value]="'CheckBox'" > checkbox </option>
-              <option [selected]="question.controlType === 'NumberSelect'" [value]="'NumberSelect'" > button </option>
+              <option [value]="'NumberInput'" > type </option>
+              <option [value]="'CheckBox'" > checkbox </option>
+              <option [value]="'NumberSelect'" > button </option>
             </select>
           </label>
           <div class="col-1"></div>
-          <label *ngIf="question.controlType === 'CheckBox'"> Expandable
+          <label *ngIf="form.value.controlType === 'CheckBox'"> Expandable
             <md-checkbox class="pl2" formControlName="expandable"></md-checkbox>
           </label>
         </div>
 
         
-        <div class="flex col-12 flex-center" *ngIf="question.controlType === 'NumberSelect'">
-          <md-input class="col-4" (input)="handleInput($event)" [value]= "optionValue" placeholder="option value"></md-input>
+        <div class="flex col-12 flex-center" *ngIf="form.value.controlType === 'NumberSelect'">
+          <md-input class="col-4" [formControl]="optionInput" placeholder="option value"></md-input>
           <button md-button (click)="handleOptionAdd()"> => </button>
           <md-chip-list>
-            <md-chip (click)="removeOption(i)" *ngFor="let option of question.options; let i = index"> {{ option }} </md-chip>
+            <md-chip (click)="removeOption(option)" *ngFor="let option of form.value.options"> {{ option }} </md-chip>
           </md-chip-list>
         </div>
 
@@ -96,13 +92,7 @@
   
   </md-tab-group>
 
-  
-    <div *ngIf="form.errors">
-      {{ form.errors | json }}
+    <div *ngIf="errors.length > 0">
+      <div *ngFor="let error of errors" style="color: red"> {{ error }} </div>
     </div>
-
-  </div>
-
-
-  
 </form>

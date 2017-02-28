@@ -1,7 +1,11 @@
 import { Component, OnInit, OnDestroy, Input, Output, EventEmitter } from '@angular/core';
+import { Observable } from 'rxjs/Observable';
 import { ReplaySubject } from 'rxjs/ReplaySubject';
-import { ScreenerModel } from '../../screener-model';
+import { BehaviorSubject } from 'rxjs/BehaviorSubject';
+import { ScreenerController, Question } from '../../services';
 import 'rxjs/add/operator/take';
+import 'rxjs/add/operator/multicast';
+import 'rxjs/add/observable/combineLatest';
 import { Subscription } from 'rxjs/Subscription';
 
 @Component({
@@ -10,62 +14,98 @@ import { Subscription } from 'rxjs/Subscription';
   styleUrls: ['./overview-controls.component.css']
 })
 export class OverviewControlsComponent implements OnInit, OnDestroy {
-  @Input() questions: any[];
-  @Input() selectedQuestion: ReplaySubject<any>;
-  @Output() questionSelected = new EventEmitter<any>();
-  @Output() swapQuestions = new EventEmitter<any>();
+  @Input() question_IDs: Observable<string[]>;
+  @Input() selectedQuestion_ID: BehaviorSubject<string>;
+  @Output() questionSelected = new EventEmitter<Question>();
+  @Output() swapQuestions = new EventEmitter<{ [key: string]: string }>();
+  private questions: Observable<Question[]>;
   private styles = {};
+  
   private subscriptions: Subscription[];
 
-  constructor(public model: ScreenerModel) { }
+  constructor(public controller: ScreenerController) { }
 
   ngOnInit() {
-    if (this.questions && this.questions.length > 0) {
-      this.styles = this.questions.reduce((styles, question) => {
-        const style = {};
-        style[question.id] = {
-          selected: false
-        };
+    this.questions = this.question_IDs
+                      .map(ids => ids.reduce( (accum, id) => [this.controller.findQuestionById(id), ...accum], []) )
+                      .multicast( new BehaviorSubject( [] ) ).refCount();
 
-        return (<any>Object).assign(styles, style);
-      }, {});
-    }
+    const selectedQuestion = this.selectedQuestion_ID
+      .subscribe( id => {
+        for(const styleID in this.styles) {
+          this.styles[styleID].selected = false;
+        }
 
-    const error = this.model.errors$.subscribe( (errors: string[]) => {
-      if (errors.length > 0) {
-        const errorQuestions = this.questions.filter(q => errors.find(id => q.id === id));
+        if (this.styles[id] !== undefined && this.styles[id].selected !== undefined) {
+          this.styles[id].selected = true;
+        } else {
+          const style = {}
+          style[id] = { 
+            selected: true,
+            dragStart: false,
+            dragOver: false,
+            error: true
+          }
+          this.styles = (<any>Object).assign({}, this.styles, style)
+        }
 
-        // mark errors
-        for(const errorQuestion of errorQuestions) {
-          if(this.styles[errorQuestion.id]) {
-            this.styles[errorQuestion.id].error = true;
-          } else {
-            this.styles[errorQuestion.id] = {
+      })
+
+    const updateStyles = this.questions.subscribe(questions => {
+      if (Array.isArray(questions) && questions.length > 0) {
+        this.styles = questions.filter(question => question.id !== undefined)
+          .reduce( (styles, question) => {
+            const style = {};
+            style[question.id] = { 
               selected: false,
               dragStart: false,
               dragOver: false,
               error: true
             }
-          }
-        }
-        // unmark questions no longer in error
-        for(const key in this.styles) {
-          if (errorQuestions.find(q => q.id === key) === undefined && this.styles[key].error === true) {
-            this.styles[key].error = false;
-          }
-        }
-
-      } else {
-        // no errors at all => unmark all
-        for(const key in this.styles) {
-          this.styles[key].error = false;
-        }
+            return (<any>Object).assign(styles, style);
+          }, {})
       }
     })
 
-    const questionSelect = this.selectedQuestion.subscribe(question => this.selectQuestion(question));
+    const errors = Observable.combineLatest(
+        this.controller.state$.map(state => state.errors),
+        this.questions
+    )
+      .subscribe( ([errors , questions ]) => {
 
-    this.subscriptions = [ error, questionSelect ];
+        // add style for question not in styles
+        for (const q of questions ) {
+          if (this.styles[q.id] === undefined) {
+            const style = {}
+            style[q.id] = { 
+              selected: false,
+              dragStart: false,
+              dragOver: false,
+              error: true
+            }
+            this.styles = (<any>Object).assign({}, this.styles, style)
+          }
+        }
+
+        for(const id in this.styles) {
+
+          // set errors
+          if (!errors.has(id) ) {
+            this.styles[id] = (<any>Object).assign({}, this.styles[id], { error: false })
+          } else {
+            this.styles[id] = (<any>Object).assign({}, this.styles[id], { error: true })
+          }
+
+          // delete styles for deleted questions
+          if (!errors.has(id) && questions.find(q => q.id === id) === undefined) {
+            delete this.styles[id];
+          }
+
+        }
+
+      })
+
+    this.subscriptions = [ errors, updateStyles, selectedQuestion ];
   }
 
   ngOnDestroy(){
@@ -77,44 +117,14 @@ export class OverviewControlsComponent implements OnInit, OnDestroy {
   }
 
   addQuestion() {
-    this.model.addQuestion();
-    this.model.questions$.map( (questions: any[]) => questions[questions.length - 1])
-      .take(1)
-      .subscribe(question => {
-        if (question) {
-          for (const key in this.styles) {
-            this.styles[key].selected = false;
-          }
-          if (this.styles[question.id]) {
-            this.styles[question.id].selected = true;
-          } else {
-            this.styles[question.id] = {};
-            this.styles[question.id].selected = true;
-          }
-          this.questionSelected.emit(question);
-        }
-      });
+    this.controller.command$.next({
+      fn: this.controller.commands.addConstantQuestion,
+      args: []
+    });
   }
 
   selectQuestion(question) {
-
-    if (question === this.selectQuestion) {
-      return;
-    }
-
-    this.selectedQuestion = question;
-
-    for (const key in this.styles) {
-      this.styles[key].selected = false;
-    }
-    if (this.styles[question.id]) {
-      this.styles[question.id].selected = true;
-    } else {
-      this.styles[question.id] = {};
-      this.styles[question.id].selected = true;
-    }
-
-    this.questionSelected.emit(this.selectedQuestion);
+    this.questionSelected.emit(question);
   }
 
   dragStart(question, $event) {
@@ -196,9 +206,9 @@ export class OverviewControlsComponent implements OnInit, OnDestroy {
       targetKey = stringArray[0];
     }
 
-    const draggingKey = Object.keys(this.styles).filter(key => this.styles[key].dragStart === true)
-    if (draggingKey.length !== 1) {
-      console.error(`Strange behaviour with conditional drag and drop index swap: dragging.length = ${draggingKey.length}`);
+    const draggingID = Object.keys(this.styles).filter(key => this.styles[key].dragStart === true)[0];
+    if (draggingID === undefined) {
+      console.error(`[OverviewControlsComponent].drop: Strange behaviour with conditional drag and drop index swap: ${draggingID}`);
       return false;
     }
 
@@ -207,19 +217,11 @@ export class OverviewControlsComponent implements OnInit, OnDestroy {
       this.styles[key].dragOver = false;
     }
 
-    if (!this.model.hasKey(targetKey) && targetKey.substr(0, 7) !== 'invalid'){
+    if (!this.controller.hasKey(targetKey) && targetKey.substr(0, 7) !== 'invalid'){
       return false;
     }
 
-    
-
-    const q = this.questions.find(qq => qq.id === draggingKey[0]);
-    if (q) {
-      this.swapQuestions.emit({
-        sourceQuestion: q,
-        targetKeyName: targetKey
-      })
-    }
+    this.swapQuestions.emit({ sourceID: draggingID, targetKeyName: targetKey });
     return false;
   }
 
