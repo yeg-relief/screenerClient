@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Key } from '../../models/key';
 import { Question, Id, Model } from './index';
-import { FormGroup, FormControl, FormBuilder, Validators } from '@angular/forms';
+import { FormGroup, FormControl, FormBuilder, Validators, AbstractControl } from '@angular/forms';
 
 import { Observable } from 'rxjs/Observable';
 import { ReplaySubject } from 'rxjs/ReplaySubject';
@@ -17,14 +17,13 @@ import 'rxjs/add/operator/merge';
 import 'rxjs/add/operator/mergeMap';
 import 'rxjs/add/operator/switchMap';
 
-
-@Injectable() 
+@Injectable()
 export class ScreenerModel {
   private questionControls: FormGroup;
   private keyControls: FormGroup;
   created: number;
 
-  constructor(data: any) { this.setModel(data) }
+  constructor() { }
 
   pull() {
     const questions = []
@@ -34,17 +33,17 @@ export class ScreenerModel {
 
     let unusedKeys = []
     const uk = this.keyControls.get('unusedKeys');
-    if (uk !== null) unusedKeys = uk.value.map(key => key.name); 
+    if (uk !== null) unusedKeys = uk.value.sort(this.keyComparator).map(key => key.name); 
 
     let keys = []
     const k = this.keyControls.get('keys');
-    if (k !== null) keys = k.value.map(key => key.name);
+    if (k !== null) keys = k.value.sort(this.keyComparator).map(key => key.name);
 
     return {
       created: this.created,
-      questions: questions.sort(this.questionComparator),
-      unusedKeys: unusedKeys.sort(this.keyComparator),
-      keys: keys.sort(this.keyComparator)
+      questions: questions.sort(this.questionComparator).map(question => question.id),
+      unusedKeys: unusedKeys,
+      keys: keys
     }
   }
 
@@ -61,8 +60,13 @@ export class ScreenerModel {
   }
 
   findQuestionById(id: Id): Question {
-    const value: {[key: string]: Question} = this.questionControls.value;
+    if (typeof id !== 'string') { 
+      console.warn('[ScreenerModel].findQuestionById: id is not a string');
+      console.warn(id)
+      return;
+    }
 
+    const value: {[key: string]: Question} = this.questionControls.value;
     for (const key in value) {
       if (value[key].id === id) {
         return value[key];
@@ -104,7 +108,9 @@ export class ScreenerModel {
     this.keyControls.get('unusedKeys').setValue(update);
   }
 
-  private createFormGroup(question): FormGroup {
+  makeExpandable(id: Id) { this.getQuestionControl(id).get('expandable').setValue(true) }
+
+  private createFormGroup(question): {[key: string]: AbstractControl } {
     const assignControl = (accum: FormGroup, key: string) => {
       accum[key] = key !== 'conditionalQuestions' || key !== 'options' ? 
                    new FormControl(question[key], Validators.required) : 
@@ -126,7 +132,7 @@ export class ScreenerModel {
 
     return Object.keys(question)
         .filter(key => approvedProperties.find(p => p === key) !== undefined)
-        .reduce(assignControl, <FormGroup>{})
+        .reduce(assignControl, {})
   }
 
   keyComparator(a: Key, b: Key): number {
@@ -142,18 +148,9 @@ export class ScreenerModel {
     return 0;
   }
 
-  questionComparator(a: Question, b: Question): number {
-    let aIndex = a.index,
-        bIndex = b.index;
+  questionComparator(a: Question, b: Question): number { return b.index - a.index  }
 
-    if (aIndex === undefined || bIndex === undefined ) return -1;
-
-    return a.index - b.index;
-  }
-
-  getQuestionControl(id: string): FormGroup {
-    return <FormGroup>this.questionControls.get(id);
-  }
+  getQuestionControl(id: string): FormGroup { return <FormGroup>this.questionControls.get(id) }
 
   clearConditionals(hostID: string) {
     if (hostID === undefined){
@@ -255,11 +252,12 @@ export class ScreenerModel {
       options: []
     };
 
-    const control: FormGroup = this.createFormGroup(blank);
-    this.questionControls.addControl(id, control);
+    const control  = this.createFormGroup(blank);
+    this.questionControls.addControl(id, new FormGroup(control) );
   }
 
   setModel(data: any) {
+    
     const model: Model = {
       created: data.created || 0,
       questions: data.questions.sort(this.questionComparator) || [],
@@ -271,19 +269,20 @@ export class ScreenerModel {
     this.questionControls = new FormGroup({});
 
     const allQuestions = [ ...model.questions, ...model.conditionalQuestions ];
-
+    
     const unusedKeys = model.keys
       .filter(key => allQuestions.find(q => q.key === key.name) === undefined)
       .sort(this.keyComparator);
-
+    
     for (const q of allQuestions) {
       const control = this.createFormGroup(q);
-      this.questionControls.addControl(q.id, control);
+      this.questionControls.addControl(q.id, new FormGroup(control) );
     }
-
+    
     this.keyControls = new FormGroup({});
     this.keyControls.addControl('keys', new FormControl(model.keys, Validators.required));
-    this.keyControls.addControl('unusedKeys', new FormControl(model.unusedKeys, Validators.required));
+    this.keyControls.addControl('unusedKeys', new FormControl(unusedKeys, Validators.required));
+    
   }
 
   deleteQuestion(id: Id) {

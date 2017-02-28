@@ -1,5 +1,6 @@
 import { Component, OnInit, Output, EventEmitter } from '@angular/core';
-import { ScreenerController, Question, Id } from '../services';
+import { ScreenerController } from '../services/screener-controller';
+import { Id, Question } from '../services';
 import { ReplaySubject } from 'rxjs/ReplaySubject';
 import { Observable } from 'rxjs/Observable';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
@@ -8,6 +9,7 @@ import 'rxjs/add/operator/take';
 import 'rxjs/add/operator/filter';
 import 'rxjs/add/operator/map';
 import 'rxjs/add/observable/of';
+import 'rxjs/add/operator/do';
 
 @Component({
   selector: 'app-screener-overview',
@@ -16,13 +18,13 @@ import 'rxjs/add/observable/of';
 })
 export class ScreenerOverviewComponent implements OnInit {
   questions: Observable<string[]>;
-  selectedQuestion = new BehaviorSubject('');
+  selectedQuestion = new ReplaySubject<any>(1);
 
   constructor(public controller: ScreenerController) { }
 
   ngOnInit() {
     this.controller.populateModel();
-    const questions = this.controller.state$.asObservable().map(state => state.questions)
+    this.questions = this.controller.state$.asObservable().map(state => state.questions);
   }
 
   ngOnDestroy() {}
@@ -36,11 +38,15 @@ export class ScreenerOverviewComponent implements OnInit {
     }
   }
 
-  handleSelect(id) {    
+  handleSelect(id) {
+    console.log(`[ScreenerOverview].handleSelect called on id: ${id}`); 
     const newSelection = this.questions.take(1)
-                             .map(ids => ids.filter(i => i === id) )
-                             .map(id => id[0])
-                             .subscribe( (update: string) => { if(update !== undefined) this.selectedQuestion.next( update ) } )
+      .map(ids => ids.filter(i => i === id) )
+      .map(id => id[0])
+      .subscribe( (update: string) => { 
+        console.log(update);
+        if(update !== undefined) this.selectedQuestion.next( update ) 
+      })
     
   }
 

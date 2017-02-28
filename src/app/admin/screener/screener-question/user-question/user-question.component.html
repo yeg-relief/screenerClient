@@ -59,7 +59,7 @@
           <label>Key Value
             <select formControlName="key" placeholder = "question key">
               <option selected disabled  [value]="form.value.key"> {{ form.value.key }} </option>
-              <option *ngFor="let key of unusedKeys" [value]="key"> {{ key }} </option>
+              <option *ngFor="let key of (unusedKeys | async)" [value]="key"> {{ key }} </option>
             </select>
           </label>
           <div class="col-1"></div>

@@ -3,8 +3,8 @@
 
   <div id="screener-content" class="flex col-12">
     <app-overview-controls class="col-3" style="min-height: 85vh" *ngIf="questions !== undefined" 
-      [questions]="questions | async"
-      [selectedQuestion]="selectedQuestion | async" 
+      [question_IDs]="questions"
+      [selectedQuestion_ID]="selectedQuestion" 
       (questionSelected)="handleSelect($event)"
       (swapQuestions)="handleSwap($event)">
     </app-overview-controls>
@@ -12,7 +12,7 @@
       <app-screener-question  
         (onDelete)="handleDelete($event)"
         (onAddConditional)="handleAddConditional($event)"
-        [question]="selectedQuestion | async">
+        [question]="selectedQuestion">
       </app-screener-question>
     </div>
     <div class="col-9 center" *ngIf=" (selectedQuestion | async) === undefined || (selectedQuestion | async) === '' " 

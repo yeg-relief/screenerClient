@@ -1,6 +1,7 @@
 import { Component, OnInit, OnDestroy, Input, Output, EventEmitter } from '@angular/core';
 import { FormGroup } from '@angular/forms';
-import { ScreenerController, Id, Question } from '../../services';
+import { ScreenerController } from '../../services/screener-controller';
+import { Id, Question } from '../../services';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 import { Observable } from 'rxjs/Observable';
 import { Subscription } from 'rxjs/Subscription';
@@ -15,7 +16,7 @@ import 'rxjs/add/observable/combineLatest';
 })
 export class ConditionalQuestionsComponent implements OnInit, OnDestroy {
   @Input() questionIDs: Observable<Id[]>;
-  @Input() selectedQuestion: Observable<Id>;
+  @Input() selectedQuestion: BehaviorSubject<Id>;
   @Output() handleSelect = new EventEmitter<Id>();
 
   @Output() addQuestion = new EventEmitter<any>();

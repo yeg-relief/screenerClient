@@ -6,7 +6,7 @@
       <md-card-subtitle> this screener has {{ count }} questions </md-card-subtitle>
     </section>
     
-    <section [formGroup]="form" class="flex flex-column flex-justify flex-stretch">
+    <section class="flex flex-column flex-justify flex-stretch">
 
       <button [disabled]="disabled" style="width: 20vw; height: 5vh" (click)="handleSave()" md-raised-button color="primary"> SAVE </button>
       <div *ngIf="errors.error !== ''" style="color:red; width: 20vw;">  
@@ -19,9 +19,9 @@
   </div>
   <form [formGroup]="adminControls">
     <label> <button disabled md-button>filter by key</button>
-      <select formControlName="keyFilter" class="col-4" placeholder="filter by key">
+      <select formControlName="keyFilter" class="col-4" placeholder="filter by key" style="min-height: 3.5em">
         <option [value]="''"> all </option>
-        <option *ngFor="let key of allKeys" [value]="key.name"> {{ key.name }} </option>
+        <option *ngFor="let key of allKeys" [value]="key"> {{ key }} </option>
       </select>
     </label>
   </form>

@@ -6,14 +6,14 @@
   </div>
   <app-user-question [question]="question" (makeExpandable)="makeExpandable($event)"></app-user-question>
 </md-card>
-
-<div *ngIf="question.expandable && showConditionals" class="conditional-questions-container">
+{{ (form | async) | json }}
+<div *ngIf="( (form | async)?.expandable )" class="conditional-questions-container">
   <app-conditional-questions
     (addQuestion)="addConditionalQuestion()" 
     (swapConditionals)="swapConditionalQuestions($event)"
     (removeConditional)="deleteConditionalQuestion($event)"
     (handleSelect)="handleSelect($event)" 
-    [questions]="conditionalQuestions"
+    [questionIDs]="conditionalQuestions"
     [selectedQuestion]="selectedQuestion">
   </app-conditional-questions>
 </div>

@@ -2,7 +2,8 @@ import { Component, OnInit, OnDestroy, Input, Output, EventEmitter } from '@angu
 import { Observable } from 'rxjs/Observable';
 import { ReplaySubject } from 'rxjs/ReplaySubject';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
-import { ScreenerController, Question } from '../../services';
+import { ScreenerController } from '../../services/screener-controller';
+import { Id, Question } from '../../services';
 import 'rxjs/add/operator/take';
 import 'rxjs/add/operator/multicast';
 import 'rxjs/add/observable/combineLatest';
@@ -28,10 +29,19 @@ export class OverviewControlsComponent implements OnInit, OnDestroy {
   ngOnInit() {
     this.questions = this.question_IDs
                       .map(ids => ids.reduce( (accum, id) => [this.controller.findQuestionById(id), ...accum], []) )
+                      /*
+                      .do(questions => { 
+                        if(Array.isArray(questions) && questions.length > 0){
+                          this.selectedQuestion_ID.next(questions[questions.length - 1]);
+                        } 
+                      })
+                      */
                       .multicast( new BehaviorSubject( [] ) ).refCount();
 
     const selectedQuestion = this.selectedQuestion_ID
       .subscribe( id => {
+        console.log(`[OverviewControls].ngOnInit.selectedQuestion id: ${id}`);
+
         for(const styleID in this.styles) {
           this.styles[styleID].selected = false;
         }
@@ -124,7 +134,10 @@ export class OverviewControlsComponent implements OnInit, OnDestroy {
   }
 
   selectQuestion(question) {
-    this.questionSelected.emit(question);
+    console.log('[OverviewControls].selectQuestion called');
+    console.log(question);
+
+    if (question !== undefined && question.id !== undefined) this.questionSelected.emit(question.id); 
   }
 
   dragStart(question, $event) {

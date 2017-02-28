@@ -20,7 +20,9 @@ import { HttpModule } from '@angular/http';
 
 import { ProgramsResolverService } from './programs/program-overview/programs-resolver.service';
 import { ScreenerOverviewComponent } from './screener/screener-overview/screener-overview.component';
-import { ScreenerModel, ScreenerNetwork, ScreenerController } from './screener/services';
+import { ScreenerModel } from './screener/services/screener-model';
+import { ScreenerController } from './screener/services/screener-controller';
+import { ScreenerNetwork } from './screener/services/screener-network';
 import { ScreenerToolbarComponent } from './screener/screener-toolbar/screener-toolbar.component';
 
 import { ReactiveFormsModule, FormsModule } from '@angular/forms';

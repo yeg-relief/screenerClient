@@ -1,55 +1,49 @@
-import { Component, Input, OnInit} from '@angular/core';
+import { Component, Input, OnInit, Output, EventEmitter } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
 import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/operator/map';
 import 'rxjs/add/observable/merge';
+import 'rxjs/add/operator/do';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
-import { ScreenerModel } from '../screener-model';
+import { ScreenerController } from '../services/screener-controller';
 import { Subscription } from 'rxjs/Subscription';
 
 @Component({
   selector: 'app-screener-toolbar',
   templateUrl: './screener-toolbar.component.html',
   styleUrls: ['./screener-toolbar.component.css'],
-  //changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ScreenerToolbarComponent implements OnInit {
   count = 0;
   updated = 0;
-  form: any
   private adminControls: FormGroup;
   private allKeys: any[] = [];
   private subscriptions: Subscription[];
   private disabled = false;
   private errors: any =  { error: '' };
 
-  constructor(public model: ScreenerModel) {}
+
+  @Output() onFilter = new EventEmitter<string>();
+  constructor(public controller: ScreenerController) {}
 
   ngOnInit() {
-    const group = {
-      keyFilter: new FormControl(''),
-      // error filter is disabled for the time being
-      errorFilter: new FormControl({value: false, disabled: true})
-    }
+    const group = { keyFilter: new FormControl('') };
     this.adminControls = new FormGroup(group);
 
-    this.form = this.model.getModelControls();
-    const count = this.model.count$.asObservable().subscribe( (count: number) => this.count = count);
-    const created  = this.model.created$.asObservable().subscribe( (updated: number) => this.updated = updated);
-    const keys = this.model.keys$.asObservable().subscribe( (allkeys: any[]) => this.allKeys = [...allkeys])
+    const count = this.controller.state$.map(state => state.questions.length).subscribe(val => this.count = val);
 
-    const errorCheckbox = this.adminControls.valueChanges
-      .map( filter => filter.errorFilter )
-      .do( filter => this.model.filter$.next(filter) )
-      .subscribe();
+    const created  = this.controller.state$.map(state => state.created).subscribe( (updated: number) => this.updated = updated);
+    
+    const keys = this.controller.state$.asObservable()
+      .map(state => state.keys)
+      .subscribe( (allkeys: any[]) => this.allKeys = [...allkeys])
 
 
-    const errorSelect = this.adminControls.valueChanges
+    const keySelect = this.adminControls.valueChanges
       .map ( filter => filter.keyFilter)
-      .do( filter => this.model.keyFilter$.next(filter) )
-      .subscribe();
+      .subscribe(val => val === 'all' ? this.onFilter.emit('') : this.onFilter.emit(val) );
 
-    this.subscriptions = [ count, created, keys, errorCheckbox, errorSelect ]
+    this.subscriptions = [ count, created, keys, keySelect ]
   }
 
   ngOnDestroy() {
@@ -61,21 +55,15 @@ export class ScreenerToolbarComponent implements OnInit {
   }
 
   handleSave() {
-    this.model.save()
-      .do(_ => console.error(_))
-      .switchMap( data => this.model.pushToNetwork(data) )
+    this.controller.save()
       .subscribe( {
-        next: data => {
-          this.errors.error = '';
-          this.model.setModel( data );
-          this.model.errors$.next( [] );
-        },
+        next: data => this.errors.error = '',
 
         error: err => {
+          this.errors.error = '',
           this.disabled = true;
-          this.errors = (<any>Object).assign({}, { error: err })
+          this.errors = (<any>Object).assign({}, { error: 'errors encountered' })
           setTimeout( () => this.disabled = false, 2000);
-          this.model.errors$.next(err);
         }
       } );
   }

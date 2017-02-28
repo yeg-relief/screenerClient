@@ -2,7 +2,8 @@ import {
   Component, OnInit, Input, ViewEncapsulation, 
   Output, EventEmitter, OnDestroy } from '@angular/core';
 import { FormGroup, FormControl, Validators, FormBuilder } from '@angular/forms';
-import { ScreenerController, Id, Question } from '../../services';
+import { ScreenerController } from '../../services/screener-controller';
+import { Id, Question } from '../../services';
 import { Observable } from 'rxjs/Observable';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 import { Subscription } from 'rxjs/Subscription';
@@ -22,13 +23,12 @@ export class UserQuestionComponent implements OnInit, OnDestroy {
 
   private form: FormGroup;
   private unusedKeys: Observable<string[]>;
-  private errors: string[];
+  private errors: string[] = [];
   private currentKey: string = '';
-  private internalErrors: string;
   
   private optionInput: FormControl;
 
-  private subscriptions: Subscription[];
+  private subscriptions: Subscription[] = [];
   private formUpdate: Subscription;
 
 
@@ -44,16 +44,15 @@ export class UserQuestionComponent implements OnInit, OnDestroy {
       this.updateObservables(); 
     })
 
-    const unusedKeys = this.controller.state$.map(state => state.unusedKeys);
+    this.unusedKeys = this.controller.state$.map(state => state.unusedKeys).do(_ => console.log(_));
+
 
     const errors = Observable.combineLatest(
       this.controller.state$.map(state => state.errors),
       this.question
     )
     .filter( ([errors, questionID]) => errors.has(questionID))
-    .subscribe( ([errors, questionID]) => {
-      this.errors = [...errors.get(questionID)];
-    });
+    .subscribe( ([errors, questionID]) => this.errors = [...errors.get(questionID)] );
 
 
     this.subscriptions = [ errors, ...this.subscriptions ];

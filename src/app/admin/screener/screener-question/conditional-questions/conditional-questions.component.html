@@ -30,7 +30,7 @@
       <div class="flex-grow"></div>
       <button md-raised-button color="warn" style="min-width: 10vw" (click)="deleteConditionalQuestion()" style="font-size: 125%"> &#10006; </button>
     </div>
-    <app-user-question [question]="selectedQuestion | async"></app-user-question>
+    <app-user-question [question]="selectedQuestion"></app-user-question>
   </md-card>
   <div class="flex flex-center blue" style="margin: 0 auto" *ngIf="(questions | async)?.length === 0">
     <div>No conditional questions assigned.</div>

@@ -16,7 +16,6 @@ import 'rxjs/add/operator/multicast';
 import 'rxjs/add/operator/filter';
 import 'rxjs/add/operator/toPromise';
 import 'rxjs/add/operator/reduce';
-import 'rxjs/add/operator/multicast';
 
 @Injectable()
 export class DataService {

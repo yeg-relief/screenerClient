@@ -1,10 +1,13 @@
 import { Injectable } from '@angular/core';
-import { ScreenerModel, ScreenerNetwork, State, Id, Command, Question } from './index';
+import { ScreenerModel } from './screener-model';
+import { ScreenerNetwork } from './screener-network';
+import { State, Id, Command, Question } from './index';
 import { Subject } from 'rxjs/Subject';
 import { ReplaySubject } from 'rxjs/ReplaySubject';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 import { Observable } from 'rxjs/Observable';
 import { FormGroup } from '@angular/forms';
+import 'rxjs/add/operator/delay';
 
 @Injectable()
 export class ScreenerController {
@@ -13,7 +16,7 @@ export class ScreenerController {
   private errors = new Map<string, Id[]>();
   private GLOBAL_ERROR_TIMEOUT = 5000;
   private state: State = {
-    questions: [],
+    questions: [], //constanteQuestions
     created: -1,
     keys: [],
     unusedKeys: [],
@@ -28,23 +31,28 @@ export class ScreenerController {
   constructor(private network: ScreenerNetwork) {
     this.command$
       .filter( command => command.fn !== undefined )
-      .let(this.whitelistedCommand)
+      .let(this.whitelistedCommand.bind(this))
       .do( _ => this.cachedStates$.next(this.state) )
-      .mergeMap( command => Observable.of( command.fn.apply(this, command.args) ))
+      .mergeMap( (command: Command) => Observable.of( command.fn.apply(this, command.args) ))
+      .delay(60)
       .mergeMap( _ => Observable.of( this.update()) )
-      .subscribe( _ => this.state$.next( this.state ), 
-                (error) => console.error(`error: ${error.message} caught in command$ subject`),
-                () => console.log('[ScreenerController].command$ is complete.'));
+      .do( _ => this.state.questions = this.state.questions.filter(id => this.model.isConditionalQuestion(id) === false))
+      .subscribe( 
+        _ => this.state$.next( this.state ), 
+        (error) => console.error(`error: ${error.message} caught in command$ subject`),
+        () => console.log('[ScreenerController].command$ is complete.')
+      );
   }
 
   populateModel() {
     this.network.pull().subscribe(
       response => {
-        this.model = new ScreenerModel(response);
+        this.model = new ScreenerModel();
+        this.model.setModel(response);
         this.update();
       },
       error => console.error(error),
-      () => console.log('[ScreenerController].populateModel:  NETWORK PULL COMPLETE')
+      () => this.state$.next( this.state )
     )
   }
 
@@ -158,8 +166,8 @@ export class ScreenerController {
       this.state = {
         questions: [...freshModel.questions ].sort(this.model.questionComparator),
         created: freshModel.created,
-        unusedKeys: [...freshModel.unusedKeys ].sort(this.model.keyComparator),
-        keys: [...freshModel.keys ].sort(this.model.keyComparator),
+        unusedKeys: [...freshModel.unusedKeys ],
+        keys: [...freshModel.keys ],
         errors: new Map<string, string[]>(this.errors)
       }
     } catch(e) {
@@ -168,6 +176,8 @@ export class ScreenerController {
     } 
   }
 
+
+  private makeExpandable(questionID: Id) { }
   // ensures that all expected properties are on each question 
   // and that there are no clashing key.type and question.controlType
   private verify(): Observable<{ [key: string]: Question[] | number }> {
@@ -273,7 +283,8 @@ export class ScreenerController {
   private whitelistedCommand(source: Observable<Command>): Observable<Command> {
     const commands = [ 
                         this.swapQuestions, this.deleteQuestion, this.addConstantQuestion,
-                        this.clearConditionals, this.addConditionalQuestion, this.keyChange
+                        this.clearConditionals, this.addConditionalQuestion, this.keyChange,
+                        this.makeExpandable
                      ]
 
     return source.filter(command => commands.find(c => c === command.fn) !== undefined);
@@ -286,13 +297,15 @@ export class ScreenerController {
     const clearConditionals = this.clearConditionals;
     const addConditionalQuestion = this.addConditionalQuestion;
     const keyChange = this.keyChange;
+    const makeExpandable = this.makeExpandable;
     return {
       swapQuestions,
       deleteQuestion,
       addConstantQuestion,
       clearConditionals,
       addConditionalQuestion,
-      keyChange
+      keyChange,
+      makeExpandable
     }
   }
 
