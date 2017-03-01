@@ -2,7 +2,7 @@ import { Component, OnInit, OnDestroy, Input, Output, EventEmitter } from '@angu
 import { FormGroup } from '@angular/forms';
 import { ScreenerController } from '../../services/screener-controller';
 import { Id, Question } from '../../services';
-import { BehaviorSubject } from 'rxjs/BehaviorSubject';
+import { ReplaySubject } from 'rxjs/ReplaySubject';
 import { Observable } from 'rxjs/Observable';
 import { Subscription } from 'rxjs/Subscription';
 import 'rxjs/add/operator/take';
@@ -16,7 +16,7 @@ import 'rxjs/add/observable/combineLatest';
 })
 export class ConditionalQuestionsComponent implements OnInit, OnDestroy {
   @Input() questionIDs: Observable<Id[]>;
-  @Input() selectedQuestion: BehaviorSubject<Id>;
+  @Input() selectedQuestion: ReplaySubject<Id>;
   @Output() handleSelect = new EventEmitter<Id>();
 
   @Output() addQuestion = new EventEmitter<any>();
@@ -61,20 +61,16 @@ export class ConditionalQuestionsComponent implements OnInit, OnDestroy {
     })
 
     this.questions = this.questionIDs
-      .do( _ =>  { console.log('-----------'); console.log(_); console.log('----------'); } )
       .map(ids => ids.reduce( (accum, id) => [this.controller.findQuestionById(id), ...accum], []) )
       .map(questions => questions.filter(q => q !== undefined ))
-      .multicast( new BehaviorSubject( [] ) ).refCount();
+      .map(questions => questions.sort( (a, b) => a.index - b.index) )
+      .multicast( new ReplaySubject(1) ).refCount();
 
     const errors = Observable.combineLatest(
         this.controller.state$.map(state => state.errors),
         this.questions
     )
       .subscribe( ([errors , questions ]) => {
-        console.log('[ConditionalQuestions].ngOnInit/errors');
-        console.log(questions)
-        console.log(errors)
-        console.log('---------------------------------------');
         questions = questions.filter(q => q !== undefined );
         if (questions.length === 0) {
           for (const id in this.styles) {
