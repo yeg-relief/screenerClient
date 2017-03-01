@@ -25,6 +25,7 @@ export class UserQuestionComponent implements OnInit, OnDestroy {
   private unusedKeys: Observable<string[]>;
   private errors: string[] = [];
   private currentKey: string = '';
+  private currentControl: string = '';
   
   private optionInput: FormControl;
 
@@ -44,21 +45,25 @@ export class UserQuestionComponent implements OnInit, OnDestroy {
       this.updateObservables(); 
     })
 
-    this.unusedKeys = this.controller.state$.map(state => state.unusedKeys).do(_ => console.log(_));
+    this.unusedKeys = this.controller.state$.map(state => state.unusedKeys);
 
 
     const errors = Observable.combineLatest(
       this.controller.state$.map(state => state.errors),
       this.question
     )
-    .filter( ([errors, questionID]) => errors.has(questionID))
-    .subscribe( ([errors, questionID]) => this.errors = [...errors.get(questionID)] );
+    .subscribe( ([errors, questionID]) => this.errors = errors.has(questionID) ? [...errors.get(questionID)] : []);
 
 
     this.subscriptions = [ errors, ...this.subscriptions ];
   }
 
   private updateObservables() {
+    if (this.form === null) {
+      this.form = undefined;
+      return;
+    }
+    
     const oldSubs = [...this.subscriptions];
 
     if (this.form.get('expandable') === null) throw new Error('[UserQuestionComponent].ngOnInit: expandable control is null');
@@ -86,15 +91,25 @@ export class UserQuestionComponent implements OnInit, OnDestroy {
 
     if (this.form.get('controlType') === null ) throw new Error('[UserQuestionComponent].ngOnInit: controlType control is null');
     
+    this.currentControl = this.form.get('controlType').value;
+
+
     const controlTypeChange = Observable.combineLatest(
         this.form.get('controlType').valueChanges,
         this.question
     )
-      .subscribe( ([controlType, id]) => {
-        const value: Question = this.form.value;
-        if (controlType !== 'NumberOption' && value.options.length > 0 ) {
-          this.controller.clearOptions(id)
+      .subscribe( ([updatedControlType, id]) => {
+        const keyType = this.controller.getKeyType(id);
+        const question = this.controller.findQuestionById(id);
+        if (keyType === 'boolean' && updatedControlType !== 'CheckBox' && 
+            question !== undefined && question.expandable && question.conditionalQuestions.length > 0){
+          // set message to user that this operation will delete the conditonalQuestions
         }
+
+        this.controller.command$.next({
+          fn: this.controller.commands.controlTypeChange,
+          args: [ id, this.currentControl, updatedControlType ]
+        })
       })
 
     this.subscriptions = [ controlTypeChange, keyChange, expandChange ]
@@ -112,7 +127,7 @@ export class UserQuestionComponent implements OnInit, OnDestroy {
   ngOnDestroy() {
     this.clearSubscriptions(this.subscriptions);
 
-    if (!this.formUpdate.closed) this.formUpdate.unsubscribe();
+    if (this.formUpdate !== undefined && !this.formUpdate.closed) this.formUpdate.unsubscribe();
   }
 
 

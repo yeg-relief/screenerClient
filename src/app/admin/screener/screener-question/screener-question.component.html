@@ -6,7 +6,6 @@
   </div>
   <app-user-question [question]="question" (makeExpandable)="makeExpandable($event)"></app-user-question>
 </md-card>
-{{ (form | async) | json }}
 <div *ngIf="( (form | async)?.expandable )" class="conditional-questions-container">
   <app-conditional-questions
     (addQuestion)="addConditionalQuestion()" 

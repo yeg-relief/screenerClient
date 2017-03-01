@@ -39,12 +39,10 @@ export class ScreenerOverviewComponent implements OnInit {
   }
 
   handleSelect(id) {
-    console.log(`[ScreenerOverview].handleSelect called on id: ${id}`); 
     const newSelection = this.questions.take(1)
       .map(ids => ids.filter(i => i === id) )
       .map(id => id[0])
       .subscribe( (update: string) => { 
-        console.log(update);
         if(update !== undefined) this.selectedQuestion.next( update ) 
       })
     

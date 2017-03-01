@@ -25,21 +25,42 @@ export class ScreenerQuestionComponent implements OnInit {
   private selectedQuestion = new ReplaySubject<Id>(1);
   private form = new ReplaySubject<any>(1);
 
+  private expandable = false;
+
+  private sub: Subscription;
   constructor(public controller: ScreenerController) { }
 
   ngOnInit() {
     this.question.take(1).subscribe(id => {
       const f = this.controller.findGroup(id) !== null ? this.controller.findGroup(id) : undefined;
       if (f) this.form.next(f.value)
+      if (f.value.expandable){
+        this.expandable = true;
+      } else {
+        this.expandable = false;
+      }
     })
 
     this.questionUpdate = this.question.asObservable()
       .do( questionID => {
-        console.log('question update');
         const f = this.controller.findGroup(questionID) !== null ? this.controller.findGroup(questionID) : undefined;
-        if (f) this.form.next(f.value);
+        
+        
+        if (f !== undefined) this.form.next(f.value);
+
+        if (f !== undefined && f.value.expandable){
+          this.expandable = true;
+        } else if(f !== undefined && !f.value.expandable) {
+          this.expandable = false;
+        } else if(f === undefined) {
+          console.warn('[ScreenerQuestion].ngOnInit.questionUodate "f" is undefined')
+          console.warn(f === undefined)
+          // do something??
+        }
       })
       .multicast(new ReplaySubject<Id>(1)).refCount()
+
+    
 
     this.conditionalQuestions = this.questionUpdate
       .map( id => {
@@ -51,15 +72,11 @@ export class ScreenerQuestionComponent implements OnInit {
         return [];
       })
       .startWith([]);
-
-    this.selectedQuestion.subscribe( id => {
-      console.log('selectedQuestion change')
-      console.log(id);
-      const f = this.controller.findGroup(id) !== null ? this.controller.findGroup(id) : undefined;
-      if (f) this.form.next(f.value)
-      console.log(f.value)
-    })
+    
+    this.sub = this.questionUpdate.subscribe();
   }
+
+  ngOnDestroy(){ if (this.sub !== undefined && !this.sub.closed) this.sub.unsubscribe() }
 
   handleSelect(questionID: Id) { this.selectedQuestion.next( questionID ) }
 
@@ -91,6 +108,11 @@ export class ScreenerQuestionComponent implements OnInit {
       fn: this.controller.commands.deleteQuestion,
       args: [ questionID ]
     })
+
+    this.conditionalQuestions.take(1)
+        .filter( ids => ids.length > 0 )
+        .mergeMap( ids => Observable.of(ids[0]) )
+        .subscribe( (update: string) => { if(update !== undefined) this.selectedQuestion.next( update ) } )
   }
 
 

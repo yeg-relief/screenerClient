@@ -1,4 +1,4 @@
 export interface Key {
   name: string;
-  type: string;
+  type: 'boolean' | 'integer' | '';
 }

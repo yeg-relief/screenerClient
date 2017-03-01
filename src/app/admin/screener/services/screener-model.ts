@@ -171,6 +171,27 @@ export class ScreenerModel {
 
   }
 
+  controlTypeChange(questionID: Id, oldControlType: string, updatedControlType: string) {
+    const hostControls = this.questionControls.get(questionID);
+    if (hostControls === null) throw new Error('[ScreenerModel].controlTypeChange: hostControls is null.');
+    const key = this.findKey(hostControls.get('key').value);
+
+
+    if (oldControlType === 'NumberSelect' && updatedControlType !== 'NumberSelect') {
+      hostControls.get('options').setValue([]);
+    } else if (oldControlType === 'CheckBox' && hostControls.get('expandable').value && updatedControlType !== 'CheckBox') {
+      this.clearConditionals(questionID);
+    }
+
+    if (key !== undefined && key.type === 'boolean' && updatedControlType !== 'CheckBox') {
+      throw new Error(`${questionID} boolean ${updatedControlType}`);
+    }
+
+    if (key !== undefined && key.type === 'integer' && updatedControlType === 'CheckBox') {
+      throw new Error(`${questionID} integer ${updatedControlType}`);
+    }
+  }
+
   swapQuestions(questionA_id: Id, questionB_id: Id) {
  
     const a_controls = this.questionControls.get([questionA_id, 'index']);

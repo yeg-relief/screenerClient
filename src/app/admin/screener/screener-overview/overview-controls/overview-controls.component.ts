@@ -29,19 +29,25 @@ export class OverviewControlsComponent implements OnInit, OnDestroy {
   ngOnInit() {
     this.questions = this.question_IDs
                       .map(ids => ids.reduce( (accum, id) => [this.controller.findQuestionById(id), ...accum], []) )
-                      /*
-                      .do(questions => { 
-                        if(Array.isArray(questions) && questions.length > 0){
-                          this.selectedQuestion_ID.next(questions[questions.length - 1]);
+                      .do(questions => {
+                        let questionAlreadySelected = false;
+                        for(const key in this.styles){
+                          if(this.styles[key] !== undefined && this.styles[key].selected !== undefined){
+                            questionAlreadySelected = this.styles[key].selected
+                          }
+
+                          if (questionAlreadySelected) break;
+                        }
+
+
+                        if(Array.isArray(questions) && questions.length > 0 && !questionAlreadySelected){
+                          this.questionSelected.emit(questions[0].id)
                         } 
                       })
-                      */
                       .multicast( new BehaviorSubject( [] ) ).refCount();
 
     const selectedQuestion = this.selectedQuestion_ID
       .subscribe( id => {
-        console.log(`[OverviewControls].ngOnInit.selectedQuestion id: ${id}`);
-
         for(const styleID in this.styles) {
           this.styles[styleID].selected = false;
         }
@@ -54,7 +60,7 @@ export class OverviewControlsComponent implements OnInit, OnDestroy {
             selected: true,
             dragStart: false,
             dragOver: false,
-            error: true
+            error: false
           }
           this.styles = (<any>Object).assign({}, this.styles, style)
         }
@@ -65,14 +71,20 @@ export class OverviewControlsComponent implements OnInit, OnDestroy {
       if (Array.isArray(questions) && questions.length > 0) {
         this.styles = questions.filter(question => question.id !== undefined)
           .reduce( (styles, question) => {
-            const style = {};
-            style[question.id] = { 
-              selected: false,
-              dragStart: false,
-              dragOver: false,
-              error: true
+            if (this.styles[question.id] === undefined) {
+              const style = {};
+              style[question.id] = { 
+                selected: false,
+                dragStart: false,
+                dragOver: false,
+                error: true
+              }
+              return (<any>Object).assign(styles, style);
+            } else {
+              styles[question.id] = (<any>Object).assign({}, this.styles[question.id]);
+              return styles;
             }
-            return (<any>Object).assign(styles, style);
+            
           }, {})
       }
     })
@@ -101,9 +113,11 @@ export class OverviewControlsComponent implements OnInit, OnDestroy {
 
           // set errors
           if (!errors.has(id) ) {
-            this.styles[id] = (<any>Object).assign({}, this.styles[id], { error: false })
-          } else {
-            this.styles[id] = (<any>Object).assign({}, this.styles[id], { error: true })
+            this.styles[id].error = false;
+          } else if (errors.get(id).length === 0){
+            this.styles[id].error = false;
+          } else if (errors.get(id).length > 0) {
+            this.styles[id].error = true;
           }
 
           // delete styles for deleted questions
@@ -134,8 +148,7 @@ export class OverviewControlsComponent implements OnInit, OnDestroy {
   }
 
   selectQuestion(question) {
-    console.log('[OverviewControls].selectQuestion called');
-    console.log(question);
+
 
     if (question !== undefined && question.id !== undefined) this.questionSelected.emit(question.id); 
   }

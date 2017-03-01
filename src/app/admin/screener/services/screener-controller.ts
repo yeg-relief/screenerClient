@@ -160,6 +160,36 @@ export class ScreenerController {
 
   hasKey(keyName) { return this.model.findKey(keyName) !== undefined }
 
+  getKeyType(id) {
+    const question = this.findQuestionById(id);
+    if (question === undefined) return;
+
+    const key = this.model.findKey(question.key);
+    if (key !== undefined) return key.type;
+  }
+
+
+  private controlTypeChange(questionID: Id, currentControlType: string, updatedControlType: string) {
+    const typeA_error = 'question has an boolean key and a non-checkbox controlType';
+    const typeB_error = 'question has an integer key and a checkbox controlType';
+    
+    try {
+      this.model.controlTypeChange(questionID, currentControlType, updatedControlType);
+      if (this.errors.has(questionID)) {
+        const errors = this.errors.get(questionID).filter(err => err !== typeA_error && err !== typeB_error);
+        this.errors.set(questionID, errors);
+      }
+    } catch (e) {
+      if(e.message === '[ScreenerModel].controlTypeChange: hostControls is null.') throw new Error(e);
+
+      const parsed = (<string>e.message).split(' ');
+      if (parsed[1] === 'boolean') this.addError(parsed[0], typeA_error);
+
+      if (parsed[1] === 'integer') this.addError(parsed[0], typeB_error)
+    }
+    
+  }
+
   private update() {
     const freshModel = this.model.pull();
     try {
@@ -284,7 +314,7 @@ export class ScreenerController {
     const commands = [ 
                         this.swapQuestions, this.deleteQuestion, this.addConstantQuestion,
                         this.clearConditionals, this.addConditionalQuestion, this.keyChange,
-                        this.makeExpandable
+                        this.makeExpandable, this.controlTypeChange
                      ]
 
     return source.filter(command => commands.find(c => c === command.fn) !== undefined);
@@ -298,6 +328,7 @@ export class ScreenerController {
     const addConditionalQuestion = this.addConditionalQuestion;
     const keyChange = this.keyChange;
     const makeExpandable = this.makeExpandable;
+    const controlTypeChange = this.controlTypeChange;
     return {
       swapQuestions,
       deleteQuestion,
@@ -305,7 +336,8 @@ export class ScreenerController {
       clearConditionals,
       addConditionalQuestion,
       keyChange,
-      makeExpandable
+      makeExpandable,
+      controlTypeChange
     }
   }
 
