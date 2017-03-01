@@ -131,7 +131,7 @@ export class UserQuestionComponent implements OnInit, OnDestroy {
   }
 
 
-  handleAddOption() {
+  handleOptionAdd() {
     const value = this.optionInput.value;
 
     if ( value === '') return;

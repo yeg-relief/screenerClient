@@ -60,6 +60,7 @@ export class ScreenerToolbarComponent implements OnInit {
         next: data => this.errors.error = '',
 
         error: err => {
+          console.error(err);
           this.errors.error = '',
           this.disabled = true;
           this.errors = (<any>Object).assign({}, { error: 'errors encountered' })

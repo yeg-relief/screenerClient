@@ -156,14 +156,7 @@ export class ScreenerController {
 
   findQuestionByKey(key: string): Question { return this.model.findQuestionByKey(key) }
 
-  findQuestionById(id: string): Question {
-    console.log('[ScreeenerController].findQuestionById');
-    console.log(id)
-    const question = this.model.findQuestionById(id);
-    console.log(question);
-    console.log(this.model.getQuestionControl(id)) 
-    return question; 
-  }
+  findQuestionById(id: string): Question { return this.model.findQuestionById(id) }
 
   hasKey(keyName) { return this.model.findKey(keyName) !== undefined }
 
@@ -231,9 +224,12 @@ export class ScreenerController {
 
     for (const q of [...questions, ...conditionalQuestions]) {
       const checker = presentBoolean(q);
-      const failedChecking = ['label', 'index', 'controlType', 'key', 'expandable', 'conditionalQuestions', 'id', 'options'].filter(checker);
+      const failedChecking = ['label', 'index', 'controlType', 'key', 'expandable', 'id'].filter(checker);
 
-      if (failedChecking.length !== 4) {
+      if (failedChecking.length !== 6) {
+        console.error(`[ScreenerController].verify : error with question with key: ${q.key}`)
+        console.error(q)
+        console.log(failedChecking);
         this.addError(q.id, 'question is missing a required property');
         encounteredError = true;
       }
