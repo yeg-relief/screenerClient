@@ -156,7 +156,14 @@ export class ScreenerController {
 
   findQuestionByKey(key: string): Question { return this.model.findQuestionByKey(key) }
 
-  findQuestionById(id: string): Question { return this.model.findQuestionById(id) }
+  findQuestionById(id: string): Question {
+    console.log('[ScreeenerController].findQuestionById');
+    console.log(id)
+    const question = this.model.findQuestionById(id);
+    console.log(question);
+    console.log(this.model.getQuestionControl(id)) 
+    return question; 
+  }
 
   hasKey(keyName) { return this.model.findKey(keyName) !== undefined }
 

@@ -61,7 +61,9 @@ export class ConditionalQuestionsComponent implements OnInit, OnDestroy {
     })
 
     this.questions = this.questionIDs
+      .do( _ =>  { console.log('-----------'); console.log(_); console.log('----------'); } )
       .map(ids => ids.reduce( (accum, id) => [this.controller.findQuestionById(id), ...accum], []) )
+      .map(questions => questions.filter(q => q !== undefined ))
       .multicast( new BehaviorSubject( [] ) ).refCount();
 
     const errors = Observable.combineLatest(
@@ -69,28 +71,37 @@ export class ConditionalQuestionsComponent implements OnInit, OnDestroy {
         this.questions
     )
       .subscribe( ([errors , questions ]) => {
-
-        // add style for question not in styles
-        for (const q of questions ) {
-          if (this.styles[q.id] === undefined) buildStyle(q.id, false);
-        }
-
-        for(const id in this.styles) {
-
-          // set errors
-          if (!errors.has(id) ) {
-            this.styles[id] = (<any>Object).assign({}, this.styles[id], { error: false })
-          } else {
-            this.styles[id] = (<any>Object).assign({}, this.styles[id], { error: true })
-          }
-
-          // delete styles for deleted questions
-          if (!errors.has(id) && questions.find(q => q.id === id) === undefined) {
+        console.log('[ConditionalQuestions].ngOnInit/errors');
+        console.log(questions)
+        console.log(errors)
+        console.log('---------------------------------------');
+        questions = questions.filter(q => q !== undefined );
+        if (questions.length === 0) {
+          for (const id in this.styles) {
             delete this.styles[id];
           }
+        } else {
+          // add style for question not in styles
+          for (const q of questions ) {
+            if (q === undefined) continue;
+            if (this.styles[q.id] === undefined) buildStyle(q.id, false);
+          }
 
+          for(const id in this.styles) {
+
+            // set errors
+            if (!errors.has(id) ) {
+              this.styles[id] = (<any>Object).assign({}, this.styles[id], { error: false })
+            } else {
+              this.styles[id] = (<any>Object).assign({}, this.styles[id], { error: true })
+            }
+
+            // delete styles for deleted questions
+            if (!errors.has(id) && questions.find(q => q.id === id) === undefined) {
+              delete this.styles[id];
+            }
+          }
         }
-
       })
 
     this.subscriptions = [ selectedSub, errors ]

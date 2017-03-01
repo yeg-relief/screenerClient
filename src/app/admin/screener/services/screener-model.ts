@@ -256,6 +256,8 @@ export class ScreenerModel {
       errorPreamble();
       throw new Error('[ScreenerModel].addConditionalQuestion: unable to find "conditionalQuestions" control on hostControl');
     }
+    const control = this.createFormGroup(blank);
+    this.questionControls.addControl(blank.id, new FormGroup(control));
   }
 
   addQuestion() {
