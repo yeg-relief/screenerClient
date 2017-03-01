@@ -24,7 +24,7 @@
       <h4 md-line>{{question.controlType}}</h4>
     </md-list-item>
   </md-list>
-  <md-card class="conditional-question col-9 flex-grow" style="min-height: 40vh;">
+  <md-card class="conditional-question col-9 flex-grow"  *ngIf="(questions | async)?.length !== 0" style="min-height: 40vh;">
     <div class="flex col-12"> 
       <md-card-title> Selected Expandable Question </md-card-title>
       <div class="flex-grow"></div>

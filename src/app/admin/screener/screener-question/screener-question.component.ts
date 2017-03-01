@@ -41,11 +41,13 @@ export class ScreenerQuestionComponent implements OnInit {
       }
     })
 
-    this.questionUpdate = this.question.asObservable()
+    this.questionUpdate = Observable.combineLatest(
+      this.question.asObservable(),
+      this.controller.state$
+    )
+      .map( ([question, _]) => question)
       .do( questionID => {
         const f = this.controller.findGroup(questionID) !== null ? this.controller.findGroup(questionID) : undefined;
-        
-        
         if (f !== undefined) this.form.next(f.value);
 
         if (f !== undefined && f.value.expandable){
@@ -64,7 +66,10 @@ export class ScreenerQuestionComponent implements OnInit {
 
     this.conditionalQuestions = this.questionUpdate
       .map( id => {
+        console.log('[ScreenerQuestion].ngOnInit.contionalQuestions called');
         const q = this.controller.findQuestionById(id);
+        console.log(q);
+
         if( q !== undefined && Array.isArray(q.conditionalQuestions) )  {
           if(q.conditionalQuestions[0] !== undefined) this.selectedQuestion.next(q.conditionalQuestions[0]);
           return q.conditionalQuestions;
@@ -110,9 +115,8 @@ export class ScreenerQuestionComponent implements OnInit {
     })
 
     this.conditionalQuestions.take(1)
-        .filter( ids => ids.length > 0 )
-        .mergeMap( ids => Observable.of(ids[0]) )
-        .subscribe( (update: string) => { if(update !== undefined) this.selectedQuestion.next( update ) } )
+        .map( ids => ids[0] )
+        .subscribe( (update: string) => update !== undefined ? this.selectedQuestion.next( update ) : this.selectedQuestion.next(''))
   }
 
 
