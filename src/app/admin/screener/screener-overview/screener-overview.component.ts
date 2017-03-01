@@ -68,6 +68,8 @@ export class ScreenerOverviewComponent implements OnInit {
   }
 
   handleAddConditional(questionID: Id) {
+    console.log(`[ScreenerOverview].handleAddConditional questionID: ${questionID}`)
+
     this.controller.command$.next({
       fn: this.controller.commands.addConditionalQuestion,
       args: [ questionID ]

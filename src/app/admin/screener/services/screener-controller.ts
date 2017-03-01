@@ -130,14 +130,14 @@ export class ScreenerController {
 
   private addConstantQuestion() { this.model.addQuestion() }
 
-  private addConditionalQuestion(hq: Question ) {
-    if (!hq || hq.id === undefined) {
+  private addConditionalQuestion(hq: Id ) {
+    if (hq === undefined) {
       console.error('[ScreenerController].addConditionalQuestion: attempting to add conditional to question that has no id');
       this.addGlobalError('Unable to add conditional question. Host question is undefined.');
       return;
     }
 
-    const hostQuestion = this.model.findQuestionById(hq.id);
+    const hostQuestion = this.model.findQuestionById(hq);
     if (hostQuestion === undefined) {
       console.error('[ScreenerController].addConditionalQuestion: unable to find hostQuestion');
       console.error(hostQuestion)
@@ -148,7 +148,7 @@ export class ScreenerController {
     try {
       this.model.addConditionalQuestion(hostQuestion.id)
     } catch (e) {
-      this.addError(hq.id, e);
+      this.addError(hq, e);
     }
   }
 
