@@ -53,9 +53,20 @@ export const getForm = share(compose(fromScreener.getForm, getScreenerState));
 
 export const getStyles = share(compose(fromScreener.getStyles, getScreenerState));
 
-export const getError = share(compose(fromScreener.getError, getScreenerState));
+export const getScreenerError = share(compose(fromScreener.getError, getScreenerState));
 
-export const isLoading = share(compose(fromScreener.isLoading, getScreenerState));
+export const isScreenerLoading = share(compose(fromScreener.isLoading, getScreenerState));
+
+export const getConstantQuestions = share(compose(fromScreener.getConstantQuestions, getScreenerState));
+
+export const getConditionalQuestions = share(compose(fromScreener.getConditionalQuestions, getScreenerState));
+
+export const getConditionalQuestionsLength = share(compose(fromScreener.getConditionalQuestionsLength, getScreenerState));
+
+export const getSelectedConstantID = share(compose(fromScreener.getSelectedConstantID, getScreenerState));
+
+export const getSelectedConditionalID = share(compose(fromScreener.getSelectedConditionalID, getScreenerState));
+
 
 
 /* for programs */

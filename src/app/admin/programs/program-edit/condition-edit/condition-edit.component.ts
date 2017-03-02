@@ -1,6 +1,6 @@
 import { Component, Input, OnInit, Output, EventEmitter, OnDestroy } from '@angular/core';
 import { FormControl, Validators, FormGroup } from '@angular/forms';
-import { cloneDeep } from 'lodash';
+import * as _ from 'lodash';
 import { Key } from '../../../models/key';
 import { Store } from '@ngrx/store';
 import * as fromRoot from '../../../reducer';
@@ -232,7 +232,7 @@ export class ConditionEditComponent implements OnInit, OnDestroy {
     return actions.scan((state, action) => {
       switch (action.type) {
         case 'INIT_STATE': {
-          const condition = cloneDeep(action.payload);
+          const condition = _.cloneDeep(action.payload);
           if (Object.keys(condition).length === 0 && condition.constructor === Object) {
             return Object.assign({}, state, condition);
           }

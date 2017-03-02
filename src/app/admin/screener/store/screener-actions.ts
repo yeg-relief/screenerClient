@@ -12,6 +12,7 @@ export const ScreenerActionTypes = {
   SAVE_DATA: '[SCREENER] SAVE_DATA',
   SAVE_DATA_FAILURE: '[SCREENER] LOAD_DATA_FAILURE',
   SAVE_DATA_SUCCESS: '[SCREENER] LOAD_DATA_SUCCESS',
+  SELECT_QUESTION: '[SCREENER] SELECT_QUESTION',
   SWAP_QUESTIONS: '[SCREENER] SWAP_QUESTIONS',
 };
 
@@ -63,10 +64,17 @@ export class SaveDataSuccess implements Action {
   constructor(public payload: Screener) {}
 }
 
+export class SelectQuestion implements Action {
+  type = ScreenerActionTypes.SELECT_QUESTION;
+  constructor(public payload: ID) {}
+}
+
 export class SwapQuestions implements Action {
   type = ScreenerActionTypes.SWAP_QUESTIONS;
   constructor(public payload: { [key: string]: ID }) {}
 }
+
+
 
 
 export type ScreenerActions = 

@@ -1,0 +1,15 @@
+:host {
+  background-color: darkslateblue;
+}
+
+.ng-invalid {
+  background-color: mediumvioletred;
+}
+
+.ng-error {
+  background-color: lightgoldenrodyellow;
+}
+
+.selected {
+  background-color: #0074d9;
+}

@@ -1,3 +1,32 @@
-<p>
-  question-list works!
-</p>
+<md-list class="col-12">
+
+  <div class="flex flex-justify flex-center control-header">
+    <!--
+    <h3 md-subheader *ngIf="type === constant_type">Screener Questions</h3>
+    <h3 md-subheader *ngIf="type === conditional_type">Conditional Questions</h3>
+    <button class="col-2" md-mini-fab style="background-color:#0074d9" (click)="handleAddQuestion()"> 
+      <i class="material-icons">add</i>
+    </button>
+    -->
+  </div>
+
+  <md-divider></md-divider>
+  <!--
+  <md-list-item class="col-12" 
+      *ngFor="let question of questions" 
+      [formGroup]="form.get(question.id)"
+      (click)="questionSelect.emit(question.id)"
+      [attr.id]="question.id">
+    <md-icon md-list-avatar *ngIf="question.expandable && type === constant_type" [style.width]="'1em'">content_copy</md-icon>
+      <md-icon md-list-avatar *ngIf="!question.expandable" [style.width]="'1em'"></md-icon>
+      <h4 md-line>{{question.key}}</h4>
+      <h4 md-line>{{question.controlType}}</h4>
+      <p md-line *ngIf="question.expandable && type === constant_type"> 
+        [+] {{ question.conditionalQuestions.length }} hidden question(s) 
+      </p>
+    <md-divider></md-divider>
+  </md-list-item>
+  -->
+  
+
+</md-list>

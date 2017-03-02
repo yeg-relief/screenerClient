@@ -1,4 +1,8 @@
 export type ID = string;
+export type QuestionType = 'conditional' | 'constant';
+
+export const QUESTION_TYPE_CONSTANT: QuestionType = 'constant';
+export const QUESTION_TYPE_CONDITIONAL: QuestionType = 'conditional';
 
 type ControlType = '' | 'invalid' | 'NumberSelect' | 'NumberInput' | 'CheckBox';
 
@@ -11,11 +15,4 @@ export interface Question {
   key: string,
   label: string,
   options: number[]
-};
-
-export interface QuestionThumbNail {
-  key: string,
-  controlType: ControlType,
-  expandable: boolean,
-  conditionalLength?: number,
 };

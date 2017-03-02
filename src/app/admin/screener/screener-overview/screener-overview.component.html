@@ -2,23 +2,14 @@
   <app-screener-toolbar (onFilter)="handleKeyFilter($event)"> </app-screener-toolbar>
 
   <div id="screener-content" class="flex col-12">
-    <app-overview-controls class="col-3" style="min-height: 85vh" *ngIf="questions !== undefined" 
-      [question_IDs]="questions"
-      [selectedQuestion_ID]="selectedQuestion" 
-      (questionSelected)="handleSelect($event)"
-      (swapQuestions)="handleSwap($event)">
-    </app-overview-controls>
-    <div class="col-9" *ngIf=" (selectedQuestion | async) !== undefined && (selectedQuestion | async) !== '' ">
-      <app-screener-question  
-        (onDelete)="handleDelete($event)"
-        (onAddConditional)="handleAddConditional($event)"
-        [question]="selectedQuestion">
-      </app-screener-question>
-    </div>
-    <div class="col-9 center" *ngIf=" (selectedQuestion | async) === undefined || (selectedQuestion | async) === '' " 
-      style="margin-top: 5em; color: #0074d9">
-      No question selected.
-    </div> 
+    
+    <app-question-list 
+        [questions]="constantQuestions$ | async"
+        [form]="form$ | async"
+        [type]="constant_type"
+        (questionSelect)="handleSelect($event)"
+        (addQuestion)="handleAddQuestion($event)">
+    </app-question-list>
 
   </div>
   <div class="p2"></div>

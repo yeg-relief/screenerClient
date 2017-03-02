@@ -24,7 +24,7 @@ import { ScreenerModel } from './screener/services/screener-model';
 import { ScreenerController } from './screener/services/screener-controller';
 import { ScreenerNetwork } from './screener/services/screener-network';
 import { ScreenerToolbarComponent } from './screener/screener-toolbar/screener-toolbar.component';
-
+import { ScreenerEffects } from './screener/store/screener-effects';
 import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { ScreenerQuestionComponent } from './screener/screener-question/screener-question.component';
 import { UserQuestionComponent } from './screener/screener-question/user-question/user-question.component';
@@ -41,6 +41,7 @@ import { QuestionListComponent } from './screener/question-list/question-list.co
     EffectsModule.run(ProgramOverviewEffects),
     EffectsModule.run(ProgramEditEffects),
     EffectsModule.run(ProgramDeleteEffects),
+    EffectsModule.run(ScreenerEffects),
     AdminCoreModule,
     ProgramsModule,
     KeysModule,

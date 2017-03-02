@@ -25,7 +25,7 @@ export interface State {
 export const initialState: State = {
   loading: false,
   styles: {},
-  form: undefined,
+  form: new FormGroup({}),
   error: '',
   selectedConstantQuestion: undefined,
   selectedConditionalQuestion: undefined,
@@ -61,6 +61,7 @@ export function reducer(state = initialState, action: ScreenerActions): State {
       if ( index < 0 ) return state;
 
       const question = blankQuestion(index);
+      question.expandable = false;
       const control = question_to_control(question);
       state.form.addControl(question.id, new FormGroup(control));
       state.form.get([hostID, 'conditionalQuestions']).setValue([...hostQuestion.conditionalQuestions, question.id]);
@@ -166,6 +167,23 @@ export function reducer(state = initialState, action: ScreenerActions): State {
 
     case ScreenerActionTypes.SAVE_DATA_SUCCESS: return (<any>Object).assign({}, state, { loading: false })
 
+    case ScreenerActionTypes.SELECT_QUESTION: {
+      if(action.payload === undefined || typeof action.payload !== 'string') return state;
+
+      const id = action.payload;
+      const host_id = isConditionalQuestion(id, state);
+
+      if(host_id === false) {
+        return (<any>Object).assign({}, state, {
+          selectedConstantQuestion: id,
+          selectedConditionalQuestion: undefined
+        })
+      };
+
+      return (<any>Object).assign({}, state,  {
+        selectedConditionalQuestion: id
+      });
+    }
 
     case ScreenerActionTypes.SWAP_QUESTIONS: {
       if (action.payload === undefined) return state;
@@ -178,7 +196,6 @@ export function reducer(state = initialState, action: ScreenerActions): State {
 
       state.form.get([id_a, 'index']).setValue(state.form.get([id_b, 'index']).value);
       state.form.get([id_b, 'index']).setValue(state.form.get([id_a, 'index']).value);
-
       return state; 
     }
 
@@ -188,6 +205,8 @@ export function reducer(state = initialState, action: ScreenerActions): State {
 
   }
 }
+
+// following functions are used in main reducer
 
 export function getForm(state$: Observable<State>){
   return state$.select(s => s.form);
@@ -205,7 +224,38 @@ export function isLoading(state$: Observable<State>){
   return state$.select(s => s.loading);
 }
 
-export function getConstantQuestions(state$: Observable<State>){}
+export function getConstantQuestions(state$: Observable<State>){
+  return state$.select(s => [ s.form, s ])
+    .map( ([form, state]) => {
+      const f = <FormGroup>form;
+      const s = <State>state;
+      const keys = Object.keys(f.value);
+
+      return keys.map(k => f.value[k])
+        .filter( q => isConditionalQuestion(q.id, s) === false )
+        .sort( (a, b) => a.index - b.index);
+    })
+}
+
+export function getSelectedConstantID(state$: Observable<State>){
+  return state$.select(s => s.selectedConstantQuestion);
+}
+
+export function getSelectedConditionalID(state$: Observable<State>){
+  return state$.select(s => s.selectedConditionalQuestion);
+}
+
+export function getConditionalQuestions(state$: Observable<State>){
+  return state$.select(s => [ s.selectedConstantQuestion, s ] )
+    .map( ([id, state]) => {
+      const _state = <State>state; const _id = <ID>id;
+      const conditionalQuestions = _state.form.value[_id].conditionalQuestions;
+      return conditionalQuestions.map(c_id => _state.form.value[c_id]).sort( (a, b) => a.index - b.index)
+    })
+}
+
+
+// these following functions are used internally
 
 export function blankQuestion(index: number): Question {
   const id = randomString();
@@ -246,7 +296,7 @@ export function getConstantQuestionsLength(state: State): number {
 
   return Object.keys(state.form).reduce( (length: number, key) => {
     const id = value[key].id;
-    return isConditionalQuestion(id, state) ? length : length + 1;
+    return isConditionalQuestion(id, state) !== false ? length : length + 1;
   }, 0);
 }
 
@@ -257,7 +307,8 @@ export function getConditionalQuestionsLength(hostID: ID, state: State): number 
   const question = questionValues[hostID]
   if ( question === undefined ) return -1;
 
-  if (question.expandable === false || !Array.isArray(question.conditionalQuestions) || isConditionalQuestion(hostID, state)) 
+  if (question.expandable === false 
+      || !Array.isArray(question.conditionalQuestions) || isConditionalQuestion(hostID, state) !== false) 
     return -1;
 
   return question.conditionalQuestions.length;

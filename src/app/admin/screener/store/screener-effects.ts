@@ -10,7 +10,7 @@ const TIMEOUT = 20000;
 const URL = '/protected/screener';
 
 @Injectable()
-export class AuthEffects {
+export class ScreenerEffects {
   constructor(
     private http: Http,
     private actions$: Actions,
@@ -18,12 +18,11 @@ export class AuthEffects {
   ) { }
 
   private getCredentials(): RequestOptions {
-    if (this.authService.credentials === undefined) {
-      throw new Error('undefined credentials in data service');
-    }
     const headers = new Headers();
     headers.append("Authorization", "Basic " + this.authService.credentials);
-    return new RequestOptions({ headers: headers })
+    const r = new RequestOptions({ headers: headers });
+    console.log(r);
+    return r;
   }
 
   @Effect() loadData$ = this.actions$
