@@ -36,7 +36,7 @@ import { QuestionListComponent } from './screener/question-list/question-list.co
   imports: [
     CommonModule,
     routing,
-    MaterialModule.forRoot(),
+    MaterialModule,
     StoreModule.provideStore(reducer),
     EffectsModule.run(ProgramOverviewEffects),
     EffectsModule.run(ProgramEditEffects),

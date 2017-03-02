@@ -32,7 +32,7 @@ import { QuickLinksComponent } from './user/quick-links/quick-links.component';
     MasterScreenerModule,
     BrowseModule,
     routing,
-    MaterialModule.forRoot()
+    MaterialModule
   ],
   providers: [
     MasterScreenerService,

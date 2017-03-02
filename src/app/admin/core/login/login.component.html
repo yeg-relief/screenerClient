@@ -8,15 +8,17 @@
       <md-card-subtitle *ngIf="invalidLogin"> invalid login </md-card-subtitle>
       <md-card-content>
         <div class="p1"></div>
-         <md-input class="col-6" 
-            style="margin-left:25%; margin-right:25%;" 
-            placeholder="username" [(ngModel)]="credentials.username">
-         </md-input>
+          <md-input-container>
+            <input mdInput class="col-6" 
+              style="margin-left:25%; margin-right:25%;" 
+              placeholder="username" [(ngModel)]="credentials.username">
+          </md-input-container>
         <div class="p1"></div>
-        <md-input class="col-6" 
-            style="margin-left:25%; margin-right:25%;" 
-            placeholder="password" type="password" [(ngModel)]="credentials.password">
-        </md-input>
+          <md-input-container>
+            <input mdInput class="col-6" 
+                style="margin-left:25%; margin-right:25%;" 
+                placeholder="password" type="password" [(ngModel)]="credentials.password">
+          </md-input-container>
         <div class="p1"></div>
       </md-card-content>
       <div *ngIf="credentials.username.length === 0 || credentials.password.length === 0">

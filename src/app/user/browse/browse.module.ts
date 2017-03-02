@@ -14,7 +14,7 @@ import { BrowseService } from './browse.service';
     RouterModule,
     HttpModule,
     UserFacingProgramModule,
-    MaterialModule.forRoot()
+    MaterialModule
   ],
   declarations: [
     BrowseComponent,

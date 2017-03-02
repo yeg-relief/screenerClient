@@ -14,7 +14,6 @@ import { Key } from './models/key';
 import 'rxjs/add/operator/concatMap';
 import 'rxjs/add/operator/do';
 import 'rxjs/add/operator/find';
-import { cloneDeep } from 'lodash';
 import { ApplicationFacingProgram } from './models/program';
 
 export interface State {

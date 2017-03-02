@@ -6,7 +6,6 @@ import { Observable } from 'rxjs/Observable';
 import { ReplaySubject } from 'rxjs/ReplaySubject';
 import { Http, Response, Headers, RequestOptions } from '@angular/http';
 import { AuthService } from './core/services/auth.service'
-import { cloneDeep } from 'lodash';
 import 'rxjs/add/observable/of';
 import 'rxjs/add/operator/switchMap';
 import 'rxjs/add/observable/range';
