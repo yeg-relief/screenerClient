@@ -30,6 +30,7 @@ import { ScreenerQuestionComponent } from './screener/screener-question/screener
 import { UserQuestionComponent } from './screener/screener-question/user-question/user-question.component';
 import { ConditionalQuestionsComponent } from './screener/screener-question/conditional-questions/conditional-questions.component';
 import { OverviewControlsComponent } from './screener/screener-overview/overview-controls/overview-controls.component';
+import { QuestionListComponent } from './screener/question-list/question-list.component';
 
 @NgModule({
   imports: [
@@ -54,6 +55,7 @@ import { OverviewControlsComponent } from './screener/screener-overview/overview
     UserQuestionComponent,
     ConditionalQuestionsComponent,
     OverviewControlsComponent,
+    QuestionListComponent,
   ],
   providers: [
     DataService, 

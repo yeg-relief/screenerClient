@@ -18,13 +18,17 @@ export interface State {
   styles: ScreenerStyles;
   form: FormGroup;
   error: string;
+  selectedConstantQuestion: ID;
+  selectedConditionalQuestion: ID;
 };
 
 export const initialState: State = {
   loading: false,
   styles: {},
   form: undefined,
-  error: ''
+  error: '',
+  selectedConstantQuestion: undefined,
+  selectedConditionalQuestion: undefined,
 };
 
 export function reducer(state = initialState, action: ScreenerActions): State {
@@ -200,6 +204,8 @@ export function getError(state$: Observable<State>){
 export function isLoading(state$: Observable<State>){
   return state$.select(s => s.loading);
 }
+
+export function getConstantQuestions(state$: Observable<State>){}
 
 export function blankQuestion(index: number): Question {
   const id = randomString();

@@ -1,12 +1,21 @@
 export type ID = string;
 
-export interface Question{
+type ControlType = '' | 'invalid' | 'NumberSelect' | 'NumberInput' | 'CheckBox';
+
+export interface Question {
   conditionalQuestions?: ID[],
-  controlType: '' | 'invalid' | 'NumberSelect' | 'NumberInput' | 'CheckBox',
+  controlType: ControlType,
   expandable: boolean,
   id: ID,
   index: number,
   key: string,
   label: string,
   options: number[]
+};
+
+export interface QuestionThumbNail {
+  key: string,
+  controlType: ControlType,
+  expandable: boolean,
+  conditionalLength?: number,
 };
