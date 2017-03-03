@@ -1,6 +1,6 @@
 import '@ngrx/core/add/operator/select';
 import { Observable } from 'rxjs/Observable';
-import { Screener, ID, Question } from '../../models';
+import { Screener, ID, Question, Key } from '../../models';
 import { ScreenerActions, ScreenerActionTypes } from './screener-actions';
 import { FormGroup, AbstractControl, FormControl, Validators } from '@angular/forms';
 import { questionValidator } from '../validators';
@@ -20,6 +20,7 @@ export interface State {
   error: string;
   selectedConstantQuestion: ID;
   selectedConditionalQuestion: ID;
+  keys: Key[];
 };
 
 export const initialState: State = {
@@ -29,6 +30,7 @@ export const initialState: State = {
   error: '',
   selectedConstantQuestion: undefined,
   selectedConditionalQuestion: undefined,
+  keys: [],
 };
 
 export function reducer(state = initialState, action: ScreenerActions): State {
@@ -105,7 +107,8 @@ export function reducer(state = initialState, action: ScreenerActions): State {
 
       const screener = <Screener>action.payload;
 
-      if ( !Array.isArray(screener.conditionalQuestions) || !Array.isArray(screener.conditionalQuestions) ){
+      if ( !Array.isArray(screener.conditionalQuestions) || !Array.isArray(screener.conditionalQuestions
+            || !Array.isArray(screener.keys)) ){
         return (<any>Object).assign({}, state, {
           loading: false,
           error: 'loaded data is corrupt and unable to be displayed'
@@ -128,11 +131,14 @@ export function reducer(state = initialState, action: ScreenerActions): State {
         return _styles;
       }, {});
 
+      const keys = screener.keys;
+
       return (<any>Object).assign({}, {
         loading: false,
         error: '',
         styles,
-        form
+        form,
+        keys,
       })
     }
 
@@ -221,6 +227,10 @@ export function getError(state$: Observable<State>){
 
 export function isLoading(state$: Observable<State>){
   return state$.select(s => s.loading);
+}
+
+export function getKeys(state$: Observable<State>) {
+  return state$.select(s => s.keys);
 }
 
 export function getConstantQuestions(state$: Observable<State>){

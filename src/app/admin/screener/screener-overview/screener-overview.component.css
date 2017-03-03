@@ -2,11 +2,32 @@
   margin: 0 auto; 
   height: 100%;
   overflow-x: hidden;
+  width: 95vw;
 }
 
 #question-content {
   height: 55vh;
   width: 100%;
   background-color: green;
-   
+}
+
+#screener-content {
+  max-height: 55vh;
+  width: 100%;
+}
+
+app-question-list {
+  height: 55vh;
+  overflow-y: scroll;
+  overflow-x: hidden;
+}
+
+#constant-question-list {
+  flex: none;
+  width: 17em;
+}
+
+#conditional-question-list {
+  flex: none;
+  width: 15em !important;
 }

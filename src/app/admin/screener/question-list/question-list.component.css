@@ -20,9 +20,10 @@
 }
 
 md-list {
-  height: 55vh;
-  width: 17em;
-  overflow: scroll;
+  height: 100%;
+  overflow-y: scroll;
+  overflow-x: hidden;
+  background-color: darkslateblue;
 }
 
 .question-item {

@@ -84,8 +84,6 @@ export class ScreenerOverviewComponent implements OnInit {
   handleSelect(id: ID) { this.store.dispatch(new actions.SelectQuestion(id)) }
 
   handleAddQuestion(payload: {[key:string]: QuestionType | ID }) {
-    console.log('enter handleAddQuestion');
-    console.log(payload)
     const type = payload['type'], host_id = payload['host_id'];
 
     
@@ -93,7 +91,7 @@ export class ScreenerOverviewComponent implements OnInit {
       this.store.dispatch(new actions.AddQuestion({}));
       setTimeout( () => { 
         if (this.reloadConstantQuestions !== undefined) this.reloadConstantQuestions.next(''); 
-      }, 60)
+      }, 0)
       return; 
     }
 
@@ -101,10 +99,8 @@ export class ScreenerOverviewComponent implements OnInit {
       this.store.dispatch(new actions.AddConditionalQuestion(host_id));
       setTimeout( () => { 
         if (this.reloadConditionalQuestions !== undefined) this.reloadConditionalQuestions.next(''); 
-      }, 60)
+      }, 0)
     }
-
-    console.log('exit handleAddQuestion');
   }
 
   handleSelectConditional(id: ID) {
