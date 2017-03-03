@@ -63,7 +63,7 @@ import { QuestionListComponent } from './screener/question-list/question-list.co
     HttpModule, 
     KeyResolverService,
     ProgramsResolverService,
-    ScreenerModel, ScreenerNetwork, ScreenerController
+    ScreenerModel, ScreenerNetwork, ScreenerController,
   ]
 })
 export class AdminModule { }

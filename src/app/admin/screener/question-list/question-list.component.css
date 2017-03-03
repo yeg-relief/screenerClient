@@ -13,3 +13,18 @@
 .selected {
   background-color: #0074d9;
 }
+
+.header {
+  min-height: 5em;
+  padding-right: 1em;
+}
+
+md-list {
+  height: 55vh;
+  width: 17em;
+  overflow: scroll;
+}
+
+.question-item {
+  cursor: pointer;
+}

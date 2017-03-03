@@ -17,19 +17,13 @@ export class ScreenerEffects {
     private authService: AuthService
   ) { }
 
-  private getCredentials(): RequestOptions {
-    const headers = new Headers();
-    headers.append("Authorization", "Basic " + this.authService.credentials);
-    const r = new RequestOptions({ headers: headers });
-    console.log(r);
-    return r;
-  }
+  
 
   @Effect() loadData$ = this.actions$
       .ofType(ScreenerActionTypes.LOAD_DATA)
-      .map(_ => this.getCredentials())
+      .map(action => action.payload)
       .switchMap(requestOptions => 
-        this.http.post(URL, requestOptions)
+        this.http.get(URL, requestOptions)
           .map(res => ({ type: ScreenerActionTypes.LOAD_DATA_SUCCESS, payload: res.json().response }))
           .retry(2)
           .timeout(TIMEOUT)
@@ -39,8 +33,7 @@ export class ScreenerEffects {
 
   @Effect() saveData$ = this.actions$
       .ofType(ScreenerActionTypes.SAVE_DATA)
-      .map(action => action.payload)
-      .zip(Observable.of(this.getCredentials()))
+      .map(action => [action.payload.screener, action.payload.credentials])
       .switchMap( ([payload, options]) => {
         return this.http.post(URL, payload, options)
           .map(res => ({ type: ScreenerActionTypes.SAVE_DATA_SUCCESS, payload: res.json().response }))

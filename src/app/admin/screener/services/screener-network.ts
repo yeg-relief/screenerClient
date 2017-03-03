@@ -8,12 +8,15 @@ export class ScreenerNetwork {
   constructor(private http: Http, private authService: AuthService) {}
 
   private getCredentials(): Headers {
+    /*
     if (this.authService.credentials === undefined) {
       throw new Error('undefined credentials in data service');
     }
     const headers = new Headers();
     headers.append("Authorization", "Basic " + this.authService.credentials);
     return headers;
+    */
+    return new Headers();
   }
 
   push(data): Observable<Response>  {

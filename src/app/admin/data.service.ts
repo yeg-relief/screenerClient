@@ -25,18 +25,13 @@ export class DataService {
 
   constructor(private http: Http, private authService: AuthService) {}
 
-  private getCredentials(): Headers{
-    if (this.authService.credentials === undefined) {
-      throw new Error('undefined credentials in data service');
-    }
-    const headers = new Headers();
-    headers.append("Authorization", "Basic " + this.authService.credentials);
-    return headers;
+  private getCredentials(): RequestOptions{
+    return this.authService.getCredentials();
   }
 
   getKeys() {
-    const options = new RequestOptions({headers: this.getCredentials()})
-    return this.keys$ = this.http.get('/protected/key/', options)
+    const creds = this.getCredentials();
+    return this.keys$ = this.http.get('/protected/key/', creds)
       .map(res => res.json().keys)
       .catch(this.loadError);
   }
@@ -57,8 +52,8 @@ export class DataService {
   }
 
   loadPrograms(): Observable<ApplicationFacingProgram[]> {
-    const options = new RequestOptions({headers: this.getCredentials()})
-    return this.http.get('/protected/program/', options)
+    const creds = this.getCredentials();
+    return this.http.get('/protected/program/', creds)
       .map( res => res.json())
       .reduce( (accum, obj) => {
         const programs = obj.programs;
@@ -79,30 +74,28 @@ export class DataService {
   }
 
   updateProgram(program: ApplicationFacingProgram) {
-    const headers = this.getCredentials()
-    headers.append('Content-Type', 'application/json' );
-    const options = new RequestOptions({ headers: headers });
+    const creds = this.getCredentials();
+    creds.headers.append('Content-Type', 'application/json' );
     const body = JSON.stringify({ data: program });
-    return this.http.put('/protected/program/', body, options)
+    return this.http.put('/protected/program/', body, creds)
       .map(res => res.json().created)
       .catch(this.loadError)
       .toPromise();
   }
 
   createProgram(program: ApplicationFacingProgram) {
-    const headers = this.getCredentials()
-    headers.append('Content-Type', 'application/json' );
-    const options = new RequestOptions({ headers: headers });
+    const creds = this.getCredentials();
+    creds.headers.append('Content-Type', 'application/json' );
     const body = JSON.stringify({ data: program });
-    return this.http.post('/protected/program/', body, options)
+    return this.http.post('/protected/program/', body, creds)
       .map(res => res.json().response)
       .catch(this.loadError)
       .toPromise();
   }
 
   deleteProgram(program: ApplicationFacingProgram) {
-    const options = new RequestOptions({headers: this.getCredentials()})
-    return this.http.delete(`/protected/program/${program.guid}`, options)
+    const creds = this.getCredentials();
+    return this.http.delete(`/protected/program/${program.guid}`, creds)
       .map(res => res.json())
       .catch(this.loadError)
       .toPromise()
@@ -111,11 +104,10 @@ export class DataService {
   // updateKey is really more like createKey
   updateKey(key: Key) {
     const k = [key];
-    const headers = this.getCredentials()
-    headers.append('Content-Type', 'application/json' );
-    const options = new RequestOptions({ headers: headers });
+    const creds = this.getCredentials();
+    creds.headers.append('Content-Type', 'application/json' );
     const body = JSON.stringify({ key: key });
-    return this.http.post(`/protected/key/`, body, options)
+    return this.http.post(`/protected/key/`, body, creds)
       .map(res => res.json().update)
       .catch(this.loadError)
   }

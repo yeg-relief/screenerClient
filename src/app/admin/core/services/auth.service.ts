@@ -5,7 +5,7 @@ import { Observable } from 'rxjs/Observable';
 @Injectable()
 export class AuthService {
   isLoggedIn: boolean = false;
-  credentials: string;
+  private credentials: string;
   // store the URL so we can redirect after logging in
   redirectUrl = 'admin/screener/edit';
 
@@ -30,5 +30,13 @@ export class AuthService {
   logout(): void {
     this.isLoggedIn = false;
     this.credentials = '';
+  }
+
+  getCredentials(): RequestOptions {
+    const headers = new Headers();
+    headers.append("Authorization", "Basic " + this.credentials);
+    const r = new RequestOptions({ headers: headers });
+    console.log(r);
+    return r;
   }
 }

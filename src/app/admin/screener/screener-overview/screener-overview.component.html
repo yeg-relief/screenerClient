@@ -4,12 +4,30 @@
   <div id="screener-content" class="flex col-12">
     
     <app-question-list 
+        id="constant-question-list"
+        class="question-list"
         [questions]="constantQuestions$ | async"
         [form]="form$ | async"
         [type]="constant_type"
         (questionSelect)="handleSelect($event)"
         (addQuestion)="handleAddQuestion($event)">
     </app-question-list>
+  
+    <div id="question-content" class="flex flex-column">
+      <div *ngIf="(conditionalQuestions$ | async )?.length > 0">
+        <app-question-list
+          id="conditional-question-list"
+          class="question-list" 
+          [questions]="conditionalQuestions$$ | async"
+          [form]="form$ | async"
+          [type]="conditional_type"
+          [host_id]="selectedConstantID$ | async"
+          (questionSelect)="handleSelectConditional($event)"
+          (addQuestion)="handleAddQuestion($event)">
+      </app-question-list>
+      </div>
+
+    </div>
 
   </div>
   <div class="p2"></div>

@@ -50,7 +50,7 @@ import 'rxjs/add/operator/multicast';
     `
 
   ],
-  providers: [  ]
+  providers: [ ]
 })
 export class AppComponent implements OnInit {
 

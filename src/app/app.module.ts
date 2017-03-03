@@ -35,10 +35,10 @@ import { QuickLinksComponent } from './user/quick-links/quick-links.component';
     MaterialModule
   ],
   providers: [
-    MasterScreenerService,
+    MasterScreenerService, 
+    BrowseService,
     AuthService,
-    AuthGuardService, 
-    BrowseService
+    AuthGuardService,
   ],
   bootstrap: [AppComponent]
 })

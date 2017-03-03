@@ -37,12 +37,11 @@ export function reducer(state = initialState, action: ScreenerActions): State {
 
     case ScreenerActionTypes.ADD_QUESTION: {
       if (state.form === undefined) return state;
-
       const index = getConstantQuestionsLength(state);
       const question = blankQuestion(index);
       const control = question_to_control(question);
-      state.form.addControl(question.id, new FormGroup(control))
-      state.styles[question.id] = freshStyle();
+      state.form.addControl(question.id, new FormGroup(control, questionValidator))
+      //state.styles[question.id] = freshStyle();
       return state;
     }
 
@@ -63,7 +62,7 @@ export function reducer(state = initialState, action: ScreenerActions): State {
       const question = blankQuestion(index);
       question.expandable = false;
       const control = question_to_control(question);
-      state.form.addControl(question.id, new FormGroup(control));
+      state.form.addControl(question.id, new FormGroup(control, questionValidator));
       state.form.get([hostID, 'conditionalQuestions']).setValue([...hostQuestion.conditionalQuestions, question.id]);
       state.styles[question.id] = freshStyle();
 
@@ -235,6 +234,8 @@ export function getConstantQuestions(state$: Observable<State>){
         .filter( q => isConditionalQuestion(q.id, s) === false )
         .sort( (a, b) => a.index - b.index);
     })
+    .do(_ => console.log('getConstantQuestions'))
+    .do(thing => console.log(thing))
 }
 
 export function getSelectedConstantID(state$: Observable<State>){
@@ -245,13 +246,18 @@ export function getSelectedConditionalID(state$: Observable<State>){
   return state$.select(s => s.selectedConditionalQuestion);
 }
 
-export function getConditionalQuestions(state$: Observable<State>){
-  return state$.select(s => [ s.selectedConstantQuestion, s ] )
-    .map( ([id, state]) => {
-      const _state = <State>state; const _id = <ID>id;
-      const conditionalQuestions = _state.form.value[_id].conditionalQuestions;
-      return conditionalQuestions.map(c_id => _state.form.value[c_id]).sort( (a, b) => a.index - b.index)
-    })
+export function getConditionalQuestionIDS(state$: Observable<State>){
+  let selectedConstantID: ID;
+
+  return state$.select(s => { selectedConstantID = s.selectedConstantQuestion; return  s } )
+    .filter(s => s.selectedConstantQuestion !== undefined)
+    .do( _ => console.log(_))
+    .map( state => {
+      console.log(selectedConstantID);
+      const conditionalQuestions = state.form.value[selectedConstantID].conditionalQuestions;
+      console.log(conditionalQuestions);
+      return conditionalQuestions;
+    });
 }
 
 
@@ -294,7 +300,7 @@ export function question_to_control(question: Question): ControlMap {
 export function getConstantQuestionsLength(state: State): number {
   const value: { [key: string]: Question } = state.form.value;
 
-  return Object.keys(state.form).reduce( (length: number, key) => {
+  return Object.keys(value).reduce( (length: number, key) => {
     const id = value[key].id;
     return isConditionalQuestion(id, state) !== false ? length : length + 1;
   }, 0);

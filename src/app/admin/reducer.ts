@@ -59,7 +59,7 @@ export const isScreenerLoading = share(compose(fromScreener.isLoading, getScreen
 
 export const getConstantQuestions = share(compose(fromScreener.getConstantQuestions, getScreenerState));
 
-export const getConditionalQuestions = share(compose(fromScreener.getConditionalQuestions, getScreenerState));
+export const getConditionalQuestions = share(compose(fromScreener.getConditionalQuestionIDS, getScreenerState));
 
 export const getConditionalQuestionsLength = share(compose(fromScreener.getConditionalQuestionsLength, getScreenerState));
 
