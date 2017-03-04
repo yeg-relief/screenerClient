@@ -20,6 +20,7 @@ type QUESTION_KEY_TYPE = 'integer' | 'boolean' | 'invalid' | 'broken';
 export class QuestionEditComponent implements OnInit, OnDestroy {
   private readonly INVALID_TYPE: QUESTION_KEY_TYPE = 'invalid';
   private readonly BROKEN_TYPE: QUESTION_KEY_TYPE = 'broken';
+  private readonly INTEGER_TYPE: QUESTION_KEY_TYPE = 'integer';
   private readonly CONTROL_TYPES = [
     { value: 'NumberInput', display: 'type' },
     { value: 'NumberSelect', display: 'select'},
@@ -74,16 +75,23 @@ export class QuestionEditComponent implements OnInit, OnDestroy {
       .let(this.findUnusedKeys.bind(this))
       .startWith(seed);
 
-    const digit_pattern = '^\d+$'
+    const digit_pattern = '^\\d+$'
 
     this.numberOptionForm = this.fb.group({
-      optionValue: ['', Validators.compose([Validators.required, Validators.pattern(digit_pattern)]) ]
+      optionValue: ['', Validators.pattern(digit_pattern) ]
     })
-    this.controlType$ = this.form.get([this.questionID, 'controlType']).valueChanges
-      .startWith(this.form.get([this.questionID, 'controlType']).value); 
+    
+    this.controlType$ = this.store.let(fromRoot.getSelectedConstantID)  
+      .mergeMap( id => this.form.get([id, 'controlType']).valueChanges)
+      .startWith(this.form.get([this.questionID, 'controlType']).value)
+      .do( _ => console.log('this.controlType$'))
+      .catch( _ => Observable.of(''))
 
-    this.options$ = this.form.get([this.questionID, 'options']).valueChanges
-      .startWith(this.form.get([this.questionID, 'options']).value); 
+    this.options$ = this.store.let(fromRoot.getSelectedConstantID)
+      .mergeMap( id => this.form.get([id, 'options']).valueChanges )
+      .startWith(this.form.get([this.questionID, 'options']).value)
+      .do( _ => console.log('this.options$'))
+      .catch( _ => Observable.of([]))
 
     this.subscriptions = [  ]
   }

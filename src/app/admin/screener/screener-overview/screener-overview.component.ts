@@ -58,7 +58,8 @@ export class ScreenerOverviewComponent implements OnInit {
     this.conditionalQuestions$ = this.selectedConstantID$.withLatestFrom(this.form$)
       .filter( ([selectedConstantID, form, ]) => form.get(selectedConstantID) !== null)
       .filter( ([ selectedConstant, form,]) => Array.isArray(form.get([selectedConstant, 'conditionalQuestions']).value))
-      .map( ([selectedConstant, form,]) => form.get([selectedConstant, 'conditionalQuestions']).value)
+      .map( ([selectedConstant, form,]) => [form.get([selectedConstant, 'conditionalQuestions']).value, form])
+      .map( ([conditionalIDs, form]) => conditionalIDs.sort( (a, b) => form.get([a, 'index']).value - form.get([b, 'index']).value ) )
 
     this.conditionalQuestions$$ = this.reloadConditionalQuestions
       .mergeMap(_ => this.conditionalQuestions$)
@@ -76,7 +77,9 @@ export class ScreenerOverviewComponent implements OnInit {
       .filter(loading => loading === false)
       .take(1)
       .subscribe( _ => {
-        setTimeout( () => { if (this.reloadConstantQuestions !== undefined) this.reloadConstantQuestions.next(''); }, 0);
+        setTimeout( () => { 
+          if (this.reloadConstantQuestions !== undefined) this.reloadConstantQuestions.next(''); 
+        }, 0);
       })
     
   }
