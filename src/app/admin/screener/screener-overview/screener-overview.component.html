@@ -24,7 +24,7 @@
     </app-question-list>
 
 
-    <div id="question-content">
+    <div id="question-content" *ngIf="(selectedConstantID$ | async) !== undefined">
       <app-question-edit [form] = "form$ | async" [questionID]="selectedConstantID$ | async"></app-question-edit>
     </div>
 

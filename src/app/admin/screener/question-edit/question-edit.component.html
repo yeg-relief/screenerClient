@@ -1,34 +1,38 @@
-<div *ngIf="form.get(questionID) !== null">
+<div *ngIf="form !== undefined">
+<div *ngIf="form.get(questionID) !== null" class="flex flex-column" id="question-container">
   <main class="col-12" [formGroup]="form.get(questionID)">
     
-    <md-input-container>
+    <md-input-container class="col-12">
       <input mdInput placeholder="Question Label" formControlName="label">
     </md-input-container>
 
-    <md-select placeholder="Key" formControlName="key">
+    <md-select placeholder="Key" formControlName="key" class="col-12">
       <md-option *ngFor="let unusedKey of (unusedKeys | async)" [value]="unusedKey.name">{{ unusedKey.name }}</md-option>
     </md-select>
 
-    <md-checkbox formControlName="expandable" [attr.disabled]="(selectedKeyType | async) === INTEGER_TYPE ? true : null">
-      Expandable
-    </md-checkbox>
+    <div class="col-12" style="margin-top: 1em; margin-bottom: 1em;">
+      <md-checkbox formControlName="expandable" [attr.disabled]="(selectedKeyType | async) === INTEGER_TYPE ? true : null">
+        Expandable
+      </md-checkbox>
+    </div>
 
-    <md-select placeholder="Input Type" formControlName="controlType">
+    <md-select placeholder="Input Type" formControlName="controlType" class="col-12">
       <md-option *ngFor="let control of CONTROL_TYPES" [value]="control.value"> {{ control.display }} </md-option>
     </md-select>
 
   </main>
-
   <section 
       id="number-select-options" 
-      *ngIf="(form.get([questionID, 'controlType']).valueChanges | async) === 'NumberSelect'"
-      [formGroup]="numberOptionForm">
-    <md-input-container>
+      *ngIf="(controlType$ | async) === 'NumberSelect'"
+      [formGroup]="numberOptionForm"
+      class="flex col-12">
+    <md-input-container class="col-9">
       <input mdInput placeholder="option value" formControlName="optionValue">
     </md-input-container>
-    <div *ngFor="let option of (form.get([questionID, 'options']).valueChanges | async)" style="background-color: palegreen"> 
+    <div *ngFor="let option of ( options$  | async )" style="background-color: palegreen"> 
       {{ option }}
     </div>
-    <button md-button [attr.disabled]="!adminForm.valid"> ADD </button>
+    <button md-raised-button color="primary" [attr.disabled]="!numberOptionForm.valid" (click)="addOption()"> ADD </button>
   </section>
+</div>
 </div>

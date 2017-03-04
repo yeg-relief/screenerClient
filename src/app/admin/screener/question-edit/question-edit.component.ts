@@ -1,6 +1,6 @@
 import { Component, OnInit, Input, OnDestroy } from '@angular/core';
-import { FormGroup, FormBuilder, Validators } from '@angular/forms';
-import { ID, Key, Question } from '../../models';
+import { FormGroup, FormBuilder, Validators, FormControl } from '@angular/forms';
+import { ID, Key, Question, ControlType } from '../../models';
 import { Observable } from 'rxjs/Observable';
 import { Subscription } from 'rxjs/Subscription';
 import { Store } from '@ngrx/store';
@@ -27,23 +27,29 @@ export class QuestionEditComponent implements OnInit, OnDestroy {
   ];
   private readonly DEBOUNCE_TIME = 250;
 
-  private adminForm: FormGroup;
-
   @Input() form: FormGroup;
   @Input() questionID: ID;
 
   private selectedKeyType: Observable<QUESTION_KEY_TYPE>;
   private unusedKeys: Observable<Key[]>;
   private subscriptions: Subscription[] = [];
-
-
-  
+  private numberOptionForm: FormGroup;
+  private numberOption$: Observable<number[]>;
+  private controlType$: Observable<ControlType>;
+  private options$: Observable<number[]>;
 
   
 
   constructor(private store: Store<fromRoot.State>, private fb: FormBuilder) { }
 
   ngOnInit() {
+
+    // TODO: create all questions with an options array...
+    if(this.form.get([this.questionID, 'options']) === null){
+      (<FormGroup>this.form.get([this.questionID])).addControl('options', new FormControl([]));
+      console.log(this.form.get([this.questionID, 'options']).value)
+    }
+
 
     if(this.form.get([this.questionID, 'key']) === null) {
       this.selectedKeyType = Observable.of(this.BROKEN_TYPE);
@@ -70,9 +76,14 @@ export class QuestionEditComponent implements OnInit, OnDestroy {
 
     const digit_pattern = '^\d+$'
 
-    this.adminForm = this.fb.group({
+    this.numberOptionForm = this.fb.group({
       optionValue: ['', Validators.compose([Validators.required, Validators.pattern(digit_pattern)]) ]
     })
+    this.controlType$ = this.form.get([this.questionID, 'controlType']).valueChanges
+      .startWith(this.form.get([this.questionID, 'controlType']).value); 
+
+    this.options$ = this.form.get([this.questionID, 'options']).valueChanges
+      .startWith(this.form.get([this.questionID, 'options']).value); 
 
     this.subscriptions = [  ]
   }
@@ -84,6 +95,13 @@ export class QuestionEditComponent implements OnInit, OnDestroy {
       .map( ([questionKeyNames, allKeys]) => {
         return allKeys.filter( key => questionKeyNames.find(name => name === key.name) === undefined)
       })
+  }
+
+  addOption() {
+    const optionValue = Number.parseInt(this.numberOptionForm.get('optionValue').value, 10);
+    const presentOptions = this.form.get([this.questionID, 'options']).value;
+    this.form.get([this.questionID, 'options']).setValue([...presentOptions, optionValue]);
+    this.numberOptionForm.get('optionValue').setValue('');
   }
 
   ngOnDestroy() {
