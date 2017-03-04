@@ -19,13 +19,13 @@
         [form]="form$ | async"
         [type]="conditional_type"
         [host_id]="selectedConstantID$ | async"
-        (questionSelect)="handleSelectConditional($event)"
+        (questionSelect)="handleSelect($event)"
         (addQuestion)="handleAddQuestion($event)">
     </app-question-list>
 
 
     <div id="question-content" *ngIf="(selectedConstantID$ | async) !== undefined">
-      <app-question-edit [form] = "form$ | async" [questionID]="selectedConstantID$ | async"></app-question-edit>
+      <app-question-edit></app-question-edit>
     </div>
 
   </div>

@@ -106,10 +106,6 @@ export class ScreenerOverviewComponent implements OnInit {
     }
   }
 
-  handleSelectConditional(id: ID) {
-    this.store.dispatch(new actions.SelectConditionalQuestion(id));
-  }
-
   ngOnDestroy() {}
 
 }

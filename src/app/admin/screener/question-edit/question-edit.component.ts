@@ -5,7 +5,7 @@ import { Observable } from 'rxjs/Observable';
 import { Subscription } from 'rxjs/Subscription';
 import { Store } from '@ngrx/store';
 import * as fromRoot from '../../reducer';
-import * as actions  from '../store/screener-actions';
+import * as actions from '../store/screener-actions';
 
 type QUESTION_KEY_TYPE = 'integer' | 'boolean' | 'invalid' | 'broken';
 
@@ -23,27 +23,58 @@ export class QuestionEditComponent implements OnInit, OnDestroy {
   private readonly INTEGER_TYPE: QUESTION_KEY_TYPE = 'integer';
   private readonly CONTROL_TYPES = [
     { value: 'NumberInput', display: 'type' },
-    { value: 'NumberSelect', display: 'select'},
+    { value: 'NumberSelect', display: 'select' },
     { value: 'CheckBox', display: 'checkbox' },
   ];
   private readonly DEBOUNCE_TIME = 250;
 
-  @Input() form: FormGroup;
-  @Input() questionID: ID;
 
-  private selectedKeyType: Observable<QUESTION_KEY_TYPE>;
-  private unusedKeys: Observable<Key[]>;
-  private subscriptions: Subscription[] = [];
-  private numberOptionForm: FormGroup;
-  private numberOption$: Observable<number[]>;
-  private controlType$: Observable<ControlType>;
-  private options$: Observable<number[]>;
 
-  
+  private selectedQuestionID$: Observable<ID>;
+  private form$: Observable<FormGroup>;
+  private selectedKeyType$: Observable<QUESTION_KEY_TYPE>;
+  private unusedKeys$: Observable<Key[]>;
 
   constructor(private store: Store<fromRoot.State>, private fb: FormBuilder) { }
 
   ngOnInit() {
+
+    this.selectedQuestionID$ = Observable.merge(
+      this.store.let(fromRoot.getSelectedConstantID),
+      this.store.let(fromRoot.getSelectedConditionalID)
+    )
+      .filter(id => id !== undefined)
+      .share();
+
+    this.form$ = this.selectedQuestionID$
+      .withLatestFrom(this.store.let(fromRoot.getForm))
+      .map( ([questionID, form]) => form.get(questionID))
+      .filter(questionGroup => questionGroup !== null)
+      //.do(f => console.log(f.value))
+      .startWith(this.fb.group({
+        label: [''], key: [''], controlType: [''], expandable: [false],  
+      }))
+      .share();
+
+    this.selectedKeyType$ = this.form$
+      .map(questionGroup => questionGroup.get('key').value)
+      .filter(val => val !== undefined)
+      .withLatestFrom(this.store.let(fromRoot.getScreenerKeys))
+      .map(([keyName, allKeys]) => {
+        const key = allKeys.find(key => key.name === keyName)
+        return key === undefined ? this.INVALID_TYPE : key.type;
+      })
+      .startWith(this.INVALID_TYPE)
+    
+    this.unusedKeys$ = this.store.let(fromRoot.getForm)
+      .map(form => form.value)
+      .let(this.findUnusedKeys.bind(this))
+      .startWith([])
+
+
+
+
+    /*
 
     // TODO: create all questions with an options array...
     if(this.form.get([this.questionID, 'options']) === null){
@@ -81,6 +112,7 @@ export class QuestionEditComponent implements OnInit, OnDestroy {
       optionValue: ['', Validators.pattern(digit_pattern) ]
     })
     
+    /*
     this.controlType$ = this.store.let(fromRoot.getSelectedConstantID)  
       .mergeMap( id => this.form.get([id, 'controlType']).valueChanges)
       .startWith(this.form.get([this.questionID, 'controlType']).value)
@@ -92,28 +124,31 @@ export class QuestionEditComponent implements OnInit, OnDestroy {
       .startWith(this.form.get([this.questionID, 'options']).value)
       .do( _ => console.log('this.options$'))
       .catch( _ => Observable.of([]))
-
+    
     this.subscriptions = [  ]
+    */
   }
 
-  findUnusedKeys(input: Observable<{[key: string]: Question}>): Observable<Key[]> {
-    return input.map( changes => [Object.keys(changes), changes] )
-      .map( ([keys, value]) => (<string[]>keys).map( key => value[key].key))
+  findUnusedKeys(input: Observable<{ [key: string]: Question }>): Observable<Key[]> {
+    return input.map(changes => [Object.keys(changes), changes])
+      .map(([keys, value]) => (<string[]>keys).map(key => value[key].key))
       .withLatestFrom(this.store.let(fromRoot.getScreenerKeys))
-      .map( ([questionKeyNames, allKeys]) => {
-        return allKeys.filter( key => questionKeyNames.find(name => name === key.name) === undefined)
+      .map(([questionKeyNames, allKeys]) => {
+        return allKeys.filter(key => questionKeyNames.find(name => name === key.name) === undefined)
       })
   }
 
   addOption() {
+    /*
     const optionValue = Number.parseInt(this.numberOptionForm.get('optionValue').value, 10);
     const presentOptions = this.form.get([this.questionID, 'options']).value;
     this.form.get([this.questionID, 'options']).setValue([...presentOptions, optionValue]);
     this.numberOptionForm.get('optionValue').setValue('');
+    */
   }
 
   ngOnDestroy() {
-    for (const sub of this.subscriptions) !sub.closed ? sub.unsubscribe() : undefined;
+    //for (const sub of this.subscriptions) !sub.closed ? sub.unsubscribe() : undefined;
   }
 
 }
