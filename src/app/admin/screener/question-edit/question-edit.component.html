@@ -15,8 +15,10 @@
   </div>
 
   <md-select placeholder="Input Type" formControlName="controlType" class="col-12">
-    <md-option *ngFor="let control of CONTROL_TYPES" [value]="control.value"> {{ control.display }} </md-option>
+    <md-option *ngFor="let control of VALID_CONTROL_TYPES" [value]="control.value"> {{ control.display }} </md-option>
   </md-select>
+
+  <div> {{ VALID_CONTROL_TYPES | json }} </div>
 
 </main>
 <section 
