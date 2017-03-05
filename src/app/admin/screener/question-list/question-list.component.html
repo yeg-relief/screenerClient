@@ -14,7 +14,7 @@
         *ngIf="form.get(id) !== null" 
         [formGroup]="form.get(id)"
         (click)="handleSelect(form.get([id, 'id'])?.value)"
-        [attr.id]="form.get([id, 'id'])?.value">
+        [attr.id]="type === constant_type ? form.get([id, 'id'])?.value + '-constant-list-item' : form.get([id, 'id'])?.value + '-conditional-list-item'">
       <md-icon md-list-avatar *ngIf="form.get([id, 'expandable'])?.value && type === constant_type" [style.width]="'1em'">content_copy</md-icon>
       <md-icon md-list-avatar *ngIf="!form.get([id, 'expandable'])?.value && type === constant_type" [style.width]="'1em'"></md-icon>
       <h4 md-line>{{ form.get([id, 'key'])?.value?.name }}</h4>
