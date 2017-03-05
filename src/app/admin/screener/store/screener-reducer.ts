@@ -103,6 +103,10 @@ export function reducer(state = initialState, action: ScreenerActions): State {
         selectedConditionalQuestion = sortedConditionalQuestions.length > 0 ? sortedConditionalQuestions[0] : undefined;
 
     } else if (hostID === false){
+        const constantquestion: Question_2 = state.form.get(id).value;
+        if (constantquestion.expandable && constantquestion.conditionalQuestions.length > 0 ){
+          for (const condQuestion of constantquestion.conditionalQuestions) state.form.removeControl(condQuestion);
+        }
         state.form.removeControl(id);
         const sortedConstants = sortConstants(state);
         selectedConstantQuestion = sortedConstants.length > 0 ? sortedConstants[0] : undefined;
