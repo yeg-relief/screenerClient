@@ -70,38 +70,57 @@ export class QuestionListComponent implements OnInit, OnDestroy {
   }
   
   ngOnInit(){
-    const deselectAll = () => {
-      for (const key in this.classes) {
-        if (this.classes[key]['selected'] === true) this.classes[key]['selected'] = false;
-      }
-    }
-
-    if(this.type === this.constant_type){
-      const upArrow = Observable.fromEvent(document.body, 'keydown')
-        .filter(e => (<any>e).key === 'ArrowUp')
-        .takeUntil(this.destroySubs$)
-        .withLatestFrom(this.store.let(fromRoot.getSelectedConstantID))
-        .subscribe( ([_, selectedConstantID]) => {
-          if(selectedConstantID !== undefined) {
-
-            const index = this.questions.findIndex(id => id === selectedConstantID)
-            const targetID = this.questions[index];
-            deselectAll();
-            if(this.classes[targetID] === undefined) this.classes[targetID] = { };
-
-            this.classes[targetID]['selected'] = true;
-            
-          } else {
-
-            deselectAll();
-          }
-        })
-    }
-
     
-    
+    const upArrow = Observable.fromEvent(document.body, 'keydown')
+      .filter(e => (<any>e).key === 'ArrowUp')
+      .takeUntil(this.destroySubs$)
+      .combineLatest(this.store.let(fromRoot.getSelectedConstantID), this.store.let(fromRoot.getSelectedConditionalID))
+      .subscribe( ([_, selectedConstantID, selectedConditionalID]) => {
+        const container = document.getElementById(this.type + '-question-list'); 
+        if(selectedConstantID !== undefined && this.type === this.constant_type) {
+          this.showSelection(selectedConstantID, container)
+        } else if (selectedConstantID === undefined && this.type === this.constant_type){
+          this.deselectAll();
+        } else if (selectedConditionalID !== undefined && this.type === this.conditional_type) {
+          this.showSelection(selectedConditionalID, container)
+        } else if (selectedConditionalID === undefined && this.type == this.conditional_type) {
+          this.deselectAll();
+        }        
+      })
+  }
 
-   }
+  showSelection(selectedID, container) {
+    const element = document.getElementById(selectedID);
+    scrollIntoView(element, container);
+    const index = this.questions.findIndex(id => id === selectedID)
+    const targetID = index >= 0 ? this.questions[index] : undefined;
+    this.selectTarget(targetID);
+  }
+
+  deselectAll() {
+    for (const key in this.classes) {
+      if (this.classes[key]['selected'] === true) this.classes[key]['selected'] = false;
+    }
+  }
+
+  selectTarget(targetID){
+    this.deselectAll();
+
+    if (targetID === undefined) return;
+
+    if(this.classes[targetID] === undefined) this.classes[targetID] = { };
+
+    this.classes[targetID]['selected'] = true;
+  }
 
   ngOnDestroy() { this.destroySubs$.next() }
+}
+
+
+function scrollIntoView(element, container){
+  if (element && container){
+    element.scrollIntoView({block: 'start', behavior: 'smooth'});
+    // scroll a bit more
+    container.scroll(0, 50)
+  }
 }

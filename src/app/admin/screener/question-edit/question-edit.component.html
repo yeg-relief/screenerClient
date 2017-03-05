@@ -1,5 +1,5 @@
 <div class=" col-12 " style="overflow:scroll;">
-<main [formGroup]="form$ | async" *ngIf="(form$ | async ) !== null" class="flex flex-column" id="question-container" 
+<form [formGroup]="form$ | async" *ngIf="(form$ | async ) !== null" class="flex flex-column" id="question-container" 
   style="width: 70%; margin: 2em auto; justify-content: space-between; height: 30vh;">
 
   <md-input-container class="col-12">
@@ -30,7 +30,7 @@
     {{ (form$ | async)?.errors | json }}
   </div>
 
-</main>
+</form>
 
 <section 
     id="number-select-options" 

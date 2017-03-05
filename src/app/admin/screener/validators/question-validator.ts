@@ -29,12 +29,7 @@ export function questionValidator(control: AbstractControl): {[key: string]: any
 
     if (control.get('key') !== null) {
         key = control.get('key').value;
-    } else {
-        console.warn(`KEY IS NULL!!`);
-        console.log('-----------------')
-        console.log(control.value);
-        console.log('-----------------')
-    }
+    } 
 
     let errors = { }
 

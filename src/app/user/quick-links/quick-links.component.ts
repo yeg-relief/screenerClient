@@ -14,7 +14,7 @@ export class QuickLinksComponent implements OnInit {
     this.route.fragment.subscribe(f => {
       const element = document.querySelector("#" + f)
       if (element) {
-        element.scrollIntoView(element)
+        element.scrollIntoView(true)
       } else {
         console.log(`can't find element: ${f}`)
       }

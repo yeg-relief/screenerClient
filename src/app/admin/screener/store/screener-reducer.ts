@@ -247,7 +247,6 @@ export function reducer(state = initialState, action: ScreenerActions): State {
     }
 
     case ScreenerActionTypes.UP_ARROW: {
-
       let updatedConstantID     = undefined,
           updatedConditionalID  = undefined;
 
@@ -266,10 +265,20 @@ export function reducer(state = initialState, action: ScreenerActions): State {
       // if constant selected and conditional is not then decrease constant index;
       else if(state.selectedConstantQuestion !== undefined && state.selectedConditionalQuestion === undefined) 
       {
+        if (state.form.get([state.selectedConstantQuestion, 'expandable']).value === false){
+          const index = state.form.get([state.selectedConstantQuestion, 'index']).value;
+          updatedConstantID =  index === 0 ? undefined : sortedConstants[index - 1];
+        } else {
+          const sortedConditionalQuestions = Object.keys(state.form.value)
+                                .filter(id => isConditionalQuestion(id, state) === state.selectedConstantQuestion)
+                                .sort( (a, b) => state.form.get([a, 'index']).value - state.form.get([b, 'index']).value);
 
-        const index = state.form.get([state.selectedConstantQuestion, 'index']).value;
-        
-        updatedConstantID =  index === 0 ? undefined : sortedConstants[index - 1];
+          updatedConditionalID = sortedConditionalQuestions.length > 0 ? 
+                                 sortedConditionalQuestions[ sortedConditionalQuestions.length - 1 ] :
+                                 undefined;
+
+          updatedConstantID = state.selectedConstantQuestion;
+        }
       }
       // constant and conditional selected move up in conditionals 
       else if (state.selectedConstantQuestion !== undefined && state.selectedConditionalQuestion !== undefined)
@@ -290,7 +299,7 @@ export function reducer(state = initialState, action: ScreenerActions): State {
 
         updatedConstantID = state.selectedConstantQuestion
 
-        updatedConditionalID = conditionalIndex == 0 ? 
+        updatedConditionalID = conditionalIndex === 0 ? 
                                undefined :
                                sortedConditionalQuestions[conditionalIndex - 1];
         
