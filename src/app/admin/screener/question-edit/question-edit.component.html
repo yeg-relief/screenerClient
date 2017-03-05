@@ -24,8 +24,6 @@
     <md-option *ngFor="let control of CONTROL_TYPE_VALUES" [value]="control.value"> {{ control.display }} </md-option>
   </md-select>
 
-  <div> {{ VALID_CONTROL_TYPES | json }} </div>
-
   <div *ngIf=" (form$ | async)?.errors"> 
     {{ (form$ | async)?.errors | json }}
   </div>
@@ -33,7 +31,7 @@
 </main>
 
 
-
+{{ controlType }}
 <section 
     id="number-select-options" 
     *ngIf="controlType === 'NumberSelect'"

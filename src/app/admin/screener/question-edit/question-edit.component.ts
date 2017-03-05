@@ -7,7 +7,7 @@ import { Subject } from 'rxjs/Subject';
 import { Store } from '@ngrx/store';
 import * as fromRoot from '../../reducer';
 import * as actions from '../store/screener-actions';
-
+import 'rxjs/add/operator/pairwise';
 type QUESTION_KEY_TYPE = 'integer' | 'boolean' | 'invalid' | 'broken' | '';
 
 
@@ -28,10 +28,6 @@ export class QuestionEditComponent implements OnInit, OnDestroy {
     { value: 'NumberSelect', display: 'select' },
     { value: 'CheckBox', display: 'checkbox' },
   ];
-  private readonly DEBOUNCE_TIME = 250;
-
-  private VALID_CONTROL_TYPES: {[key: string]: string}[] = []
-
 
   private selectedQuestionID$: Observable<ID>;
   private form$: Observable<FormGroup>;
@@ -78,10 +74,18 @@ export class QuestionEditComponent implements OnInit, OnDestroy {
       }))
       .multicast( new ReplaySubject(1)).refCount()
 
-    this.unusedKeys$ = this.store.let(fromRoot.getForm)
+    const unusedKeys = this.store.let(fromRoot.getForm)
       .map(form => form.value)
       .let(this.findUnusedKeys.bind(this))
-      .startWith([])
+      .startWith([]);
+
+    this.unusedKeys$ = this.form$
+      .filter(form => form.get('key') !== null)
+      .switchMap( form => form.get('key').valueChanges )
+      .withLatestFrom(unusedKeys)
+      .map( ([releasedKey, keys]) => (<Key[]>keys).filter(key => key.name !== releasedKey.name) )
+      .startWith(this.seedUnusedKeys())
+      .multicast( new ReplaySubject(1)).refCount()
 
     // local form(s)
 
@@ -100,8 +104,36 @@ export class QuestionEditComponent implements OnInit, OnDestroy {
       .let(this.setKeyType.bind(this))
       .takeUntil(this.destroySubs$)
       .subscribe();
+
+    const control_type_change_effects = this.form$
+      .filter(form => form !== null)
+      .switchMap( form => form.get('controlType').valueChanges )
+      .let(this.updateInternalControlType.bind(this))
+      .withLatestFrom(this.form$)
+      .let(this.updateOptions.bind(this))
+      .takeUntil(this.destroySubs$)
+      .subscribe();
+
+    const question_change_effect = this.form$
+      .filter( form => form !== null)
+      .map( form => form.get('controlType').value)
+      .let(this.updateInternalControlType.bind(this))
+      .withLatestFrom(this.form$)
+      .let(this.updateOptions.bind(this))
+      .subscribe();
   }
 
+  seedUnusedKeys() {
+    let unusedKeys: Key[] = [];
+    this.store.let(fromRoot.getForm)
+      .map(form => form.value)
+      .let(this.findUnusedKeys.bind(this))
+      .startWith([])
+      .takeUntil(this.destroySubs$)
+      .subscribe( (keys: Key[]) => unusedKeys = [...keys])
+    
+    return unusedKeys;
+  }
 
   findUnusedKeys(input: Observable<{ [key: string]: Question }>): Observable<Key[]> {
     return input.map(changes => [Object.keys(changes), changes])
@@ -137,6 +169,30 @@ export class QuestionEditComponent implements OnInit, OnDestroy {
       .map( _ => capturedKey);
   }
 
+  updateInternalControlType(controlType$: Observable<ControlType>): Observable<ControlType> {
+    return controlType$.do( controlUpdate => this.controlType = controlUpdate)
+      .do( _ => { 
+          if(this.controlType !== 'NumberSelect'){
+            this.options = [];
+            this.optionForm.get('optionValue').setValue('');
+          }  
+      })
+  }
+
+  updateOptions(input$: Observable<Array<ControlType | FormGroup>>): Observable<Array<ControlType | FormGroup>> {
+    
+    return input$.do( ([controlType, form]) => {
+      const f = <FormGroup>form;
+      const ct = <ControlType>controlType;
+      
+      if (f.get('options') === null) f.addControl('options', new FormControl([]));
+
+      if (ct === 'NumberSelect') {
+        this.options = f.get('options').value;
+      } 
+    })
+  }
+/*
   optionFormEffects(optionFormInfo$: Observable<Array<ControlType | number[]>>): Observable<Array<ControlType | number[]>> {
     return optionFormInfo$
       .do( ([questionControlType, questionOptions]) => {
@@ -146,10 +202,7 @@ export class QuestionEditComponent implements OnInit, OnDestroy {
         this.options = [...options];
       });
   }
-
-  ngOnDestroy() {
-    this.destroySubs$.next();
-    //for (const sub of this.subscriptions) !sub.closed ? sub.unsubscribe() : undefined;
-  }
+*/
+  ngOnDestroy() { this.destroySubs$.next(); }
 
 }
