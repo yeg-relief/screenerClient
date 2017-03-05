@@ -6,9 +6,12 @@ export const ScreenerActionTypes = {
   ADD_QUESTION: '[SCREENER] ADD_QUESTION',
   ADD_CONDITIONAL_QUESTION: '[SCREENER] ADD_CONDITIONAL_QUESTION',
   DELETE_QUESTION: '[SCREENER] DELETE_QUESTION',
+  DOWN_ARROW: '[SCREENER] DOWN_ARROW',
+  LEFT_ARROW: '[SCREENER] LEFT_ARROW',
   LOAD_DATA: '[SCREENER] LOAD_DATA',
   LOAD_DATA_FAILURE: '[SCREENER] LOAD_DATA_FAILURE',
   LOAD_DATA_SUCCESS: '[SCREENER] LOAD_DATA_SUCCESS',
+  RIGHT_ARROW: '[SCREENER] RIGHT_ARROW',
   SAVE_DATA: '[SCREENER] SAVE_DATA',
   SAVE_DATA_FAILURE: '[SCREENER] LOAD_DATA_FAILURE',
   SAVE_DATA_SUCCESS: '[SCREENER] LOAD_DATA_SUCCESS',
@@ -35,6 +38,16 @@ export class DeleteQuestion implements Action {
   constructor(public payload: ID) {}
 }
 
+export class DownArrow implements Action {
+  type = ScreenerActionTypes.DOWN_ARROW;
+  constructor(public payload: {}) {}
+}
+
+export class LeftArrow implements Action {
+  type = ScreenerActionTypes.LEFT_ARROW;
+  constructor(public payload: {}) {}
+}
+
 export class LoadData implements Action {
   type = ScreenerActionTypes.LOAD_DATA;
 
@@ -49,6 +62,11 @@ export class LoadDataFailure implements Action {
 export class LoadDataSuccess implements Action {
   type = ScreenerActionTypes.LOAD_DATA_SUCCESS;
   constructor(public payload: Screener) {}
+}
+
+export class RightArrow implements Action {
+  type = ScreenerActionTypes.RIGHT_ARROW;
+  constructor(public payload: {}) {}
 }
 
 export class SaveData implements Action {
@@ -97,9 +115,12 @@ export type ScreenerActions =
   AddQuestion               |
   AddConditionalQuestion    |
   DeleteQuestion            |
+  DownArrow                 |
+  LeftArrow                 |
   LoadData                  |
   LoadDataFailure           |
   LoadDataSuccess           |
+  RightArrow                |
   SaveData                  |
   SaveDataFailure           |
   SaveDataSuccess           |

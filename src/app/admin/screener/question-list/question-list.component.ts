@@ -1,9 +1,11 @@
-import { Component, Input, Output, EventEmitter, OnInit, OnDestroy } from '@angular/core';
+import { Component, Input, Output, EventEmitter, OnInit, OnDestroy, ElementRef } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import { Question, ID, QuestionType, QUESTION_TYPE_CONDITIONAL, QUESTION_TYPE_CONSTANT } from '../../models';
 
 import { Observable } from 'rxjs/Observable';
 import { Subject } from 'rxjs/Subject';
+import { ReplaySubject } from 'rxjs/ReplaySubject';
+import { Subscription } from 'rxjs/Subscription';
 import 'rxjs/add/observable/fromEvent';
 import { Store } from '@ngrx/store';
 import * as fromRoot from '../../reducer';
@@ -27,16 +29,31 @@ export class QuestionListComponent implements OnInit, OnDestroy {
   private constant_type: QuestionType = QUESTION_TYPE_CONSTANT;
   private conditional_type: QuestionType = QUESTION_TYPE_CONDITIONAL;
 
+  private upArrow: Subscription;
+  private downArrow: Subscription;
+  private rightArrow: Subscription;
+  private leftArrow: Subscription;
+
   private destroySubs$ = new Subject();
 
-  constructor(private store: Store<fromRoot.State>) {}
+  constructor(private store: Store<fromRoot.State>, private ref: ElementRef) {}
 
   handleAddQuestion() {
     if (this.type === QUESTION_TYPE_CONSTANT ) {
-      this.addQuestion.emit({type: QUESTION_TYPE_CONSTANT});
+      Promise.resolve(this.addQuestion.emit({type: QUESTION_TYPE_CONSTANT}))
+        .then( _ => setTimeout( () => this.selectTarget(this.questions[this.questions.length - 1]), 60))
+        .then( _ => {
+          const id = this.questions[this.questions.length -1];
+          this.showSelection(id);
+        })
       return;
     } else if (this.type === QUESTION_TYPE_CONDITIONAL ) {
-      this.addQuestion.emit({type: QUESTION_TYPE_CONDITIONAL, host_id: this.host_id})
+      Promise.resolve(this.addQuestion.emit({type: QUESTION_TYPE_CONDITIONAL, host_id: this.host_id}))
+        .then( _ => setTimeout( () => this.selectTarget(this.questions[this.questions.length -1]), 60))
+        .then( _ => {
+          const id = this.questions[this.questions.length -1];
+          this.showSelection(id);
+        })
     } else {
       console.warn('[QuestionList]: unkown type @Input()');
     }
@@ -71,27 +88,79 @@ export class QuestionListComponent implements OnInit, OnDestroy {
   
   ngOnInit(){
     
-    const upArrow = Observable.fromEvent(document.body, 'keydown')
-      .filter(e => (<any>e).key === 'ArrowUp')
+  }
+
+  ngAfterViewInit(){
+    const keydown = Observable.fromEvent(document, 'keydown')
       .takeUntil(this.destroySubs$)
+      .do(e => (<any>e).preventDefault())
+      .debounceTime(60)
+      .multicast( new ReplaySubject(1)).refCount();
+
+
+    this.upArrow = keydown
       .combineLatest(this.store.let(fromRoot.getSelectedConstantID), this.store.let(fromRoot.getSelectedConditionalID))
+      .filter( ([e, _, __]) => (<any>e).key === 'ArrowUp')
       .subscribe( ([_, selectedConstantID, selectedConditionalID]) => {
-        const container = document.getElementById(this.type + '-question-list'); 
+
         if(selectedConstantID !== undefined && this.type === this.constant_type) {
-          this.showSelection(selectedConstantID, container)
+          this.showSelection(selectedConstantID)
         } else if (selectedConstantID === undefined && this.type === this.constant_type){
           this.deselectAll();
         } else if (selectedConditionalID !== undefined && this.type === this.conditional_type) {
-          this.showSelection(selectedConditionalID, container)
+          this.showSelection(selectedConditionalID,)
         } else if (selectedConditionalID === undefined && this.type == this.conditional_type) {
           this.deselectAll();
         }        
       })
+
+    this.downArrow = keydown
+      .combineLatest(this.store.let(fromRoot.getSelectedConstantID), this.store.let(fromRoot.getSelectedConditionalID))
+      .filter( ([e, _, __]) => (<any>e).key === 'ArrowDown')
+      .subscribe( ([_, selectedConstantID, selectedConditionalID]) => {
+
+        if(selectedConstantID !== undefined && this.type === this.constant_type) {
+          this.showSelection(selectedConstantID)
+        } else if (selectedConstantID === undefined && this.type === this.constant_type){
+          this.deselectAll();
+        } else if (selectedConditionalID !== undefined && this.type === this.conditional_type) {
+          this.showSelection(selectedConditionalID,)
+        } else if (selectedConditionalID === undefined && this.type == this.conditional_type) {
+          this.deselectAll();
+        }        
+      });
+
+    this.rightArrow = keydown
+      .combineLatest(this.store.let(fromRoot.getSelectedConditionalID), this.store.let(fromRoot.getSelectedConstantID))
+      .filter( ([e, __, _]) => (<any>e).key === 'ArrowRight')
+      .subscribe( ([_, selectedConditionalID, selectedConstantID]) => {
+          console.log(selectedConditionalID);
+          if (selectedConditionalID !== undefined && this.type === this.conditional_type) {
+            this.showSelection(selectedConditionalID);
+          } else if (selectedConstantID !== undefined && this.type === this.constant_type){
+            this.showSelection(selectedConstantID);
+          }   
+        },
+        error => console.log(error)
+      );
+
+    this.leftArrow = keydown
+      .combineLatest(this.store.let(fromRoot.getSelectedConditionalID))
+      .filter( ([e,  __]) => (<any>e).key === 'ArrowLeft')
+      .filter( ([_, selectedConditionalID]) => selectedConditionalID === undefined )
+      .subscribe( ([_, selectedConditionalID]) => {
+        
+        if (selectedConditionalID === undefined && this.type === this.conditional_type) {
+          const selected_id = Object.keys(this.classes).find(id => this.classes[id]['selected'] === true);
+          if (selected_id !== undefined) this.questionUnselect.emit(selected_id);
+          this.deselectAll();
+        }    
+      });
   }
 
-  showSelection(selectedID, container) {
+  showSelection(selectedID) {
     const element = document.getElementById(selectedID);
-    scrollIntoView(element, container);
+    scrollIntoView(element);
     const index = this.questions.findIndex(id => id === selectedID)
     const targetID = index >= 0 ? this.questions[index] : undefined;
     this.selectTarget(targetID);
@@ -117,10 +186,4 @@ export class QuestionListComponent implements OnInit, OnDestroy {
 }
 
 
-function scrollIntoView(element, container){
-  if (element && container){
-    element.scrollIntoView({block: 'start', behavior: 'smooth'});
-    // scroll a bit more
-    container.scroll(0, 50)
-  }
-}
+function scrollIntoView(element){if (element) element.scrollIntoView({block: "start", behavior: "smooth"});}

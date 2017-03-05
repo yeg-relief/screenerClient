@@ -1,4 +1,4 @@
-import { Component, OnInit, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, Output, EventEmitter, ElementRef } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import { Store } from '@ngrx/store';
 import { AuthService } from '../../core/services/auth.service';
@@ -39,9 +39,17 @@ export class ScreenerOverviewComponent implements OnInit {
 
   private destroySubs$ = new Subject();
 
-  constructor(private store: Store<fromRoot.State>, private auth: AuthService) { }
+  private upArrow;
+  private downArrow;
+  private leftArrow;
+  private rightArrow;
+
+  constructor(private store: Store<fromRoot.State>, private auth: AuthService, private ref: ElementRef) { }
 
   ngOnInit() {
+    console.log("SCREENER OVERVIEW ON_INIT")
+
+
     this.store.dispatch(new actions.LoadData(this.auth.getCredentials()));
 
 
@@ -98,14 +106,45 @@ export class ScreenerOverviewComponent implements OnInit {
 
     // event listeners for arrow keys 
 
-    const upArrow = Observable.fromEvent(document.body, 'keydown')
-      .filter(e => (<any>e).key === 'ArrowUp')
-      .do( _ => this.store.dispatch( new actions.UpArrow({})))
-      .takeUntil(this.destroySubs$)
-      .subscribe({
-        complete: () => console.log('UP ARROW DISPATCH COMPLETED')
-      })
     
+
+  }
+
+  ngAfterViewInit(){
+    const base = Observable.fromEvent(document, 'keydown')
+      .takeUntil(this.destroySubs$)
+      .do( _ => console.log((<any>_).key))
+      .do( (e: any) => e.preventDefault())
+      .debounceTime(60)
+      .multicast( new ReplaySubject(1)).refCount();
+
+
+      this.upArrow = base
+        .filter(e => (<any>e).key === 'ArrowUp')
+        .do( _ => this.store.dispatch( new actions.UpArrow({})))
+        .subscribe();
+
+    
+    
+      this.downArrow = base
+        .filter(e => (<any>e).key === 'ArrowDown')
+        .do( _ => this.store.dispatch( new actions.DownArrow({})))
+        .subscribe();
+
+    
+
+
+      this.rightArrow = base
+        .filter(e => (<any>e).key === 'ArrowRight')
+        .do( _ => this.store.dispatch( new actions.RightArrow({})))
+        .subscribe();
+
+    
+
+      this.leftArrow = base
+        .filter(e => (<any>e).key === 'ArrowLeft')
+        .do( _ => this.store.dispatch( new actions.LeftArrow({})))
+        .subscribe();
   }
 
   handleSelect(id: ID) { this.store.dispatch(new actions.SelectQuestion(id)) }

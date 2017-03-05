@@ -46,9 +46,12 @@ export function reducer(state = initialState, action: ScreenerActions): State {
       const question_group = new FormGroup(control, questionValidator);
       question_group.addControl('key', key_group);
       state.form.addControl(question.id, question_group);
-      //state.styles[question.id] = freshStyle();
-      return state;
-    }
+      
+      return (<any>Object).assign({}, state, {
+        selectedConstantQuestion: question.id,
+        selectedConditionalQuestion: undefined
+      });
+    };
 
 
     case ScreenerActionTypes.ADD_CONDITIONAL_QUESTION: {
@@ -74,7 +77,10 @@ export function reducer(state = initialState, action: ScreenerActions): State {
       state.form.get([hostID, 'conditionalQuestions']).setValue([...hostQuestion.conditionalQuestions, question.id]);
       state.styles[question.id] = freshStyle();
 
-      return state;
+      return (<any>Object).assign({}, state, {
+        selectedConstantQuestion: hostID,
+        selectedConditionalQuestion: question.id
+      });;
     }
 
 
@@ -94,6 +100,98 @@ export function reducer(state = initialState, action: ScreenerActions): State {
       delete state.styles[id];
 
       return state;
+    }
+
+    case ScreenerActionTypes.DOWN_ARROW: {
+      let updatedConstantID     = undefined,
+          updatedConditionalID  = undefined;
+
+      const sortedConstants = sortConstants(state);
+      
+      if (sortedConstants.length === 0) return state;
+
+
+      if(state.selectedConstantQuestion === undefined && state.selectedConditionalQuestion === undefined)  
+      {
+        updatedConstantID = sortedConstants[0];
+      } 
+      // if constant selected and conditional is not then decrease constant index;
+      else if(state.selectedConstantQuestion !== undefined && state.selectedConditionalQuestion === undefined) 
+      {
+        const index = state.form.get([state.selectedConstantQuestion, 'index']).value;
+        updatedConstantID =  index === sortedConstants.length - 1 ? 
+                             sortedConstants[0] : 
+                             sortedConstants[index + 1];
+          
+      }
+      // constant and conditional selected move up in conditionals 
+      else if (state.selectedConstantQuestion !== undefined && state.selectedConditionalQuestion !== undefined)
+      {
+        const conditionalIndex = state.form.get([state.selectedConditionalQuestion, 'index']).value;
+        const host_id = isConditionalQuestion(state.selectedConditionalQuestion, state);
+        
+        // selectedConditional is not a conditional question...
+        if(host_id === false) return state;
+
+        const sortedConditionalQuestions = sortConditionals(state, host_id);
+
+        updatedConstantID = state.selectedConstantQuestion;                        
+        updatedConditionalID = conditionalIndex === sortedConditionalQuestions.length - 1 ? 
+                               sortedConditionalQuestions[0] :
+                               sortedConditionalQuestions[conditionalIndex + 1];
+        
+      } else {
+        console.error(`[SCREENER_REDUCER]: STRANGE BEHAVIOR IN ${action.type} case.`);
+        return state;
+      }
+      
+      return (<any>Object).assign({}, state, {
+        selectedConstantQuestion: updatedConstantID,
+        selectedConditionalQuestion: updatedConditionalID
+      });
+    }   
+    
+    case ScreenerActionTypes.LEFT_ARROW: {
+      let updatedConstantID     = undefined,
+          updatedConditionalID  = undefined;
+
+      const sortedConstants = sortConstants(state);
+      
+      if (sortedConstants.length === 0) return state;
+      
+        
+      //  no questions selected... can't move left
+      if(state.selectedConstantQuestion === undefined && state.selectedConditionalQuestion === undefined)  
+      {
+        return state;
+      } 
+      // if contitionalQuestion is undefined we can't move left
+      else if(state.selectedConstantQuestion !== undefined && state.selectedConditionalQuestion === undefined) 
+      {
+        return state;
+
+        
+          
+      }
+      // move left
+      else if (state.selectedConstantQuestion !== undefined && state.selectedConditionalQuestion !== undefined)
+      {
+        const expandable = state.form.get([state.selectedConstantQuestion, 'expandable']).value;
+        const conditionalQuestions = state.form.get([state.selectedConstantQuestion, 'conditionalQuestions']).value;
+
+        if(expandable === true && conditionalQuestions.length > 0) {
+          updatedConditionalID = undefined;
+          updatedConstantID = state.selectedConstantQuestion;
+        } 
+      } else {
+        console.error(`[SCREENER_REDUCER]: STRANGE BEHAVIOR IN ${action.type} case.`);
+        return state;
+      }
+      
+      return (<any>Object).assign({}, state, {
+        selectedConstantQuestion: updatedConstantID,
+        selectedConditionalQuestion: updatedConditionalID
+      });
     }
 
 
@@ -163,6 +261,54 @@ export function reducer(state = initialState, action: ScreenerActions): State {
         keys,
       })
     }
+
+    case ScreenerActionTypes.RIGHT_ARROW: {
+      let updatedConstantID     = undefined,
+          updatedConditionalID  = undefined;
+
+      const sortedConstants = sortConstants(state);
+      
+      if (sortedConstants.length === 0) return state;
+      
+        
+      //  no questions selected... can't move right
+      if(state.selectedConstantQuestion === undefined)  
+      {
+        return state;
+      } 
+      // if constant selected and conditional is not check if constant is expandable with conditionals and move right
+      else if(state.selectedConstantQuestion !== undefined && state.selectedConditionalQuestion === undefined) 
+      {
+        const expandable = state.form.get([state.selectedConstantQuestion, 'expandable']).value;
+        const conditionalQuestions = state.form.get([state.selectedConstantQuestion, 'conditionalQuestions']).value;
+
+        if(expandable === true && conditionalQuestions.length > 0) {
+          const sortedConditionalQuestions = sortConditionals(state, state.selectedConstantQuestion);
+          updatedConditionalID = sortedConditionalQuestions[0];
+          updatedConstantID = state.selectedConstantQuestion;
+          console.log(updatedConditionalID)
+          console.log(updatedConstantID)
+        } else if( expandable === false) {
+          updatedConstantID = state.selectedConstantQuestion;
+        }
+          
+      }
+      // already in conditionals... return state
+      else if (state.selectedConstantQuestion !== undefined && state.selectedConditionalQuestion !== undefined)
+      {
+        return state;
+        
+      } else {
+        console.error(`[SCREENER_REDUCER]: STRANGE BEHAVIOR IN ${action.type} case.`);
+        return state;
+      }
+      
+      return (<any>Object).assign({}, state, {
+        selectedConstantQuestion: updatedConstantID,
+        selectedConditionalQuestion: updatedConditionalID
+      });
+    }
+
 
     case ScreenerActionTypes.SAVE_DATA: {
       let error = false
@@ -250,9 +396,7 @@ export function reducer(state = initialState, action: ScreenerActions): State {
       let updatedConstantID     = undefined,
           updatedConditionalID  = undefined;
 
-      const sortedConstants = Object.keys(state.form.value)
-                              .filter(id => isConditionalQuestion(id, state) === false)
-                              .sort( (a, b) => state.form.get([a, 'index']).value - state.form.get([b, 'index']).value)
+      const sortedConstants = sortConstants(state);
       
       if (sortedConstants.length === 0) return state;
       
@@ -265,42 +409,26 @@ export function reducer(state = initialState, action: ScreenerActions): State {
       // if constant selected and conditional is not then decrease constant index;
       else if(state.selectedConstantQuestion !== undefined && state.selectedConditionalQuestion === undefined) 
       {
-        if (state.form.get([state.selectedConstantQuestion, 'expandable']).value === false){
-          const index = state.form.get([state.selectedConstantQuestion, 'index']).value;
-          updatedConstantID =  index === 0 ? undefined : sortedConstants[index - 1];
-        } else {
-          const sortedConditionalQuestions = Object.keys(state.form.value)
-                                .filter(id => isConditionalQuestion(id, state) === state.selectedConstantQuestion)
-                                .sort( (a, b) => state.form.get([a, 'index']).value - state.form.get([b, 'index']).value);
-
-          updatedConditionalID = sortedConditionalQuestions.length > 0 ? 
-                                 sortedConditionalQuestions[ sortedConditionalQuestions.length - 1 ] :
-                                 undefined;
-
-          updatedConstantID = state.selectedConstantQuestion;
-        }
+        const index = state.form.get([state.selectedConstantQuestion, 'index']).value;
+        updatedConstantID =  index === 0 ? 
+                             sortedConstants[sortedConstants.length - 1] : 
+                             sortedConstants[index - 1];
+          
       }
       // constant and conditional selected move up in conditionals 
       else if (state.selectedConstantQuestion !== undefined && state.selectedConditionalQuestion !== undefined)
       {
         const conditionalIndex = state.form.get([state.selectedConditionalQuestion, 'index']).value;
         const host_id = isConditionalQuestion(state.selectedConditionalQuestion, state);
-
+        
         // selectedConditional is not a conditional question...
         if(host_id === false) return state;
 
+        const sortedConditionalQuestions = sortConditionals(state, host_id);
 
-        const sortedConditionalQuestions = Object.keys(state.form.value)
-                                .filter(id => isConditionalQuestion(id, state) === host_id)
-                                .sort( (a, b) => state.form.get([a, 'index']).value - state.form.get([b, 'index']).value)
-
-
-        
-
-        updatedConstantID = state.selectedConstantQuestion
-
+        updatedConstantID = state.selectedConstantQuestion;                        
         updatedConditionalID = conditionalIndex === 0 ? 
-                               undefined :
+                               sortedConditionalQuestions[sortedConditionalQuestions.length - 1] :
                                sortedConditionalQuestions[conditionalIndex - 1];
         
       } else {
@@ -481,4 +609,16 @@ function freshStyle(): Styles {
     selected: false,
     error: false
   }
+}
+
+function sortConstants(state): ID[] {
+  return Object.keys(state.form.value)
+          .filter(id => isConditionalQuestion(id, state) === false)
+          .sort( (a, b) => state.form.get([a, 'index']).value - state.form.get([b, 'index']).value)
+}
+
+function sortConditionals(state, host_id): ID[] {
+  return Object.keys(state.form.value)
+          .filter(id => isConditionalQuestion(id, state) === host_id)
+          .sort( (a, b) => state.form.get([a, 'index']).value - state.form.get([b, 'index']).value)
 }
