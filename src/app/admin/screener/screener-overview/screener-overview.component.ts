@@ -11,7 +11,9 @@ import {
 import { Observable } from 'rxjs/Observable';
 import { ReplaySubject } from 'rxjs/ReplaySubject';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
+import { Subject } from 'rxjs/Subject';
 import 'rxjs/add/operator/multicast';
+import 'rxjs/add/observable/fromEvent';
 
 import { isConditionalQuestion, State } from '../store/screener-reducer';
 
@@ -34,6 +36,8 @@ export class ScreenerOverviewComponent implements OnInit {
   private conditional_type: QuestionType = QUESTION_TYPE_CONDITIONAL;
   private reloadConstantQuestions = new BehaviorSubject('');
   private reloadConditionalQuestions = new BehaviorSubject('');
+
+  private destroySubs$ = new Subject();
 
   constructor(private store: Store<fromRoot.State>, private auth: AuthService) { }
 
@@ -78,8 +82,11 @@ export class ScreenerOverviewComponent implements OnInit {
     this.loading$ = this.store.let(fromRoot.isScreenerLoading);
 
     this.error$ = this.store.let(fromRoot.getScreenerError);
+
+
     
     // we have to force an initial load of the constant questions.
+    // TODO: replace with a startWith operator on this.conditionalQuestions$$
     this.loading$
       .filter(loading => loading === false)
       .take(1)
@@ -87,6 +94,16 @@ export class ScreenerOverviewComponent implements OnInit {
         setTimeout( () => { 
           if (this.reloadConstantQuestions !== undefined) this.reloadConstantQuestions.next(''); 
         }, 0);
+      });
+
+    // event listeners for arrow keys 
+
+    const upArrow = Observable.fromEvent(document.body, 'keydown')
+      .filter(e => (<any>e).key === 'ArrowUp')
+      .do( _ => this.store.dispatch( new actions.UpArrow({})))
+      .takeUntil(this.destroySubs$)
+      .subscribe({
+        complete: () => console.log('UP ARROW DISPATCH COMPLETED')
       })
     
   }
@@ -122,6 +139,6 @@ export class ScreenerOverviewComponent implements OnInit {
     }, 0)
   }
 
-  ngOnDestroy() {}
+  ngOnDestroy() { this.destroySubs$.next(); }
 
 }

@@ -193,17 +193,7 @@ export class QuestionEditComponent implements OnInit, OnDestroy {
       } 
     })
   }
-/*
-  optionFormEffects(optionFormInfo$: Observable<Array<ControlType | number[]>>): Observable<Array<ControlType | number[]>> {
-    return optionFormInfo$
-      .do( ([questionControlType, questionOptions]) => {
-        const controlType = <ControlType>questionControlType;
-        const options = <number[]>questionOptions;
-        this.controlType = controlType;
-        this.options = [...options];
-      });
-  }
-*/
+
   ngOnDestroy() { this.destroySubs$.next(); }
 
 }

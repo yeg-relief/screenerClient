@@ -246,6 +246,65 @@ export function reducer(state = initialState, action: ScreenerActions): State {
       
     }
 
+    case ScreenerActionTypes.UP_ARROW: {
+
+      let updatedConstantID     = undefined,
+          updatedConditionalID  = undefined;
+
+      const sortedConstants = Object.keys(state.form.value)
+                              .filter(id => isConditionalQuestion(id, state) === false)
+                              .sort( (a, b) => state.form.get([a, 'index']).value - state.form.get([b, 'index']).value)
+      
+      if (sortedConstants.length === 0) return state;
+      
+        
+      //  if no questions are selected then set the constant id to the final item in constants
+      if(state.selectedConstantQuestion === undefined && state.selectedConditionalQuestion === undefined)  
+      {
+        updatedConstantID = sortedConstants[sortedConstants.length - 1];
+      } 
+      // if constant selected and conditional is not then decrease constant index;
+      else if(state.selectedConstantQuestion !== undefined && state.selectedConditionalQuestion === undefined) 
+      {
+
+        const index = state.form.get([state.selectedConstantQuestion, 'index']).value;
+        
+        updatedConstantID =  index === 0 ? undefined : sortedConstants[index - 1];
+      }
+      // constant and conditional selected move up in conditionals 
+      else if (state.selectedConstantQuestion !== undefined && state.selectedConditionalQuestion !== undefined)
+      {
+        const conditionalIndex = state.form.get([state.selectedConditionalQuestion, 'index']).value;
+        const host_id = isConditionalQuestion(state.selectedConditionalQuestion, state);
+
+        // selectedConditional is not a conditional question...
+        if(host_id === false) return state;
+
+
+        const sortedConditionalQuestions = Object.keys(state.form.value)
+                                .filter(id => isConditionalQuestion(id, state) === host_id)
+                                .sort( (a, b) => state.form.get([a, 'index']).value - state.form.get([b, 'index']).value)
+
+
+        
+
+        updatedConstantID = state.selectedConstantQuestion
+
+        updatedConditionalID = conditionalIndex == 0 ? 
+                               undefined :
+                               sortedConditionalQuestions[conditionalIndex - 1];
+        
+      } else {
+        console.error(`[SCREENER_REDUCER]: STRANGE BEHAVIOR IN ${action.type} case.`);
+        return state;
+      }
+      
+      return (<any>Object).assign({}, state, {
+        selectedConstantQuestion: updatedConstantID,
+        selectedConditionalQuestion: updatedConditionalID
+      });
+    }   
+
 
     default: {
       return state;
