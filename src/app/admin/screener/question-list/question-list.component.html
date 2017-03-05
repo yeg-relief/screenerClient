@@ -17,7 +17,7 @@
         [attr.id]="form.get([id, 'id'])?.value">
       <md-icon md-list-avatar *ngIf="form.get([id, 'expandable'])?.value && type === constant_type" [style.width]="'1em'">content_copy</md-icon>
       <md-icon md-list-avatar *ngIf="!form.get([id, 'expandable'])?.value && type === constant_type" [style.width]="'1em'"></md-icon>
-      <h4 md-line>{{ form.get([id, 'key'])?.value }}</h4>
+      <h4 md-line>{{ form.get([id, 'key'])?.value?.name }}</h4>
       <h4 md-line>{{ form.get([id, 'controlType'])?.value }}</h4>
       <p md-line *ngIf="form.get([id, 'expandable'])?.value && type === constant_type"> 
         [+] {{ form.get([id, 'conditionalQuestions'])?.value.length }} hidden question(s) 

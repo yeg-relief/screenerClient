@@ -1,12 +1,18 @@
-<main [formGroup]="form$ | async" class="flex flex-column" id="question-container" style="width: 70%; margin: 0 auto">
+<main [formGroup]="form$ | async" *ngIf="(form$ | async ) !== null" class="flex flex-column" id="question-container" style="width: 70%; margin: 0 auto">
 
   <md-input-container class="col-12">
     <input mdInput placeholder="Question Label" formControlName="label">
   </md-input-container>
 
-  <md-select placeholder="Key" formControlName="key" class="col-12">
-    <md-option *ngFor="let unusedKey of (unusedKeys$ | async)" [value]="unusedKey.name">{{ unusedKey.name }}</md-option>
-  </md-select>
+  <div formGroupName="key">
+    <md-select placeholder="Key" class="col-12" formControlName="name">
+      <md-option *ngFor="let unusedKey of (unusedKeys$ | async)" [value]="unusedKey.name"
+        style="height: 3em; overflow: hidden">
+        <pre>{{ unusedKey.name }} : {{ unusedKey.type }}</pre>
+      </md-option>
+    </md-select>
+  </div>
+  
 
   <div class="col-12" style="margin-top: 1em; margin-bottom: 1em;">
     <md-checkbox formControlName="expandable">
@@ -15,12 +21,19 @@
   </div>
 
   <md-select placeholder="Input Type" formControlName="controlType" class="col-12">
-    <md-option *ngFor="let control of VALID_CONTROL_TYPES" [value]="control.value"> {{ control.display }} </md-option>
+    <md-option *ngFor="let control of CONTROL_TYPE_VALUES" [value]="control.value"> {{ control.display }} </md-option>
   </md-select>
 
   <div> {{ VALID_CONTROL_TYPES | json }} </div>
 
+  <div *ngIf=" (form$ | async)?.errors"> 
+    {{ (form$ | async)?.errors | json }}
+  </div>
+
 </main>
+
+
+
 <section 
     id="number-select-options" 
     *ngIf="controlType === 'NumberSelect'"
@@ -34,44 +47,4 @@
   </div>
   <button md-raised-button color="primary" [disabled]="!optionForm.valid ? true : null" (click)="addOption()"> ADD </button>
 </section>
-
-<!--
-<div *ngIf="form.get(questionID) !== null" class="flex flex-column" id="question-container">
-  <main class="col-12" [formGroup]="form.get(questionID)">
-    
-    <md-input-container class="col-12">
-      <input mdInput placeholder="Question Label" formControlName="label">
-    </md-input-container>
-
-    <md-select placeholder="Key" formControlName="key" class="col-12">
-      <md-option *ngFor="let unusedKey of (unusedKeys | async)" [value]="unusedKey.name">{{ unusedKey.name }}</md-option>
-    </md-select>
-
-    <div class="col-12" style="margin-top: 1em; margin-bottom: 1em;">
-      <md-checkbox formControlName="expandable" [disabled]="(selectedKeyType | async) === INTEGER_TYPE ? true : null">
-        Expandable
-      </md-checkbox>
-    </div>
-
-    <md-select placeholder="Input Type" formControlName="controlType" class="col-12">
-      <md-option *ngFor="let control of CONTROL_TYPES" [value]="control.value"> {{ control.display }} </md-option>
-    </md-select>
-
-  </main>
-  <section 
-      id="number-select-options" 
-      *ngIf="(controlType$ | async) === 'NumberSelect'"
-      [formGroup]="numberOptionForm"
-      class="flex col-12">
-    <md-input-container class="col-9">
-      <input mdInput placeholder="option value" formControlName="optionValue">
-    </md-input-container>
-    <div *ngFor="let option of ( options$  | async )" style="background-color: palegreen"> 
-      {{ option }}
-    </div>
-    <button md-raised-button color="primary" [disabled]="!numberOptionForm.valid ? true : null" (click)="addOption()"> ADD </button>
-  </section>
-  {{ numberOptionForm.valid }}
-</div>
--->
 

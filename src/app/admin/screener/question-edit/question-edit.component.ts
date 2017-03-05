@@ -80,12 +80,15 @@ export class QuestionEditComponent implements OnInit, OnDestroy {
 
     // effects 
     const key_change_effects = this.form$
-      .switchMap( form => form.get('key').valueChanges.startWith(form.get('key').value))
-      .let(this.keyChangeEffect.bind(this))
-      .let(this.controlTypeChangeEffects.bind(this))
+      .map( form => form.get(['key', 'name']))
+      .filter( keyName => keyName !== null)
+      .switchMap( keyName => keyName.valueChanges.startWith(keyName.value))
+      .let(this.setKeyType.bind(this))
+      //.let(this.keyChangeEffect.bind(this))
+      //.let(this.controlTypeChangeEffects.bind(this))
       .takeUntil(this.destroySubs$)
       .subscribe();
-    
+    /*
     const option_change_effects = this.form$
       .switchMap( form => {
         if (form.get('options') === null) form.addControl('options', new FormControl([]));
@@ -130,7 +133,21 @@ export class QuestionEditComponent implements OnInit, OnDestroy {
       })
   }
 
-  controlTypeChangeEffects(keyName$: Observable<string>): Observable<string> {
+  setKeyType(key$: Observable<string>): Observable<string> {
+    let capturedKey: string;
+    return key$
+      .do( keyUpdate => capturedKey = keyUpdate )
+      .withLatestFrom(this.store.let(fromRoot.getScreenerKeys))
+      .map( ([keyUpdate, allKeys]) => allKeys.find(k => k.name === keyUpdate))
+      .filter(k => k !== undefined)
+      .withLatestFrom(this.form$)
+      .do( ([key, form]) =>  form.get(['key', 'type']).setValue(key.type))
+      .map( _ => capturedKey);
+  }
+
+/*
+  controlTypeChangeEffects(key$: Observable<string>): Observable<string> {
+    let capturedKey: string;
     const findValidControlTypes = (keyType: QUESTION_KEY_TYPE) => {
       switch (keyType) {
         
@@ -158,36 +175,35 @@ export class QuestionEditComponent implements OnInit, OnDestroy {
     }
     
     
-    return keyName$.combineLatest(this.store.let(fromRoot.getScreenerKeys))
-      .map( ([keyName, allKeys]) => {
-        const key = allKeys.find(k => k.name === keyName); 
-        console.log('------------------\n CONTORL TYPES\n');
-        console.log(keyName);
-        console.log(key);       
-        const controlTypes = 
-          key === undefined 
+    return key$
+      .do(updateKeyName => capturedKey = updateKeyName)
+      .withLatestFrom(this.store.let(fromRoot.getScreenerKeys))
+      .map( ([keyName, allKeys]) => allKeys.find(key => key.name === keyName))
+      .filter( key => key !== undefined )
+      .do( key => {     
+        const controlTypes = key.type === '' 
           ? findValidControlTypes(this.INVALID_TYPE) 
           : findValidControlTypes(key.type);
         
         this.VALID_CONTROL_TYPES = [...controlTypes];
-        
-        console.log(controlTypes);
-        console.log('--------------------')
-        return keyName;
+
+        console.log('------------------')
+        console.log(this.VALID_CONTROL_TYPES)
+        console.log('-------------------')
       })
+      .map( _ => capturedKey);
   }
 
   // enables or disables the expandable checkbox 
   // depending on the on whether the selected qustion's key is 'interger' or 'boolean'
-  keyChangeEffect(keyName$: Observable<string>): Observable<string> {
-    let updatedKeyName = '';
-    return keyName$
-      .do(keyName => updatedKeyName = keyName )
+  keyChangeEffect(key$: Observable<string>): Observable<string> {
+    let updatedKey: string;
+    return key$
+      .do( update => updatedKey = update)
       .withLatestFrom(this.store.let(fromRoot.getScreenerKeys))
-      .map( ([updateKeyName, allKeys]) => {
-        const key = allKeys.find(key => key.name === updateKeyName)
-        return key !== undefined && key.type === this.BOOLEAN_TYPE ? 'enable' : 'disable';
-      })
+      .map( ([keyName, allKeys]) => allKeys.find(key => key.name === keyName))
+      .filter(key => key !== undefined)
+      .map( key => key.type === this.BOOLEAN_TYPE ? 'enable' : 'disable')
       .combineLatest(
         this.store.let(fromRoot.getForm),
         this.selectedQuestionID$
@@ -202,9 +218,9 @@ export class QuestionEditComponent implements OnInit, OnDestroy {
         command === 'enable' ? c.enable() : c.disable();
       })
       .do(([command, control, value]) => (<FormControl>control).setValue(value))
-      .map(_ => updatedKeyName);
+      .map(_ => updatedKey);
   }
-
+*/
   optionFormEffects(optionFormInfo$: Observable<Array<ControlType | number[]>>): Observable<Array<ControlType | number[]>> {
     return optionFormInfo$
       .do( ([questionControlType, questionOptions]) => {

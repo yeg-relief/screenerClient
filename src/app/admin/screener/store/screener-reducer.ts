@@ -1,6 +1,6 @@
 import '@ngrx/core/add/operator/select';
 import { Observable } from 'rxjs/Observable';
-import { Screener, ID, Question, Key } from '../../models';
+import { Screener, ID, Question_2, Key } from '../../models';
 import { ScreenerActions, ScreenerActionTypes } from './screener-actions';
 import { FormGroup, AbstractControl, FormControl, Validators } from '@angular/forms';
 import { questionValidator } from '../validators';
@@ -42,7 +42,10 @@ export function reducer(state = initialState, action: ScreenerActions): State {
       const index = getConstantQuestionsLength(state);
       const question = blankQuestion(index);
       const control = question_to_control(question);
-      state.form.addControl(question.id, new FormGroup(control, questionValidator))
+      const key_group = key_to_group({ name: question.key.name, type: question.key.type });
+      const question_group = new FormGroup(control, questionValidator);
+      question_group.addControl('key', key_group);
+      state.form.addControl(question.id, question_group);
       //state.styles[question.id] = freshStyle();
       return state;
     }
@@ -56,7 +59,7 @@ export function reducer(state = initialState, action: ScreenerActions): State {
 
       if( hostForm === null ) return state;
 
-      const hostQuestion: Question = hostForm.value
+      const hostQuestion: Question_2 = hostForm.value
       const index = getConditionalQuestionsLength(hostID, state)
       
       if ( index < 0 ) return state;
@@ -64,7 +67,10 @@ export function reducer(state = initialState, action: ScreenerActions): State {
       const question = blankQuestion(index);
       question.expandable = false;
       const control = question_to_control(question);
-      state.form.addControl(question.id, new FormGroup(control, questionValidator));
+      const key_group = key_to_group({ name: question.key.name, type: question.key.type });
+      const question_group = new FormGroup(control, questionValidator);
+      question_group.addControl('key', key_group);
+      state.form.addControl(question.id, question_group);
       state.form.get([hostID, 'conditionalQuestions']).setValue([...hostQuestion.conditionalQuestions, question.id]);
       state.styles[question.id] = freshStyle();
 
@@ -79,7 +85,7 @@ export function reducer(state = initialState, action: ScreenerActions): State {
       const hostID = isConditionalQuestion(id, state);
 
       if (typeof hostID === 'string') {
-        const hostQuestion: Question = state.form[hostID].value;
+        const hostQuestion: Question_2 = state.form[hostID].value;
         state.form.get([hostID, 'conditionalQuestions'])
                   .setValue(hostQuestion.conditionalQuestions.filter(c_id => c_id !== id));
       }
@@ -117,9 +123,25 @@ export function reducer(state = initialState, action: ScreenerActions): State {
 
       const allQuestions = [...screener.conditionalQuestions, ...screener.questions];
 
-      const form: FormGroup = allQuestions
-          .map(question => question_to_control(question))
-          .map(control => new FormGroup(control))
+      let allQuestions_2: Question_2[] = [];
+      for (const q of allQuestions) {
+        const newQ = (<any>Object).assign({}, q);
+        const key = screener.keys.find(key => key.name === newQ.key);
+        newQ.key = key;
+        allQuestions_2.push(newQ);
+      }
+
+      //const allQuestions_2 = allQuestions.map(q => q.key = screener.keys.find(key => key.name === q.key))
+
+      const form: FormGroup = allQuestions_2
+          .map(question => [question_to_control(question), key_to_group(question.key)])
+          .map( ([question, key]) => {
+            const questionControl = <{ [key: string]: AbstractControl; }>question;
+            const keyGroup = <FormGroup>key;
+            const questionGroup = new FormGroup(questionControl)
+            questionGroup.addControl('key', keyGroup);
+            return questionGroup;
+          })
           .map(group => { group.setValidators([questionValidator]); return group })
           .reduce( (_form, control) => { 
             _form.addControl(control.value.id, control); 
@@ -244,8 +266,7 @@ export function getConstantQuestions(state$: Observable<State>){
         .filter( q => isConditionalQuestion(q.id, s) === false )
         .sort( (a, b) => a.index - b.index);
     })
-    .do(_ => console.log('getConstantQuestions'))
-    .do(thing => console.log(thing))
+
 }
 
 export function getSelectedConstantID(state$: Observable<State>){
@@ -261,11 +282,8 @@ export function getConditionalQuestionIDS(state$: Observable<State>){
 
   return state$.select(s => { selectedConstantID = s.selectedConstantQuestion; return  s } )
     .filter(s => s.selectedConstantQuestion !== undefined)
-    .do( _ => console.log(_))
     .map( state => {
-      console.log(selectedConstantID);
       const conditionalQuestions = state.form.value[selectedConstantID].conditionalQuestions;
-      console.log(conditionalQuestions);
       return conditionalQuestions;
     });
 }
@@ -273,22 +291,25 @@ export function getConditionalQuestionIDS(state$: Observable<State>){
 
 // these following functions are used internally
 
-export function blankQuestion(index: number): Question {
+export function blankQuestion(index: number): Question_2 {
   const id = randomString();
-  const key = 'invalid'.concat(randomString())
+  const keyName = 'invalid'.concat(randomString())
   return {
     controlType: 'invalid',
-    key: key,
     label: '',
     expandable: false,
     index: index,
     id: id,
     conditionalQuestions: [],
-    options: []
+    options: [],
+    key: {
+      name: keyName,
+      type: ''
+    }
   };
 }
 
-export function question_to_control(question: Question): ControlMap {
+export function question_to_control(question: Question_2): ControlMap {
   
   const approvedProperties = [
     'conditionalQuestions',
@@ -303,12 +324,23 @@ export function question_to_control(question: Question): ControlMap {
 
   return Object.keys(question)
     .filter(key => approvedProperties.find(p => p === key) !== undefined)
-    .reduce( (accum, key) => { accum[key] = new FormControl(question[key]); return accum; }, {});
+    .filter(key => key !== 'key')
+    .reduce( (accum, key) => {
+        accum[key] = new FormControl(question[key]); 
+        return accum; 
+    }, {});
+}
+
+export function key_to_group(key: Key): FormGroup {
+  return new FormGroup({
+    name: new FormControl(key.name),
+    type: new FormControl(key.type)
+  });
 }
 
 
 export function getConstantQuestionsLength(state: State): number {
-  const value: { [key: string]: Question } = state.form.value;
+  const value: { [key: string]: Question_2 } = state.form.value;
 
   return Object.keys(value).reduce( (length: number, key) => {
     const id = value[key].id;
@@ -318,7 +350,7 @@ export function getConstantQuestionsLength(state: State): number {
 
 export function getConditionalQuestionsLength(hostID: ID, state: State): number {
   if (state === undefined || state.form === undefined) return -1;
-  const questionValues: { [key: string]: Question } = state.form.value;
+  const questionValues: { [key: string]: Question_2 } = state.form.value;
   
   const question = questionValues[hostID]
   if ( question === undefined ) return -1;
@@ -333,10 +365,10 @@ export function getConditionalQuestionsLength(hostID: ID, state: State): number 
 
 export function isConditionalQuestion(id: ID, state: State): ID | false {
   if (state === undefined || state.form === undefined) return false;
-  const questionValues: { [key: string]: Question } = state.form.value;
+  const questionValues: { [key: string]: Question_2 } = state.form.value;
 
   for (const key in questionValues) {
-    const q: Question = questionValues[key];
+    const q: Question_2 = questionValues[key];
     if (Array.isArray(q.conditionalQuestions) && q.conditionalQuestions.find(cq_id => cq_id === id) !== undefined) {
       return q.id;
     }
