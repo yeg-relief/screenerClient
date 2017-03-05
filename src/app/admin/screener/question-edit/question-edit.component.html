@@ -1,6 +1,11 @@
 <div class=" col-12 " style="overflow:scroll;">
 <form [formGroup]="form$ | async" *ngIf="(form$ | async ) !== null" class="flex flex-column" id="question-container" 
   style="width: 70%; margin: 2em auto; justify-content: space-between; height: 30vh;">
+  <div 
+      style="margin-left: 80%; width: 20%; background-color: darkslategray; padding-top: 1em; padding-bottom:1em" 
+      class="flex flex-center border rounded center">
+        <button md-mini-fab color="warn" style="margin: 0 auto" (click)="deleteQuestion()"><md-icon>clear</md-icon></button>
+  </div>
 
   <md-input-container class="col-12">
     <input mdInput placeholder="Question Label" formControlName="label">

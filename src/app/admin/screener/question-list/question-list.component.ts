@@ -33,8 +33,9 @@ export class QuestionListComponent implements OnInit, OnDestroy {
   private downArrow: Subscription;
   private rightArrow: Subscription;
   private leftArrow: Subscription;
-
+  private selectedQuestionID: Subscription;
   private destroySubs$ = new Subject();
+  
 
   constructor(private store: Store<fromRoot.State>, private ref: ElementRef) {}
 
@@ -70,6 +71,7 @@ export class QuestionListComponent implements OnInit, OnDestroy {
 
     const selected_id = Object.keys(this.classes).find(id => this.classes[id]['selected'] === true);
     if (selected_id !== undefined && selected_id === questionID) {
+      console.log("QUESTION UNSELECT")
       this.questionUnselect.emit(selected_id);
       deselectAll();
       return;
@@ -87,7 +89,13 @@ export class QuestionListComponent implements OnInit, OnDestroy {
   }
   
   ngOnInit(){
-    
+    this.selectedQuestionID = Observable.merge(
+      this.store.let(fromRoot.getSelectedConstantID),
+      this.store.let(fromRoot.getSelectedConditionalID)
+    )
+    .filter( id => this.questions.find(qid => qid === id) !== undefined)
+    .takeUntil(this.destroySubs$)
+    .subscribe( id => { this.selectTarget(id); console.log(this.classes) });
   }
 
   ngAfterViewInit(){
@@ -134,7 +142,7 @@ export class QuestionListComponent implements OnInit, OnDestroy {
       .combineLatest(this.store.let(fromRoot.getSelectedConditionalID), this.store.let(fromRoot.getSelectedConstantID))
       .filter( ([e, __, _]) => (<any>e).key === 'ArrowRight')
       .subscribe( ([_, selectedConditionalID, selectedConstantID]) => {
-          console.log(selectedConditionalID);
+
           if (selectedConditionalID !== undefined && this.type === this.conditional_type) {
             this.showSelection(selectedConditionalID);
           } else if (selectedConstantID !== undefined && this.type === this.constant_type){
@@ -182,7 +190,11 @@ export class QuestionListComponent implements OnInit, OnDestroy {
     this.classes[targetID]['selected'] = true;
   }
 
-  ngOnDestroy() { this.destroySubs$.next() }
+  ngOnDestroy() { 
+    console.log('NG ON DESTROY CALLED');
+    for(const key in this.classes) delete this.classes[key];
+    this.destroySubs$.next(); 
+  }
 }
 
 

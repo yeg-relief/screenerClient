@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, OnDestroy } from '@angular/core';
+import { Component, OnInit, Input, OnDestroy, EventEmitter, Output } from '@angular/core';
 import { FormGroup, FormBuilder, Validators, FormControl } from '@angular/forms';
 import { ID, Key, Question, ControlType } from '../../models';
 import { Observable } from 'rxjs/Observable';
@@ -39,6 +39,8 @@ export class QuestionEditComponent implements OnInit, OnDestroy {
   private options: number[] = [];
 
   private destroySubs$ = new Subject();
+  @Output() delete = new EventEmitter<ID>();
+  @Output() makeExpandable = new EventEmitter<ID>();
 
   constructor(private store: Store<fromRoot.State>, private fb: FormBuilder) { }
 
@@ -50,6 +52,8 @@ export class QuestionEditComponent implements OnInit, OnDestroy {
       this.store.let(fromRoot.getSelectedConditionalID)
     )
       .map( ([constant, conditional]) => {
+
+
         if (constant === undefined) {
           return 'unselect all the questions';
         }
@@ -68,6 +72,7 @@ export class QuestionEditComponent implements OnInit, OnDestroy {
 
     this.form$ = this.selectedQuestionID$
       .withLatestFrom(this.store.let(fromRoot.getForm))
+      .filter( ([questionID, form]) => form.get(questionID) !== null)
       .map( ([questionID, form]) => form.get(questionID))
       .startWith(this.fb.group({
         label: [''], key: [''], controlType: [''], expandable: [false],  
@@ -122,6 +127,11 @@ export class QuestionEditComponent implements OnInit, OnDestroy {
       .withLatestFrom(this.form$)
       .let(this.updateOptions.bind(this))
       .subscribe();
+
+    const expandable_change_effect = this.form$ 
+      .filter( form => form !== null)
+      .switchMap( form => form.get('expandable').valueChanges )
+      
   }
 
   seedUnusedKeys() {
@@ -193,6 +203,10 @@ export class QuestionEditComponent implements OnInit, OnDestroy {
       } 
     })
   }
+
+  deleteQuestion() { this.selectedQuestionID$.take(1).subscribe(id => this.delete.emit(id)); }
+
+  dispatchMakeExpandable() { this.makeExpandable.next(''); }
 
   ngOnDestroy() { this.destroySubs$.next(); }
 

@@ -31,6 +31,7 @@ export class ScreenerOverviewComponent implements OnInit {
   private selectedConditionalID$: Observable<ID>;
   private loading$: Observable<boolean>;
   private error$: Observable<string>;
+  private isExpandable$: Observable<boolean>;
 
   private constant_type: QuestionType = QUESTION_TYPE_CONSTANT;
   private conditional_type: QuestionType = QUESTION_TYPE_CONDITIONAL;
@@ -69,10 +70,16 @@ export class ScreenerOverviewComponent implements OnInit {
       .multicast( new ReplaySubject(1) ).refCount();
 
     this.conditionalQuestions$ = this.selectedConstantID$.withLatestFrom(this.form$)
+      .filter( ([_, form]) => form !== null && form !== undefined)
+      .filter( ([id, form]) => form.get(id) !== null)
       .map( ([selectedConstantID, form]) => {
+        console.log('IN SCREENER OVERVIEW COMPONENT')
+        console.log(selectedConstantID)
         if (selectedConstantID === undefined) return [];
         
         if (form.get(selectedConstantID) === null) return [];
+
+        if (form.get([selectedConstantID, 'conditionalQuestions']) === null) return [];
 
         const conditionalIDS = form.get([selectedConstantID, 'conditionalQuestions']).value;
 
@@ -83,7 +90,18 @@ export class ScreenerOverviewComponent implements OnInit {
     this.conditionalQuestions$$ = this.reloadConditionalQuestions
       .mergeMap(_ => this.conditionalQuestions$)
 
-    
+    this.isExpandable$ = Observable.combineLatest(this.form$, this.selectedConstantID$)
+      .switchMap( ([form, constantID]) => {
+        if (form.get(constantID) === null) return Observable.of(false);
+
+        if (constantID === undefined) return Observable.of(false);
+
+        return Observable.merge(
+          form.get([constantID, 'expandable']).valueChanges, 
+          Observable.of(form.get([constantID, 'expandable']).value)
+        );
+      }).multicast( new ReplaySubject(1) ).refCount();
+      
 
     this.selectedConditionalID$ = this.store.let(fromRoot.getSelectedConditionalID);
 
@@ -113,7 +131,6 @@ export class ScreenerOverviewComponent implements OnInit {
   ngAfterViewInit(){
     const base = Observable.fromEvent(document, 'keydown')
       .takeUntil(this.destroySubs$)
-      .do( _ => console.log((<any>_).key))
       .do( (e: any) => e.preventDefault())
       .debounceTime(60)
       .multicast( new ReplaySubject(1)).refCount();
@@ -176,6 +193,25 @@ export class ScreenerOverviewComponent implements OnInit {
 
       if (this.reloadConstantQuestions !== undefined) this.reloadConstantQuestions.next(''); 
     }, 0)
+  }
+
+  handleDelete(id: ID){
+    this.store.dispatch(new actions.DeleteQuestion(id));
+    setTimeout( () => {
+      if (this.reloadConditionalQuestions !== undefined) this.reloadConditionalQuestions.next('');
+
+      if (this.reloadConstantQuestions !== undefined) this.reloadConstantQuestions.next(''); 
+    }, 0)
+
+  }
+
+  handleExpandableChange() {
+    /*
+    setTimeout( () => {
+      if (this.reloadConditionalQuestions !== undefined) this.reloadConditionalQuestions.next('');
+
+      if (this.reloadConstantQuestions !== undefined) this.reloadConstantQuestions.next(''); 
+    }, 0)*/
   }
 
   ngOnDestroy() { this.destroySubs$.next(); }

@@ -14,7 +14,7 @@
     </app-question-list>
 
     <app-question-list
-        *ngIf="(conditionalQuestions$ | async )?.length > 0"
+        *ngIf="(isExpandable$ | async) === true"
         id="conditional-question-list"
         [questions]="conditionalQuestions$$ | async"
         [form]="form$ | async"
@@ -27,7 +27,7 @@
 
 
     <div id="question-content" *ngIf="(selectedConstantID$ | async) !== undefined">
-      <app-question-edit></app-question-edit>
+      <app-question-edit (delete)="handleDelete($event)" (makeExpandable)="handleExpandableChange()"></app-question-edit>
     </div>
 
   </div>

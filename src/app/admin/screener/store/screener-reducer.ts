@@ -90,16 +90,31 @@ export function reducer(state = initialState, action: ScreenerActions): State {
       const id = <ID>action.payload;
       const hostID = isConditionalQuestion(id, state);
 
+      let selectedConstantQuestion = state.selectedConstantQuestion;
+      let selectedConditionalQuestion = state.selectedConditionalQuestion;
+      
       if (typeof hostID === 'string') {
-        const hostQuestion: Question_2 = state.form[hostID].value;
+        const hostQuestion: Question_2 = state.form.value[hostID];
         state.form.get([hostID, 'conditionalQuestions'])
                   .setValue(hostQuestion.conditionalQuestions.filter(c_id => c_id !== id));
+
+        state.form.removeControl(id);
+        const sortedConditionalQuestions = sortConditionals(state, hostID);
+        selectedConditionalQuestion = sortedConditionalQuestions.length > 0 ? sortedConditionalQuestions[0] : undefined;
+
+    } else if (hostID === false){
+        state.form.removeControl(id);
+        const sortedConstants = sortConstants(state);
+        selectedConstantQuestion = sortedConstants.length > 0 ? sortedConstants[0] : undefined;
       }
-      state.form.removeControl(id);
+      
+      
+      if(state.styles[id] !== undefined) delete state.styles[id];
 
-      delete state.styles[id];
-
-      return state;
+      return (<any>Object).assign({}, state, {
+        selectedConstantQuestion,
+        selectedConditionalQuestion
+      });
     }
 
     case ScreenerActionTypes.DOWN_ARROW: {
@@ -274,21 +289,23 @@ export function reducer(state = initialState, action: ScreenerActions): State {
       //  no questions selected... can't move right
       if(state.selectedConstantQuestion === undefined)  
       {
+        console.log('case 1');
         return state;
       } 
       // if constant selected and conditional is not check if constant is expandable with conditionals and move right
       else if(state.selectedConstantQuestion !== undefined && state.selectedConditionalQuestion === undefined) 
       {
+        console.log('case 2')
         const expandable = state.form.get([state.selectedConstantQuestion, 'expandable']).value;
         const conditionalQuestions = state.form.get([state.selectedConstantQuestion, 'conditionalQuestions']).value;
 
         if(expandable === true && conditionalQuestions.length > 0) {
+          console.log(`expandable is ${expandable} and conditionalQuestions.length is ${conditionalQuestions.length}`);
+          console.log('moving right');
           const sortedConditionalQuestions = sortConditionals(state, state.selectedConstantQuestion);
           updatedConditionalID = sortedConditionalQuestions[0];
           updatedConstantID = state.selectedConstantQuestion;
-          console.log(updatedConditionalID)
-          console.log(updatedConstantID)
-        } else if( expandable === false) {
+        } else if( expandable === false ) {
           updatedConstantID = state.selectedConstantQuestion;
         }
           
@@ -296,6 +313,7 @@ export function reducer(state = initialState, action: ScreenerActions): State {
       // already in conditionals... return state
       else if (state.selectedConstantQuestion !== undefined && state.selectedConditionalQuestion !== undefined)
       {
+        console.log('case 3')
         return state;
         
       } else {
