@@ -80,6 +80,7 @@ export class QuestionEditComponent implements OnInit, OnDestroy {
       .startWith([]);
 
     this.unusedKeys$ = this.form$
+      .filter( form => form !== null)
       .filter(form => form.get('key') !== null)
       .switchMap( form => form.get('key').valueChanges )
       .withLatestFrom(unusedKeys)
@@ -92,7 +93,7 @@ export class QuestionEditComponent implements OnInit, OnDestroy {
     const digit_pattern = '^\\d+$'
 
     this.optionForm = this.fb.group({
-      optionValue: ['', Validators.pattern(digit_pattern) ]
+      optionValue: ['', Validators.compose([Validators.pattern(digit_pattern), Validators.required]) ]
     });
 
     // effects 

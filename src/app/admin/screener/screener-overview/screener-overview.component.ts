@@ -44,6 +44,7 @@ export class ScreenerOverviewComponent implements OnInit {
     this.form$ = this.store.let(fromRoot.getForm).multicast( new ReplaySubject(1) ).refCount();
 
     this.constantQuestions$ = this.reloadConstantQuestions.withLatestFrom(this.form$)
+      .filter(form => form !== null)
       .map( ([_, form]) => { 
         const state = <State>{ form: form };
         const ids = Object.keys(form.value);
