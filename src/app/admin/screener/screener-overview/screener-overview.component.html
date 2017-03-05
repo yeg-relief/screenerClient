@@ -9,6 +9,7 @@
         [form]="form$ | async"
         [type]="constant_type"
         (questionSelect)="handleSelect($event)"
+        (questionUnselect)="handleUnselect($event)"
         (addQuestion)="handleAddQuestion($event)">
     </app-question-list>
 
@@ -20,6 +21,7 @@
         [type]="conditional_type"
         [host_id]="selectedConstantID$ | async"
         (questionSelect)="handleSelect($event)"
+        (questionUnselect)="handleUnselect($event)"
         (addQuestion)="handleAddQuestion($event)">
     </app-question-list>
 

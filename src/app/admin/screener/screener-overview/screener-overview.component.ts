@@ -56,11 +56,17 @@ export class ScreenerOverviewComponent implements OnInit {
       .multicast( new ReplaySubject(1) ).refCount();
 
     this.conditionalQuestions$ = this.selectedConstantID$.withLatestFrom(this.form$)
-      .filter( ([selectedConstantID, form, ]) => form.get(selectedConstantID) !== null)
-      .filter( ([ selectedConstant, form,]) => Array.isArray(form.get([selectedConstant, 'conditionalQuestions']).value))
-      .map( ([selectedConstant, form,]) => [form.get([selectedConstant, 'conditionalQuestions']).value, form])
-      .map( ([conditionalIDs, form]) => conditionalIDs.sort( (a, b) => form.get([a, 'index']).value - form.get([b, 'index']).value ) )
+      .map( ([selectedConstantID, form]) => {
+        if (selectedConstantID === undefined) return [];
+        
+        if (form.get(selectedConstantID) === null) return [];
 
+        const conditionalIDS = form.get([selectedConstantID, 'conditionalQuestions']).value;
+
+        return conditionalIDS.sort( (a, b) => form.get([a, 'index']).value - form.get([b, 'index']).value )
+
+      })
+      
     this.conditionalQuestions$$ = this.reloadConditionalQuestions
       .mergeMap(_ => this.conditionalQuestions$)
 
@@ -104,6 +110,15 @@ export class ScreenerOverviewComponent implements OnInit {
         if (this.reloadConditionalQuestions !== undefined) this.reloadConditionalQuestions.next(''); 
       }, 0)
     }
+  }
+
+  handleUnselect(id: ID){
+    this.store.dispatch(new actions.UnselectQuestion(id));
+    setTimeout( () => {
+      if (this.reloadConditionalQuestions !== undefined) this.reloadConditionalQuestions.next('');
+
+      if (this.reloadConstantQuestions !== undefined) this.reloadConstantQuestions.next(''); 
+    }, 0)
   }
 
   ngOnDestroy() {}

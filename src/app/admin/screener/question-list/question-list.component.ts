@@ -14,6 +14,7 @@ export class QuestionListComponent implements OnInit {
   @Input() type: QuestionType; // are these conditional or constant questions in the list?
   @Input() host_id: ID | undefined; // undefined if these are constant questions
   @Output() questionSelect = new EventEmitter<ID>();
+  @Output() questionUnselect = new EventEmitter<ID>();
   @Output() addQuestion = new EventEmitter<{[key: string]: QuestionType | ID }>();
 
   private classes: { [key: string]: {[key: string]: boolean} } = { };
@@ -32,10 +33,23 @@ export class QuestionListComponent implements OnInit {
   } 
 
   handleSelect(questionID: ID) {
-    console.log(`question selected id: ${questionID}`);
-    for (const key in this.classes) {
-      if (this.classes[key]['selected'] === true) this.classes[key]['selected'] = false;
+    
+    const deselectAll = () => {
+      for (const key in this.classes) {
+        if (this.classes[key]['selected'] === true) this.classes[key]['selected'] = false;
+      }
     }
+
+
+    const selected_id = Object.keys(this.classes).find(id => this.classes[id]['selected'] === true);
+    if (selected_id !== undefined && selected_id === questionID) {
+      console.log('deselection');
+      this.questionUnselect.emit(selected_id);
+      deselectAll();
+      return;
+    } 
+
+    deselectAll();
 
     if (this.classes[questionID] === undefined) this.classes[questionID] = { };
 

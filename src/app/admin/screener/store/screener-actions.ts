@@ -15,6 +15,7 @@ export const ScreenerActionTypes = {
   SELECT_QUESTION: '[SCREENER] SELECT_QUESTION',
   SELECT_CONDITIONAL_QUESTION: '[SCREENER] SELECT_CONDITIONAL_QUESTION',
   SWAP_QUESTIONS: '[SCREENER] SWAP_QUESTIONS',
+  UNSELECT_QUESTION: '[SCREENER] UNSELECT_QUESTION',
 };
 
 
@@ -80,6 +81,11 @@ export class SwapQuestions implements Action {
   constructor(public payload: { [key: string]: ID }) {}
 }
 
+export class UnselectQuestion implements Action {
+  type = ScreenerActionTypes.UNSELECT_QUESTION;
+  constructor(public payload: ID) {}
+}
+
 
 export type ScreenerActions = 
   AddQuestion               |
@@ -93,4 +99,5 @@ export type ScreenerActions =
   SaveDataSuccess           |
   SelectQuestion            |
   SelectConditionalQuestion |
-  SwapQuestions             ;
+  SwapQuestions             |
+  UnselectQuestion          ;
