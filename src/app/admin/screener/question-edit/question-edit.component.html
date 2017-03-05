@@ -1,4 +1,6 @@
-<main [formGroup]="form$ | async" *ngIf="(form$ | async ) !== null" class="flex flex-column" id="question-container" style="width: 70%; margin: 0 auto">
+<div class=" col-12 " style="overflow:scroll;">
+<main [formGroup]="form$ | async" *ngIf="(form$ | async ) !== null" class="flex flex-column" id="question-container" 
+  style="width: 70%; margin: 2em auto; justify-content: space-between; height: 30vh;">
 
   <md-input-container class="col-12">
     <input mdInput placeholder="Question Label" formControlName="label">
@@ -30,19 +32,21 @@
 
 </main>
 
-
-{{ controlType }}
 <section 
     id="number-select-options" 
     *ngIf="controlType === 'NumberSelect'"
     [formGroup]="optionForm"
-    class="flex col-12">
+    class="flex flex-column"
+    style="margin: 0 auto; width: 70%; justify-content: space-between; height: 15vh;">
   <md-input-container class="col-9">
     <input mdInput placeholder="option value" formControlName="optionValue">
   </md-input-container>
+  <button md-raised-button color="primary" [disabled]="!optionForm.valid ? true : null" (click)="addOption()"> ADD </button>
   <div *ngFor="let option of options" style="background-color: palegreen"> 
     {{ option }}
   </div>
-  <button md-raised-button color="primary" [disabled]="!optionForm.valid ? true : null" (click)="addOption()"> ADD </button>
+  
 </section>
+
+</div>
 

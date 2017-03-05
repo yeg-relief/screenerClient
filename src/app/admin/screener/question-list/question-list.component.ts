@@ -43,7 +43,6 @@ export class QuestionListComponent implements OnInit {
 
     const selected_id = Object.keys(this.classes).find(id => this.classes[id]['selected'] === true);
     if (selected_id !== undefined && selected_id === questionID) {
-      console.log('deselection');
       this.questionUnselect.emit(selected_id);
       deselectAll();
       return;
@@ -54,7 +53,10 @@ export class QuestionListComponent implements OnInit {
     if (this.classes[questionID] === undefined) this.classes[questionID] = { };
 
     this.classes[questionID]['selected'] = true;
-    this.questionSelect.emit(questionID);
+
+    
+    Promise.resolve(this.questionUnselect.emit(selected_id))
+           .then(_ => this.questionSelect.emit(questionID));
   }
   
   ngOnInit(){ }

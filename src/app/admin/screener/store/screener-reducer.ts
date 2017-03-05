@@ -232,14 +232,13 @@ export function reducer(state = initialState, action: ScreenerActions): State {
       const host_id = isConditionalQuestion(<ID>action.payload, state);
 
       if (host_id === false) {
-        console.log('CONSTANT QUESTION DESELECTED')
+
         return (<any>Object).assign({}, state, {
           selectedConstantQuestion: undefined,
           selectedConditionalQuestion: undefined
         })
       } 
       
-      console.log("CONDITIONAL QUESTION UNSELECTED")
       return(<any>Object).assign({}, state, {
          selectedConditionalQuestion: undefined,
          selectedConstantQuestion: host_id
