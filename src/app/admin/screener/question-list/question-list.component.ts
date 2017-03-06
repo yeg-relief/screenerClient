@@ -10,6 +10,7 @@ import 'rxjs/add/observable/fromEvent';
 import { Store } from '@ngrx/store';
 import * as fromRoot from '../../reducer';
 
+import { DragDropManagerService, DragDatum } from './drag-drop-manager.service';
 
 @Component({
   selector: 'app-question-list',
@@ -24,6 +25,7 @@ export class QuestionListComponent implements OnInit, OnDestroy {
   @Output() questionSelect = new EventEmitter<ID>();
   @Output() questionUnselect = new EventEmitter<ID>();
   @Output() addQuestion = new EventEmitter<{[key: string]: QuestionType | ID }>();
+  @Output() dragEvent =  new EventEmitter<DragDatum>();
 
   private classes: { [key: string]: {[key: string]: boolean} } = { };
   private constant_type: QuestionType = QUESTION_TYPE_CONSTANT;
@@ -37,7 +39,10 @@ export class QuestionListComponent implements OnInit, OnDestroy {
   private destroySubs$ = new Subject();
   
 
-  constructor(private store: Store<fromRoot.State>, private ref: ElementRef) {}
+  constructor(
+    private store: Store<fromRoot.State>, 
+    private dragManager: DragDropManagerService
+  ) {}
 
   handleAddQuestion() {
     if (this.type === QUESTION_TYPE_CONSTANT ) {
@@ -97,17 +102,17 @@ export class QuestionListComponent implements OnInit, OnDestroy {
     .takeUntil(this.destroySubs$)
     .subscribe( id => { this.selectTarget(id); console.log(this.classes) });
   }
-
+  /*
   ngAfterViewInit(){
     const keydown = Observable.fromEvent(document, 'keydown')
-      .takeUntil(this.destroySubs$)
       .do(e => (<any>e).preventDefault())
+      .combineLatest(this.store.let(fromRoot.getSelectedConstantID), this.store.let(fromRoot.getSelectedConditionalID))
+      .takeUntil(this.destroySubs$)
       .debounceTime(60)
       .multicast( new ReplaySubject(1)).refCount();
 
 
     this.upArrow = keydown
-      .combineLatest(this.store.let(fromRoot.getSelectedConstantID), this.store.let(fromRoot.getSelectedConditionalID))
       .filter( ([e, _, __]) => (<any>e).key === 'ArrowUp')
       .subscribe( ([_, selectedConstantID, selectedConditionalID]) => {
 
@@ -123,7 +128,6 @@ export class QuestionListComponent implements OnInit, OnDestroy {
       })
 
     this.downArrow = keydown
-      .combineLatest(this.store.let(fromRoot.getSelectedConstantID), this.store.let(fromRoot.getSelectedConditionalID))
       .filter( ([e, _, __]) => (<any>e).key === 'ArrowDown')
       .subscribe( ([_, selectedConstantID, selectedConditionalID]) => {
 
@@ -139,9 +143,8 @@ export class QuestionListComponent implements OnInit, OnDestroy {
       });
 
     this.rightArrow = keydown
-      .combineLatest(this.store.let(fromRoot.getSelectedConditionalID), this.store.let(fromRoot.getSelectedConstantID))
       .filter( ([e, __, _]) => (<any>e).key === 'ArrowRight')
-      .subscribe( ([_, selectedConditionalID, selectedConstantID]) => {
+      .subscribe( ([_, selectedConstantID, selectedConditionalID, ]) => {
 
           if (selectedConditionalID !== undefined && this.type === this.conditional_type) {
             this.showSelection(selectedConditionalID);
@@ -153,7 +156,7 @@ export class QuestionListComponent implements OnInit, OnDestroy {
       );
 
     this.leftArrow = keydown
-      .combineLatest(this.store.let(fromRoot.getSelectedConditionalID))
+      .map( ([e, constant, conditional]) => [e, conditional])
       .filter( ([e,  __]) => (<any>e).key === 'ArrowLeft')
       .filter( ([_, selectedConditionalID]) => selectedConditionalID === undefined )
       .subscribe( ([_, selectedConditionalID]) => {
@@ -164,7 +167,7 @@ export class QuestionListComponent implements OnInit, OnDestroy {
           this.deselectAll();
         }    
       });
-  }
+  }*/
 
   showSelection(selectedID) {
     const element = document.getElementById(selectedID);
@@ -191,9 +194,114 @@ export class QuestionListComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() { 
-    console.log('NG ON DESTROY CALLED');
+    // attempt to clear the selected class that sticks after route change...
     for(const key in this.classes) delete this.classes[key];
+    
     this.destroySubs$.next(); 
+  }
+
+  dragStart(id, $event) {
+    if (this.classes[id]) {
+      this.classes[id] = (<any>Object).assign({}, this.classes[id], { dragStart: true})
+    } else {
+      this.classes[id] = (<any>Object).assign({}, {
+        selected: false,
+        dragStart: true,
+        dragOver: false,
+      })
+    }
+    
+    // hack to make elements draggable in firefox
+    // http://mereskin.github.io/dnd/
+    $event.dataTransfer.setData('text', 'foo');
+
+    this.dragManager.liftItem(id);
+  }
+
+  dragEnter(id, $event) {
+    if($event.preventDefault) {
+      $event.preventDefault();
+    }
+    if (this.classes[id]) {
+      this.classes[id] = (<any>Object).assign({}, this.classes[id], { dragOver: true})
+    } else {
+      this.classes[id] = (<any>Object).assign({}, {
+        selected: false,
+        dragStart: false,
+        dragOver: true,
+      })
+    }
+  }
+
+  dragOver(id, $event){
+    if ($event.preventDefault) {
+      $event.preventDefault();
+    }
+    if (this.classes[id]) {
+      this.classes[id] = (<any>Object).assign({}, this.classes[id], { dragOver: true})
+    } else {
+      this.classes[id] = (<any>Object).assign({}, {
+        selected: false,
+        dragStart: false,
+        dragOver: true,
+      })
+    }
+    return false;
+  }
+
+  dragLeave(id) {
+    if (this.classes[id]) {
+      this.classes[id] = (<any>Object).assign({}, this.classes[id], { dragOver: false})
+    } else {
+      this.classes[id] = (<any>Object).assign({}, {
+        selected: false,
+        dragStart: false,
+        dragOver: false,
+      })
+    }
+  }
+
+  drop(id, $event) {
+    if($event.preventDefault){
+      $event.preventDefault();
+    }
+
+    if($event.stopPropagation) {
+      $event.stopPropagation();
+    }    
+
+    const targetKey = $event.target.innerText;
+    let targetNode = $event.target;
+    let targetClassNames = $event.target.className.split(" ");
+    let i = 0;
+    while(targetClassNames.find(name => name === 'question-item') === undefined) {
+      targetNode = targetNode.parentNode;
+      targetClassNames = targetNode.className.split(" ");
+      i++
+      if (i > 10) break;
+    }
+
+    if (Array.isArray(targetNode.id.split('-')) && 
+        targetNode.id.split('-').length > 0 &&
+        typeof targetNode.id.split('-')[0] === 'string')
+    {
+      this.dragManager.dropItem( targetNode.id.split('-')[0] );
+    }
+
+    for (const key in this.classes) {
+      this.classes[key]['dragStart'] = false;
+      this.classes[key]['dragOver'] = false;
+    }
+    
+    //this.dragManager.dropItem(targetID)
+    return false;
+  }
+
+  dragEnd() {
+    for(const key in this.classes) {
+      this.classes[key]['dragOver'] = false;
+      this.classes[key]['dragStart'] = false;
+    }
   }
 }
 

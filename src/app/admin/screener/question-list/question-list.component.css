@@ -10,6 +10,15 @@
   background-color: lightgoldenrodyellow;
 }
 
+.dragStart {
+  opacity: 0.4;
+}
+
+.dragOver {
+  border: 2px dashed #000;
+}
+
+
 .selected {
   border: 5px solid blue;
 }

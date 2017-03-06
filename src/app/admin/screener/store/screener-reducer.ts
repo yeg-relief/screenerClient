@@ -384,14 +384,63 @@ export function reducer(state = initialState, action: ScreenerActions): State {
       if (action.payload === undefined) return state;
 
       const payload = <{[key: string]: ID}>action.payload,
-            id_a    = payload['id_a'],
-            id_b    = payload['id_b'];
+            lifted    = payload['lifted'],
+            target    = payload['target'];
+      
+      if (lifted === undefined || target === undefined) return state;
 
-      if (state.form.get(id_a) === null || state.form.get(id_b) === null) return state;
+      // both questions are constant
+      if (isConditionalQuestion(lifted, state) === false && isConditionalQuestion(target, state) === false) {
 
-      state.form.get([id_a, 'index']).setValue(state.form.get([id_b, 'index']).value);
-      state.form.get([id_b, 'index']).setValue(state.form.get([id_a, 'index']).value);
-      return state; 
+        const liftedIndex = state.form.get([lifted, 'index']).value
+        state.form.get([lifted, 'index']).setValue(state.form.get([target, 'index']).value);
+        state.form.get([target, 'index']).setValue(liftedIndex);
+        // lifted is constant and target is conditional
+      } else if( isConditionalQuestion(lifted, state) === false && typeof isConditionalQuestion(target, state) === 'string'){
+
+        const hostID: ID = <ID>isConditionalQuestion(target, state);
+        // throw sometype of error
+        if (state.form.get([lifted, 'expandable']).value) return state;
+
+        const presentConditionals = state.form.get([hostID, 'conditionalQuestions']).value;
+        const liftedIndex = state.form.get([lifted, 'index']).value;
+        state.form.get([lifted, 'index']).setValue(state.form.get([target, 'index']).value);
+        state.form.get([hostID, 'conditionalQuestions']).setValue([...presentConditionals.filter(cid => cid !== target), lifted]);
+        state.form.get([target, 'index']).setValue(liftedIndex);
+        // both are conditional quesitons
+      } else if( typeof isConditionalQuestion(lifted, state) === 'string' && typeof isConditionalQuestion(target, state) === 'string'){
+
+        // undefined behavior two different host ids...
+        if(isConditionalQuestion(lifted, state) !== isConditionalQuestion(target, state)) return state;
+
+        const liftedIndex = state.form.get([lifted, 'index']).value;
+
+        state.form.get([lifted, 'index']).setValue(state.form.get([target, 'index']).value);
+        state.form.get([target, 'index']).setValue(liftedIndex);
+      } else if( typeof isConditionalQuestion(lifted, state) === 'string' && isConditionalQuestion(target, state) === false){
+
+        if (state.form.get([target, 'expandable']).value === true ) return state;
+        
+        const targetIndex = state.form.get([target, 'index']).value;
+        const hostID: ID = <ID>isConditionalQuestion(lifted, state);
+
+        const presentConditionals = state.form.get([hostID, 'conditionalQuestions']).value;
+        state.form.get([target, 'index']).setValue(state.form.get([lifted, 'index']).value);
+        state.form.get([lifted, 'index']).setValue(targetIndex)
+        state.form.get([hostID, 'conditionalQuestions']).setValue([...presentConditionals.filter(cid => cid !== lifted), target]);
+        
+
+
+      } else {
+        console.warn('[SCREENER_REDUCER]: Strange behavior in swap questions')
+        console.log(typeof isConditionalQuestion(lifted, state) )
+        console.log(typeof isConditionalQuestion(target, state) )
+      }
+
+
+      return (<any>Object).assign({}, state, {
+        form: state.form
+      }); 
     }
 
     case ScreenerActionTypes.UNSELECT_QUESTION: {

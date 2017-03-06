@@ -15,12 +15,15 @@ import { Subject } from 'rxjs/Subject';
 import 'rxjs/add/operator/multicast';
 import 'rxjs/add/observable/fromEvent';
 
+import { DragDropManagerService } from '../question-list/drag-drop-manager.service';
+
 import { isConditionalQuestion, State } from '../store/screener-reducer';
 
 @Component({
   selector: 'app-screener-overview',
   templateUrl: './screener-overview.component.html',
   styleUrls: ['./screener-overview.component.css'],
+  providers: [ DragDropManagerService ]
 })
 export class ScreenerOverviewComponent implements OnInit {
   private form$: Observable<FormGroup>;
@@ -45,11 +48,23 @@ export class ScreenerOverviewComponent implements OnInit {
   private leftArrow;
   private rightArrow;
 
-  constructor(private store: Store<fromRoot.State>, private auth: AuthService, private ref: ElementRef) { }
+  constructor(
+    private store: Store<fromRoot.State>, 
+    private auth: AuthService, 
+    private dragManager: DragDropManagerService
+  ) {}
 
   ngOnInit() {
-    console.log("SCREENER OVERVIEW ON_INIT")
+    const dispatchSwap = (lifted, target) => this.store.dispatch(new actions.SwapQuestions({lifted, target }))
 
+    this.dragManager.dragState.takeUntil(this.destroySubs$).subscribe(val => {
+      dispatchSwap(val.lifted, val.target);
+      setTimeout( () => {
+        if (this.reloadConditionalQuestions !== undefined) this.reloadConditionalQuestions.next('');
+
+        if (this.reloadConstantQuestions !== undefined) this.reloadConstantQuestions.next(''); 
+      }, 0)
+    });
 
     this.store.dispatch(new actions.LoadData(this.auth.getCredentials()));
 
@@ -73,8 +88,6 @@ export class ScreenerOverviewComponent implements OnInit {
       .filter( ([_, form]) => form !== null && form !== undefined)
       .filter( ([id, form]) => form.get(id) !== null)
       .map( ([selectedConstantID, form]) => {
-        console.log('IN SCREENER OVERVIEW COMPONENT')
-        console.log(selectedConstantID)
         if (selectedConstantID === undefined) return [];
         
         if (form.get(selectedConstantID) === null) return [];
@@ -127,7 +140,7 @@ export class ScreenerOverviewComponent implements OnInit {
     
 
   }
-
+  /*
   ngAfterViewInit(){
     const base = Observable.fromEvent(document, 'keydown')
       .takeUntil(this.destroySubs$)
@@ -163,6 +176,7 @@ export class ScreenerOverviewComponent implements OnInit {
         .do( _ => this.store.dispatch( new actions.LeftArrow({})))
         .subscribe();
   }
+  */
 
   handleSelect(id: ID) { this.store.dispatch(new actions.SelectQuestion(id)) }
 

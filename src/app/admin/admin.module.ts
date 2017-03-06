@@ -33,6 +33,8 @@ import { OverviewControlsComponent } from './screener/screener-overview/overview
 import { QuestionListComponent } from './screener/question-list/question-list.component';
 import { QuestionEditComponent } from './screener/question-edit/question-edit.component';
 
+import { DragDropManagerService } from './screener/question-list/drag-drop-manager.service';
+
 @NgModule({
   imports: [
     CommonModule,
@@ -66,6 +68,7 @@ import { QuestionEditComponent } from './screener/question-edit/question-edit.co
     KeyResolverService,
     ProgramsResolverService,
     ScreenerModel, ScreenerNetwork, ScreenerController,
+    DragDropManagerService
   ]
 })
 export class AdminModule { }
