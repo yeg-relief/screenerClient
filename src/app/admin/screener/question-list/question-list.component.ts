@@ -63,22 +63,15 @@ export class QuestionListComponent implements OnInit, OnDestroy {
 
   handleSelect(questionID: ID) {
     
-    const deselectAll = () => {
-      for (const key in this.classes) {
-        if (this.classes[key]['selected'] === true) this.classes[key]['selected'] = false;
-      }
-    }
-
-
     const selected_id = Object.keys(this.classes).find(id => this.classes[id]['selected'] === true);
     if (selected_id !== undefined && selected_id === questionID) {
       console.log("QUESTION UNSELECT")
       this.questionUnselect.emit(selected_id);
-      deselectAll();
+      this.deselectAll();
       return;
     } 
 
-    deselectAll();
+    this.deselectAll();
 
     if (this.classes[questionID] === undefined) this.classes[questionID] = { };
 
@@ -90,13 +83,25 @@ export class QuestionListComponent implements OnInit, OnDestroy {
   }
   
   ngOnInit(){
-    this.selectedQuestionID = Observable.merge(
+    this.selectedQuestionID = Observable.combineLatest(
       this.store.let(fromRoot.getSelectedConstantID),
       this.store.let(fromRoot.getSelectedConditionalID)
     )
-    .filter( id => this.questions.find(qid => qid === id) !== undefined)
     .takeUntil(this.destroySubs$)
-    .subscribe( id => { this.selectTarget(id); console.log(this.classes) });
+    .subscribe( ([constantID, conditionalID]) => { 
+      const presentConstant = this.questions.find(qid => qid === constantID);
+      const presentConditional = this.questions.find(qid => qid === conditionalID);
+
+      if (presentConstant !== undefined) 
+        this.selectTarget(constantID);
+      else if(presentConditional !== undefined) 
+        this.selectTarget(conditionalID);
+      else 
+        this.deselectAll(); 
+       
+
+     console.log(this.classes)  
+    });
   }
  
 
@@ -209,7 +214,7 @@ export class QuestionListComponent implements OnInit, OnDestroy {
       targetNode = targetNode.parentNode;
       targetClassNames = targetNode.className.split(" ");
       i++
-      if (i > 10) break;
+      if (i > 5) break;
     }
 
     if (Array.isArray(targetNode.id.split('-')) && 
@@ -237,4 +242,6 @@ export class QuestionListComponent implements OnInit, OnDestroy {
 }
 
 
-function scrollIntoView(element){if (element) element.scrollIntoView({block: "start", behavior: "smooth"});}
+function scrollIntoView(element){
+  if (element) element.scrollIntoView({block: "start", behavior: "smooth"});
+}

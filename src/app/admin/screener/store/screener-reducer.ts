@@ -286,7 +286,10 @@ export function reducer(state = initialState, action: ScreenerActions): State {
         state.form.get([lifted, 'index']).setValue(targetIndex)
         state.form.get([hostID, 'conditionalQuestions']).setValue([...presentConditionals.filter(cid => cid !== lifted), target]);
         
-
+        if (state.selectedConditionalQuestion === lifted) {
+          state.selectedConditionalQuestion = undefined;
+          state.selectedConstantQuestion = undefined;
+        }
 
       } else {
         console.warn('[SCREENER_REDUCER]: Strange behavior in swap questions')
