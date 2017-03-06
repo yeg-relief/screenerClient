@@ -5,7 +5,7 @@ import 'rxjs/add/operator/map';
 import 'rxjs/add/observable/merge';
 import 'rxjs/add/operator/do';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
-import { ScreenerController } from '../services/screener-controller';
+
 import { Subscription } from 'rxjs/Subscription';
 
 @Component({
@@ -24,12 +24,12 @@ export class ScreenerToolbarComponent implements OnInit {
 
 
   @Output() onFilter = new EventEmitter<string>();
-  constructor(public controller: ScreenerController) {}
+  constructor() {}
 
   ngOnInit() {
     const group = { keyFilter: new FormControl('') };
     this.adminControls = new FormGroup(group);
-
+/*
     const count = this.controller.state$.map(state => state.questions.length).subscribe(val => this.count = val);
 
     const created  = this.controller.state$.map(state => state.created).subscribe( (updated: number) => this.updated = updated);
@@ -37,13 +37,13 @@ export class ScreenerToolbarComponent implements OnInit {
     const keys = this.controller.state$.asObservable()
       .map(state => state.keys)
       .subscribe( (allkeys: any[]) => this.allKeys = [...allkeys])
-
+*/
 
     const keySelect = this.adminControls.valueChanges
       .map ( filter => filter.keyFilter)
       .subscribe(val => val === 'all' ? this.onFilter.emit('') : this.onFilter.emit(val) );
 
-    this.subscriptions = [ count, created, keys, keySelect ]
+    //this.subscriptions = [ count, created, keys, keySelect ]
   }
 
   ngOnDestroy() {
@@ -55,17 +55,6 @@ export class ScreenerToolbarComponent implements OnInit {
   }
 
   handleSave() {
-    this.controller.save()
-      .subscribe( {
-        next: data => this.errors.error = '',
-
-        error: err => {
-          console.error(err);
-          this.errors.error = '',
-          this.disabled = true;
-          this.errors = (<any>Object).assign({}, { error: 'errors encountered' })
-          setTimeout( () => this.disabled = false, 2000);
-        }
-      } );
+   
   }
 }

@@ -14,6 +14,7 @@ import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 import { Subject } from 'rxjs/Subject';
 import 'rxjs/add/operator/multicast';
 import 'rxjs/add/observable/fromEvent';
+import 'rxjs/add/operator/mergeMap';
 
 import { DragDropManagerService } from '../question-list/drag-drop-manager.service';
 
@@ -42,11 +43,6 @@ export class ScreenerOverviewComponent implements OnInit {
   private reloadConditionalQuestions = new BehaviorSubject('');
 
   private destroySubs$ = new Subject();
-
-  private upArrow;
-  private downArrow;
-  private leftArrow;
-  private rightArrow;
 
   constructor(
     private store: Store<fromRoot.State>, 
@@ -140,43 +136,7 @@ export class ScreenerOverviewComponent implements OnInit {
     
 
   }
-  /*
-  ngAfterViewInit(){
-    const base = Observable.fromEvent(document, 'keydown')
-      .takeUntil(this.destroySubs$)
-      .do( (e: any) => e.preventDefault())
-      .debounceTime(60)
-      .multicast( new ReplaySubject(1)).refCount();
-
-
-      this.upArrow = base
-        .filter(e => (<any>e).key === 'ArrowUp')
-        .do( _ => this.store.dispatch( new actions.UpArrow({})))
-        .subscribe();
-
-    
-    
-      this.downArrow = base
-        .filter(e => (<any>e).key === 'ArrowDown')
-        .do( _ => this.store.dispatch( new actions.DownArrow({})))
-        .subscribe();
-
-    
-
-
-      this.rightArrow = base
-        .filter(e => (<any>e).key === 'ArrowRight')
-        .do( _ => this.store.dispatch( new actions.RightArrow({})))
-        .subscribe();
-
-    
-
-      this.leftArrow = base
-        .filter(e => (<any>e).key === 'ArrowLeft')
-        .do( _ => this.store.dispatch( new actions.LeftArrow({})))
-        .subscribe();
-  }
-  */
+  
 
   handleSelect(id: ID) { this.store.dispatch(new actions.SelectQuestion(id)) }
 

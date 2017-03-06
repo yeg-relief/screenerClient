@@ -31,10 +31,6 @@ export class QuestionListComponent implements OnInit, OnDestroy {
   private constant_type: QuestionType = QUESTION_TYPE_CONSTANT;
   private conditional_type: QuestionType = QUESTION_TYPE_CONDITIONAL;
 
-  private upArrow: Subscription;
-  private downArrow: Subscription;
-  private rightArrow: Subscription;
-  private leftArrow: Subscription;
   private selectedQuestionID: Subscription;
   private destroySubs$ = new Subject();
   
@@ -102,72 +98,7 @@ export class QuestionListComponent implements OnInit, OnDestroy {
     .takeUntil(this.destroySubs$)
     .subscribe( id => { this.selectTarget(id); console.log(this.classes) });
   }
-  /*
-  ngAfterViewInit(){
-    const keydown = Observable.fromEvent(document, 'keydown')
-      .do(e => (<any>e).preventDefault())
-      .combineLatest(this.store.let(fromRoot.getSelectedConstantID), this.store.let(fromRoot.getSelectedConditionalID))
-      .takeUntil(this.destroySubs$)
-      .debounceTime(60)
-      .multicast( new ReplaySubject(1)).refCount();
-
-
-    this.upArrow = keydown
-      .filter( ([e, _, __]) => (<any>e).key === 'ArrowUp')
-      .subscribe( ([_, selectedConstantID, selectedConditionalID]) => {
-
-        if(selectedConstantID !== undefined && this.type === this.constant_type) {
-          this.showSelection(selectedConstantID)
-        } else if (selectedConstantID === undefined && this.type === this.constant_type){
-          this.deselectAll();
-        } else if (selectedConditionalID !== undefined && this.type === this.conditional_type) {
-          this.showSelection(selectedConditionalID,)
-        } else if (selectedConditionalID === undefined && this.type == this.conditional_type) {
-          this.deselectAll();
-        }        
-      })
-
-    this.downArrow = keydown
-      .filter( ([e, _, __]) => (<any>e).key === 'ArrowDown')
-      .subscribe( ([_, selectedConstantID, selectedConditionalID]) => {
-
-        if(selectedConstantID !== undefined && this.type === this.constant_type) {
-          this.showSelection(selectedConstantID)
-        } else if (selectedConstantID === undefined && this.type === this.constant_type){
-          this.deselectAll();
-        } else if (selectedConditionalID !== undefined && this.type === this.conditional_type) {
-          this.showSelection(selectedConditionalID,)
-        } else if (selectedConditionalID === undefined && this.type == this.conditional_type) {
-          this.deselectAll();
-        }        
-      });
-
-    this.rightArrow = keydown
-      .filter( ([e, __, _]) => (<any>e).key === 'ArrowRight')
-      .subscribe( ([_, selectedConstantID, selectedConditionalID, ]) => {
-
-          if (selectedConditionalID !== undefined && this.type === this.conditional_type) {
-            this.showSelection(selectedConditionalID);
-          } else if (selectedConstantID !== undefined && this.type === this.constant_type){
-            this.showSelection(selectedConstantID);
-          }   
-        },
-        error => console.log(error)
-      );
-
-    this.leftArrow = keydown
-      .map( ([e, constant, conditional]) => [e, conditional])
-      .filter( ([e,  __]) => (<any>e).key === 'ArrowLeft')
-      .filter( ([_, selectedConditionalID]) => selectedConditionalID === undefined )
-      .subscribe( ([_, selectedConditionalID]) => {
-        
-        if (selectedConditionalID === undefined && this.type === this.conditional_type) {
-          const selected_id = Object.keys(this.classes).find(id => this.classes[id]['selected'] === true);
-          if (selected_id !== undefined) this.questionUnselect.emit(selected_id);
-          this.deselectAll();
-        }    
-      });
-  }*/
+ 
 
   showSelection(selectedID) {
     const element = document.getElementById(selectedID);
