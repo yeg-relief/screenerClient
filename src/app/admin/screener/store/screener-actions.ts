@@ -6,6 +6,7 @@ export const ScreenerActionTypes = {
   ADD_QUESTION: '[SCREENER] ADD_QUESTION',
   ADD_CONDITIONAL_QUESTION: '[SCREENER] ADD_CONDITIONAL_QUESTION',
   DELETE_QUESTION: '[SCREENER] DELETE_QUESTION',
+  DROP_QUESTION: '[SCREENER] DROP_QUESTION',
   LOAD_DATA: '[SCREENER] LOAD_DATA',
   LOAD_DATA_FAILURE: '[SCREENER] LOAD_DATA_FAILURE',
   LOAD_DATA_SUCCESS: '[SCREENER] LOAD_DATA_SUCCESS',
@@ -33,6 +34,11 @@ export class AddConditionalQuestion implements Action {
 export class DeleteQuestion implements Action {
   type = ScreenerActionTypes.DELETE_QUESTION;
   constructor(public payload: ID) {}
+}
+
+export class DropQuestion implements Action {
+  type = ScreenerActionTypes.DROP_QUESTION;
+  constructor(public payload: {[key: string]: string}) {}
 }
 
 export class LoadData implements Action {
@@ -92,6 +98,7 @@ export type ScreenerActions =
   AddQuestion               |
   AddConditionalQuestion    |
   DeleteQuestion            |
+  DropQuestion              |
   LoadData                  |
   LoadDataFailure           |
   LoadDataSuccess           |

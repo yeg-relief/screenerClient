@@ -121,6 +121,95 @@ export function reducer(state = initialState, action: ScreenerActions): State {
       });
     }
 
+    case ScreenerActionTypes.DROP_QUESTION: {
+      console.log(action.type)
+      console.log(action.payload)
+      if (action.payload === undefined || 
+        (<any>action.payload).containerType === undefined  || 
+        (<any>action.payload).questionID === undefined) {
+        return state;    
+      }
+
+      const questionID = (<ID>action.payload)['questionID'];
+      const containerType = (<string>action.payload)['containerType'];
+      const question: Question_2 = state.form.get([questionID]) === null ? undefined : state.form.get([questionID]).value;
+      const hostID = isConditionalQuestion(questionID, state);
+      const constantLength = getConstantQuestionsLength(state);
+      const conditionalLength = typeof hostID === 'string' ? getConditionalQuestionsLength(hostID, state) : undefined;
+      const constantQuestions: FormGroup[] = Object.keys(state.form.value)
+                                              .filter(id => isConditionalQuestion(id, state) === false)
+                                              .map(id => <FormGroup>state.form.get(id));
+      
+      // we're moving the target question to the bottom of the list... anything with higher index 
+      // will need to be decremented.
+      const adjustIndex = (questions: FormGroup[], targetIndex: number): FormGroup[] => {
+        for(const q of questions) {
+          const indexControl = q.get('index');
+          if (indexControl === null) break;
+          
+          if(indexControl.value > targetIndex) indexControl.setValue(indexControl.value - 1); 
+        }
+        
+        return questions;
+      }
+
+
+      if ( question === undefined ) return state;
+
+      if (typeof hostID === 'string' && hostID !== state.selectedConstantQuestion) return state;
+
+      console.log('base guard passed')
+      console.log(containerType)
+      console.log(hostID);
+      // constant question to constant container
+      if(containerType === 'constant_container' && hostID === false) {
+        console.log('CASE A')
+        adjustIndex(constantQuestions, question.index)
+        state.form.get([questionID, 'index']).setValue(constantLength - 1);
+      }
+      // move a conditional question to the constant container
+      else if (containerType === 'constant_container' && typeof hostID === 'string'){
+        console.log('CASE B')
+        const conditionalQuestions = state.form.get([hostID, 'conditionalQuestions']).value
+                                      .map(id => state.form.get(id))
+                                      .filter(val => val === null);          
+        adjustIndex(conditionalQuestions, question.index) 
+        state.form.get([questionID, 'index']).setValue(constantLength - 1);
+        const conditionals = state.form.get([hostID, 'conditionalQuestions']).value;
+        const updatedConditionals = conditionals.filter( id => id !== question.id)
+        state.form.get([hostID, 'conditionalQuestions']).setValue(updatedConditionals);
+      }
+      // conditional question to conditional container
+      else if (containerType === 'conditional_container' && typeof hostID === 'string'){
+        console.log('CASE C')
+
+        const conditionalQuestions = state.form.get([hostID, 'conditionalQuestions']).value
+                                      .map(id => state.form.get(id))
+                                      .filter(val => val === null);
+        adjustIndex(conditionalQuestions, question.index)
+        state.form.get([questionID, 'index']).setValue(conditionalLength - 1);   
+
+
+      }
+      // move a constant question to conditional container
+      else if (containerType === 'conditional_container' && hostID === false){
+        console.log('CASE D')
+        // there is no selected question, how can we drop a question into the conditional container?
+        const host: FormGroup = <FormGroup>state.form.get(state.selectedConstantQuestion);
+        if (host === null || host.get('expandable').value === false) return state;
+
+        // only one layer of nesting allowed
+        if (question.expandable === true) return state;
+
+        const conditionalLength = host.get('conditionalQuestions').value.length;
+        adjustIndex(constantQuestions, question.index);
+        state.form.get([questionID, 'index']).setValue(conditionalLength - 1);
+        host.get('conditionalQuestions').setValue([...host.get('conditionalQuestions').value, question.id])
+      }
+      console.log('exiting function')
+      return state;
+    }
+
     case ScreenerActionTypes.LOAD_DATA: return (<any>Object).assign({}, state, { loading: true} );
 
 

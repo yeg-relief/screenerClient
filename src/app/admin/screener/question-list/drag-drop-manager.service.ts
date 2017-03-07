@@ -33,15 +33,19 @@ export class DragDropManagerService {
   }
 
   liftItem(id: ID) { 
-    if( id !== undefined) this.state.setValue({ lifted: id, target: '' });
-
-    else this.state.setValue({lifted: '', target: ''}); 
+    const target = this.state.get(TARGET).value;
+    if( id !== undefined && id !== '' && target === '') 
+      this.state.setValue({ lifted: id, target: '' });
+    else
+      this.state.setValue({lifted: '', target: ''}); 
   }
 
   dropItem(targetID: ID) { 
-    if (targetID !== undefined) this.state.get(TARGET).setValue(targetID); 
-
-    else this.state.setValue({lifted: '', target: ''}); 
+    const lifted = this.state.get(LIFTED).value;
+    if (targetID !== undefined && targetID !== '' && lifted !== '') 
+      this.state.get(TARGET).setValue(targetID); 
+    else
+      this.state.setValue({lifted: '', target: ''}); 
   }
 
 }

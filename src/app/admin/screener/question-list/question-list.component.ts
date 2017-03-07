@@ -34,6 +34,10 @@ export class QuestionListComponent implements OnInit, OnDestroy {
   private selectedQuestionID: Subscription;
   private destroySubs$ = new Subject();
   
+  private containerClasses = {
+    container_over: false,
+
+  };
 
   constructor(
     private store: Store<fromRoot.State>, 
@@ -65,7 +69,6 @@ export class QuestionListComponent implements OnInit, OnDestroy {
     
     const selected_id = Object.keys(this.classes).find(id => this.classes[id]['selected'] === true);
     if (selected_id !== undefined && selected_id === questionID) {
-      console.log("QUESTION UNSELECT")
       this.questionUnselect.emit(selected_id);
       this.deselectAll();
       return;
@@ -98,9 +101,7 @@ export class QuestionListComponent implements OnInit, OnDestroy {
         this.selectTarget(conditionalID);
       else 
         this.deselectAll(); 
-       
 
-     console.log(this.classes)  
     });
   }
  
@@ -137,6 +138,9 @@ export class QuestionListComponent implements OnInit, OnDestroy {
   }
 
   dragStart(id, $event) {
+    if (id === this.type + '-container') return;
+
+
     if (this.classes[id]) {
       this.classes[id] = (<any>Object).assign({}, this.classes[id], { dragStart: true})
     } else {
@@ -158,6 +162,13 @@ export class QuestionListComponent implements OnInit, OnDestroy {
     if($event.preventDefault) {
       $event.preventDefault();
     }
+
+    if (id === this.type + '-container') {
+      this.containerClasses = {
+        container_over: true
+      }
+    }
+
     if (this.classes[id]) {
       this.classes[id] = (<any>Object).assign({}, this.classes[id], { dragOver: true})
     } else {
@@ -173,6 +184,16 @@ export class QuestionListComponent implements OnInit, OnDestroy {
     if ($event.preventDefault) {
       $event.preventDefault();
     }
+
+    if (id === this.type + '-container') {
+      this.containerClasses = {
+        container_over: true
+      }
+    }
+
+
+
+
     if (this.classes[id]) {
       this.classes[id] = (<any>Object).assign({}, this.classes[id], { dragOver: true})
     } else {
@@ -186,6 +207,14 @@ export class QuestionListComponent implements OnInit, OnDestroy {
   }
 
   dragLeave(id) {
+    if (id === this.type + '-container') {
+      this.containerClasses = {
+        container_over: false
+      }
+    }
+
+
+
     if (this.classes[id]) {
       this.classes[id] = (<any>Object).assign({}, this.classes[id], { dragOver: false})
     } else {
@@ -198,6 +227,8 @@ export class QuestionListComponent implements OnInit, OnDestroy {
   }
 
   drop(id, $event) {
+
+
     if($event.preventDefault){
       $event.preventDefault();
     }
@@ -206,40 +237,80 @@ export class QuestionListComponent implements OnInit, OnDestroy {
       $event.stopPropagation();
     }    
 
-    const targetKey = $event.target.innerText;
+    if (id === this.type + '-container') {
+      this.containerClasses = {
+        container_over: false
+      }
+    }
+    // there is a function to abstract
     let targetNode = $event.target;
     let targetClassNames = $event.target.className.split(" ");
     let i = 0;
     while(targetClassNames.find(name => name === 'question-item') === undefined) {
-      targetNode = targetNode.parentNode;
-      targetClassNames = targetNode.className.split(" ");
+      if (targetNode.parentNode !== null && targetNode.parentNode !== undefined) {
+        targetNode = targetNode.parentNode;
+        targetClassNames = targetNode.className.split(" ");
+      }
+      
       i++
       if (i > 5) break;
     }
-
+    // dropped into another question
     if (Array.isArray(targetNode.id.split('-')) && 
         targetNode.id.split('-').length > 0 &&
-        typeof targetNode.id.split('-')[0] === 'string')
+        typeof targetNode.id.split('-')[0] === 'string'
+        && targetNode.id.split('-')[0] !== 'constant-question-list'
+        && targetNode.id.split('-')[0] !== 'conditional-question-list'
+        && targetNode.id.split('-')[0] !== '')
     {
+
       this.dragManager.dropItem( targetNode.id.split('-')[0] );
+
+      for (const key in this.classes) {
+        this.classes[key]['dragStart'] = false;
+        this.classes[key]['dragOver'] = false;
+      }
+      
+      
+      return false;
+    }
+    // probably a container
+    targetNode = $event.target;
+    let targetID = $event.target.id;
+    i = 0;
+    while(targetID !== (this.type + '_container') ) {
+      if (++i > 5) break;
+
+      targetID = targetNode.parentNode.id;
+    }
+
+    if (targetID === this.type + '_container') {
+      this.dragManager.dropItem( targetID );
     }
 
     for (const key in this.classes) {
-      this.classes[key]['dragStart'] = false;
-      this.classes[key]['dragOver'] = false;
-    }
-    
-    //this.dragManager.dropItem(targetID)
+        this.classes[key]['dragStart'] = false;
+        this.classes[key]['dragOver'] = false;
+      }
+      
+      
     return false;
+
+
+    
   }
 
-  dragEnd() {
+  dragEnd($event) {
     for(const key in this.classes) {
       this.classes[key]['dragOver'] = false;
       this.classes[key]['dragStart'] = false;
     }
+    this.containerClasses = {
+      container_over: false
+    }
   }
 }
+
 
 
 function scrollIntoView(element){

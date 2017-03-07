@@ -18,6 +18,11 @@
   border: 2px dashed #000;
 }
 
+.container_over {
+  color: ghostwhite;
+  border: 2px solid ghostwhite;
+}
+
 
 .selected {
   border: 5px solid blue;

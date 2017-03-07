@@ -53,13 +53,26 @@ export class ScreenerOverviewComponent implements OnInit {
   ngOnInit() {
     const dispatchSwap = (lifted, target) => this.store.dispatch(new actions.SwapQuestions({lifted, target }))
 
-    this.dragManager.dragState.takeUntil(this.destroySubs$).subscribe(val => {
-      dispatchSwap(val.lifted, val.target);
-      setTimeout( () => {
-        if (this.reloadConditionalQuestions !== undefined) this.reloadConditionalQuestions.next('');
+    const dispatchDrop = (questionID, containerType) => this.store.dispatch(new actions.DropQuestion({questionID, containerType}))
 
-        if (this.reloadConstantQuestions !== undefined) this.reloadConstantQuestions.next(''); 
-      }, 0)
+    this.dragManager.dragState.takeUntil(this.destroySubs$).subscribe(val => {
+      if (val.target === 'constant_container' || val.target === 'conditional_container') {
+        dispatchDrop(val.lifted, val.target);
+        setTimeout( () => {
+          if (this.reloadConditionalQuestions !== undefined) this.reloadConditionalQuestions.next('');
+
+          if (this.reloadConstantQuestions !== undefined) this.reloadConstantQuestions.next(''); 
+        }, 0)
+      } else {
+        dispatchSwap(val.lifted, val.target);
+        setTimeout( () => {
+          if (this.reloadConditionalQuestions !== undefined) this.reloadConditionalQuestions.next('');
+
+          if (this.reloadConstantQuestions !== undefined) this.reloadConstantQuestions.next(''); 
+        }, 0)
+      }
+      
+      
     });
 
     this.store.dispatch(new actions.LoadData(this.auth.getCredentials()));
