@@ -23,6 +23,9 @@
   border: 2px solid ghostwhite;
 }
 
+.filtered_me {
+  border: 2px solid teal
+}
 
 .selected {
   border: 5px solid blue;

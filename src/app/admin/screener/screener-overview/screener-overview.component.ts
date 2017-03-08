@@ -17,14 +17,14 @@ import 'rxjs/add/observable/fromEvent';
 import 'rxjs/add/operator/mergeMap';
 
 import { DragDropManagerService } from '../question-list/drag-drop-manager.service';
-
+import { KeyFilterService } from '../services/key-filter.service';
 import { isConditionalQuestion, State } from '../store/screener-reducer';
 
 @Component({
   selector: 'app-screener-overview',
   templateUrl: './screener-overview.component.html',
   styleUrls: ['./screener-overview.component.css'],
-  providers: [ DragDropManagerService ]
+  providers: [ DragDropManagerService, KeyFilterService ]
 })
 export class ScreenerOverviewComponent implements OnInit {
   private form$: Observable<FormGroup>;
@@ -80,7 +80,8 @@ export class ScreenerOverviewComponent implements OnInit {
 
     this.form$ = this.store.let(fromRoot.getForm).multicast( new ReplaySubject(1) ).refCount();
 
-    this.constantQuestions$ = this.reloadConstantQuestions.withLatestFrom(this.form$)
+    this.constantQuestions$ = this.reloadConstantQuestions
+      .withLatestFrom(this.form$)
       .filter(form => form !== null)
       .map( ([_, form]) => { 
         const state = <State>{ form: form };
@@ -192,15 +193,10 @@ export class ScreenerOverviewComponent implements OnInit {
 
   }
 
-  handleExpandableChange() {
-    /*
-    setTimeout( () => {
-      if (this.reloadConditionalQuestions !== undefined) this.reloadConditionalQuestions.next('');
-
-      if (this.reloadConstantQuestions !== undefined) this.reloadConstantQuestions.next(''); 
-    }, 0)*/
-  }
-
   ngOnDestroy() { this.destroySubs$.next(); }
+
+  handleKeyFilter(name: string) {
+    console.log(name);
+  }
 
 }

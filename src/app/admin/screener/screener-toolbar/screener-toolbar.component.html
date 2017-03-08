@@ -2,8 +2,8 @@
    <md-card-title> Screener Edit </md-card-title>
   <div class="flex flex-justify">
     <section>
-      <md-card-subtitle> latest server update: {{ updated | date }} </md-card-subtitle>
-      <md-card-subtitle> this screener has {{ count }} questions </md-card-subtitle>
+      <md-card-subtitle> latest server update: {{ ( created$ | async ) | date }} </md-card-subtitle>
+      <md-card-subtitle> this screener has {{ count$ | async }} questions </md-card-subtitle>
     </section>
     
     <section class="flex flex-column flex-justify flex-stretch">
@@ -18,11 +18,13 @@
     
   </div>
   <form [formGroup]="adminControls">
-    <label> <button disabled md-button>filter by key</button>
-      <select formControlName="keyFilter" class="col-4" placeholder="filter by key" style="min-height: 3.5em">
-        <option [value]="''"> all </option>
-        <option *ngFor="let key of allKeys" [value]="key"> {{ key }} </option>
-      </select>
-    </label>
+    <md-input-container>
+      <input type="text" mdInput formControlName="keyFilter" placeholder="filter by key name" [mdAutocomplete]="auto">
+    </md-input-container>
+    <md-autocomplete #auto="mdAutocomplete" [displayWith]="displayFunction">
+      <md-option *ngFor="let key of (allKeys$ | async)" [value]="key" [style.height]="'3em'">
+          <pre>{{ key?.name }} : {{ key?.type }}</pre>
+      </md-option>
+    </md-autocomplete>
   </form>
 </md-card>

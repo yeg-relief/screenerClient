@@ -21,6 +21,7 @@ export interface State {
   selectedConstantQuestion: ID;
   selectedConditionalQuestion: ID;
   keys: Key[];
+  created: number;
 };
 
 export const initialState: State = {
@@ -31,6 +32,7 @@ export const initialState: State = {
   selectedConstantQuestion: undefined,
   selectedConditionalQuestion: undefined,
   keys: [],
+  created: 0
 };
 
 export function reducer(state = initialState, action: ScreenerActions): State {
@@ -122,8 +124,7 @@ export function reducer(state = initialState, action: ScreenerActions): State {
     }
 
     case ScreenerActionTypes.DROP_QUESTION: {
-      console.log(action.type)
-      console.log(action.payload)
+
       if (action.payload === undefined || 
         (<any>action.payload).containerType === undefined  || 
         (<any>action.payload).questionID === undefined) {
@@ -158,30 +159,28 @@ export function reducer(state = initialState, action: ScreenerActions): State {
 
       if (typeof hostID === 'string' && hostID !== state.selectedConstantQuestion) return state;
 
-      console.log('base guard passed')
-      console.log(containerType)
-      console.log(hostID);
+
       // constant question to constant container
       if(containerType === 'constant_container' && hostID === false) {
-        console.log('CASE A')
+
         adjustIndex(constantQuestions, question.index)
         state.form.get([questionID, 'index']).setValue(constantLength - 1);
       }
       // move a conditional question to the constant container
       else if (containerType === 'constant_container' && typeof hostID === 'string'){
-        console.log('CASE B')
+ 
         const conditionalQuestions = state.form.get([hostID, 'conditionalQuestions']).value
                                       .map(id => state.form.get(id))
                                       .filter(val => val === null);          
         adjustIndex(conditionalQuestions, question.index) 
-        state.form.get([questionID, 'index']).setValue(constantLength - 1);
+        state.form.get([questionID, 'index']).setValue(constantLength);
         const conditionals = state.form.get([hostID, 'conditionalQuestions']).value;
         const updatedConditionals = conditionals.filter( id => id !== question.id)
         state.form.get([hostID, 'conditionalQuestions']).setValue(updatedConditionals);
       }
       // conditional question to conditional container
       else if (containerType === 'conditional_container' && typeof hostID === 'string'){
-        console.log('CASE C')
+
 
         const conditionalQuestions = state.form.get([hostID, 'conditionalQuestions']).value
                                       .map(id => state.form.get(id))
@@ -193,7 +192,7 @@ export function reducer(state = initialState, action: ScreenerActions): State {
       }
       // move a constant question to conditional container
       else if (containerType === 'conditional_container' && hostID === false){
-        console.log('CASE D')
+
         // there is no selected question, how can we drop a question into the conditional container?
         const host: FormGroup = <FormGroup>state.form.get(state.selectedConstantQuestion);
         if (host === null || host.get('expandable').value === false) return state;
@@ -203,10 +202,10 @@ export function reducer(state = initialState, action: ScreenerActions): State {
 
         const conditionalLength = host.get('conditionalQuestions').value.length;
         adjustIndex(constantQuestions, question.index);
-        state.form.get([questionID, 'index']).setValue(conditionalLength - 1);
+        state.form.get([questionID, 'index']).setValue(conditionalLength);
         host.get('conditionalQuestions').setValue([...host.get('conditionalQuestions').value, question.id])
       }
-      console.log('exiting function')
+
       return state;
     }
 
@@ -270,6 +269,7 @@ export function reducer(state = initialState, action: ScreenerActions): State {
 
       return (<any>Object).assign({}, {
         loading: false,
+        created: screener.created,
         error: '',
         styles,
         form,

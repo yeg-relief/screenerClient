@@ -1,11 +1,16 @@
 import { Component, Input, OnInit, Output, EventEmitter } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
+import { Store } from '@ngrx/store';
+import { Key } from '../../models';
+import { AuthService } from '../../core/services/auth.service';
+import * as fromRoot from '../../reducer';
+import * as actions  from '../store/screener-actions';
 import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/operator/map';
 import 'rxjs/add/observable/merge';
 import 'rxjs/add/operator/do';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
-
+import { KeyFilterService } from '../services/key-filter.service';
 import { Subscription } from 'rxjs/Subscription';
 
 @Component({
@@ -14,36 +19,39 @@ import { Subscription } from 'rxjs/Subscription';
   styleUrls: ['./screener-toolbar.component.css'],
 })
 export class ScreenerToolbarComponent implements OnInit {
-  count = 0;
-  updated = 0;
+  private count$: Observable<number>;
   private adminControls: FormGroup;
-  private allKeys: any[] = [];
+  private allKeys$: Observable<Key[]>;
+  private form$: Observable<FormGroup>;
+  private created$: Observable<number>;
   private subscriptions: Subscription[];
   private disabled = false;
   private errors: any =  { error: '' };
 
 
-  @Output() onFilter = new EventEmitter<string>();
-  constructor() {}
+
+  constructor(private store: Store<fromRoot.State>, private keyFilter: KeyFilterService) {}
 
   ngOnInit() {
     const group = { keyFilter: new FormControl('') };
     this.adminControls = new FormGroup(group);
-/*
-    const count = this.controller.state$.map(state => state.questions.length).subscribe(val => this.count = val);
 
-    const created  = this.controller.state$.map(state => state.created).subscribe( (updated: number) => this.updated = updated);
-    
-    const keys = this.controller.state$.asObservable()
-      .map(state => state.keys)
-      .subscribe( (allkeys: any[]) => this.allKeys = [...allkeys])
-*/
+    this.allKeys$ = 
+      this.adminControls.get('keyFilter').valueChanges
+        .map( (filterItem) => filterItem.name !== undefined? filterItem.name : filterItem )
+        .withLatestFrom(this.store.let(fromRoot.getScreenerKeys))
+        .map( ([filterInput, _, ]) => [_, new RegExp(<string>filterInput, 'gi')])
+        .map( ([keys, filterRegex]) => (<Key[]>keys).filter(key => (<RegExp>filterRegex).test(key.name)) )
+        .do ( keys => this.keyFilter.setValue(keys.map(k => k.name)))
+        .startWith(this.adminControls.get('keyFilter').value)
 
-    const keySelect = this.adminControls.valueChanges
-      .map ( filter => filter.keyFilter)
-      .subscribe(val => val === 'all' ? this.onFilter.emit('') : this.onFilter.emit(val) );
+    this.form$ = this.store.let(fromRoot.getForm);
+    this.count$ = this.store.let(fromRoot.getConstantQuestions).map(questions => questions.length);
+    this.created$ = this.store.select('screener', 'created');
+  }
 
-    //this.subscriptions = [ count, created, keys, keySelect ]
+  displayFunction(key: Key){
+    return key ? key.name : key;
   }
 
   ngOnDestroy() {

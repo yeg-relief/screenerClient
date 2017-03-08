@@ -29,6 +29,7 @@ import { QuestionListComponent } from './screener/question-list/question-list.co
 import { QuestionEditComponent } from './screener/question-edit/question-edit.component';
 
 import { DragDropManagerService } from './screener/question-list/drag-drop-manager.service';
+import { KeyFilterService } from './screener/services/key-filter.service';
 
 @NgModule({
   imports: [
@@ -58,7 +59,8 @@ import { DragDropManagerService } from './screener/question-list/drag-drop-manag
     HttpModule, 
     KeyResolverService,
     ProgramsResolverService,
-    DragDropManagerService
+    DragDropManagerService,
+    KeyFilterService
   ]
 })
 export class AdminModule { }

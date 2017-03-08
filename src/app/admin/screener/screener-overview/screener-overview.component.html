@@ -8,6 +8,7 @@
         [questions]="constantQuestions$ | async"
         [form]="form$ | async"
         [type]="constant_type"
+
         (questionSelect)="handleSelect($event)"
         (questionUnselect)="handleUnselect($event)"
         (addQuestion)="handleAddQuestion($event)">
@@ -19,6 +20,7 @@
         [questions]="conditionalQuestions$$ | async"
         [form]="form$ | async"
         [type]="conditional_type"
+
         [host_id]="selectedConstantID$ | async"
         (questionSelect)="handleSelect($event)"
         (questionUnselect)="handleUnselect($event)"
@@ -27,7 +29,7 @@
 
 
     <div id="question-content" *ngIf="(selectedConstantID$ | async) !== undefined">
-      <app-question-edit (delete)="handleDelete($event)" (makeExpandable)="handleExpandableChange()"></app-question-edit>
+      <app-question-edit (delete)="handleDelete($event)"></app-question-edit>
     </div>
 
   </div>

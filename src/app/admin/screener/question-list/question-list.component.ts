@@ -9,7 +9,7 @@ import { Subscription } from 'rxjs/Subscription';
 import 'rxjs/add/observable/fromEvent';
 import { Store } from '@ngrx/store';
 import * as fromRoot from '../../reducer';
-
+import { KeyFilterService } from '../services/key-filter.service';
 import { DragDropManagerService, DragDatum } from './drag-drop-manager.service';
 
 @Component({
@@ -22,6 +22,7 @@ export class QuestionListComponent implements OnInit, OnDestroy {
   @Input() form: FormGroup;
   @Input() type: QuestionType; // are these conditional or constant questions in the list?
   @Input() host_id: ID | undefined; // undefined if these are constant questions
+  //@Input() filter: string; // key name to filter by
   @Output() questionSelect = new EventEmitter<ID>();
   @Output() questionUnselect = new EventEmitter<ID>();
   @Output() addQuestion = new EventEmitter<{[key: string]: QuestionType | ID }>();
@@ -41,7 +42,8 @@ export class QuestionListComponent implements OnInit, OnDestroy {
 
   constructor(
     private store: Store<fromRoot.State>, 
-    private dragManager: DragDropManagerService
+    private dragManager: DragDropManagerService,
+    private keyFilter: KeyFilterService
   ) {}
 
   handleAddQuestion() {
@@ -103,8 +105,40 @@ export class QuestionListComponent implements OnInit, OnDestroy {
         this.deselectAll(); 
 
     });
+
+    this.keyFilter.filteredKey$
+      .takeUntil(this.destroySubs$)
+      .map( (update: any) => update.keyNames)
+      .filter( keys => keys !== undefined && keys !== null && Array.isArray(keys))
+      .subscribe( (keys) => {
+
+        if(Object.keys(this.form.value).length > keys.length){
+          for (const id of this.questions) {
+            if(this.classes[id] === undefined) this.initializeStyle(id);
+            if (keys.find(keyName => keyName === this.form.value[id].key.name)) 
+              this.classes[id]['filtered_me'] = true;
+            else 
+              this.classes[id]['filtered_me'] = false;
+          }
+        } else {
+          for (const id of this.questions) {
+            if(this.classes[id] === undefined) this.initializeStyle(id);
+            
+            this.classes[id]['filtered_me'] = false;
+          }
+        }  
+      })
   }
- 
+
+  private initializeStyle(id){
+    this.classes[id] = (<any>Object).assign({}, {
+      selected: false,
+      dragStart: false,
+      dragOver: false,
+      filtered_me: false
+    })
+  }
+
 
   showSelection(selectedID) {
     const element = document.getElementById(selectedID);
@@ -144,11 +178,7 @@ export class QuestionListComponent implements OnInit, OnDestroy {
     if (this.classes[id]) {
       this.classes[id] = (<any>Object).assign({}, this.classes[id], { dragStart: true})
     } else {
-      this.classes[id] = (<any>Object).assign({}, {
-        selected: false,
-        dragStart: true,
-        dragOver: false,
-      })
+      this.initializeStyle(id)
     }
     
     // hack to make elements draggable in firefox
@@ -172,11 +202,7 @@ export class QuestionListComponent implements OnInit, OnDestroy {
     if (this.classes[id]) {
       this.classes[id] = (<any>Object).assign({}, this.classes[id], { dragOver: true})
     } else {
-      this.classes[id] = (<any>Object).assign({}, {
-        selected: false,
-        dragStart: false,
-        dragOver: true,
-      })
+      this.initializeStyle(id)
     }
   }
 
@@ -197,11 +223,7 @@ export class QuestionListComponent implements OnInit, OnDestroy {
     if (this.classes[id]) {
       this.classes[id] = (<any>Object).assign({}, this.classes[id], { dragOver: true})
     } else {
-      this.classes[id] = (<any>Object).assign({}, {
-        selected: false,
-        dragStart: false,
-        dragOver: true,
-      })
+      this.initializeStyle(id)
     }
     return false;
   }
@@ -218,11 +240,7 @@ export class QuestionListComponent implements OnInit, OnDestroy {
     if (this.classes[id]) {
       this.classes[id] = (<any>Object).assign({}, this.classes[id], { dragOver: false})
     } else {
-      this.classes[id] = (<any>Object).assign({}, {
-        selected: false,
-        dragStart: false,
-        dragOver: false,
-      })
+      this.initializeStyle(id)
     }
   }
 
