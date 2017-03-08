@@ -1,0 +1,57 @@
+<div class=" col-12 " style="overflow:scroll;">
+<form [formGroup]="form$ | async" *ngIf="(form$ | async ) !== null" class="flex flex-column" id="question-container" 
+  style="width: 70%; margin: 2em auto; justify-content: space-between; height: 30vh;">
+  <div 
+      style="margin-left: 80%; width: 20%; background-color: darkslategray; padding-top: 1em; padding-bottom:1em" 
+      class="flex flex-center border rounded center">
+        <button md-mini-fab color="warn" style="margin: 0 auto" (click)="deleteQuestion()"><md-icon>clear</md-icon></button>
+  </div>
+
+  <md-input-container class="col-12">
+    <input mdInput placeholder="Question Label" formControlName="label">
+  </md-input-container>
+
+  <div formGroupName="key">
+    <md-select placeholder="Key" class="col-12" formControlName="name">
+      <md-option *ngFor="let unusedKey of (unusedKeys$ | async)" [value]="unusedKey.name"
+        style="height: 3em; overflow: hidden">
+        <pre>{{ unusedKey.name }} : {{ unusedKey.type }}</pre>
+      </md-option>
+    </md-select>
+  </div>
+  
+
+  <div class="col-12" style="margin-top: 1em; margin-bottom: 1em;">
+    <md-checkbox formControlName="expandable">
+      Expandable
+    </md-checkbox>
+  </div>
+
+  <md-select placeholder="Input Type" formControlName="controlType" class="col-12">
+    <md-option *ngFor="let control of CONTROL_TYPE_VALUES" [value]="control.value"> {{ control.display }} </md-option>
+  </md-select>
+
+  <div *ngIf=" (form$ | async)?.errors"> 
+    {{ (form$ | async)?.errors | json }}
+  </div>
+
+</form>
+
+<section 
+    id="number-select-options" 
+    *ngIf="controlType === 'NumberSelect'"
+    [formGroup]="optionForm"
+    class="flex flex-column"
+    style="margin: 0 auto; width: 70%; justify-content: space-between; height: 15vh;">
+  <md-input-container class="col-9">
+    <input mdInput placeholder="option value" formControlName="optionValue">
+  </md-input-container>
+  <button md-raised-button color="primary" [disabled]="!optionForm.valid ? true : null" (click)="addOption()"> ADD </button>
+  <div *ngFor="let option of options" style="background-color: palegreen"> 
+    {{ option }}
+  </div>
+  
+</section>
+
+</div>
+

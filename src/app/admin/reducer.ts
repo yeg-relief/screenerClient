@@ -6,7 +6,7 @@ import { Observable } from 'rxjs/Observable';
 import { combineReducers } from '@ngrx/store';
 import { compose } from '@ngrx/core/compose';
 import * as fromKeyOverview from './keys/reducer';
-
+import * as fromScreener from './screener/store/screener-reducer';
 import * as fromProgramOverview from './programs/program-overview/reducer';
 
 import { Question } from '../shared/models';
@@ -14,25 +14,30 @@ import { Key } from './models/key';
 import 'rxjs/add/operator/concatMap';
 import 'rxjs/add/operator/do';
 import 'rxjs/add/operator/find';
-import { cloneDeep } from 'lodash';
 import { ApplicationFacingProgram } from './models/program';
 
 export interface State {
   keyOverview: fromKeyOverview.State;
   programOverview: fromProgramOverview.State;
+  screener: fromScreener.State;
 }
 
 const reducers = {
   keyOverview: fromKeyOverview.reducer,
-  programOverview: fromProgramOverview.reducer
+  programOverview: fromProgramOverview.reducer,
+  screener: fromScreener.reducer
 };
 
 const productionReducer = combineReducers(reducers);
+
 
 export function reducer(state: any, action: any) {
   return productionReducer(state, action);
 }
 
+export function getScreenerState(state$: Observable<State>) {
+  return state$.select(state => state.screener);
+}
 
 export function getProgramOverviewState(state$: Observable<State>) {
   return state$.select(state => state.programOverview);
@@ -42,6 +47,27 @@ export function getKeyOverview(state$: Observable<State>) {
   return state$.select(state => state.keyOverview);
 }
 
+
+/* for screener */
+export const getForm = share(compose(fromScreener.getForm, getScreenerState));
+
+export const getStyles = share(compose(fromScreener.getStyles, getScreenerState));
+
+export const getScreenerError = share(compose(fromScreener.getError, getScreenerState));
+
+export const isScreenerLoading = share(compose(fromScreener.isLoading, getScreenerState));
+
+export const getConstantQuestions = share(compose(fromScreener.getConstantQuestions, getScreenerState));
+
+export const getConditionalQuestions = share(compose(fromScreener.getConditionalQuestionIDS, getScreenerState));
+
+export const getConditionalQuestionsLength = share(compose(fromScreener.getConditionalQuestionsLength, getScreenerState));
+
+export const getSelectedConstantID = share(compose(fromScreener.getSelectedConstantID, getScreenerState));
+
+export const getSelectedConditionalID = share(compose(fromScreener.getSelectedConditionalID, getScreenerState));
+
+export const getScreenerKeys = share(compose(fromScreener.getKeys, getScreenerState));
 
 /* for programs */
 export const getLoadedPrograms = share(compose(fromProgramOverview.getPrograms, getProgramOverviewState));
@@ -76,6 +102,9 @@ export const findProgram = function (state$: Observable<State>, guid: string){
 
 /* for keys **key/overview etc** */
 export const allLoadedKeys = share(compose(fromKeyOverview.getLoadedKeys, getKeyOverview));
+
+
+
 
 /* https://github.com/ngrx/example-app/blob/final/src/util.ts */
 interface SelectorFn<T, V> {

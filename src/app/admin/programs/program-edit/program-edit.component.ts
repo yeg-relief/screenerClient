@@ -20,7 +20,7 @@ import { FormControl, Validators, FormGroup } from '@angular/forms';
 import { Store } from '@ngrx/store';
 import * as fromRoot from '../../reducer';
 import * as fromOverview from '../program-overview/actions';
-import { cloneDeep } from 'lodash';
+import * as _ from 'lodash';
 import { ActivatedRoute } from '@angular/router';
 
 interface Action {
@@ -125,7 +125,7 @@ export class ProgramEditComponent implements OnInit, OnDestroy {
     const guid = this.route.snapshot.params['guid'];
     const initialState$ = fromRoot.findProgram(this.store, guid)
       // get rid of object reference
-      .map(program => cloneDeep(program))
+      .map(program => _.cloneDeep(program))
       .do(program => this.setControls(program))
       // sideEffects executed once
       .multicast(new ReplaySubject(1)).refCount();

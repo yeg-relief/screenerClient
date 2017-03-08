@@ -8,9 +8,9 @@
         <md-card-title id="question-label"> {{ question.label }} </md-card-title>
 
         <div class="py1"></div>
-
-        <md-input formControlName="{{ question.key }}" placeholder="input here"></md-input>
-
+        <md-input-container>
+          <input mdInput formControlName="{{ question.key }}" placeholder="input here">
+        </md-input-container>
       </div>
 
       <div *ngSwitchCase="'CheckBox'">

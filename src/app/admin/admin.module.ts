@@ -20,24 +20,27 @@ import { HttpModule } from '@angular/http';
 
 import { ProgramsResolverService } from './programs/program-overview/programs-resolver.service';
 import { ScreenerOverviewComponent } from './screener/screener-overview/screener-overview.component';
-import { ScreenerModel } from './screener/screener-model';
-import { ScreenerToolbarComponent } from './screener/screener-toolbar/screener-toolbar.component';
 
+import { ScreenerToolbarComponent } from './screener/screener-toolbar/screener-toolbar.component';
+import { ScreenerEffects } from './screener/store/screener-effects';
 import { ReactiveFormsModule, FormsModule } from '@angular/forms';
-import { ScreenerQuestionComponent } from './screener/screener-question/screener-question.component';
-import { UserQuestionComponent } from './screener/screener-question/user-question/user-question.component';
-import { ConditionalQuestionsComponent } from './screener/screener-question/conditional-questions/conditional-questions.component';
-import { OverviewControlsComponent } from './screener/screener-overview/overview-controls/overview-controls.component';
+
+import { QuestionListComponent } from './screener/question-list/question-list.component';
+import { QuestionEditComponent } from './screener/question-edit/question-edit.component';
+
+import { DragDropManagerService } from './screener/question-list/drag-drop-manager.service';
+import { KeyFilterService } from './screener/services/key-filter.service';
 
 @NgModule({
   imports: [
     CommonModule,
     routing,
-    MaterialModule.forRoot(),
+    MaterialModule,
     StoreModule.provideStore(reducer),
     EffectsModule.run(ProgramOverviewEffects),
     EffectsModule.run(ProgramEditEffects),
     EffectsModule.run(ProgramDeleteEffects),
+    EffectsModule.run(ScreenerEffects),
     AdminCoreModule,
     ProgramsModule,
     KeysModule,
@@ -48,17 +51,16 @@ import { OverviewControlsComponent } from './screener/screener-overview/overview
     AdminComponent,
     ScreenerOverviewComponent,
     ScreenerToolbarComponent,
-    ScreenerQuestionComponent,
-    UserQuestionComponent,
-    ConditionalQuestionsComponent,
-    OverviewControlsComponent,
+    QuestionListComponent,
+    QuestionEditComponent,
   ],
   providers: [
     DataService, 
     HttpModule, 
     KeyResolverService,
     ProgramsResolverService,
-    ScreenerModel
+    DragDropManagerService,
+    KeyFilterService
   ]
 })
 export class AdminModule { }

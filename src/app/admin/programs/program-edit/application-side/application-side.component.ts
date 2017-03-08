@@ -10,7 +10,8 @@ import 'rxjs/add/operator/let';
 import 'rxjs/add/operator/takeUntil';
 import 'rxjs/add/operator/multicast';
 import { ReplaySubject } from 'rxjs/ReplaySubject';
-import { cloneDeep, uniqWith } from 'lodash';
+import * as _ from 'lodash';
+
 
 interface State {
   queries: ProgramQuery[];
@@ -58,7 +59,7 @@ export class ApplicationSideComponent implements OnInit, OnDestroy {
   }
 
   dispatch$() {
-    const initState$ = Observable.of(cloneDeep(this.program))
+    const initState$ = Observable.of(_.cloneDeep(this.program))
       .map(program => {
         return {
           type: 'INIT_STATE',
@@ -141,7 +142,7 @@ function reducer(actions: Observable<any>): Observable<State> {
         if (query.id === 'new') {
           query.id = `temp-${Math.random().toString(10)}`;
           return Object.assign({}, state, {
-            queries: uniqWith([action.payload, ...state.queries], queryComparator),
+            queries: _.uniqWith([action.payload, ...state.queries], queryComparator),
             editQuery: {
               guid: state.editQuery.guid,
               id: 'new',
@@ -155,7 +156,7 @@ function reducer(actions: Observable<any>): Observable<State> {
           const queries = state.queries;
           queries.splice(index, 1, action.payload);
           return Object.assign({}, state, {
-            queries: uniqWith([action.payload, ...state.queries], queryComparator),
+            queries: _.uniqWith([action.payload, ...state.queries], queryComparator),
             editQuery: {
               guid: state.editQuery.guid,
               id: 'new',
@@ -167,7 +168,7 @@ function reducer(actions: Observable<any>): Observable<State> {
       }
       case 'EDIT_QUERY': {
         return Object.assign({}, state, {
-          editQuery: cloneDeep(action.payload)
+          editQuery: _.cloneDeep(action.payload)
         });
       }
       case 'CANCEL_EDIT': {

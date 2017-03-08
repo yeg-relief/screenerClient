@@ -19,7 +19,7 @@ import { QueryEditComponent } from './program-edit/query-edit/query-edit.compone
   imports: [
     CommonModule,
     RouterModule,
-    MaterialModule.forRoot(),
+    MaterialModule,
     ReactiveFormsModule,
     AdminCoreModule
   ],

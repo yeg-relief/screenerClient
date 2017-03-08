@@ -8,7 +8,7 @@ import { AuthService } from './core/services/auth.service';
   templateUrl: './admin.component.html',
   styleUrls: ['./admin.component.css'],
   encapsulation: ViewEncapsulation.None,
-  providers: [ DataService ]
+  providers: [ ]
 })
 export class AdminComponent implements OnInit {
 

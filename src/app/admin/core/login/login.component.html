@@ -1,22 +1,19 @@
 <div class="p2"></div>
-<main class="clearfix flex">
-  <div class="px1 sm-hide"></div>
-  <div class="col-3 sm-show"></div>
-  <div class="col-6">
-    <md-card class="bg-silver">
+
+    <md-card class="bg-silver" style="width: 75%; margin: 0 auto">
       <md-card-title class="center">LOGIN </md-card-title>
       <md-card-subtitle *ngIf="invalidLogin"> invalid login </md-card-subtitle>
       <md-card-content>
         <div class="p1"></div>
-         <md-input class="col-6" 
-            style="margin-left:25%; margin-right:25%;" 
-            placeholder="username" [(ngModel)]="credentials.username">
-         </md-input>
+          <md-input-container>
+            <input mdInput 
+              placeholder="username" [(ngModel)]="credentials.username">
+          </md-input-container>
         <div class="p1"></div>
-        <md-input class="col-6" 
-            style="margin-left:25%; margin-right:25%;" 
-            placeholder="password" type="password" [(ngModel)]="credentials.password">
-        </md-input>
+          <md-input-container>
+            <input mdInput 
+                placeholder="password" type="password" [(ngModel)]="credentials.password">
+          </md-input-container>
         <div class="p1"></div>
       </md-card-content>
       <div *ngIf="credentials.username.length === 0 || credentials.password.length === 0">
@@ -29,7 +26,3 @@
       <md-progress-bar *ngIf="active" mode="indeterminate" color="accent"></md-progress-bar>
     </md-card>
     
-  </div>
-  <div class="px1 sm-hide"></div>
-  <div class="col-3 sm-show"></div>
-</main>

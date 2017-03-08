@@ -16,7 +16,7 @@ import { KeyResolverService } from './overview/key-resolver.service';
     CommonModule,
     RouterModule,
     AdminCoreModule,
-    MaterialModule.forRoot(),
+    MaterialModule,
   ],
   declarations: [
     KeysComponent,

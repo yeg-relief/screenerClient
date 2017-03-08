@@ -1,6 +1,6 @@
 import { Component, OnInit, Input, OnDestroy } from '@angular/core';
 import { ProgramQuery, ProgramCondition } from '../../../models/program';
-import { cloneDeep } from 'lodash';
+import * as _ from 'lodash';
 import { Observable } from 'rxjs/Observable';
 import { ReplaySubject } from 'rxjs/ReplaySubject';
 import { Subject } from 'rxjs/Subject';
@@ -143,7 +143,7 @@ function reducer(actions: Observable<any>): Observable<State> {
         if (conditionIndex < 0) {
           query.conditions = [action.payload, ...state.query.conditions];
         } else {
-          query.conditions.splice(conditionIndex, 1, cloneDeep(action.payload));
+          query.conditions.splice(conditionIndex, 1, _.cloneDeep(action.payload));
         }
         return Object.assign({}, state, {
           query: query,
@@ -151,7 +151,7 @@ function reducer(actions: Observable<any>): Observable<State> {
       }
       case 'SELECT_CONDITION': {
         return Object.assign({}, state, {
-          selectedCondition: cloneDeep(action.payload)
+          selectedCondition: _.cloneDeep(action.payload)
         });
       }
       case 'DELETE_CONDITION': {
