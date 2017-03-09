@@ -8,7 +8,7 @@
 #question-content {
   height: 55vh;
   width: 100%;
-  background-color: lightblue;
+  overflow: hidden;
 }
 
 #screener-content {

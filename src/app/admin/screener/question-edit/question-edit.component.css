@@ -1,4 +1,62 @@
-#quetion-container {
-  margin: 0 auto;
-  width: 90%;
+:host {
+  width: 100%; 
 }
+
+#question-container {
+  width: 80%; 
+  margin: 0 5vw; 
+  justify-content: space-between; 
+  background-color: whitesmoke;
+  padding-bottom: 1em;
+}
+
+#delete-container {
+  margin-left: 80%; 
+  width: 20%; 
+  padding-top: 1em; 
+  padding-bottom:1em
+}
+
+#option-chip-container{
+  width: 80%;
+  margin-left: 5vw;
+  margin-right: 5vw;
+}
+
+#number-select-options {
+  width: 80%; 
+  margin: 1vh 5vw;
+  padding-bottom: 1em;
+}
+
+md-option {
+  height: 3em; 
+  overflow: hidden
+}
+
+#option-add-button {
+  margin-left: 1em;
+}
+
+md-chip {
+  cursor: pointer;
+  margin-left: 0.5em;
+  margin-right: 0.5em;
+}
+
+.checkbox-container {
+  margin-top: 1em; 
+  margin-bottom: 1em;
+  width: 100%;
+}
+
+.question-container-child {
+  padding-top: 1em;
+  padding-left: 1em;
+  padding-right: 1em;
+  width: 70%;
+  margin-left: 15%;
+  margin-right: 15%; 
+}
+
+

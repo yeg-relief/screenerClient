@@ -210,4 +210,8 @@ export class QuestionEditComponent implements OnInit, OnDestroy {
 
   ngOnDestroy() { this.destroySubs$.next(); }
 
+  spliceOption(option){
+    this.options = this.options.filter(opt => opt !== option);
+  }
+
 }
