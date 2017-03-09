@@ -346,7 +346,8 @@ export function reducer(state = initialState, action: ScreenerActions): State {
 
         const hostID: ID = <ID>isConditionalQuestion(target, state);
         // throw sometype of error
-        if (state.form.get([lifted, 'expandable']).value) return state;
+        if (state.form.get([lifted, 'expandable']) === null || state.form.get([lifted, 'expandable']).value === true) return state;
+
 
         const presentConditionals = state.form.get([hostID, 'conditionalQuestions']).value;
         const liftedIndex = state.form.get([lifted, 'index']).value;
