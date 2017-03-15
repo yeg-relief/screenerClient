@@ -15,9 +15,6 @@ import { AuthService } from './admin/core/services/auth.service'
 import { AuthGuardService } from './admin/core/services/auth-guard.service';
 import { QuickLinksComponent } from './user/quick-links/quick-links.component';
 
-
-
-
 @NgModule({
   declarations: [
     AppComponent,

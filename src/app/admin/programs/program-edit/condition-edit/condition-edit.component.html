@@ -20,10 +20,9 @@
     </option>
   </select>
   <div class="px2"></div>
-  <md-input-container>
-    <input mdInput class="col-2" 
-      [formControl]="inputNumberValue" 
-      *ngIf="(state$ | async)?.key?.type === 'number' || (state$ | async)?.key?.type === 'integer'" placeholder="value">
+  
+  <md-input-container *ngIf="(state$ | async)?.key?.type === 'number' || (state$ | async)?.key?.type === 'integer'">
+    <input mdInput class="col-2" [formControl]="inputNumberValue"  placeholder="value">
   </md-input-container>
   <div class="col-2" *ngIf="(state$ | async)?.key?.type === 'boolean'"></div>
   <!--

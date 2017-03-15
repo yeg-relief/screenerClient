@@ -32,7 +32,7 @@
       <textarea placeholder="description" class="container-item" rows="4" [formControl]="details"></textarea>
       <div class="py1"></div>
       <md-input-container>
-        <input mdInputt class="container-item" placeholder="link" [formControl]="link">
+        <input mdInput class="container-item" placeholder="link" [formControl]="link">
       </md-input-container>
       <div class="container-item flex">
         <div class="ml1 mr1 p1 border bg-silver" *ngFor="let tag of (state$ | async).user.tags">
