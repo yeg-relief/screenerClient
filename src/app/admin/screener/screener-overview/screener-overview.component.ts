@@ -75,7 +75,7 @@ export class ScreenerOverviewComponent implements OnInit {
       
     });
 
-    this.store.dispatch(new actions.LoadData(this.auth.getCredentials()));
+    
 
 
     this.form$ = this.store.let(fromRoot.getForm).multicast( new ReplaySubject(1) ).refCount();
@@ -144,14 +144,8 @@ export class ScreenerOverviewComponent implements OnInit {
           if (this.reloadConstantQuestions !== undefined) this.reloadConstantQuestions.next(''); 
         }, 0);
       });
-
-    // event listeners for arrow keys 
-
-    
-
   }
   
-
   handleSelect(id: ID) { this.store.dispatch(new actions.SelectQuestion(id)) }
 
   handleAddQuestion(payload: {[key:string]: QuestionType | ID }) {
@@ -194,9 +188,4 @@ export class ScreenerOverviewComponent implements OnInit {
   }
 
   ngOnDestroy() { this.destroySubs$.next(); }
-
-  handleKeyFilter(name: string) {
-    console.log(name);
-  }
-
 }

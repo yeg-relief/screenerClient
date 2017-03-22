@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
-import { Question } from '../../../shared';
+import { Question } from '../../../admin/models';
 
 @Injectable()
 export class QuestionControlService {

@@ -3,7 +3,7 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { FormGroup  } from '@angular/forms';
 import { MasterScreenerService } from '../master-screener.service';
 import { QuestionControlService } from './question-control.service';
-import { Question } from '../../../shared';
+import { Question } from '../../../admin/models';
 import { ReplaySubject } from 'rxjs/ReplaySubject';
 import 'rxjs/add/operator/take';
 
