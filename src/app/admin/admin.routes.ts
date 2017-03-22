@@ -17,18 +17,30 @@ import { KeysComponent } from './keys/keys.component';
 import { KeysOverviewComponent } from './keys/overview/overview.component';
 import { KeyEditComponent } from './keys/edit/key-edit.component';
 
-
+import { ScreenerContainerComponent } from './screener/screener-container/screener-container.component';
 import { ScreenerOverviewComponent } from './screener/screener-overview/screener-overview.component'
-
+import { ScreenerPreviewComponent } from './screener/screener-preview/screener-preview.component';
 
 export const routing: ModuleWithProviders = RouterModule.forChild([
   {
     path: '', component: AdminComponent,
     children: [
       {
-        path: 'screener/edit',
-        component: ScreenerOverviewComponent,
+        path: 'screener',
+        component: ScreenerContainerComponent,
         canActivate: [AuthGuardService],
+        children: [
+          {
+            path: 'edit',
+            component: ScreenerOverviewComponent,
+            canActivate: [AuthGuardService],
+          },
+          {
+            path: 'preview',
+            component: ScreenerPreviewComponent,
+            canActivate: [AuthGuardService],
+          },
+        ]
       },
       {
         path: 'programs',

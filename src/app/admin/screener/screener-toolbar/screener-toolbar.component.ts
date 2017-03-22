@@ -27,8 +27,6 @@ export class ScreenerToolbarComponent implements OnInit {
   private disabled = false;
   private errors: any =  { error: '' };
 
-
-
   constructor(
     private store: Store<fromRoot.State>, 
     private keyFilter: KeyFilterService, 
@@ -38,7 +36,7 @@ export class ScreenerToolbarComponent implements OnInit {
   ngOnInit() {
     const group = { keyFilter: new FormControl('') };
     this.adminControls = new FormGroup(group);
-
+    
     this.allKeys$ = 
       this.adminControls.get('keyFilter').valueChanges
         .map( (filterItem) => filterItem.name !== undefined ? filterItem.name : filterItem )

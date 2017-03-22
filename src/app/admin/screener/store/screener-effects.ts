@@ -35,7 +35,6 @@ export class ScreenerEffects {
 
   @Effect() saveData$ = this.actions$
       .ofType(ScreenerActionTypes.SAVE_DATA)
-      .do( action => console.log(action.payload))
       .map(action => [action.payload.screener, action.payload.credentials])
       .switchMap( ([payload, options]) => {
         return this.http.post(URL, payload, options)

@@ -31,6 +31,10 @@ import { YcbConditionalQuestionComponent } from './ycb-question/ycb-conditional-
   ],
   providers: [ 
     QuestionsResolverService
+  ],
+  exports: [
+    YcbQuestionComponent,
+    YcbConditionalQuestionComponent
   ]
 })
 export class MasterScreenerModule {}
