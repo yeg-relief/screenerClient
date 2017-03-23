@@ -27,7 +27,7 @@ import 'rxjs/add/operator/multicast';
     `,
     `
       .background {
-        background-image: url(assets/17_01_27_SkylineIllustration_2.svg);
+        background-image: url(assets/17_03_15-YouCanBenefit-Illustration.svg);
         background-position: center bottom;
         background-repeat: no-repeat;
         background-size: contain;
@@ -36,7 +36,7 @@ import 'rxjs/add/operator/multicast';
     `
       @media(max-width: 600px) {
         .background {
-          background-image: url(assets/17_01_27_SkylineIllustration_2.svg);
+          background-image: url(assets/17_03_15-YouCanBenefit-Illustration.svg);
           background-position: center center;
           background-repeat: no-repeat;
           background-size: cover;
