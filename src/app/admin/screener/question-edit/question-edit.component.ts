@@ -150,9 +150,9 @@ export class QuestionEditComponent implements OnInit, OnDestroy {
     return input.map(changes => [Object.keys(changes), changes])
       .map(([keys, value]) => (<string[]>keys).map(key => value[key].key))
       .withLatestFrom(this.store.let(fromRoot.getScreenerKeys))
-      .map(([questionKeyNames, allKeys]) => {
-        return allKeys.filter(key => questionKeyNames.find(name => name === key.name) === undefined)
-      })
+      .map(([questionKeys, allKeys]) => {
+        return allKeys.filter(key => questionKeys.find(qKey => qKey.name === key.name) === undefined)
+      });
   }
 
   addOption() {
