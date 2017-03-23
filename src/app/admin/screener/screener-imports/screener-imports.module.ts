@@ -1,3 +1,7 @@
+/*
+  intended to import and export YcbQuestion and YcbConditionalQuestion
+  had some issues and resorted to importing and exporting masterScreenerModule
+*/
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 

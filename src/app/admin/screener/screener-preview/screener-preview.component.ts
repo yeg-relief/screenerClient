@@ -33,7 +33,6 @@ export class ScreenerPreviewComponent implements OnInit {
       .let(this.partitionQuestions.bind(this))
       .let(this.flattenKeys)
       .subscribe( partitionedQuestions => {
-        console.error(partitionedQuestions);
         this.questions = partitionedQuestions['questions'];
         this.conditionalQuestions = partitionedQuestions['conditionalQuestions'];
         this.form.next( this.questionControlService.toFormGroup(this.questions) );
