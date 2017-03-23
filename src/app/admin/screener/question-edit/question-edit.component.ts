@@ -8,6 +8,7 @@ import { Store } from '@ngrx/store';
 import * as fromRoot from '../../reducer';
 import * as actions from '../store/screener-actions';
 import 'rxjs/add/operator/pairwise';
+import 'rxjs/add/operator/combineLatest';
 type QUESTION_KEY_TYPE = 'integer' | 'boolean' | 'invalid' | 'broken' | '';
 
 
@@ -83,13 +84,14 @@ export class QuestionEditComponent implements OnInit, OnDestroy {
       .map(form => form.value)
       .let(this.findUnusedKeys.bind(this))
       .startWith([]);
-
+    
+    const self = this;
     this.unusedKeys$ = this.form$
-      .filter( form => form !== null)
-      .filter(form => form.get('key') !== null)
+      .filter(form => form !== null && form.get('key') !== null)
       .switchMap( form => form.get('key').valueChanges )
-      .withLatestFrom(unusedKeys)
-      .map( ([releasedKey, keys]) => (<Key[]>keys).filter(key => key.name !== releasedKey.name) )
+      .switchMapTo(this.store.let(fromRoot.getForm).take(1))
+      .map( form => form.value)
+      .let(this.findUnusedKeys.bind(this))
       .startWith(this.seedUnusedKeys())
       .multicast( new ReplaySubject(1)).refCount()
 
@@ -149,7 +151,7 @@ export class QuestionEditComponent implements OnInit, OnDestroy {
   findUnusedKeys(input: Observable<{ [key: string]: Question }>): Observable<Key[]> {
     return input.map(changes => [Object.keys(changes), changes])
       .map(([keys, value]) => (<string[]>keys).map(key => value[key].key))
-      .withLatestFrom(this.store.let(fromRoot.getScreenerKeys))
+      .withLatestFrom(this.store.let(fromRoot.getScreenerKeys).take(1))
       .map(([questionKeys, allKeys]) => {
         return allKeys.filter(key => questionKeys.find(qKey => qKey.name === key.name) === undefined)
       });
