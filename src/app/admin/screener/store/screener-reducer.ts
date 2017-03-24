@@ -40,7 +40,9 @@ export function reducer(state = initialState, action: ScreenerActions): State {
 
 
     case ScreenerActionTypes.ADD_QUESTION: {
+      console.log(action.type)
       if (state.form === undefined) return state;
+      console.log('here')
       const index = getConstantQuestionsLength(state);
       const question = blankQuestion(index);
       const control = question_to_control(question);
@@ -306,8 +308,9 @@ export function reducer(state = initialState, action: ScreenerActions): State {
     }
 
 
-    case ScreenerActionTypes.SAVE_DATA_SUCCESS: return (<any>Object).assign({}, state, { loading: false })
-
+    case ScreenerActionTypes.SAVE_DATA_SUCCESS: {
+      return (<any>Object).assign({}, state, { loading: false })
+    }
     case ScreenerActionTypes.SELECT_QUESTION: {
       if(action.payload === undefined || typeof action.payload !== 'string') return state;
 

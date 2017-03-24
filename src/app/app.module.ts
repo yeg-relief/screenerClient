@@ -14,6 +14,7 @@ import { BrowseService } from './user/browse/browse.service';
 import { AuthService } from './admin/core/services/auth.service'
 import { AuthGuardService } from './admin/core/services/auth-guard.service';
 import { QuickLinksComponent } from './user/quick-links/quick-links.component';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 @NgModule({
   declarations: [
@@ -26,6 +27,7 @@ import { QuickLinksComponent } from './user/quick-links/quick-links.component';
   ],
   imports: [
     BrowserModule,
+    BrowserAnimationsModule,
     MasterScreenerModule,
     BrowseModule,
     routing,
