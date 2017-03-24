@@ -5,13 +5,15 @@
 }
 
 .home {
-  height: 100%;
+  margin-top: 3%;
+  height: 97%;
   width: 100%;
   overflow: auto;
 }
 
 .section-text {
-  height: 6vh;
+  height: 2vh; 
+  padding-bottom: 2em;
 }
 
 main {
