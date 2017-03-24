@@ -20,26 +20,26 @@ type QUESTION_KEY_TYPE = 'integer' | 'boolean' | 'invalid' | 'broken' | '';
   styleUrls: ['./question-edit.component.css']
 })
 export class QuestionEditComponent implements OnInit, OnDestroy {
-  private readonly INVALID_TYPE: QUESTION_KEY_TYPE = 'invalid';
-  private readonly BROKEN_TYPE: QUESTION_KEY_TYPE = 'broken';
-  private readonly INTEGER_TYPE: QUESTION_KEY_TYPE = 'integer';
-  private readonly BOOLEAN_TYPE: QUESTION_KEY_TYPE = 'boolean';
-  private readonly CONTROL_TYPE_VALUES = [
+  readonly INVALID_TYPE: QUESTION_KEY_TYPE = 'invalid';
+  readonly BROKEN_TYPE: QUESTION_KEY_TYPE = 'broken';
+  readonly INTEGER_TYPE: QUESTION_KEY_TYPE = 'integer';
+  readonly BOOLEAN_TYPE: QUESTION_KEY_TYPE = 'boolean';
+  readonly CONTROL_TYPE_VALUES = [
     { value: 'NumberInput', display: 'type' },
     { value: 'NumberSelect', display: 'select' },
     { value: 'CheckBox', display: 'checkbox' },
   ];
 
-  private selectedQuestionID$: Observable<ID>;
-  private form$: Observable<FormGroup>;
-  private selectedKeyType$: Observable<QUESTION_KEY_TYPE>;
-  private unusedKeys$: Observable<Key[]>;
-  private optionForm: FormGroup;
+  selectedQuestionID$: Observable<ID>;
+  form$: Observable<FormGroup>;
+  selectedKeyType$: Observable<QUESTION_KEY_TYPE>;
+  unusedKeys$: Observable<Key[]>;
+  optionForm: FormGroup;
 
-  private controlType: ControlType = '';
-  private options: number[] = [];
+  controlType: ControlType = '';
+  options: number[] = [];
 
-  private destroySubs$ = new Subject();
+  destroySubs$ = new Subject();
   @Output() delete = new EventEmitter<ID>();
   @Output() makeExpandable = new EventEmitter<ID>();
 
@@ -151,9 +151,23 @@ export class QuestionEditComponent implements OnInit, OnDestroy {
   findUnusedKeys(input: Observable<{ [key: string]: Question }>): Observable<Key[]> {
     return input.map(changes => [Object.keys(changes), changes])
       .map(([keys, value]) => (<string[]>keys).map(key => value[key].key))
-      .withLatestFrom(this.store.let(fromRoot.getScreenerKeys).take(1))
+      .withLatestFrom(this.store.let(fromRoot.getScreenerKeys))
+      .filter( ([questionKeys, allKeys]) => {
+        return allKeys.findIndex(k => typeof k === 'undefined') < 0 && 
+               questionKeys.findIndex(k => typeof k === 'undefined') < 0 
+      })
       .map(([questionKeys, allKeys]) => {
-        return allKeys.filter(key => questionKeys.find(qKey => qKey.name === key.name) === undefined)
+        console.log('questionKeys')
+        console.log(questionKeys)
+        console.log('--------------')
+        console.log('allKeys')
+        console.log(allKeys)
+        return allKeys.filter(key => {
+          console.log('allKeys.filter key')
+          console.log(key)
+          console.log('------------')
+          return questionKeys.find(qKey => qKey.name === key.name) === undefined
+        })
       });
   }
 

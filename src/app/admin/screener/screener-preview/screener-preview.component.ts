@@ -15,9 +15,9 @@ import { QuestionControlService } from '../../../user/master-screener/questions/
   providers: [ QuestionControlService ]
 })
 export class ScreenerPreviewComponent implements OnInit {
-  private form = new ReplaySubject<FormGroup>(1);
-  private questions: Question[] = [];
-  private conditionalQuestions: Question[] = [];
+  form = new ReplaySubject<FormGroup>(1);
+  questions: Question[] = [];
+  conditionalQuestions: Question[] = [];
 
   constructor(
     private store: Store<fromRoot.State>,

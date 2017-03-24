@@ -8,8 +8,8 @@ import { FormGroup, FormBuilder, Validators } from '@angular/forms';
   styleUrls: ['./key-overview-controls.component.css']
 })
 export class KeyOverviewControlsComponent implements OnInit, OnDestroy {
-  private form: FormGroup;
-  private sub;
+  form: FormGroup;
+  sub;
   @Output() onFilter = new EventEmitter<string>();
   constructor(private fb: FormBuilder) { }
 

@@ -28,14 +28,14 @@ export class QuestionListComponent implements OnInit, OnDestroy {
   @Output() addQuestion = new EventEmitter<{[key: string]: QuestionType | ID }>();
   @Output() dragEvent =  new EventEmitter<DragDatum>();
 
-  private classes: { [key: string]: {[key: string]: boolean} } = { };
-  private constant_type: QuestionType = QUESTION_TYPE_CONSTANT;
-  private conditional_type: QuestionType = QUESTION_TYPE_CONDITIONAL;
+  classes: { [key: string]: {[key: string]: boolean} } = { };
+  constant_type: QuestionType = QUESTION_TYPE_CONSTANT;
+  conditional_type: QuestionType = QUESTION_TYPE_CONDITIONAL;
 
-  private selectedQuestionID: Subscription;
-  private destroySubs$ = new Subject();
+  selectedQuestionID: Subscription;
+  destroySubs$ = new Subject();
   
-  private containerClasses = {
+  containerClasses = {
     container_over: false,
 
   };

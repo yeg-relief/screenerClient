@@ -19,13 +19,13 @@ import { KeyFilterService } from '../services/key-filter.service';
   styleUrls: ['./screener-toolbar.component.css'],
 })
 export class ScreenerToolbarComponent implements OnInit {
-  private count$: Observable<number>;
-  private adminControls: FormGroup;
-  private allKeys$: Observable<Key[]>;
-  private form$: Observable<FormGroup>;
-  private created$: Observable<number>;
-  private disabled = false;
-  private errors: any =  { error: '' };
+  count$: Observable<number>;
+  adminControls: FormGroup;
+  allKeys$: Observable<Key[]>;
+  form$: Observable<FormGroup>;
+  created$: Observable<number>;
+  disabled = false;
+  errors: any =  { error: '' };
 
   constructor(
     private store: Store<fromRoot.State>, 

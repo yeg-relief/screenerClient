@@ -11,7 +11,7 @@ interface Section {
   styleUrls: ['./sidenav.component.css']
 })
 export class SidenavComponent implements OnInit {
-  private content: Section[] = [
+  content: Section[] = [
     {
       title: 'screener',
       url: 'screener/edit',

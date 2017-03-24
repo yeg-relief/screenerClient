@@ -10,8 +10,8 @@ export class OverviewControlsComponent implements OnInit, OnDestroy {
   @Input() loaded: boolean;
   @Input() deleteInitiated: boolean;
   @Output() onFilter = new EventEmitter<any>();
-  private form: FormGroup;
-  private subscription;
+  form: FormGroup;
+  subscription;
   constructor(private fb: FormBuilder) { }
 
   ngOnInit() {

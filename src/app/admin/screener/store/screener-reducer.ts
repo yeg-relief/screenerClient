@@ -40,9 +40,8 @@ export function reducer(state = initialState, action: ScreenerActions): State {
 
 
     case ScreenerActionTypes.ADD_QUESTION: {
-      console.log(action.type)
       if (state.form === undefined) return state;
-      console.log('here')
+
       const index = getConstantQuestionsLength(state);
       const question = blankQuestion(index);
       const control = question_to_control(question);

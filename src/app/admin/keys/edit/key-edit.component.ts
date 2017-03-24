@@ -93,5 +93,9 @@ export class KeyEditComponent implements OnInit, OnDestroy {
       })
     
   }
+
+  handleCancel() {
+    this.router.navigateByUrl('/admin/keys/overview')
+  }
 }
 

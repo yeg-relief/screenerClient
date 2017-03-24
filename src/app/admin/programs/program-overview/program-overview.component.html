@@ -1,8 +1,5 @@
 <app-bread-crumb>
-  <app-overview-controls 
-    (onFilter)="handleFilter($event)"
-    [loaded]="!(loading$ | async)" 
-    [deleteInitiated]="deleteInitiated"></app-overview-controls>
+  <app-overview-controls (onFilter)="handleFilter($event)" [loaded]="!(loading$ | async)"></app-overview-controls>
 </app-bread-crumb>
 
 <div class="program-container" *ngIf="!(loading$ | async)">

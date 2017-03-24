@@ -22,7 +22,6 @@ import 'rxjs/add/operator/multicast';
       #main-outlet {
         min-height: 93vh;
         width: 100vw;
-        overflow-x: hidden;
       }
     `,
     `

@@ -46,10 +46,12 @@
       </md-input-container>
       <button class="col-2" id="option-add-button" md-raised-button color="primary" [disabled]="!optionForm.valid ? true : null" (click)="addOption()"> ADD </button>
     </div>
+
+    <div class="flex" id="option-chip-container">
+      <md-chip-list>
+        <md-chip *ngFor="let option of options" (click)="spliceOption(option)">{{ option }}</md-chip>
+      </md-chip-list>
+    </div>
 </section>
- <div class="flex" id="option-chip-container">
-    <md-chip-list>
-      <md-chip *ngFor="let option of options" (click)="spliceOption(option)">{{ option }}</md-chip>
-    </md-chip-list>
-</div>
+
 

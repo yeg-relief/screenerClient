@@ -18,8 +18,8 @@ export class YcbQuestionComponent implements OnInit, OnDestroy {
   @Input() conditionalQuestions;
   @Output() onExpand = new EventEmitter<any>();
   @Output() onHide = new EventEmitter<any>();
-  private subscriptions: Subscription[] = [];
-  private showQuestions = false;
+  public subscriptions: Subscription[] = [];
+  public showQuestions = false;
 
   constructor(private qcs: QuestionControlService) { }
 

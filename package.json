@@ -4,11 +4,11 @@
   "license": "MIT",
   "scripts": {
     "start": "ng serve --proxy-config proxy.conf.json",
-    "start-prod": "ng serve --prod --aot --no-sourcemap --proxy-config proxy.conf.json",
+    "start-prod": "ng serve --prod --aot --proxy-config proxy.conf.json",
     "test": "ng test",
     "lint": "ng lint",
     "e2e": "ng e2e",
-    "build": "ng build --prod --aot --no-sourcemap",
+    "build": "ng build --prod --aot",
     "compress": "gzip -kr dist"
   },
   "private": true,

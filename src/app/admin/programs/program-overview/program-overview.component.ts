@@ -25,9 +25,9 @@ import { ActivatedRoute } from '@angular/router'
   styleUrls: ['./program-overview.component.css']
 })
 export class ProgramOverviewComponent implements OnInit {
-  private programs$: Observable<ApplicationFacingProgram[]>;
-  private loading$: Observable<boolean>;
-  private filter = new BehaviorSubject<FilterMessage>(new FilterMessage({type: '', value: ''}));
+  programs$: Observable<ApplicationFacingProgram[]>;
+  loading$: Observable<boolean>;
+  filter = new BehaviorSubject<FilterMessage>(new FilterMessage({type: '', value: ''}));
   constructor(private store: Store<fromRoot.State>, private dataService: DataService, private route: ActivatedRoute) { }
 
   ngOnInit() {

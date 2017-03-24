@@ -27,22 +27,22 @@ import { isConditionalQuestion, State } from '../store/screener-reducer';
   providers: [ DragDropManagerService, KeyFilterService ]
 })
 export class ScreenerOverviewComponent implements OnInit {
-  private form$: Observable<FormGroup>;
-  private constantQuestions$: Observable<ID[]>;
-  private conditionalQuestions$: Observable<ID[]>;
-  private conditionalQuestions$$: Observable<ID[]>;
-  private selectedConstantID$: Observable<ID>;
-  private selectedConditionalID$: Observable<ID>;
-  private loading$: Observable<boolean>;
-  private error$: Observable<string>;
-  private isExpandable$: Observable<boolean>;
+  form$: Observable<FormGroup>;
+  constantQuestions$: Observable<ID[]>;
+  conditionalQuestions$: Observable<ID[]>;
+  conditionalQuestions$$: Observable<ID[]>;
+  selectedConstantID$: Observable<ID>;
+  selectedConditionalID$: Observable<ID>;
+  loading$: Observable<boolean>;
+  error$: Observable<string>;
+  isExpandable$: Observable<boolean>;
 
-  private constant_type: QuestionType = QUESTION_TYPE_CONSTANT;
-  private conditional_type: QuestionType = QUESTION_TYPE_CONDITIONAL;
-  private reloadConstantQuestions = new BehaviorSubject('');
-  private reloadConditionalQuestions = new BehaviorSubject('');
+  constant_type: QuestionType = QUESTION_TYPE_CONSTANT;
+  conditional_type: QuestionType = QUESTION_TYPE_CONDITIONAL;
+  reloadConstantQuestions = new BehaviorSubject('');
+  reloadConditionalQuestions = new BehaviorSubject('');
 
-  private destroySubs$ = new Subject();
+  destroySubs$ = new Subject();
 
   constructor(
     private store: Store<fromRoot.State>, 

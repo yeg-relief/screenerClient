@@ -1,14 +1,12 @@
 :host {
   margin: 0 auto; 
   height: 100%;
-  overflow-x: hidden;
   width: 95vw;
 }
 
 #question-content {
   height: 55vh;
   width: 100%;
-  overflow: hidden;
   margin-top: 2em;
 }
 
@@ -19,7 +17,6 @@
 
 app-question-list {
   height: 55vh;
-  overflow: hidden;
 }
 
 #constant-question-list {
