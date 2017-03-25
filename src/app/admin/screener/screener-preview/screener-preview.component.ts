@@ -75,7 +75,7 @@ export class ScreenerPreviewComponent implements OnInit {
   private flattenKeys(input: Observable<{[key: string]: Question_2[]}>): Observable<{[key: string]: Question[] }> {
     const removeKeyType = (question: Question_2): Question => {
       const keyName = question.key.name;
-      delete question['key'];
+      //delete question['key'];
 
       
       return (<any>Object).assign({}, question, {key: keyName});

@@ -69,6 +69,8 @@ export const getSelectedConditionalID = share(compose(fromScreener.getSelectedCo
 
 export const getScreenerKeys = share(compose(fromScreener.getKeys, getScreenerState));
 
+export const getUnusedScreenerKeys = share(compose(fromScreener.getUnusedKeys, getScreenerState));
+
 /* for programs */
 export const getLoadedPrograms = share(compose(fromProgramOverview.getPrograms, getProgramOverviewState));
 

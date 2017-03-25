@@ -8,14 +8,14 @@
   </md-input-container>
 
   <div formGroupName="key" class="question-container-child">
-    <md-select placeholder="Key" class="col-12" formControlName="name">
-      <md-option selected disabled [value]="(form$ | async)?.get(['key', 'name']).value">
+    <select placeholder="Key" class="col-12" formControlName="name">
+      <option selected disabled [value]="(form$ | async)?.get(['key', 'name'])?.value">
         <pre> {{ (form$ | async)?.get(['key', 'name']).value }} : {{ (form$ | async)?.get(['key', 'type']).value }} </pre>
-      </md-option>
-      <md-option *ngFor="let unusedKey of (unusedKeys$ | async)" [value]="unusedKey.name">
+      </option>
+      <option *ngFor="let unusedKey of unusedKeys" [value]="unusedKey.name">
         <pre>{{ unusedKey.name }} : {{ unusedKey.type }}</pre>
-      </md-option>
-    </md-select>
+      </option>
+    </select>
   </div>
   
 

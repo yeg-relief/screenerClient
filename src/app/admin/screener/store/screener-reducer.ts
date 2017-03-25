@@ -441,7 +441,23 @@ export function isLoading(state$: Observable<State>){
 }
 
 export function getKeys(state$: Observable<State>) {
-  return state$.select(s => s.keys);
+  return state$.select(s => s.keys)
+          .filter(keys => keys !== undefined && keys.findIndex(k => k === undefined) < 0)
+}
+
+export function getUnusedKeys(state$: Observable<State>) {
+  return state$.select(s => [s.keys, s.form.value])
+    .map( ([allKeys, formValue]) => {
+      let unusedKeys = allKeys;
+      console.log('---------------------')
+      console.log('formValue')
+      console.log(formValue);
+      console.log('---------------------')
+      for (const id in formValue){
+        unusedKeys = unusedKeys.filter(key => key.name !== formValue[id].key.name);
+      }
+      return unusedKeys;
+    })           
 }
 
 export function getConstantQuestions(state$: Observable<State>){
@@ -521,10 +537,15 @@ export function question_to_control(question: Question_2): ControlMap {
 }
 
 export function key_to_group(key: Key): FormGroup {
-  return new FormGroup({
-    name: new FormControl(key.name),
-    type: new FormControl(key.type)
-  });
+  return key !== undefined && key.name !== undefined && key.type !== undefined ?
+         new FormGroup({
+           name: new FormControl(key.name),
+           type: new FormControl(key.type)
+         }) :
+         new FormGroup({
+           name: new FormControl(''),
+           type: new FormControl('')
+         });
 }
 
 

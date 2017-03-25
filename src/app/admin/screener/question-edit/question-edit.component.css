@@ -34,9 +34,13 @@
   padding: 0.25em;
 }
 
-md-option {
+option {
   height: 3em; 
   overflow: hidden;
+}
+
+select {
+  height: 3em;
 }
 
 #option-add-button {

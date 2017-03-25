@@ -8,6 +8,7 @@ import { Store } from '@ngrx/store';
 import * as fromRoot from '../../reducer';
 import * as actions from '../store/screener-actions';
 import 'rxjs/add/operator/pairwise';
+import 'rxjs/add/operator/zip';
 import 'rxjs/add/operator/combineLatest';
 type QUESTION_KEY_TYPE = 'integer' | 'boolean' | 'invalid' | 'broken' | '';
 
@@ -33,7 +34,7 @@ export class QuestionEditComponent implements OnInit, OnDestroy {
   selectedQuestionID$: Observable<ID>;
   form$: Observable<FormGroup>;
   selectedKeyType$: Observable<QUESTION_KEY_TYPE>;
-  unusedKeys$: Observable<Key[]>;
+  unusedKeys: Key[] = [];
   optionForm: FormGroup;
 
   controlType: ControlType = '';
@@ -53,8 +54,6 @@ export class QuestionEditComponent implements OnInit, OnDestroy {
       this.store.let(fromRoot.getSelectedConditionalID)
     )
       .map( ([constant, conditional]) => {
-
-
         if (constant === undefined) {
           return 'unselect all the questions';
         }
@@ -79,21 +78,11 @@ export class QuestionEditComponent implements OnInit, OnDestroy {
         label: [''], key: [''], controlType: [''], expandable: [false],  
       }))
       .multicast( new ReplaySubject(1)).refCount()
-
-    const unusedKeys = this.store.let(fromRoot.getForm)
-      .map(form => form.value)
-      .let(this.findUnusedKeys.bind(this))
-      .startWith([]);
     
-    const self = this;
-    this.unusedKeys$ = this.form$
-      .filter(form => form !== null && form.get('key') !== null)
-      .switchMap( form => form.get('key').valueChanges )
-      .switchMapTo(this.store.let(fromRoot.getForm).take(1))
-      .map( form => form.value)
-      .let(this.findUnusedKeys.bind(this))
-      .startWith(this.seedUnusedKeys())
-      .multicast( new ReplaySubject(1)).refCount()
+    this.store.let(fromRoot.getUnusedScreenerKeys)
+        .takeUntil(this.destroySubs$)
+        .subscribe( keys => this.unusedKeys = [...keys])
+          
 
     // local form(s)
 
@@ -106,12 +95,25 @@ export class QuestionEditComponent implements OnInit, OnDestroy {
     // effects 
     const key_change_effects = this.form$
       .filter( form => form !== null)
-      .map( form => form.get(['key', 'name']))
-      .filter( keyName => keyName !== null)
-      .switchMap( keyName => keyName.valueChanges.startWith(keyName.value))
-      .let(this.setKeyType.bind(this))
+      .map( form => form.get('key'))
+      .filter( key => key !== null)
+      .switchMap( key => key.valueChanges.startWith(key.value).pairwise() )
+      .debounceTime(100)
       .takeUntil(this.destroySubs$)
-      .subscribe();
+      .withLatestFrom(this.form$)
+      .subscribe( ([[prevKey, currKey], form]) => {
+        const type = this.unusedKeys.find(k => k.name === currKey.name).type;
+        form.get(['key', 'type']).setValue(type);
+        if (prevKey.name.substr(0, 7) !== 'invalid'){
+          this.unusedKeys = this.unusedKeys.filter(k => k.name !== currKey.name)
+            .concat(prevKey)
+            .sort( (a, b) => a.name.localeCompare(b.name));
+        } else {
+          this.unusedKeys = this.unusedKeys.filter(k => k.name !== currKey.name)
+            .sort( (a, b) => a.name.localeCompare(b.name));
+        }
+        
+      });
 
     const control_type_change_effects = this.form$
       .filter(form => form !== null)
@@ -136,40 +138,6 @@ export class QuestionEditComponent implements OnInit, OnDestroy {
       
   }
 
-  seedUnusedKeys() {
-    let unusedKeys: Key[] = [];
-    this.store.let(fromRoot.getForm)
-      .map(form => form.value)
-      .let(this.findUnusedKeys.bind(this))
-      .startWith([])
-      .takeUntil(this.destroySubs$)
-      .subscribe( (keys: Key[]) => unusedKeys = [...keys])
-    
-    return unusedKeys;
-  }
-
-  findUnusedKeys(input: Observable<{ [key: string]: Question }>): Observable<Key[]> {
-    return input.map(changes => [Object.keys(changes), changes])
-      .map(([keys, value]) => (<string[]>keys).map(key => value[key].key))
-      .withLatestFrom(this.store.let(fromRoot.getScreenerKeys))
-      .filter( ([questionKeys, allKeys]) => {
-        return allKeys.findIndex(k => typeof k === 'undefined') < 0 && 
-               questionKeys.findIndex(k => typeof k === 'undefined') < 0 
-      })
-      .map(([questionKeys, allKeys]) => {
-        console.log('questionKeys')
-        console.log(questionKeys)
-        console.log('--------------')
-        console.log('allKeys')
-        console.log(allKeys)
-        return allKeys.filter(key => {
-          console.log('allKeys.filter key')
-          console.log(key)
-          console.log('------------')
-          return questionKeys.find(qKey => qKey.name === key.name) === undefined
-        })
-      });
-  }
 
   addOption() {
     const optionValue = Number.parseInt(this.optionForm.get('optionValue').value, 10);
@@ -182,18 +150,6 @@ export class QuestionEditComponent implements OnInit, OnDestroy {
         group.get('options').setValue([...group.get('options').value, optionValue]);
         this.optionForm.get('optionValue').setValue('');
       })
-  }
-
-  setKeyType(key$: Observable<string>): Observable<string> {
-    let capturedKey: string;
-    return key$
-      .do( keyUpdate => capturedKey = keyUpdate )
-      .withLatestFrom(this.store.let(fromRoot.getScreenerKeys))
-      .map( ([keyUpdate, allKeys]) => allKeys.find(k => k.name === keyUpdate))
-      .filter(k => k !== undefined)
-      .withLatestFrom(this.form$)
-      .do( ([key, form]) =>  form.get(['key', 'type']).setValue(key.type))
-      .map( _ => capturedKey);
   }
 
   updateInternalControlType(controlType$: Observable<ControlType>): Observable<ControlType> {

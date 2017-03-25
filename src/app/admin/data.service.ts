@@ -64,12 +64,10 @@ export class DataService {
             application: queries.filter(query => query.guid === program.guid),
             user: program
           })
-          console.log(pp);
           return pp;
         })
         return p;
       }, [])
-      .do(_ => console.error(_))
       .catch(this.loadError)
   }
 
