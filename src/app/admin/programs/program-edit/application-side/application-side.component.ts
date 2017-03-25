@@ -30,9 +30,9 @@ interface Action {
   styleUrls: ['./application-side.component.css']
 })
 export class ApplicationSideComponent implements OnInit, OnDestroy {
-  // going to get rid of this
+
   @Output() saveQueries = new EventEmitter<ProgramQuery[]>();
-  @Input() keys: Key[];
+
   @Input() program: ApplicationFacingProgram;
   guid: string;
   addQuery: boolean = false;
