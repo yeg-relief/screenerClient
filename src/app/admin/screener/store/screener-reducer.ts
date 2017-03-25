@@ -454,7 +454,9 @@ export function getUnusedKeys(state$: Observable<State>) {
       console.log(formValue);
       console.log('---------------------')
       for (const id in formValue){
-        unusedKeys = unusedKeys.filter(key => key.name !== formValue[id].key.name);
+        unusedKeys =  formValue[id].key !== undefined ?  
+                      unusedKeys.filter(key => key.name !== formValue[id].key.name) :
+                      [...unusedKeys];
       }
       return unusedKeys;
     })           
