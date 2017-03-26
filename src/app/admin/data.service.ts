@@ -95,6 +95,8 @@ export class DataService {
     const creds = this.getCredentials();
     return this.http.delete(`/protected/program/${program.guid}`, creds)
       .map(res => res.json())
+      // object is an es response, the array is the remaining programs
+      .map( (res: [boolean, object, Array<ApplicationFacingProgram>]) => res[2])
       .catch(this.loadError)
       .toPromise()
   }

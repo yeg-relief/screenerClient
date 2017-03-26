@@ -1,40 +1,43 @@
-<div class="col-12 flex flex-center my-container">
-  <select class="rounded col-4" [formControl]="keySelect">
-    <option *ngFor="let key of (keys$ | async)" [value]="key.name" 
-      [attr.disabled]="key.name === 'select a key' ? true : null">
-      {{key.name}}
-    </option>
-  </select>
-  <div class="px2"></div>
-  <select class="rounded col-2 center" [formControl]="qualifierInput" 
-    *ngIf="(state$ | async)?.key?.type === 'number' || (state$ | async)?.key?.type === 'integer'">
-    <option *ngFor="let option of qualifierOptions" [value]="option.value">
-      {{option.display}}
-    </option>
-  </select>
-  <div class="px1"></div>
-  <select class="rounded col-2" *ngIf="(state$ | async)?.key?.type === 'boolean'" 
-    [formControl]="booleanValueSelect">
-    <option *ngFor="let option of booleanValueOptions" [value]="option">
-      {{option}}
-    </option>
-  </select>
-  <div class="px2"></div>
-  
-  <md-input-container *ngIf="(state$ | async)?.key?.type === 'number' || (state$ | async)?.key?.type === 'integer'">
-    <input mdInput class="col-2" [formControl]="inputNumberValue"  placeholder="value">
-  </md-input-container>
-  <div class="col-2" *ngIf="(state$ | async)?.key?.type === 'boolean'"></div>
-  <!--
-  <div class="col-4" 
-    *ngIf="(state$ | async)?.type !== 'boolean' && ( (state$ | async)?.type !== 'integer' || (state$ | async)?.type !== 'number' )">
-  </div>
-  -->
-  <div class="px2"></div>
-  <button 
-    md-mini-fab color="primary" 
-    [attr.disabled]="!form.valid ? true : null"
-    (click)="save$.next()">
-      <i class="material-icons">add</i>
-  </button>
+<div style="width: 50%; margin: 0 auto; color: green"> CONDITION EDIT </div>
+<div class="col-10 flex flex-center my-container" style="margin: 0 auto" [formGroup]="form" >
+    <div formGroupName="key" class="col-4">
+      <select class="rounded col-12" formControlName="name">
+        <option selected disabled *ngIf="form.get(['key', 'type']).value === ''">
+          select a key
+        </option>
+        <option *ngFor="let key of (keys$ | async)" [value]="key.name">
+          {{key.name}}
+        </option>
+      </select>
+    </div>
+    <div class="px2"></div>
+
+    <select class="rounded col-2 center" formControlName="qualifier" *ngIf="form.get(['key', 'type']).value === 'integer'"> 
+      <option *ngFor="let qualifier of integerQualifierOptions" [value]="qualifier.value">
+        {{ qualifier.display }}
+      </option>
+    </select>
+
+    <select class="rounded col-2 center" formControlName="value" *ngIf="form.get(['key', 'type']).value === 'boolean'"> 
+      <option *ngFor="let qualifier of booleanValueOptions" [value]="qualifier.value">
+        {{ qualifier.display }}
+      </option>
+    </select>
+    <div class="px2"></div>
+    
+    <md-input-container *ngIf="form.get(['key', 'type']).value === 'integer'" class="col-2">
+      <input mdInput  formControlName="value"  placeholder="value">
+    </md-input-container>
+    <!-- spacer to avoid jerking when there is no integer input -->
+    <div class="col-2" 
+      *ngIf="form.get(['key', 'type']).value === 'boolean' || form.get(['key', 'type']).value === ''"></div>
+    
+    <div class="px2"></div>
+    <button 
+      md-mini-fab color="primary" 
+      [disabled]="!form.valid ? true : null"
+      (click)="handleSave()">
+        <i class="material-icons">add</i>
+    </button>
+
 </div>
