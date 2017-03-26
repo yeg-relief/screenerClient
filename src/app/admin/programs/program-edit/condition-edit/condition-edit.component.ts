@@ -131,6 +131,9 @@ export class ConditionEditComponent implements OnInit, OnDestroy {
       const val = this.form.value;
       if(val.key.type === 'integer' && typeof val.value === 'string')
         val.value = Number.parseInt(val.value, 10);
+      else if(val.key.type === 'boolean' && typeof val.value === 'string')
+        val.value = val.value === 'true' ? true : false;
+      
 
       this.save.emit(val);
 

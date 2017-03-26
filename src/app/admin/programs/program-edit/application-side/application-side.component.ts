@@ -34,16 +34,13 @@ export class ApplicationSideComponent {
   }
 
   handleSave(query) {
-    console.log(this.program.value);
     const presentQueries = this.program.value;
 
     if(query.id === 'new') query.id = this.randomString();
 
-
     if (presentQueries.find(q => JSON.stringify(q) === JSON.stringify(query)) === undefined)
       this.program.setValue([...presentQueries, query]);
 
-    console.log(this.program.value);
     this.editQuery$.emit(null);
   }
 
