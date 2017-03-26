@@ -24,8 +24,8 @@
   </md-button-toggle-group>
 </div>
 <div [hidden]="hide">
-  <section class="main-container flex flex-column flex-center" [formGroup]="form.get('user')">
-    <div class="col-12">
+  <section class="main-container flex flex-column flex-center" [formGroup]="form">
+    <div class="col-12" formGroupName="user">
       <md-input-container class="container-item">
         <input mdInput  placeholder="title" formControlName="title">
       </md-input-container>
@@ -33,7 +33,7 @@
       <textarea placeholder="description" class="container-item" rows="4" formControlName="details"></textarea>
       <div class="py1"></div>
       <md-input-container class="container-item">
-        <input mdInput  placeholder="link" formControlName="link">
+        <input mdInput  placeholder="link" formControlName="externalLink">
       </md-input-container>
       <div class="container-item flex">
         <div class="ml1 mr1 p1 border bg-silver" *ngFor="let tag of form.get(['user', 'tags'])?.value">

@@ -47,8 +47,8 @@ export class ProgramEditComponent implements OnInit, OnDestroy {
           user: this.fb.group({
             title: new FormControl(program.user.title, [Validators.required]),
             details: new FormControl(program.user.details, Validators.required),
-            link: new FormControl(program.user.externalLink),
-            tags: new FormControl([]),
+            externalLink: new FormControl(program.user.externalLink),
+            tags: new FormControl(program.user.tags),
             tag: new FormControl(''),
             guid: new FormControl(program.guid)
           }),
@@ -75,17 +75,27 @@ export class ProgramEditComponent implements OnInit, OnDestroy {
   }
 
   removeTag(tag) {
-    const tagsControl = this.form.get('tags');
+    const tagsControl = this.form.get(['user', 'tags']);
     tagsControl.setValue(tagsControl.value.filter(t => t !== tag))
   }
 
   addTag() {
-    this.form.get('tags').setValue([...this.form.get('tags').value, this.form.get('tag').value]);
-    this.form.get('tag').setValue('');
+    this.form.get(['user', 'tags'])
+        .setValue([...this.form.get(['user', 'tags']).value, this.form.get(['user', 'tag']).value]);
+    this.form.get(['user', 'tag']).setValue('');
   }
 
   submit() {
+    if (this.form.invalid) {
+      console.error('attempting to save invalid form');
+      return;
+    }
+
     this.saving$.next(true);
+    const userForm = <FormGroup>this.form.get('user');
+
+    userForm.removeControl('tag');
+
     if (this.form.get('guid').value === 'new') {
       this.store.dispatch(new fromOverview.CreateProgram(this.form.value));
     } else {
