@@ -55,7 +55,6 @@ export class QuestionsComponent implements OnInit, OnDestroy {
     this.timeout = setTimeout( () => this.loading = true, 60);
     let value;
     this.form.take(1).subscribe(val => value = val.value)
-    console.log(value);
     this.masterScreenerService.loadResults(value)
       .then( results => this.masterScreenerService.results = [...results] )
       .then(() => this.router.navigateByUrl('/master-screener/results'))

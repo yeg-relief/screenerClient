@@ -1,10 +1,11 @@
-<app-bread-crumb>
+<app-bread-crumb [formGroup]="form">
   <div class="flex col-10 p1" style="overflow: hidden">
     <div class="px2"></div>
-    <button md-raised-button 
+    <button 
+      [disabled]="form.invalid  ? true : null"
+      md-raised-button 
       color="primary"
-      [attr.disabled]="!form.valid ? true : null"
-      (click)="submit$.next(true)">SAVE</button>
+      (click)="submit()">SAVE</button>
     <div class="px2"></div>
     <button md-raised-button 
       color="primary"
@@ -23,25 +24,28 @@
   </md-button-toggle-group>
 </div>
 <div [hidden]="hide">
-  <section class="main-container flex flex-column flex-center">
-    <div class="col-12">
-      <md-input-container>
-        <input mdInput class="container-item" placeholder="title" [formControl]="title">
+  <section class="main-container flex flex-column flex-center" [formGroup]="form">
+    <div class="col-12" formGroupName="user">
+      <md-input-container class="container-item">
+        <input mdInput  placeholder="title" formControlName="title">
       </md-input-container>
       <div class="py1"></div>
-      <textarea placeholder="description" class="container-item" rows="4" [formControl]="details"></textarea>
+      <textarea placeholder="description" class="container-item" rows="4" formControlName="details"></textarea>
       <div class="py1"></div>
-      <md-input-container>
-        <input mdInput class="container-item" placeholder="link" [formControl]="link">
+      <md-input-container class="container-item">
+        <input mdInput  placeholder="link" formControlName="externalLink">
       </md-input-container>
       <div class="container-item flex">
-        <div class="ml1 mr1 p1 border bg-silver" *ngFor="let tag of (state$ | async).user.tags">
-          {{ tag }} <div style="cursor:pointer" (click)="removeTag$.next(tag)"> X</div>
+        <div class="ml1 mr1 p1 border bg-silver" *ngFor="let tag of form.get(['user', 'tags'])?.value">
+          {{ tag }} <div style="cursor:pointer" (click)="removeTag(tag)">X</div>
         </div>
       </div>
       <div class="container-item flex flex-center">
-        <md-input-container> <input mdInput class="mr2" placeholder="tag name" [formControl]="tag"> </md-input-container>
-        <button md-mini-fab color="primary" (click)="tagAdd.next()">
+        <md-input-container class="col-8"> 
+          <input mdInput class="mr2" placeholder="tag name" formControlName="tag"> 
+        </md-input-container>
+        <div class="col-1"></div>
+        <button md-mini-fab color="primary" (click)="addTag()">
           <i class="material-icons">add</i>
         </button>
       </div>
@@ -52,8 +56,8 @@
 <section class="col-12">
   <app-application-side
     *ngIf="(view$ | async) === 'application'"
-    [keys]="(keys$ | async)"
-    [program]="(state$ | async)"
-    (saveQueries)="updatedQueries$.next($event)">
+    [program]="form.get('application')"
+    [guid]="form.get('guid').value"
+    (saveQueries)="addQuery($event)">
   </app-application-side>
 </section>

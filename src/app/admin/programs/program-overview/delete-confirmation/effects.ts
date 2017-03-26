@@ -11,6 +11,7 @@ export class ProgramDeleteEffects {
 
   @Effect() savedProgramUpdate$ = this.actions$
     .ofType(programOverview.ProgramOverviewActionsTypes.DELETE_PROGRAM_SUCCESS)
+    .delay(200)
     .do(() => this.router.navigateByUrl('/admin/programs/overview'))
     .map(() => new programDelete.DeleteSuccess({}));
 

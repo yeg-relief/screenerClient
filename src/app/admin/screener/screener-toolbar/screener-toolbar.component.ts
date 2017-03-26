@@ -58,15 +58,11 @@ export class ScreenerToolbarComponent implements OnInit {
   handleSave() {
     this.form$.filter(form => form.valid)
         .take(1)
-        .do( _ => console.log('handleSave called') )
         .let(this.partitionQuestions.bind(this))
-        .do( _ => console.log('here') )
         .let(this.flattenKeys.bind(this))
-        .do( _ => console.log('her2') )
         .subscribe( (questions) => {
           const screener = (<any>Object).assign({}, questions, { created: -1 });
           this.store.dispatch(new actions.SaveData({screener, credentials: this.auth.getCredentials()}));
-          console.log('here3')
         })
   }
 
