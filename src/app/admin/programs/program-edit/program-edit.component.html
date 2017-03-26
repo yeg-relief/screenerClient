@@ -56,7 +56,8 @@
 <section class="col-12">
   <app-application-side
     *ngIf="(view$ | async) === 'application'"
-    [program]="(state$ | async)"
+    [program]="form.get('application')"
+    [guid]="form.get('guid').value"
     (saveQueries)="addQuery($event)">
   </app-application-side>
 </section>
