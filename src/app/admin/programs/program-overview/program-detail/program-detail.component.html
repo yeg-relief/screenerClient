@@ -1,5 +1,5 @@
 <div class="py1"></div>
-<md-card style="height:100%;">
+<md-card>
   <md-button-toggle-group (change)="viewChange($event.value)" [value]="views[0].value">
     <md-button-toggle *ngFor="let view of views" [value]="view.value">
         {{view.value}}
@@ -25,8 +25,15 @@
     </div>
   </section>
   <section *ngIf="selectedView === 'application' && program.application.length > 0" >
-    <div *ngFor="let query of program.application" class="py2 border rounded">
-      <table style="width:100%">
+    <div style="margin-bottom: 0.2em"> {{ program.user.title }} has {{ program.application.length }} queries </div>
+    <div *ngFor="let query of program.application" class="py2 border rounded" style="margin-bottom: 0.2em">
+      <table>
+        <colgroup span="4">
+          <col style="width: 25%;">
+          <col style="width: 25%;">
+          <col style="width: 25%;">
+          <col style="width: 25%;">
+        </colgroup>
         <tr>
           <th>Key</th>
           <th>Type</th>

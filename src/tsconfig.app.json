@@ -13,9 +13,7 @@
     "target": "es5",
     "module": "es2015",
     "baseUrl": "",
-    "types": [
-      "lodash"
-    ]
+    "types": []
   },
   "exclude": [
     "test.ts",

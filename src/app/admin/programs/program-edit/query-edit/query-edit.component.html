@@ -1,13 +1,13 @@
 <section *ngIf="query !== null && query !== undefined" class="col-10" style="margin: 0 auto">
-  <div style="width: 50%; margin: 0 auto; color: green"> QUERY EDIT </div>
-  <div class="flex col-4">
-    <div class="px2"></div>
-    <button md-raised-button color="primary" (click)="save.emit(query)">SAVE QUERY</button>
-    <div class="px2"></div>
-    <button md-raised-button color="primary" (click)="cancel.emit()">CANCEL</button>
-  </div>
-
-  <table style="width:100%">
+  <table style="width:100%" *ngIf="query.conditions?.length > 0" class="border">
+     <colgroup span="6">
+        <col style="width: 16%;">
+        <col style="width: 16%;">
+        <col style="width: 16%;">
+        <col style="width: 16%;">
+        <col style="width: 16%;">
+        <col style="width: 16%;">
+    </colgroup>
     <tr>
       <th>Key</th>
       <th>Type</th>
@@ -38,8 +38,17 @@
           <i class="material-icons">create</i>
         </button>
       </td>
+      
     </tr>
+    
   </table>
+  <div class="py2"></div>
+  <div class="flex col-4">
+    <div class="px2"></div>
+    <button md-raised-button color="primary" (click)="save.emit(query)">SAVE QUERY</button>
+    <div class="px2"></div>
+    <button md-raised-button color="primary" (click)="cancel.emit()">CANCEL</button>
+  </div>
   <div class="py2"></div>
   <app-condition-edit 
     [condition]="editCondition$"

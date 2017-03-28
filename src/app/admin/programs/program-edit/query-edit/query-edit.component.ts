@@ -20,7 +20,11 @@ export class QueryEditComponent {
   }
 
   handleEdit(condition) {
-    this.editCondition$.emit(condition);
+    console.log(condition);
+    setTimeout( () => {
+      if (this.editCondition$) this.editCondition$.emit(condition);
+    }, 10);
+    
   }
 
   handleSaveCondition($event) {

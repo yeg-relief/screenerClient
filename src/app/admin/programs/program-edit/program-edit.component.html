@@ -1,5 +1,5 @@
 <app-bread-crumb [formGroup]="form">
-  <div class="flex col-10 p1" style="overflow: hidden">
+  <div class="flex col-10 p1" style="overflow: hidden;">
     <div class="px2"></div>
     <button 
       [disabled]="form.invalid  ? true : null"
@@ -16,14 +16,14 @@
 
 <!-- SAVE BAR -->
 <md-progress-bar mode="indeterminate" color="warn" *ngIf="saving$ | async"></md-progress-bar>
-<div class="p2 center">
+<div class="p2 center mt1">
   <md-button-toggle-group [formControl]="view">
     <md-button-toggle *ngFor="let v of views" [value]="v">
       {{v}}
     </md-button-toggle>
   </md-button-toggle-group>
 </div>
-<div [hidden]="hide">
+<div [hidden]="hide" id="user-edit" class="border rounded">
   <section class="main-container flex flex-column flex-center" [formGroup]="form">
     <div class="col-12" formGroupName="user">
       <md-input-container class="container-item">
