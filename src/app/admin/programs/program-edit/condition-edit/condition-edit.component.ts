@@ -53,7 +53,7 @@ export class ConditionEditComponent implements OnInit, OnDestroy {
     this.form = this.fb.group({
       key: this.fb.group({
         name: new FormControl('select a key', Validators.required),
-        type: new FormControl('', [Validators.required, Validators.minLength(7)])
+        type: new FormControl('', [ Validators.required ])
       }),
       value: new FormControl('', Validators.required),
       qualifier: new FormControl('', Validators.required)
@@ -63,6 +63,7 @@ export class ConditionEditComponent implements OnInit, OnDestroy {
 
     this.form.get(['key', 'name'])
         .valueChanges
+        .debounceTime(60)
         .filter( name => name !== 'select a key')
         .withLatestFrom(this.keys$)
         .takeUntil(this.destroy$)
@@ -75,6 +76,7 @@ export class ConditionEditComponent implements OnInit, OnDestroy {
           if (key.type === 'boolean') {
 
             if (typeof this.form.get('value').value !== 'boolean'){
+              this.form.get('value').clearValidators();
               this.form.get('value').setValidators(Validators.required); 
               this.form.get('value').setValue(this.booleanValueOptions[0].value);
             }
@@ -82,39 +84,48 @@ export class ConditionEditComponent implements OnInit, OnDestroy {
             if (this.form.contains('qualifier'))
               this.form.removeControl('qualifier');  
           
-        } else if(key.type === 'integer') {
+          } else if(key.type === 'integer' || key.type === 'number') {
             if (!this.form.contains('qualifier')){
               this.form.addControl('qualifier', new FormControl('', Validators.required));
               this.form.get('qualifier').setValue(this.integerQualifierOptions[0].value);
             }
 
+            this.form.get('value').clearValidators();
             this.form.get('value').setValidators([Validators.required, Validators.pattern('^\\d+$')]);
 
             if (typeof this.form.get('value').value === 'boolean')
               this.form.get('value').setValue('');     
           } else {
             console.error(`strange behavior detected in condition-edit\nkey type: ${key.type}`);
-          } 
+          }
         });
 
     //this is passed from query-edit... it may be bad form, 
     // and is probably a code smell that I should refactor to a service....
     this.condition
+        .debounceTime(60)
         .takeUntil(this.destroy$)
+        .map( cond => (<any>Object).assign({}, cond))
         .subscribe( condition => {
           if (condition.key.type === 'boolean') {
             if (this.form.contains('qualifier')) this.form.removeControl('qualifier');
+            
 
+            this.form.get('value').clearValidators();
+            this.form.get('value').setValidators(Validators.required); 
             this.form.get('value').setValue(condition.value);
             this.form.get('key').setValue(condition.key);
                   
-        } else if (condition.key.type === 'integer' ) {
+          } else if (condition.key.type === 'integer' || condition.key.type === 'number') {
             
             if (!this.form.contains('qualifier'))
               this.form.addControl('qualifier', new FormControl(condition.qualifier, Validators.required));
             else
               this.form.get('qualifier').setValue(condition.qualifier);
 
+
+            this.form.get('value').clearValidators();
+            this.form.get('value').setValidators([Validators.required, Validators.pattern('^\\d+$')]);
             this.form.get('value').setValue(condition.value);
             this.form.get('key').setValue(condition.key);  
             
@@ -129,7 +140,7 @@ export class ConditionEditComponent implements OnInit, OnDestroy {
   handleSave() {
     if (this.form.valid){
       const val = this.form.value;
-      if(val.key.type === 'integer' && typeof val.value === 'string')
+      if( (val.key.type === 'integer' || val.key.type === 'number') && typeof val.value === 'string')
         val.value = Number.parseInt(val.value, 10);
       else if(val.key.type === 'boolean' && typeof val.value === 'string')
         val.value = val.value === 'true' ? true : false;
