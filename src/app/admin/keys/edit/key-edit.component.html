@@ -2,23 +2,26 @@
 </app-bread-crumb>
 
 <md-progress-bar mode="indeterminate" color="warn" *ngIf="saving"></md-progress-bar>
-<section class="key-edit-container flex flex-center col-12">
-  <div class="col-2"></div>
-  <md-input-container> <input mdInput class="col-4" placeholder="key name" [formControl]="nameControl"></md-input-container>
-  <div class="col-1"></div>
-  <md-button-toggle-group [formControl]="typeControl">
-    <md-button-toggle *ngFor="let option of typeOptions" [value]="option">
-        {{ option }}
-    </md-button-toggle>
-  </md-button-toggle-group>
-  <div class="col-2"></div>
+<section class="key-edit-container">
+  <div class="flex flex-center">
+    <div class="col-2"></div>
+    <md-input-container class="col-4"> 
+      <input mdInput placeholder="key name" [formControl]="nameControl">
+    </md-input-container>
+    <div class="col-2"></div>
+    <md-button-toggle-group [formControl]="typeControl">
+      <md-button-toggle *ngFor="let option of typeOptions" [value]="option">
+          {{ option }}
+      </md-button-toggle>
+    </md-button-toggle-group>
+  </div>
 </section>
 <div class="py2"></div>
-<div class="flex flex-center">
+<div class="flex flex-center col-12">
   <div class="col-2"></div>
   <button class="col-4"
     md-raised-button color="primary" 
-    [attr.disabled]="!(form.valid && uniqueKeyName) ? true : null"
+    [disabled]="!(form.valid && uniqueKeyName) ? true : null"
     (click)="dispatchKeyUpdate()">
     SAVE
   </button>
