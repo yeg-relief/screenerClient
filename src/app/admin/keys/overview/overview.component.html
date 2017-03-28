@@ -2,22 +2,22 @@
   <app-key-overview-controls (onFilter)="handleFilter($event)"></app-key-overview-controls>
 </app-bread-crumb>
 <div class="py2"></div>
-<md-card-subtitle class="center"> 
-  You are only allowed to create keys. Updating or deleting has consequences on the search engine that are 
-  not easily reconciled. It is suggested to create keys and ignore ones not being currently used etc. 
-</md-card-subtitle>
 
-<section class="col-12 flex">
-  <div class="col-3 bg-grey border"></div>
-  <table class="col-6" >
-      <tr>
-        <th> key name </th>
+<section class="col-10 flex" style="margin: 0 auto">
+  <div class="col-3 bg-grey border-right"></div>
+  <div class="col-4" style="margin: 0 auto">
+    <table class="col-12 table-light" >
+      <thead class="bg-darken-2">
+        <th> <strong>key name</strong> </th>
         <th> key type </th>
-      </tr>
-      <tr *ngFor="let key of (loadedKeys$ | async)" class="py2">
-        <td> {{ key.name }} </td>
-        <td> {{ key.type }} </td>
-      </tr>
-  </table> 
-  <div class="col-3 bg-grey border"></div>
+      </thead>
+      <tbody>
+        <tr *ngFor="let key of (loadedKeys$ | async)" class="py2">
+          <td> {{ key.name }} </td>
+          <td> {{ key.type }} </td>
+        </tr>
+      </tbody>
+    </table> 
+  </div>
+  <div class="col-3 bg-grey border-left"></div>
 </section>

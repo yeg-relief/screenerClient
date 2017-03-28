@@ -1,5 +1,6 @@
 .key-edit-container {
-  margin-top: 10%;
+  padding-top: 10%;
+  width: 100%;
 }
 
 .ng-invalid {
