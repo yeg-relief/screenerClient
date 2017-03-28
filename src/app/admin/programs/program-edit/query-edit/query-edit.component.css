@@ -1,0 +1,6 @@
+table {
+    background-color: lightgray;
+    padding: 1em 0;
+    max-height: 30vh;
+    overflow: scroll;
+}

@@ -49,3 +49,9 @@ select {
 select > option {
   font-family: 'Open Sans', sans-serif;
 }
+
+#user-edit {
+  width: 90%;
+  margin: 0 auto;
+  background-color: lightgrey;
+}
