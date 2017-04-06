@@ -55,19 +55,6 @@ export class DataService {
     const creds = this.getCredentials();
     return this.http.get('/protected/program/', creds)
       .map( res => res.json())
-      .reduce( (accum, obj) => {
-        const programs = obj.programs;
-        const queries = obj.queries;
-        const p: ApplicationFacingProgram[] = programs.map( program => {
-          const pp: ApplicationFacingProgram = (<any>Object).assign({}, {
-            guid: program.guid,
-            application: queries.filter(query => query.guid === program.guid),
-            user: program
-          })
-          return pp;
-        })
-        return p;
-      }, [])
       .catch(this.loadError)
   }
 

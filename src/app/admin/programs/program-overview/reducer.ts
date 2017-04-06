@@ -2,7 +2,6 @@ import '@ngrx/core/add/operator/select';
 import { Observable } from 'rxjs/Observable';
 import { ProgramOverviewActionsTypes, ProgramOverviewActions} from './actions';
 import { ApplicationFacingProgram } from '../../models/program';
-import * as _ from 'lodash';
 
 export interface State {
   loading: boolean;
@@ -22,24 +21,24 @@ export function reducer(state = initialState, action: ProgramOverviewActions): S
   switch (action.type) {
 
     case ProgramOverviewActionsTypes.LOAD_PROGRAMS: {
-      const newState = _.cloneDeep(state);
-      newState.loading = true;
-      return newState;
+      return (<any>Object).assign({}, state, {
+        loading: true
+      });
     }
 
     case ProgramOverviewActionsTypes.LOAD_PROGRAMS_FAILURE: {
-      const newState = _.cloneDeep(state);
-      newState.loading = false;
-      newState.error = 'unable to load programs';
-      return newState;
+      return (<any>Object).assign({}, state, {
+        loading: false,
+        error: 'unable to load programs'
+      });
     }
 
     case ProgramOverviewActionsTypes.LOAD_PROGRAMS_SUCCESS: {
-      const newState = _.cloneDeep(state);
-      newState.loading = false;
-      newState.error = '';
-      newState.programs = [...<ApplicationFacingProgram[]>action.payload];
-      return newState;
+      return (<any>Object).assign({}, state, {
+        loading: false,
+        error: '',
+        programs: [...<ApplicationFacingProgram[]>action.payload]
+      });
     }
 
     case ProgramOverviewActionsTypes.UPDATE_PROGRAM: {

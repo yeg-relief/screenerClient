@@ -42,6 +42,7 @@ export class ProgramEditComponent implements OnInit, OnDestroy {
     
     fromRoot.findProgram(this.store, guid)
       .take(1)
+      .do( _ => console.log(_))
       .subscribe( program => {
         this.form = this.fb.group({
           user: this.fb.group({

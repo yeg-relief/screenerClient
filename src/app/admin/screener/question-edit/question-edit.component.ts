@@ -12,13 +12,10 @@ import 'rxjs/add/operator/zip';
 import 'rxjs/add/operator/combineLatest';
 type QUESTION_KEY_TYPE = 'integer' | 'boolean' | 'invalid' | 'broken' | '';
 
-
-
-
 @Component({
   selector: 'app-question-edit',
   templateUrl: './question-edit.component.html',
-  styleUrls: ['./question-edit.component.css']
+  styleUrls: ['./question-edit.component.css'],
 })
 export class QuestionEditComponent implements OnInit, OnDestroy {
   readonly INVALID_TYPE: QUESTION_KEY_TYPE = 'invalid';
