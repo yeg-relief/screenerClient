@@ -1,7 +1,6 @@
 import { Component, OnInit, Output, EventEmitter, ElementRef } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import { Store } from '@ngrx/store';
-import { AuthService } from '../../core/services/auth.service';
 import * as fromRoot from '../../reducer';
 import * as actions  from '../store/screener-actions';
 import { 
@@ -46,7 +45,6 @@ export class ScreenerOverviewComponent implements OnInit {
 
   constructor(
     private store: Store<fromRoot.State>, 
-    private auth: AuthService, 
     private dragManager: DragDropManagerService
   ) {}
 

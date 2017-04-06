@@ -65,6 +65,7 @@ export class QuestionEditComponent implements OnInit, OnDestroy {
 
       })
       .filter(id => id !== undefined)
+      
       .multicast( new ReplaySubject(1)).refCount()
 
     this.form$ = this.selectedQuestionID$
@@ -99,6 +100,7 @@ export class QuestionEditComponent implements OnInit, OnDestroy {
       .takeUntil(this.destroySubs$)
       .withLatestFrom(this.form$)
       .subscribe( ([[prevKey, currKey], form]) => {
+
         const type = this.unusedKeys.find(k => k.name === currKey.name).type;
         form.get(['key', 'type']).setValue(type);
         if (prevKey.name.substr(0, 7) !== 'invalid'){

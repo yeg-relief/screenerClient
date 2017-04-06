@@ -1,11 +1,11 @@
 import { TestBed, inject } from '@angular/core/testing';
-
+import { FormBuilder } from '@angular/forms';
 import { DragDropManagerService } from './drag-drop-manager.service';
 
 describe('DragDropManagerService', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
-      providers: [DragDropManagerService]
+      providers: [DragDropManagerService, FormBuilder]
     });
   });
 

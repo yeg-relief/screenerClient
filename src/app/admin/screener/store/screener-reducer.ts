@@ -5,17 +5,10 @@ import { ScreenerActions, ScreenerActionTypes } from './screener-actions';
 import { FormGroup, AbstractControl, FormControl, Validators } from '@angular/forms';
 import { questionValidator } from '../validators';
 
-interface Styles {
-  selected: boolean;
-  error: boolean;
-};
-
-type ScreenerStyles = { [key: string]: Styles };
 type ControlMap = { [key: string]: AbstractControl };
 
 export interface State {
   loading: boolean;
-  styles: ScreenerStyles;
   form: FormGroup;
   error: string;
   selectedConstantQuestion: ID;
@@ -26,7 +19,6 @@ export interface State {
 
 export const initialState: State = {
   loading: false,
-  styles: {},
   form: new FormGroup({}),
   error: '',
   selectedConstantQuestion: undefined,
@@ -78,7 +70,7 @@ export function reducer(state = initialState, action: ScreenerActions): State {
       question_group.addControl('key', key_group);
       state.form.addControl(question.id, question_group);
       state.form.get([hostID, 'conditionalQuestions']).setValue([...hostQuestion.conditionalQuestions, question.id]);
-      state.styles[question.id] = freshStyle();
+
 
       return (<any>Object).assign({}, state, {
         selectedConstantQuestion: hostID,
@@ -115,8 +107,6 @@ export function reducer(state = initialState, action: ScreenerActions): State {
         selectedConstantQuestion = sortedConstants.length > 0 ? sortedConstants[0] : undefined;
       }
       
-      
-      if(state.styles[id] !== undefined) delete state.styles[id];
 
       return (<any>Object).assign({}, state, {
         selectedConstantQuestion,
@@ -261,10 +251,6 @@ export function reducer(state = initialState, action: ScreenerActions): State {
             return _form 
           }, new FormGroup({}));
 
-      const styles: ScreenerStyles = allQuestions.reduce( (_styles, question) => {
-        _styles[question.id] = freshStyle();
-        return _styles;
-      }, {});
 
       const keys = screener.keys;
 
@@ -272,7 +258,6 @@ export function reducer(state = initialState, action: ScreenerActions): State {
         loading: false,
         created: screener.created,
         error: '',
-        styles,
         form,
         keys,
       })
@@ -280,20 +265,7 @@ export function reducer(state = initialState, action: ScreenerActions): State {
 
 
     case ScreenerActionTypes.SAVE_DATA: {
-      let error = false
-
-      for (const id in state.styles) {
-        if (state.styles[id].error === false){
-          error = true;
-          break;
-        }
-      }
-
-      const errorPresent = error === true || state.error !== '';
-
-      return errorPresent ? 
-        (<any>Object).assign({}, state, { error: 'errors detected, unable to save.' }) :
-        (<any>Object).assign({}, state, { loading: true });
+      return (<any>Object).assign({}, state, { loading: true });
     }
 
 
@@ -426,10 +398,6 @@ export function reducer(state = initialState, action: ScreenerActions): State {
 
 export function getForm(state$: Observable<State>){
   return state$.select(s => s.form);
-}
-
-export function getStyles(state$: Observable<State>){
-  return state$.select(s => s.styles);
 }
 
 export function getError(state$: Observable<State>){
@@ -593,13 +561,6 @@ function randomString() {
     randomString += charSet.substring(randomPoz, randomPoz + 1);
   }
   return randomString;
-}
-
-function freshStyle(): Styles {
-  return {
-    selected: false,
-    error: false
-  }
 }
 
 function sortConstants(state): ID[] {

@@ -51,8 +51,6 @@ export function getKeyOverview(state$: Observable<State>) {
 /* for screener */
 export const getForm = share(compose(fromScreener.getForm, getScreenerState));
 
-export const getStyles = share(compose(fromScreener.getStyles, getScreenerState));
-
 export const getScreenerError = share(compose(fromScreener.getError, getScreenerState));
 
 export const isScreenerLoading = share(compose(fromScreener.isLoading, getScreenerState));
