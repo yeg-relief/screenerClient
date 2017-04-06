@@ -23,5 +23,3 @@ Run `npm run start` if you're also running the [api-server](https://github.com/y
 
 Other relevant information -- how to build etc -- can be found at [angular-cli](https://github.com/angular/angular-cli).
 
-# Tests
-:thumbsdown: There are currently no tests. :thumbsdown:
