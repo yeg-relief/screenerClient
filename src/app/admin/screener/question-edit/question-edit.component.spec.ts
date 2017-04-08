@@ -126,7 +126,7 @@ describe('QuestionEditComponent', () => {
 
     const expandable = formControls.find( debugElem => debugElem.attributes.formControlName === 'expandable');
     expect(expandable).toBeDefined();
-    // how to test if it's checked? no checked or value prop on nativeElement...
+    expect(expandable.nativeElement.getElementsByTagName('input')[0].checked).toEqual(false);
 
     const name = formControls.find( debugElem => debugElem.attributes.formControlName === 'name' );
 
