@@ -15,6 +15,9 @@ import * as fromPrograms from '../../programs/program-overview/reducer';
 import { RequestOptions, Headers } from '@angular/http';
 import { AuthService } from '../../core/services/auth.service'
 import { KeyFilterService } from '../services/key-filter.service'
+import { RouterLink } from '@angular/router';
+
+declare const btoa;
 
 @Injectable()
 class ActionsSubject extends BehaviorSubject<Action> implements OnDestroy {
@@ -126,5 +129,41 @@ describe('ScreenerToolbarComponent', () => {
 
   it('should create', () => {
     expect(component).toBeTruthy();
+  });
+
+  it('should conform to this display TODO: think of better description', () => {
+    const meta = fixture.debugElement.queryAll(By.css('md-card-subtitle'));
+    expect(meta).not.toBeNull();
+    expect(meta.length).toEqual(2);
+    expect(meta[0].nativeElement.innerText).toEqual('latest server update: Dec 31, 1969');
+    expect(meta[1].nativeElement.innerText).toEqual('this screener has 1 questions');
+
+    const buttons = fixture.debugElement.queryAll(By.css('button'));
+    expect(buttons).not.toBeNull();
+    expect(buttons.length).toEqual(2)
+    expect(buttons[0].nativeElement.disabled).toEqual(false)
+    expect(buttons[1].nativeElement.disabled).toEqual(false)
+    expect(buttons[1].attributes['routerLink']).toEqual('/admin/screener/preview')
+  });
+
+  it('should show two keys in the key filter', () => {
+    const autocomplete = fixture.debugElement.query(By.css('md-autocomplete'));
+    expect(autocomplete).not.toBeNull();
+    /*
+    having trouble testing autocomplete... consider if this is worth it, bcuz material libary proabably
+    has tested this functionality
+
+    console.log(autocomplete.children)
+    console.log(autocomplete.childNodes)
+    component.adminControls.get('keyFilter').setValue('boo');
+    console.log('-----------')
+    console.log(autocomplete.nativeElement)
+    console.log(fixture.debugElement.nativeElement)
+    const options = fixture.debugElement.queryAll(By.css('md-option'));
+    expect(options).not.toBeNull();
+    expect(options.length).toEqual(2);
+    expect(options[0].nativeElement.innerText).toEqual('boolean_key')
+    expect(options[1].nativeElement.innerText).toEqual('integer_key')
+    */
   });
 });

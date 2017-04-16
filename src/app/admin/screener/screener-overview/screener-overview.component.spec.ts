@@ -19,6 +19,8 @@ import { QuestionEditComponent } from '../question-edit/question-edit.component'
 import { RequestOptions, Headers } from '@angular/http';
 import { AuthService } from '../../core/services/auth.service'
 
+declare const btoa;
+
 @Injectable()
 class ActionsSubject extends BehaviorSubject<Action> implements OnDestroy {
   static readonly INIT = '@ngrx/store/init';
@@ -132,5 +134,21 @@ describe('ScreenerOverviewComponent', () => {
 
   it('should create', () => {
     expect(component).toBeTruthy();
+  });
+
+  it('should show a single constant question', () => {
+    expect(fixture.debugElement.queryAll(By.css('app-screener-toolbar'))).not.toBeNull();
+    expect(fixture.debugElement.queryAll(By.css('app-screener-toolbar')).length).toEqual(1);
+    const screenerContent = fixture.debugElement.query(By.css('#screener-content'))
+    expect(screenerContent).not.toBeNull();
+    const questionLists = screenerContent.queryAll(By.css('app-question-list'));
+    expect(questionLists).not.toBeNull();
+    expect(questionLists.length).toEqual(1)
+    const constantList = screenerContent.query(By.css('#constant-question-list'))
+    expect(constantList).not.toBeNull();
+    const questionContent = screenerContent.query(By.css('#question-content'));
+    expect(questionContent).not.toBeNull();
+    const questionEdit = questionContent.query(By.css('app-question-edit'));
+    expect(questionEdit).not.toBeNull();
   });
 });

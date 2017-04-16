@@ -3,7 +3,7 @@ import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 import { DebugElement } from '@angular/core';
 import { MaterialModule } from '@angular/material';
-import { ReactiveFormsModule, FormGroup, FormControl } from '@angular/forms';
+import { ReactiveFormsModule, FormGroup, FormControl, FormControlName } from '@angular/forms';
 import { YcbQuestionComponent } from './ycb-question.component';
 import { QuestionControlService } from '../questions/question-control.service';
 import { YcbConditionalQuestionComponent } from './ycb-conditional-question/ycb-conditional-question.component';
@@ -43,4 +43,13 @@ describe('YcbQuestionComponent', () => {
   it('should create', () => {
     expect(component).toBeTruthy();
   });
+
+  it('should display a number question', () => {
+    const label = fixture.debugElement.query(By.css('#question-label'));
+    expect(label).not.toBeNull();
+    expect(label.nativeElement.innerText).toEqual('a fake question')
+
+    const input = fixture.debugElement.query(By.directive(FormControlName))
+    expect(input).not.toBeNull();
+  })
 });

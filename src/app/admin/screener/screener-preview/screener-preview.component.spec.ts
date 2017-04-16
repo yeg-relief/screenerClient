@@ -1,5 +1,6 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { YcbQuestionComponent } from '../../../user/master-screener/ycb-question/ycb-question.component';
+import { By } from '@angular/platform-browser';
 import { 
   YcbConditionalQuestionComponent 
 } from '../../../user/master-screener/ycb-question/ycb-conditional-question/ycb-conditional-question.component';
@@ -101,4 +102,11 @@ describe('ScreenerPreviewComponent', () => {
   it('should create', () => {
     expect(component).toBeTruthy();
   });
+
+  it('should show a single constant question', () => {
+    const questionsContainer = fixture.debugElement.query(By.css('.questions'))
+    expect(questionsContainer).not.toBeNull();
+    const questions = questionsContainer.queryAll(By.css('app-ycb-question'));
+    expect(questions.length).toEqual(1);
+  })
 });
