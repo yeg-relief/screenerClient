@@ -109,4 +109,23 @@ describe('QuestionListComponent', () => {
   it('should create', () => {
     expect(component).toBeTruthy();
   });
+
+  it('should show a single constant question', () => {
+    const questionListHeader = fixture.debugElement.query(By.css('#constant_container'))
+    expect(questionListHeader).not.toBeNull();
+    const h3 = questionListHeader.query(By.css('h3'))
+    expect(h3).not.toBeNull();
+    expect(h3.nativeElement.innerText).toEqual('Screener Questions');
+    const headerButton = questionListHeader.query(By.css('button'))
+    expect(headerButton).not.toBeNull();
+    
+    component.questions.forEach( id=> {
+      const question = fixture.debugElement.query(By.css(`#${id}-constant-list-item`))
+      expect(question).not.toBeNull();
+      const [key, controlType] = question.queryAll(By.css('h4')).map(i => i.nativeElement.innerText)
+      expect(key).toEqual(form.get([id, 'key']).value.name)
+      expect(controlType).toEqual(form.get([id, 'controlType']).value)
+    })
+    
+  })
 });

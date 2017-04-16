@@ -2,6 +2,8 @@ import { Injectable } from '@angular/core';
 import {Http, Headers, RequestOptions} from '@angular/http';
 import { Observable } from 'rxjs/Observable';
 
+declare const btoa;
+
 @Injectable()
 export class AuthService {
   isLoggedIn: boolean = false;
