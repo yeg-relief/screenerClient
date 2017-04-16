@@ -21,32 +21,6 @@ import { AuthService } from '../../core/services/auth.service'
 
 declare const btoa;
 
-@Injectable()
-class ActionsSubject extends BehaviorSubject<Action> implements OnDestroy {
-  static readonly INIT = '@ngrx/store/init';
-
-  constructor() {
-    super({ type: ActionsSubject.INIT });
-  }
-
-  next(action: Action): void {
-    if (typeof action === 'undefined') {
-      throw new Error(`Actions must be objects`);
-    }
-    else if (typeof action.type === 'undefined') {
-      throw new Error(`Actions must have a type property`);
-    }
-
-    super.next(action);
-  }
-
-  complete() {  }
-
-  ngOnDestroy() {
-    super.complete();
-  }
-}
-
 const questionOne = new FormGroup({
   key: new FormGroup({
     name: new FormControl('boolean_key'),

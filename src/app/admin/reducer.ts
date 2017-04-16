@@ -1,20 +1,13 @@
-import 'rxjs/add/operator/publishReplay';
-import 'rxjs/add/observable/combineLatest';
-import { multicast } from 'rxjs/operator/multicast';
-import { ReplaySubject } from 'rxjs/ReplaySubject';
 import { Observable } from 'rxjs/Observable';
 import { combineReducers } from '@ngrx/store';
 import { compose } from '@ngrx/core/compose';
 import * as fromKeyOverview from './keys/reducer';
 import * as fromScreener from './screener/store/screener-reducer';
 import * as fromProgramOverview from './programs/program-overview/reducer';
-
-import { Question } from '../shared/models';
-import { Key } from './models/key';
 import 'rxjs/add/operator/concatMap';
-import 'rxjs/add/operator/do';
 import 'rxjs/add/operator/find';
 import { ApplicationFacingProgram } from './models/program';
+import { createSelector } from 'reselect';
 
 export interface State {
   keyOverview: fromKeyOverview.State;
@@ -49,30 +42,28 @@ export function getKeyOverview(state$: Observable<State>) {
 
 
 /* for screener */
-export const getForm = share(compose(fromScreener.getForm, getScreenerState));
+export const getForm = createSelector(getScreenerState, fromScreener.getForm, );
 
-export const getScreenerError = share(compose(fromScreener.getError, getScreenerState));
+export const getScreenerError = createSelector(getScreenerState, fromScreener.getError, );
 
-export const isScreenerLoading = share(compose(fromScreener.isLoading, getScreenerState));
+export const isScreenerLoading = createSelector(getScreenerState, fromScreener.isLoading, );
 
-export const getConstantQuestions = share(compose(fromScreener.getConstantQuestions, getScreenerState));
+export const getConstantQuestions = createSelector(getScreenerState, fromScreener.getConstantQuestions, );
 
-export const getConditionalQuestions = share(compose(fromScreener.getConditionalQuestionIDS, getScreenerState));
+export const getConditionalQuestions = createSelector(fromScreener.getConditionalQuestionIDS, getScreenerState);
 
-export const getConditionalQuestionsLength = share(compose(fromScreener.getConditionalQuestionsLength, getScreenerState));
+export const getSelectedConstantID = createSelector( getScreenerState, fromScreener.getSelectedConstantID);
 
-export const getSelectedConstantID = share(compose(fromScreener.getSelectedConstantID, getScreenerState));
+export const getSelectedConditionalID = createSelector( getScreenerState, fromScreener.getSelectedConditionalID,);
 
-export const getSelectedConditionalID = share(compose(fromScreener.getSelectedConditionalID, getScreenerState));
+export const getScreenerKeys = createSelector(getScreenerState, fromScreener.getKeys);
 
-export const getScreenerKeys = share(compose(fromScreener.getKeys, getScreenerState));
-
-export const getUnusedScreenerKeys = share(compose(fromScreener.getUnusedKeys, getScreenerState));
+export const getUnusedScreenerKeys = createSelector( getScreenerState, fromScreener.getUnusedKeys,);
 
 /* for programs */
-export const getLoadedPrograms = share(compose(fromProgramOverview.getPrograms, getProgramOverviewState));
+export const getLoadedPrograms = createSelector(getProgramOverviewState, fromProgramOverview.getPrograms, );
 
-export const areProgramsLoaded = share(compose(fromProgramOverview.programsLoaded, getProgramOverviewState));
+export const areProgramsLoaded = createSelector( getProgramOverviewState, fromProgramOverview.programsLoaded,);
 
 export const findProgram = function (state$: Observable<State>, guid: string){
   const searchProgram = state$.select(state => state.programOverview)
@@ -101,55 +92,5 @@ export const findProgram = function (state$: Observable<State>, guid: string){
 
 
 /* for keys **key/overview etc** */
-export const allLoadedKeys = share(compose(fromKeyOverview.getLoadedKeys, getKeyOverview));
+export const allLoadedKeys = createSelector(getKeyOverview, fromKeyOverview.getLoadedKeys);
 
-
-
-
-/* https://github.com/ngrx/example-app/blob/final/src/util.ts */
-interface SelectorFn<T, V> {
-  (input$: Observable<T>): Observable<V>;
-}
-
-interface Selector<T, V> extends SelectorFn<T, V> {
-  readonly cachedResult?: null | Observable<V>;
-  reset(): void;
-  override(source$: Observable<V>): void;
-}
-
-function share<T, V>(selectFn: SelectorFn<T, V>): Selector<T, V> {
-  let cachedResult: null | Observable<V>;
-
-
-  const override = function (source$: Observable<V>) {
-    cachedResult = source$;
-  };
-
-  const reset = function () {
-    cachedResult = null;
-  };
-
-  const multicastFactory = function () {
-    return new ReplaySubject<V>(1);
-  };
-
-  const selector: any = function (input$: Observable<T>) {
-    if (Boolean(cachedResult)) {
-      return cachedResult;
-    }
-
-    return cachedResult = multicast.call(selectFn(input$), multicastFactory).refCount();
-  };
-
-  selector.override = override;
-  selector.reset = reset;
-  Object.defineProperty(selector, 'cachedResult', {
-    configurable: true,
-    enumerable: true,
-    get() {
-      return cachedResult;
-    }
-  });
-
-  return selector;
-}
