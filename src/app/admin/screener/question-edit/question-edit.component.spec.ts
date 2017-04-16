@@ -13,34 +13,6 @@ import * as fromKeys from '../../keys/reducer';
 import * as fromPrograms from '../../programs/program-overview/reducer';
 
 import { MdInputDirective } from '@angular/material';
-
-
-@Injectable()
-class ActionsSubject extends BehaviorSubject<Action> implements OnDestroy {
-  static readonly INIT = '@ngrx/store/init';
-
-  constructor() {
-    super({ type: ActionsSubject.INIT });
-  }
-
-  next(action: Action): void {
-    if (typeof action === 'undefined') {
-      throw new Error(`Actions must be objects`);
-    }
-    else if (typeof action.type === 'undefined') {
-      throw new Error(`Actions must have a type property`);
-    }
-
-    super.next(action);
-  }
-
-  complete() {  }
-
-  ngOnDestroy() {
-    super.complete();
-  }
-}
-
 const questionOne = new FormGroup({
   key: new FormGroup({
     name: new FormControl('boolean_key'),
@@ -137,6 +109,74 @@ describe('QuestionEditComponent', () => {
   })
 });
 
+/*
+class MockStore {
+  // can't get name... how to supply mock data?  
+  let(fn: Function) {
+    console.log(fn.name)
+    console.log(fn)
+  }
+}
 
+describe('QuestionEditComponent v2', () => {
+  let component: QuestionEditComponent;
+  let fixture: ComponentFixture<QuestionEditComponent>;
+  let de: DebugElement;
+  let el: any;
 
+  beforeEach(async(() => {
+    TestBed.configureTestingModule({
+      declarations: [ QuestionEditComponent ],
+      imports: [ 
+        MaterialModule, 
+        ReactiveFormsModule,
+        StoreModule.provideStore(fromRoot.reducer),
+        BrowserAnimationsModule
+      ],
+      providers: [
+        FormBuilder,
+        {provide: Store, useClass: MockStore}
+      ]
+    })
+    .compileComponents();
+  }));
 
+  beforeEach(() => {
+    fixture = TestBed.createComponent(QuestionEditComponent);
+    component = fixture.componentInstance;
+    fixture.detectChanges();
+  });
+
+  it('should create', () => {
+    
+    
+    expect(component).toBeTruthy();
+  });
+
+  it('should display data representative of questionOne', () => {
+    /*
+    const formControls = fixture.debugElement.queryAll(By.directive(FormControlName))
+    
+    const label = formControls.find( debugElem => debugElem.attributes.formControlName === 'label');
+    expect(label).toBeDefined();
+    expect(label.nativeElement.value).toEqual('question label')
+
+    const controlType = formControls.find( debugElem => debugElem.attributes.formControlName === 'controlType');
+    expect(controlType).toBeDefined();
+    expect(controlType.nativeElement.textContent).toEqual('Input Type  ');
+
+    const expandable = formControls.find( debugElem => debugElem.attributes.formControlName === 'expandable');
+    expect(expandable).toBeDefined();
+    expect(expandable.nativeElement.getElementsByTagName('input')[0].checked).toEqual(false);
+
+    const name = formControls.find( debugElem => debugElem.attributes.formControlName === 'name' );
+
+    expect(name.nativeElement.textContent.replace(/\s+/g, ''))
+      .toEqual('boolean_key:booleaninteger_key:integer')
+
+    expect(name.nativeElement.value).toEqual('boolean_key');
+    
+  })
+});
+
+*/

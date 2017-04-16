@@ -16,31 +16,6 @@ import * as fromScreener from '../store/screener-reducer';
 import * as fromKeys from '../../keys/reducer';
 import * as fromPrograms from '../../programs/program-overview/reducer';
 
-@Injectable()
-class ActionsSubject extends BehaviorSubject<Action> implements OnDestroy {
-  static readonly INIT = '@ngrx/store/init';
-
-  constructor() {
-    super({ type: ActionsSubject.INIT });
-  }
-
-  next(action: Action): void {
-    if (typeof action === 'undefined') {
-      throw new Error(`Actions must be objects`);
-    }
-    else if (typeof action.type === 'undefined') {
-      throw new Error(`Actions must have a type property`);
-    }
-
-    super.next(action);
-  }
-
-  complete() {  }
-
-  ngOnDestroy() {
-    super.complete();
-  }
-}
 
 const questionOne = new FormGroup({
   key: new FormGroup({

@@ -12,8 +12,8 @@ import { ReplaySubject } from 'rxjs/ReplaySubject';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 import { Subject } from 'rxjs/Subject';
 import 'rxjs/add/operator/multicast';
-import 'rxjs/add/observable/fromEvent';
 import 'rxjs/add/operator/mergeMap';
+import 'rxjs/add/observable/combineLatest';
 
 import { DragDropManagerService } from '../question-list/drag-drop-manager.service';
 import { KeyFilterService } from '../services/key-filter.service';

@@ -12,6 +12,8 @@ import * as fromRoot from '../../reducer';
 import { KeyFilterService } from '../services/key-filter.service';
 import { DragDropManagerService, DragDatum } from './drag-drop-manager.service';
 
+declare const document;
+
 @Component({
   selector: 'app-question-list',
   templateUrl: './question-list.component.html',
