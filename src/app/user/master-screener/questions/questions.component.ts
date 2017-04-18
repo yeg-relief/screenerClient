@@ -1,11 +1,9 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
-import { FormGroup  } from '@angular/forms';
+import { FormGroup, FormControl } from '@angular/forms';
 import { MasterScreenerService } from '../master-screener.service';
 import { QuestionControlService } from './question-control.service';
 import { Question } from '../../../admin/models';
-import { ReplaySubject } from 'rxjs/ReplaySubject';
-import 'rxjs/add/operator/take';
 
 @Component({
   templateUrl: './questions.component.html',
@@ -13,9 +11,7 @@ import 'rxjs/add/operator/take';
   providers: [QuestionControlService]
 })
 export class QuestionsComponent implements OnInit, OnDestroy {
-  // having problems passing form through async pipe... 
-  // resolving form in `then` statement and using a flag to indicate form is resolved
-  form: ReplaySubject<FormGroup>;
+  form: FormGroup;
   questions: Question[] = [];
   conditionalQuestions: Question[] = [];
   errorMessage = '';
@@ -31,18 +27,16 @@ export class QuestionsComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     const data = this.route.snapshot.data['questions'];
-    if (data.error) {
+    if (data.error !== undefined) {
       this.errorMessage = 'unable to load data from server, please try later.';
-    } else if(Array.isArray(data)){
-      this.form = new ReplaySubject<FormGroup>(1);
-      this.questions = data[0].sort( (a, b) => a.index - b.index );
-      this.conditionalQuestions = data[1];
-      try {
-        this.form.next( this.questionControlService.toFormGroup(this.questions) );
-      } catch (error) {
-        console.error(error);
-        this.errorMessage = 'internal program error, please contact admin.';
-      }
+    } 
+    this.questions = data.questions || [];
+    this.conditionalQuestions = data.conditionalQuestions || [];
+    try {
+      this.form = this.questionControlService.toFormGroup(this.questions);
+    } catch (error) {
+      console.error(error);
+      this.errorMessage = 'internal program error, please contact admin.';
     }
   }
 
@@ -50,38 +44,31 @@ export class QuestionsComponent implements OnInit, OnDestroy {
     clearTimeout(this.timeout);
   }
 
-
   onSubmit() {
-    this.timeout = setTimeout( () => this.loading = true, 60);
-    let value;
-    this.form.take(1).subscribe(val => value = val.value)
-    this.masterScreenerService.loadResults(value)
-      .then( results => this.masterScreenerService.results = [...results] )
+    this.timeout = setTimeout(() => this.loading = true, 60);
+    this.masterScreenerService.loadResults(this.form.value)
+      .then(results => this.masterScreenerService.results = [...results])
       .then(() => this.router.navigateByUrl('/master-screener/results'))
-      .catch( () => this.errorMessage = 'unable to load results, try later.');
-}
-
-  addControls($event) {
-    let form;
-    this.form.take(1).subscribe(f => form = f);
-    const conditionalQuestions = this.conditionalQuestions.filter( q => $event.find(id => q.id === id) );
-    this.questionControlService.addQuestions(conditionalQuestions, form);
-    this.form.next( form );
+      .catch(() => this.errorMessage = 'unable to load results, try later.');
   }
 
-  removeControls($event) {
-    let form;
-    this.form.take(1).subscribe(f => form = f);
-    const conditionalQuestions = this.conditionalQuestions.filter( q => $event.find(id => q.id === id) ).sort( (a, b) => a.index - b.index);
-    this.questionControlService.removeQuestions(conditionalQuestions, form);
-    this.form.next( form );
+  idsToKeys(ids) {
+    return this.conditionalQuestions.filter(q => ids.includes(q.id)).map(q => q.key);
   }
 
-  gatherConditionals(question) {
-    if (!question.expandable || !Array.isArray(question.conditionalQuestions) || question.conditionalQuestions.length === 0){
+  addControls(conditional_ids: string[]) {
+    this.idsToKeys(conditional_ids).forEach(key => this.form.addControl(key, new FormControl()));
+  }
+
+  removeControls(conditional_ids: string[]) {
+    this.idsToKeys(conditional_ids).forEach(key => this.form.removeControl(key));
+  }
+
+  gatherConditionals(question: Question) {
+    if (!question.expandable || question.conditionalQuestions.length === 0) {
       return [];
     }
     const conditionals = question.conditionalQuestions;
-    return this.conditionalQuestions.filter( q => conditionals.find(id => id === q.id))
+    return this.conditionalQuestions.filter(q => conditionals.includes(q.id));
   }
 }

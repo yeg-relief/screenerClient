@@ -1,19 +1,17 @@
 main {
-  height: 94vh;
-  width: 100vw;
-  overflow-x: hidden;
-}
-
-h1 {
-  font-family: 'Open Sans', sans-serif;
+  min-height: 60vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
 }
 
 .questions {
   width: 100%;
 }
 
-button {
-  font-family: 'Open Sans', sans-serif;
+button:hover {
+  background-color: pink;
+  color: black;
 }
 
 @media(min-width: 64em) {
@@ -31,7 +29,6 @@ button {
 
 }
 
-
 @media(min-width: 52em) and (max-width:64em) {
   .questions {
     width: 70%;
@@ -47,7 +44,6 @@ button {
     display: none;
   }
 }
-
 
 @media(min-width: 40em) and (max-width: 52em) {
   .questions {
@@ -68,7 +64,6 @@ button {
   }
 }
 
-
 @media(min-width: 30em) and (max-width: 40em){
   .questions {
     width: 90%;
@@ -88,7 +83,6 @@ button {
   }
 }
 
-
 @media(max-width: 30em){
   .questions {
     width: 95%;
@@ -106,9 +100,4 @@ button {
     position: absolute;
     z-index: 999;
   }
-}
-
-button:hover {
-  background-color: pink;
-  color: black;
 }

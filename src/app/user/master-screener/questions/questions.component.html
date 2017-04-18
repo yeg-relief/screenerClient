@@ -1,34 +1,31 @@
+<h1 class="center"> Master Screener </h1>
 <main *ngIf="!loading">
-  <h1 class="center"> Master Screener </h1>
+  
   <button md-mini-fab color="primary" class="floating-submit" (click)="onSubmit()"><i class="material-icons">send</i></button>
   <div *ngIf="errorMessage" class="center"> <strong>{{errorMessage}} </strong></div>
-  <form (ngSubmit)="onSubmit()" [formGroup]="(form | async)" *ngIf="errorMessage.length === 0 && questions.length > 0">
+  <form (ngSubmit)="onSubmit()" [formGroup]="form" *ngIf="errorMessage.length === 0 && questions.length > 0">
     <div>
       <div *ngFor="let question of questions" class="clearfix flex">
         <div class="questions">
-          <app-ycb-question [question]="question" [conditionalQuestions]="gatherConditionals(question)" [form]="(form | async)" (onExpand)="addControls($event)" (onHide)="removeControls($event)"></app-ycb-question>
+          <app-ycb-question [question]="question" [conditionalQuestions]="gatherConditionals(question)" [form]="form" (onExpand)="addControls($event)" (onHide)="removeControls($event)"></app-ycb-question>
         </div>
       </div>
     </div>
 
-    <section class="clearfix">
-      <div class="p2"></div>
-      <div class="container">
-        <div class="submit-wrapper rounded flex p2">
-          <button 
-              class="flex-grow" 
-              md-raised-button color="primary"
-              type="submit">
-            SUBMIT
-          </button>
-        </div>
-      </div> 
-      <div class="p2"></div>
+    <section class="clearfix" [formGroup]="form">
+      <div class="submit-wrapper rounded flex p2">
+        <button [disabled]="form.pristine || !form.valid"
+                class="flex-grow" 
+                md-raised-button color="primary"
+                type="submit">
+                SUBMIT
+        </button>
+      </div>
     </section>
   </form>
   <div class="center"*ngIf="errorMessage.length === 0 && questions.length === 0"><strong>There are no questions available</strong></div>
 </main>
 
-<main *ngIf="loading">
+<div *ngIf="loading">
   <md-progress-spinner style="margin: 10vh auto 0 auto" *ngIf="loading" color="primary" mode="indeterminate"></md-progress-spinner>
-</main>
+</div>

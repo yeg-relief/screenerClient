@@ -6,15 +6,13 @@
 @import '~@angular/material/core/theming/prebuilt/indigo-pink.css';
 
 
-
-body {
-  font-family: 'Open Sans', sans-serif;
-}
-
-input[type=submit]{
-  font-family: 'Open Sans', sans-serif;
-}
-
-button[md-raised-button] {
+document,
+body,
+label,
+button,
+span,
+main,
+section,
+div{
   font-family: 'Open Sans', sans-serif;
 }
