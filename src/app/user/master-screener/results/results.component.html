@@ -1,16 +1,18 @@
-<main>
+<main class="fadein">
   <div class="p1"></div>
   <div *ngIf="errorMessage"> <strong> There was an error loading data, please try later </strong> </div>
   <div *ngIf="results.length > 0 && errorMessage.length === 0">
-    <div id="result-preface" class="border p2 center">
+    <div id="result-preface" class="border p1 result-text">
       <p><strong>NOTE: </strong> These results do <strong>NOT</strong> mean you're qualified for
       <i>any</i> of these programs. <br>They are meant to help you find programs that can help you.</p>
     </div>
-
-    <div *ngFor="let response of results" class="clearfix flex">
-      <div class="col col-8 flex-grow center">
-        <app-user-facing-program [program]="response"></app-user-facing-program>
-      </div>
+    <div id="result-count" class="result-text">
+        <md-card-title>
+          Showing {{ results.length }} result(s) of {{ results.length }} total results.
+        </md-card-title>
+    </div>
+    <div class="flex-grow response-container">
+      <app-user-facing-program *ngFor="let response of results" [program]="response"></app-user-facing-program>
     </div>
   </div>
   <div *ngIf="results.length === 0" class="p3 center">

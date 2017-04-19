@@ -1,53 +1,71 @@
-h1 {
+#result-count {
+  padding-top: 0.25em;
+}
+
+#result-count > md-card-title {
   font-family: 'Open Sans', sans-serif;
 }
 
-p {
-  font-family: 'Open Sans', sans-serif;
-  display: inline-block;
+.response-container{
+  margin: 0 auto;
+  will-change: opacity;
 }
-
-main {
-  width: 100vw;
-}
-
-
 
 @media(min-width: 64em) {
-  #result-preface {
-    width: 60%;
+  .result-text {
+    width: 30%;
     margin: 0 auto;
+  }
+
+  .response-container {
+    width: 50%;
   }
 }
 
 
 @media(min-width: 52em) and (max-width:64em) {
-  #result-preface {
+  .result-text {
     width: 60%;
     margin: 0 auto;
+  }
+
+  .response-container {
+    width: 80%;
   }
 }
 
 
 @media(min-width: 40em) and (max-width: 52em) {
-  #result-preface {
+  .result-text {
     width: 60%;
     margin: 0 auto;
+  }
+
+  .response-container {
+    width: 80%;
   }
 }
 
 
 @media(min-width: 30em) and (max-width: 40em){
-  #result-preface {
+  .result-text {
     width: 75%;
     margin: 0 auto;
+  }
+
+  .response-container {
+    width: 80%;
   }
 }
 
 
 @media(max-width: 30em){
-  #result-preface {
+  .result-text {
     width: 95%;
     margin: 0 auto;
+  }
+
+  .response-container {
+    width: default;
   }
 }

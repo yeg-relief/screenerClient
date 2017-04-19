@@ -9,7 +9,7 @@
       <app-ycb-question *ngFor="let question of questions" [question]="question" [conditionalQuestions]="gatherConditionals(question)" [form]="form" (onExpand)="addControls($event)" (onHide)="removeControls($event)"></app-ycb-question>
     </div>
 
-    <div class="submit-wrapper rounded flex p2">
+    <div class="submit-wrapper rounded flex">
       <button [disabled]="form.pristine || !form.valid"
         class="flex-grow" 
         md-raised-button color="primary"
