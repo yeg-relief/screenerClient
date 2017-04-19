@@ -4,24 +4,20 @@
   <button md-mini-fab color="primary" class="floating-submit" (click)="onSubmit()"><i class="material-icons">send</i></button>
   <div *ngIf="errorMessage" class="center"> <strong>{{errorMessage}} </strong></div>
   <form (ngSubmit)="onSubmit()" [formGroup]="form" *ngIf="errorMessage.length === 0 && questions.length > 0">
-    <div>
-      <div *ngFor="let question of questions" class="clearfix flex">
-        <div class="questions">
-          <app-ycb-question [question]="question" [conditionalQuestions]="gatherConditionals(question)" [form]="form" (onExpand)="addControls($event)" (onHide)="removeControls($event)"></app-ycb-question>
-        </div>
-      </div>
+  
+    <div class="questions">
+      <app-ycb-question *ngFor="let question of questions" [question]="question" [conditionalQuestions]="gatherConditionals(question)" [form]="form" (onExpand)="addControls($event)" (onHide)="removeControls($event)"></app-ycb-question>
     </div>
 
-    <section class="clearfix" [formGroup]="form">
-      <div class="submit-wrapper rounded flex p2">
-        <button [disabled]="form.pristine || !form.valid"
-                class="flex-grow" 
-                md-raised-button color="primary"
-                type="submit">
-                SUBMIT
-        </button>
-      </div>
-    </section>
+    <div class="submit-wrapper rounded flex p2">
+      <button [disabled]="form.pristine || !form.valid"
+        class="flex-grow" 
+        md-raised-button color="primary"
+        type="submit">
+        SUBMIT
+      </button>
+    </div>
+
   </form>
   <div class="center"*ngIf="errorMessage.length === 0 && questions.length === 0"><strong>There are no questions available</strong></div>
 </main>
