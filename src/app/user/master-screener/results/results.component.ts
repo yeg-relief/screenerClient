@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChildren, ViewChild, ContentChild, QueryList} from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { UserFacingProgramComponent } from '../../../shared/components/program/user-facing-program/user-facing-program.component';
 import { MasterScreenerService } from '../master-screener.service';
 
@@ -8,26 +8,15 @@ import { MasterScreenerService } from '../master-screener.service';
   styleUrls: ['./results.component.css']
 })
 export class ResultsComponent implements OnInit {
-  @ViewChild(UserFacingProgramComponent) userFacingProgram: QueryList<UserFacingProgramComponent>;
   errorMessage = '';
   results = [];
-  timeout;
-  loading = false;
-  
 
   constructor(private masterScreenerService: MasterScreenerService) { }
 
   ngOnInit() {
-    if (this.masterScreenerService.results !== undefined &&  Array.isArray(this.masterScreenerService.results)){
+    if (this.masterScreenerService.results !== undefined &&  Array.isArray(this.masterScreenerService.results))
       this.results = [...this.masterScreenerService.results];
-    } else {
-      this.errorMessage = 'error loading results, try again later.';
-    }
-    
-  }
-
-  ngAfterViewInit() {
-    console.log(this.userFacingProgram)
-    
+    else 
+      this.errorMessage = 'error loading results, try again later.'; 
   }
 }

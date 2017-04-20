@@ -5,10 +5,27 @@ import { MasterScreenerService } from '../master-screener.service';
 import { QuestionControlService } from './question-control.service';
 import { Question } from '../../../admin/models';
 
+import {
+  trigger,
+  state,
+  style,
+  animate,
+  transition,
+} from '@angular/animations'
+
 @Component({
   templateUrl: './questions.component.html',
   styleUrls: ['./questions.component.css'],
-  providers: [QuestionControlService]
+  providers: [QuestionControlService],
+  animations: [
+    trigger('fadein', [
+      state('*', style({opacity: 1 })),
+      transition('void => *', [
+        style({opacity: 0 }),
+        animate('400ms ease-out')
+      ]),
+    ])
+  ]
 })
 export class QuestionsComponent implements OnInit, OnDestroy {
   form: FormGroup;

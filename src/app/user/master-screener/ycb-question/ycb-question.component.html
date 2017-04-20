@@ -1,6 +1,5 @@
-<md-card style="margin-top: 3vh; margin-bottom: 3vh; background-color: lightyellow;">
+<md-card style="background-color: lightyellow;">
   
-
   <form [formGroup]="form">
     <section [ngSwitch]="question.controlType">
 
@@ -29,13 +28,15 @@
       <div *ngSwitchDefault> <strong> {{ question.controlType }} is invalid </strong> </div>
     </section>
   </form>
-  <div *ngIf="showQuestions">
-    <app-ycb-conditional-question 
+  
+  <div *ngIf="showQuestions" class="conditional-container" [@expand]>
+    <app-ycb-conditional-question
       *ngFor="let expandableQuestion of conditionalQuestions"
       [question]="expandableQuestion"
       [form]="form">
     </app-ycb-conditional-question>
   </div>
+
   
   <div class="py1"></div>
 </md-card>

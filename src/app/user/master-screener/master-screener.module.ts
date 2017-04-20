@@ -20,7 +20,7 @@ import { YcbConditionalQuestionComponent } from './ycb-question/ycb-conditional-
     ReactiveFormsModule,
     HttpModule,
     RouterModule,
-    MaterialModule
+    MaterialModule,
   ],
   declarations: [
     QuestionsComponent,

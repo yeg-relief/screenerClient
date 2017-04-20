@@ -6,6 +6,7 @@ main {
 
 .questions {
   width: 100%;
+  position: relative;
 }
 
 button:hover {

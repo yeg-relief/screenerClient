@@ -7,10 +7,29 @@ import { QuestionControlService } from '../questions/question-control.service';
 import 'rxjs/add/observable/merge';
 import 'rxjs/add/operator/multicast'
 
+
+import {
+  trigger,
+  state,
+  style,
+  animate,
+  transition,
+  keyframes
+} from '@angular/animations'
+
 @Component({
   selector: 'app-ycb-question',
   templateUrl: './ycb-question.component.html',
-  styleUrls: ['./ycb-question.component.css']
+  styleUrls: ['./ycb-question.component.css'],
+  animations: [
+    trigger('expand', [
+      state('in', style({transform: 'translateY(0)'})),
+      transition('void => *', [
+        style({transform: 'translateY(-50%)'}),
+        animate('300ms ease-out')
+      ]),
+    ]),
+  ]
 })
 export class YcbQuestionComponent implements OnInit, OnDestroy {
   @Input() question;
@@ -18,24 +37,25 @@ export class YcbQuestionComponent implements OnInit, OnDestroy {
   @Input() conditionalQuestions;
   @Output() onExpand = new EventEmitter<any>();
   @Output() onHide = new EventEmitter<any>();
-  public subscriptions: Subscription[] = [];
-  public showQuestions = false;
+  subscriptions: Subscription[] = [];
+  showQuestions = false;
 
   constructor(private qcs: QuestionControlService) { }
 
   ngOnInit() {
     if (this.question.expandable && Array.isArray(this.question.conditionalQuestions) && this.question.conditionalQuestions.length > 0) {
+      this.onExpand.emit( this.question.conditionalQuestions )
+      
       const change = this.form.get(this.question.key).valueChanges
         .filter(value => typeof value === 'boolean')
         .multicast( new ReplaySubject<boolean>(1) ).refCount()
 
 
       const expand = change.filter(value => value === true)
-        .do( _ => this.onExpand.emit( this.question.conditionalQuestions) );
+        .do( _ => this.onExpand.emit( this.question.conditionalQuestions) )
 
       const hide = change.filter(val => val === false)
-        .do( _ => this.onHide.emit( this.question.conditionalQuestions) ); 
-
+        .do( _ => this.onHide.emit( this.question.conditionalQuestions) )
       
   
       const merged = Observable.merge(expand, hide)

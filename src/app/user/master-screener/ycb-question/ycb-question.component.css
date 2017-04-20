@@ -1,3 +1,9 @@
+.conditional-container {
+  display: flex;
+  flex-direction: column;
+}
+
+
 @media(max-width: 30em){
   md-card {
     width: 90%;

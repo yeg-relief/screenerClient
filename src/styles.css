@@ -26,7 +26,13 @@ div{
 }
 
 .fadein {
+  will-change: opacity;
   animation: fadein 200ms ease-in;
+}
+
+.fadein-slow {
+  will-change: opacity;
+  animation: fadein 10s ease-out;
 }
 
 @keyframes fadein{
@@ -38,5 +44,17 @@ div{
   }
   100% {
     opacity: 1;
+  }
+}
+
+@keyframes fadeout{
+  0% {
+    opacity: 1;
+  }
+  80% {
+    opacity: 0.15;
+  }
+  100% {
+    opacity: 0;
   }
 }

@@ -10,7 +10,7 @@ import { YcbQuestionComponent } from '../ycb-question/ycb-question.component';
 import { YcbConditionalQuestionComponent } from '../ycb-question/ycb-conditional-question/ycb-conditional-question.component'
 import { MasterScreenerService } from '../master-screener.service';
 import { Router, ActivatedRoute, RouterModule } from '@angular/router';
-
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 describe('Questions Component single question', () => {
   let component: QuestionsComponent;
@@ -21,7 +21,7 @@ describe('Questions Component single question', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      imports: [MaterialModule, ReactiveFormsModule],
+      imports: [MaterialModule, ReactiveFormsModule, BrowserAnimationsModule],
       declarations: [QuestionsComponent, YcbQuestionComponent, YcbConditionalQuestionComponent],
       providers: [
         MasterScreenerService,
@@ -70,7 +70,7 @@ describe('Questions Component single question', () => {
   it('should add a conditional control to form when the host question is true', () => {
     const form = component.form;
     expect(form.value['boolean_key']).not.toBeUndefined();
-    expect(form.value['number_key']).toBeUndefined();
+    expect(form.value['number_key']).toBeNull();
     form.get('boolean_key').setValue(true);
     expect(form.value['boolean_key']).not.toBeUndefined();
     expect(form.value['number_key']).not.toBeUndefined();

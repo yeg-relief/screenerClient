@@ -1,5 +1,6 @@
-import { BrowserModule } from '@angular/platform-browser';
-import { NgModule } from '@angular/core';
+import { BrowserModule,  } from '@angular/platform-browser';
+import { CommonModule } from '@angular/common';
+import { NgModule,  } from '@angular/core';
 import { routing }  from './app.routes';
 import { AppComponent } from './app.component';
 import { MaterialModule } from '@angular/material';
