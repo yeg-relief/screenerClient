@@ -29,7 +29,8 @@
     </section>
   </form>
   
-  <div *ngIf="showQuestions" class="conditional-container" [@expand]>
+  <div *ngIf="showQuestions" class="conditional-container" 
+    [@expand]="expand" (@expand.done)="animationDone($event)">
     <app-ycb-conditional-question
       *ngFor="let expandableQuestion of conditionalQuestions"
       [question]="expandableQuestion"

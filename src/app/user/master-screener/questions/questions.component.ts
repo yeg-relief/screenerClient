@@ -24,7 +24,14 @@ import {
         style({opacity: 0 }),
         animate('400ms ease-out')
       ]),
-    ])
+    ]),
+    trigger('flyin', [
+      state('in', style({transform: 'translateX(0)'})),
+      transition('void => *', [
+        style({transform: 'translateX(-50%)'}),
+        animate('300ms ease-out')
+      ]),
+    ]),
   ]
 })
 export class QuestionsComponent implements OnInit, OnDestroy {
