@@ -1,20 +1,9 @@
-<nav class="clearfix flex">
-  <div class="col-5 mr1 flex flex-center">
-    <div class="link col-4 center ml2 mr2 px1">
-      <a  routerLink="/">HOME</a>
-    </div>
+<a [@flyin] *ngFor="let route of routes" [routerLink]="route[0]" routerLinkActive="active">{{route[1] | uppercase }}</a>
 
-    <div class="link col-4 center ml2 mr2 px1">
-      <a  routerLink="/quick-links">QUICK LINKS</a>
-    </div>
-
-    <div class="link col-4 center flex ml1 mr1 px1">
-      <a  routerLink="/about">ABOUT</a>
-    </div>
-    
-    <div class="link col-4 center ml1 px1 md-show">
-      <a routerLink="/admin/screener/edit">ADMIN</a>
-    </div>
-  </div>
-  <div class="col-7"></div>
-</nav>
+<div class="form-group-container" [formGroup]="form">
+  <select [@flyin]  formControlName="selectControl">
+    <option *ngFor="let route of routesSmall" [value]="route[0]">
+      {{ route[1] }}
+    </option>
+  </select>
+</div>

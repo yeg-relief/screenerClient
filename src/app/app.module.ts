@@ -16,7 +16,7 @@ import { AuthService } from './admin/core/services/auth.service'
 import { AuthGuardService } from './admin/core/services/auth-guard.service';
 import { QuickLinksComponent } from './user/quick-links/quick-links.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-
+import { ReactiveFormsModule } from '@angular/forms'
 @NgModule({
   declarations: [
     AppComponent,
@@ -32,7 +32,8 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
     MasterScreenerModule,
     BrowseModule,
     routing,
-    MaterialModule
+    MaterialModule,
+    ReactiveFormsModule
   ],
   providers: [
     MasterScreenerService, 

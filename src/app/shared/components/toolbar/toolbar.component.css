@@ -1,20 +1,72 @@
-nav {
-  padding-top: 1vh;
+:host {
+  display: flex;
   height: 5vh;
-  padding-bottom: 1vh;
-  background: transparent;
-  width: 100vw;
-  overflow: hidden;
+  width: 100%;
   background-color: darkorange;
+  align-items: center;
 }
 
-.link {
-  font-family: 'Open Sans', sans-serif;
-  display: inline-block;
-  vertical-align: middle;
-  line-height: normal;    
+.form-group-container {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
+
+select {
+  width: 66.66667%;
+  background-color: darkorange;
+  color: white;
+  display: relative;
+  padding-bottom: 0.1em;
+}
+
+@media screen and (min-width: 375.1px) {
+  select {
+    display: none;
+  }
+
+  .form-group-container {
+    display: none;
+  }
+}
+
+@media screen and (max-width: 375px){
+  :host {
+    height: 8vh;
+  }
+
+  select {
+    display: default;
+  }
+
+  a {
+    display: none;
+  }
+}
+
+
+
 
 a {
-  color: white
+  flex-wrap: nowrap;
+  justify-content: space-between;
+  font-size: 125%;
+  color: white;
+  overflow: hidden;
+  text-decoration: none;
 }
+
+
+.active {
+  color: orange;
+}
+
+*::before, 
+*::after{
+  content: '|';
+  margin: 0 0.25em;
+  height: 95%;
+  color: orange;
+}
+

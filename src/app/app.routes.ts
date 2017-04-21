@@ -35,12 +35,13 @@ const appRoutes: Routes = [
       }
     ],
   },
+  { path: 'home', component: HomeComponent },
   {
     path: 'admin', loadChildren: 'app/admin/admin.module#AdminModule'
   },
   { path: 'about', component: AboutComponent},
   { path: 'quick-links', component: QuickLinksComponent },
-  { path: '', component: HomeComponent },
+  { path: '', redirectTo: 'home', pathMatch: 'full' },
   { path: '**', component: PageNotFoundComponent }
 ];
 

@@ -20,8 +20,8 @@ import 'rxjs/add/operator/multicast';
   styles: [
     `
       #main-outlet {
-        height: 89vh;
-        width: 100vw;
+        min-height: 94vh;
+        width: 100%;
         margin-top: 0;
       }
     `,

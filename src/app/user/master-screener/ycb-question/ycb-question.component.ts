@@ -60,6 +60,7 @@ export class YcbQuestionComponent implements OnInit, OnDestroy {
         .do( _ => this.expand !== 'expanded' ? this.expand = 'expanded' : null );
 
       const hide = change.filter(val => val === false)
+        .do( _ => this.onHide.emit( this.question.conditionalQuestions ) )
         .do( _ => this.expand !== 'collapsed' ? this.expand = 'collapsed' : null )
       
   

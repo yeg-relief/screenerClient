@@ -1,20 +1,43 @@
-:host {
-  margin-top: 2em;
-  margin-bottom: 5em;
-  overflow-x: hidden;
-}
-
 .home {
-  margin-top: 3%;
-  height: 97%;
-  width: 100%;
+  width: 100vw;
   overflow: auto;
 }
 
+header {
+  margin-top: 7vh;
+}
+section {
+  overflow: hidden;
+}
+
 .section-text {
-  height: 2vh; 
-  padding-bottom: 2em;
-  width: 100%;
+  width: 80%;
+}
+
+.large-description-container{
+  width: 95%; 
+  margin: 0 auto;
+  display: flex;
+  justify-content: space-around;
+}
+
+@media screen and (max-width: 1023.99px){
+  .large-description-container {
+    display: none;
+  }
+}
+
+@media screen and (min-width: 1024px){
+  .large-description-container {
+    display: default;
+  }
+}
+
+.large-site-description{
+  width: 33.33%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
 }
 
 main {
@@ -58,6 +81,11 @@ button:hover {
   .logo-image {
     width: 50vw;
   }
+
+  .home {
+    overflow-x: hidden;
+    overflow-y: hidden;
+  }
 }
 
 
@@ -78,6 +106,11 @@ button:hover {
 
   .logo-image {
     width: 55vw;
+  }
+
+  .home {
+    overflow-x: hidden;
+    overflow-y: hidden;
   }
 }
 
