@@ -8,7 +8,7 @@
 
         <div class="py1"></div>
         <md-input-container>
-          <input mdInput formControlName="{{ question.key }}" placeholder="input here">
+          <input mdInput formControlName="{{ question.key }}" placeholder="input here" (keypress)="checkEnter($event)">
         </md-input-container>
       </div>
 

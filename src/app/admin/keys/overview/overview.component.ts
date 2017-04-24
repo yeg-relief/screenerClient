@@ -66,7 +66,7 @@ class KeyFilterState {
 
 function applyFilter(source: Observable<KeyFilterState>): Observable<Key[]> {
   return source.switchMap( (state: KeyFilterState) => {
-    const regexp = new RegExp(state.keyName);
-    return Observable.of(state.keys.filter(k => regexp.test(k.name)))
+    const regexp = new RegExp(state.keyName.toLowerCase().trim());
+    return Observable.of(state.keys.filter(k => regexp.test(k.name.toLowerCase().trim())))
   })
 }

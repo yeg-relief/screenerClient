@@ -123,10 +123,10 @@ function applyFilter(source: Observable<ProgramState>): Observable<ApplicationFa
           }
 
 
-          const regexp = new RegExp(state.filter.value);
+          const regexp = new RegExp(state.filter.value.toLowerCase().trim());
 
           return Observable.from(programs)
-            .filter(program => regexp.test(program.user.title))
+            .filter(program => regexp.test(program.user.title.toLowerCase().trim()))
             .toArray();
         }
 

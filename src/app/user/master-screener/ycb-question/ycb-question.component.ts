@@ -93,4 +93,10 @@ export class YcbQuestionComponent implements OnInit, OnDestroy {
            Array.isArray(this.question.conditionalQuestions) && 
            this.question.conditionalQuestions.length > 0;
   }
+
+  checkEnter(keyDownEvent) {
+    const ENTER_KEY = 13;
+    if (keyDownEvent.keyCode === ENTER_KEY) 
+      keyDownEvent.target.blur();
+  }
 }
