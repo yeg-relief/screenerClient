@@ -5,15 +5,15 @@ import { ReplaySubject } from 'rxjs/ReplaySubject';
 import { Observable } from 'rxjs/Observable';
 import { QuestionControlService } from '../questions/question-control.service';
 import 'rxjs/add/observable/merge';
-import 'rxjs/add/operator/multicast'
+import 'rxjs/add/operator/multicast';
+import 'rxjs/add/operator/mapTo';
 import {
   trigger,
   state,
   style,
   animate,
   transition,
-  keyframes
-} from '@angular/animations'
+} from '@angular/animations';
 
 @Component({
   selector: 'app-ycb-question',
@@ -21,17 +21,29 @@ import {
   styleUrls: ['./ycb-question.component.css'],
   animations: [
     trigger('expand', [
-      state('expanded', style({transform: 'translateY(0)', opacity: 1})),
-      state('collapsed', style({opacity: 0})),
+      state('expanded', style({ transform: 'translateX(0)', opacity: '1' })),
+      state('collapsed', style({ transform: 'translateX(100%)', opacity: '0' })),
       transition('void => *', [
-        style({transform: 'translateY(-30%)'}),
+        style({ transform: 'translateX(-100%)', opacity: '0' }),
         animate('300ms ease-out')
       ]),
       transition('expanded => collapsed', [
-        style({opacity: 0}),
-        animate('200ms ease-out')
+        style({ transform: 'translateX(0)', opacity: '1' }),
+        animate('300ms ease-out')
       ]),
     ]),
+    trigger('error', [
+      state('inDOM', style({opacity: '1'})),
+      state('outDOM', style({opacity: '0'})),
+      transition('inDOM => outDOM', [
+        style({ opacity: '1' }),
+        animate('300ms ease-out')
+      ]),
+      transition('outDOM => inDOM', [
+        style({ opacity: '0' }),
+        animate('300ms ease-out')
+      ])
+    ])
   ]
 })
 export class YcbQuestionComponent implements OnInit, OnDestroy {
@@ -43,40 +55,42 @@ export class YcbQuestionComponent implements OnInit, OnDestroy {
   subscriptions: Subscription[] = [];
   showQuestions = false;
   expand;
+  errorInDOM = 'outDOM';
 
   constructor(private qcs: QuestionControlService) { }
 
   ngOnInit() {
+
     if (this.isExpandableQuestion()) {
-      this.onExpand.emit( this.question.conditionalQuestions )
-      
+      this.onExpand.emit(this.question.conditionalQuestions)
+
       const change = this.form.get(this.question.key).valueChanges
         .filter(value => typeof value === 'boolean')
-        .multicast( new ReplaySubject<boolean>(1) ).refCount()
+        .multicast(new ReplaySubject<boolean>(1)).refCount()
 
 
       const expand = change.filter(value => value === true)
-        .do( _ => this.onExpand.emit( this.question.conditionalQuestions) )
-        .do( _ => this.expand !== 'expanded' ? this.expand = 'expanded' : null );
+        .do(_ => this.onExpand.emit(this.question.conditionalQuestions))
+        .do(_ => this.expand !== 'expanded' ? this.expand = 'expanded' : null);
 
       const hide = change.filter(val => val === false)
-        .do( _ => this.onHide.emit( this.question.conditionalQuestions ) )
-        .do( _ => this.expand !== 'collapsed' ? this.expand = 'collapsed' : null )
-      
-  
+        .do(_ => this.onHide.emit(this.question.conditionalQuestions))
+        .do(_ => this.expand !== 'collapsed' ? this.expand = 'collapsed' : null)
+
+
       const merged = Observable.merge(expand, hide)
         .subscribe(hide => hide === true ? this.showQuestions = hide : null);
 
-      
-      this.subscriptions = [ merged ];
-      
-    }
- 
+
+      this.subscriptions = [...this.subscriptions, merged];
+
+    } 
+
   }
 
-  ngOnDestroy(){
-    for(const sub of this.subscriptions) {
-      if (!sub.closed){
+  ngOnDestroy() {
+    for (const sub of this.subscriptions) {
+      if (!sub.closed) {
         sub.unsubscribe();
       }
     }
@@ -89,14 +103,28 @@ export class YcbQuestionComponent implements OnInit, OnDestroy {
   }
 
   isExpandableQuestion() {
-    return this.question.expandable && 
-           Array.isArray(this.question.conditionalQuestions) && 
-           this.question.conditionalQuestions.length > 0;
+    return this.question.expandable &&
+      Array.isArray(this.question.conditionalQuestions) &&
+      this.question.conditionalQuestions.length > 0;
+  }
+
+  hasInputControl() {
+    return this.question.controlType === 'NumberInput';
   }
 
   checkEnter(keyDownEvent) {
     const ENTER_KEY = 13;
-    if (keyDownEvent.keyCode === ENTER_KEY) 
+    if (keyDownEvent.keyCode === ENTER_KEY)
       keyDownEvent.target.blur();
+  }
+
+  handleInput(textInput: string) {
+    const isValid = this.form.get(this.question.key).valid;
+
+    if (!isValid && this.errorInDOM === 'outDOM')
+      this.errorInDOM = 'inDOM'
+    else if (isValid && this.errorInDOM === 'inDOM')
+      this.errorInDOM = 'outDOM'
+    
   }
 }

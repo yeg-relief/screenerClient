@@ -12,7 +12,6 @@ import { RouterModule } from '@angular/router';
 import { MaterialModule } from '@angular/material';
 import { YcbQuestionComponent } from './ycb-question/ycb-question.component';
 import { YcbConditionalQuestionComponent } from './ycb-question/ycb-conditional-question/ycb-conditional-question.component';
-
 @NgModule({
   imports: [
     CommonModule,
@@ -27,7 +26,7 @@ import { YcbConditionalQuestionComponent } from './ycb-question/ycb-conditional-
     ResultsComponent,
     MasterScreenerComponent,
     YcbQuestionComponent,
-    YcbConditionalQuestionComponent
+    YcbConditionalQuestionComponent // depracated ??
   ],
   providers: [ 
     QuestionsResolverService

@@ -55,6 +55,7 @@ export class DataService {
     const creds = this.getCredentials();
     return this.http.get('/protected/program/', creds)
       .map( res => res.json())
+      .do( _ => console.log(_))
       .catch(this.loadError)
   }
 

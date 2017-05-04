@@ -7,6 +7,7 @@ import { ReactiveFormsModule, FormGroup, FormControl, FormControlName } from '@a
 import { YcbQuestionComponent } from './ycb-question.component';
 import { QuestionControlService } from '../questions/question-control.service';
 import { YcbConditionalQuestionComponent } from './ycb-conditional-question/ycb-conditional-question.component';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 describe('YcbQuestionComponent', () => {
   let component: YcbQuestionComponent;
@@ -14,7 +15,7 @@ describe('YcbQuestionComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      imports: [MaterialModule, ReactiveFormsModule],
+      imports: [MaterialModule, ReactiveFormsModule, BrowserAnimationsModule],
       declarations: [ YcbQuestionComponent, YcbConditionalQuestionComponent ],
       providers: [ QuestionControlService ]
     })

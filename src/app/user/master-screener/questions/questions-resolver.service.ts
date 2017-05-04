@@ -22,9 +22,24 @@ export class QuestionsResolverService {
           return Observable.throw({error: 'questions are not an array', data})
         }
 
-        data.questions.sort( (a, b) => a.index - b.index );
+        data.questions.sort(this.findAndSort.bind(this))
+
+        data.conditionalQuestions.forEach(this.findAndSort.bind(this))
+
+
+
         return Observable.of(data);
       })
       .catch(err => Observable.of({error: err}));
+  }
+
+  findAndSort(q) {
+    if(Array.isArray(q.options)) {
+      q.options.sort(this.sortOptions);
+    }
+  }
+
+  sortOptions(a, b) {
+    return a - b;
   }
 }

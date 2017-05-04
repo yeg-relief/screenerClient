@@ -29,7 +29,7 @@ import {
       state('in', style({transform: 'translateX(0)'})),
       transition('void => *', [
         style({transform: 'translateX(-50%)'}),
-        animate('300ms ease-out')
+        animate('400ms ease-out')
       ]),
     ]),
   ]
