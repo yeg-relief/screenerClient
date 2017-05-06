@@ -1,16 +1,18 @@
-<div class="py2">
-</div>
-<md-card class="py2 program">
+<md-card class="program-width">
   <md-card-title> {{program?.title}} </md-card-title>
-  <md-card-content class="clearfix flex flex-wrap">
-    <div class="col-1"></div>
-    <div class="col-10"> <p>{{ program?.details }} </p> </div>
-    <div class="col-1"></div>
+  <md-card-content>
+      <p>{{ program?.details }} </p>
   </md-card-content>
   <a *ngIf="program.externalLink?.length > 0" href="http://{{ program?.externalLink }}" target="_blank">
     more information
   </a>
-  <div class="p1"></div>
+  <md-card-actions>
+    <button md-raised-button 
+      *ngFor="let tag of program?.tags" 
+      routerLink="/browse-programs/{{tag}}"
+      routerLinkActive="active"> {{tag}} </button>
+  </md-card-actions>
+  <!--
   <div class="clearfix flex">
     <div 
       class="col-2 border bg-silver black center rounded mr1 sm-show" 
@@ -29,4 +31,5 @@
       {{tag}}
     </div>
   </div>
+  -->
 </md-card>
