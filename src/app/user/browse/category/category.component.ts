@@ -3,6 +3,7 @@ import { Subscription } from 'rxjs/Subscription';
 import { UserFacingProgram } from '../../../shared';
 import { ActivatedRoute, UrlSegment } from '@angular/router';
 import { BrowseService } from '../browse.service';
+import { Animations } from '../../../shared/animations';
 
 @Component({
   selector: 'app-category',
@@ -20,13 +21,17 @@ import { BrowseService } from '../browse.service';
     md-progress-spinner {
       margin: 10% auto 0 auto;
     }
-  `]
+  `],
+  animations: [
+    Animations.fadeinAndOut
+  ]
 })
 export class CategoryComponent implements OnInit{
   programs: UserFacingProgram[] = [];
   filteredPrograms: UserFacingProgram[] = [];
   subscription: Subscription;
   loading = false;
+  fade;
   timeout;
 
   constructor(
@@ -44,7 +49,7 @@ export class CategoryComponent implements OnInit{
     // if this implies subscription is still active.
     this.subscription = this.route.params.subscribe({
         next: (params) => {
-          this.filterByCategory(params['category'])
+          this.fade = 'out';
         }
       });
   }
@@ -62,6 +67,7 @@ export class CategoryComponent implements OnInit{
     } else {
       this.filteredPrograms = this.programs.filter(program => program.tags.indexOf(category) >= 0);
     }
+    this.fade = 'in';
   }
 
   loadPrograms(programs: UserFacingProgram[]): Promise<any> {
@@ -70,5 +76,12 @@ export class CategoryComponent implements OnInit{
     this.loading = false;
     clearTimeout(this.timeout);
     return Promise.resolve();
+  }
+
+  handleFadeDone($event) {
+    if ($event.fromState === 'void' && $event.toState === 'null')
+      this.fade = 'in';
+    else if($event.fromState === 'in' && $event.toState === 'out')
+      this.filterByCategory(this.route.snapshot.params['category']);
   }
 }

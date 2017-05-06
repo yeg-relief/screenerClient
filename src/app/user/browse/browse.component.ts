@@ -47,6 +47,7 @@ export class BrowseComponent implements OnInit, OnDestroy {
 
   selectChange($event) {
     const category = $event.target.value;
+    this.currentCategory = category;
     this.router.navigate([`/browse-programs/${category}`]);
   }
 }
