@@ -7,7 +7,11 @@
   <form (ngSubmit)="onSubmit()" [formGroup]="form" *ngIf="errorMessage.length === 0 && questions.length > 0">
   
     <div class="questions">
-      <app-ycb-question *ngFor="let question of questions" [question]="question" [conditionalQuestions]="gatherConditionals(question)" [form]="form" (onExpand)="addControls($event)" (onHide)="removeControls($event)"></app-ycb-question>
+      <app-ycb-question *ngFor="let question of questions" 
+        [question]="question" 
+        [conditionalQuestions]="gatherConditionals(question)" 
+        [form]="form" (onExpand)="addControls($event)" 
+        (onHide)="removeControls($event)"></app-ycb-question>
     </div>
 
     <div class="submit-wrapper rounded flex">

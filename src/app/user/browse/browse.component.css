@@ -1,24 +1,22 @@
 button[md-button].active {
-  background-color: #ff4081;
+  background-color: darkorange;
 }
 
-.unselectable {
-  -webkit-touch-callout: none;
-  -webkit-user-select: none;
-  -khtml-user-select: none;
-  -moz-user-select: none;
-  -ms-user-select: none;
-  user-select: none;
+#category-select {
+  background: darkorange;
+  color: white;
+  display: relative;
 }
 
-.browse {
-  min-height: 95vh;
-  width: 100vw;
-  overflow-y: auto;
-  padding-bottom: 2em;
+select > option{
+  background: darkorange;
+  color: white;
+  padding-bottom: 0.1em;
 }
 
-
+.tag-padding-container {
+  padding-top: 2em;
+}
 
 .tag-container {
   display: flex;
@@ -26,21 +24,17 @@ button[md-button].active {
   justify-content: space-around;
   width: 75%;
   margin: 0 auto;
-  background-color: silver;
+  background-color: transparent;
 	border-radius: 3px;
   padding: 0.5rem 0.5rem;
   border-style: solid;
   border-width: 1px;
   border-color: rgba(0,0,0,.125);
-  margin-top: 2rem;
 }
 
 .tag-select {
-  margin: 0 auto;
+  margin: 0 12.5% 0 12.5%;
   width: 75%;
-  background-color: silver;
-  display: flex;
-  margin-top: 2rem;
 }
 
 option {
@@ -69,21 +63,4 @@ button[md-button]:not(.active):hover {
 button[md-button] {
   font-family: 'Open Sans', sans-serif;
   font-size: 110%;
-}
-
-.browse {
-  height: 94vh;
-  position: fixed;
-}
-
-@media(min-width: 40em) {
-  .browse {
-    overflow-x: hidden;
-  } 
-}
-
-@media(max-width: 40em) {
-  .browse {
-    overflow-x: auto;
-  } 
 }
