@@ -4,6 +4,7 @@ import { Subscription } from 'rxjs/Subscription';
 import { ReplaySubject } from 'rxjs/ReplaySubject';
 import { Observable } from 'rxjs/Observable';
 import { QuestionControlService } from '../questions/question-control.service';
+import { Animations } from '../../../shared/animations';
 import 'rxjs/add/observable/merge';
 import 'rxjs/add/operator/multicast';
 import 'rxjs/add/operator/mapTo';
@@ -20,7 +21,7 @@ import {
   templateUrl: './ycb-question.component.html',
   styleUrls: ['./ycb-question.component.css'],
   animations: [
-    trigger('expand', [
+    trigger('questionExpand', [
       state('expanded', style({ transform: 'translateX(0)', opacity: '1' })),
       state('collapsed', style({ transform: 'translateX(100%)', opacity: '0' })),
       transition('void => *', [
@@ -33,8 +34,8 @@ import {
       ]),
     ]),
     trigger('error', [
-      state('inDOM', style({opacity: '1'})),
-      state('outDOM', style({opacity: '0'})),
+      state('inDOM', style({ opacity: '1' })),
+      state('outDOM', style({ opacity: '0' })),
       transition('inDOM => outDOM', [
         style({ opacity: '1' }),
         animate('300ms ease-out')
@@ -84,7 +85,7 @@ export class YcbQuestionComponent implements OnInit, OnDestroy {
 
       this.subscriptions = [...this.subscriptions, merged];
 
-    } 
+    }
 
   }
 
@@ -125,6 +126,6 @@ export class YcbQuestionComponent implements OnInit, OnDestroy {
       this.errorInDOM = 'inDOM'
     else if (isValid && this.errorInDOM === 'inDOM')
       this.errorInDOM = 'outDOM'
-    
+
   }
 }

@@ -1,14 +1,17 @@
 import { Component, OnInit } from '@angular/core';
-import { UserFacingProgramComponent } from '../../../shared/components/program/user-facing-program/user-facing-program.component';
 import { MasterScreenerService } from '../master-screener.service';
+import { Animations } from '../../../shared/animations';
 
 @Component({
   selector: 'app-results',
   templateUrl: './results.component.html',
-  styleUrls: ['./results.component.css']
+  styleUrls: ['./results.component.css'],
+  animations: [
+    Animations.flyinHalf
+  ]
 })
 export class ResultsComponent implements OnInit {
-  errorMessage = '';
+  errorMessage: string;
   results = [];
 
   constructor(private masterScreenerService: MasterScreenerService) { }

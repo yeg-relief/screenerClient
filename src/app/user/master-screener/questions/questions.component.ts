@@ -4,7 +4,7 @@ import { FormGroup, FormControl } from '@angular/forms';
 import { MasterScreenerService } from '../master-screener.service';
 import { QuestionControlService } from './question-control.service';
 import { Question } from '../../../admin/models';
-
+import { Animations } from '../../../shared/animations';
 import {
   trigger,
   state,
@@ -18,20 +18,7 @@ import {
   styleUrls: ['./questions.component.css'],
   providers: [QuestionControlService],
   animations: [
-    trigger('fadein', [
-      state('*', style({opacity: 1 })),
-      transition('void => *', [
-        style({opacity: 0 }),
-        animate('400ms ease-out')
-      ]),
-    ]),
-    trigger('flyin', [
-      state('in', style({transform: 'translateX(0)'})),
-      transition('void => *', [
-        style({transform: 'translateX(-50%)'}),
-        animate('400ms ease-out')
-      ]),
-    ]),
+    Animations.flyinHalf
   ]
 })
 export class QuestionsComponent implements OnInit, OnDestroy {

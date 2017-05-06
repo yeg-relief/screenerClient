@@ -12,7 +12,7 @@ export class YcbConditionalQuestionComponent implements OnInit {
   constructor() { }
 
   ngOnInit() {
-    console.log(`YcbConditionalQuestionComponent is deprecated replace with YcbQuestionComponent`);
+    console.warn(`YcbConditionalQuestionComponent is deprecated replace with YcbQuestionComponent`);
   }
 
 }
