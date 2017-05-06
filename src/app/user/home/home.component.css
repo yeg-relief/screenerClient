@@ -42,6 +42,7 @@ section {
 
 main {
   overflow-x: hidden;
+  will-change: opacity;
 }
 
 main > header > .header-title {

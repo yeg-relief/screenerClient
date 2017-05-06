@@ -1,5 +1,5 @@
 <section *ngIf="!loading">
-  <div class="flex flex-column flex-center" [@fadeinAndOut]="fade" (@fadeinAndOut.done)="handleFadeDone($event)">
+  <div class="flex flex-column flex-center program-animation-container" [@fadeinAndOut]="fade" (@fadeinAndOut.done)="handleFadeDone($event)">
     <app-user-facing-program *ngFor="let program of filteredPrograms" [program]="program">
     </app-user-facing-program>
   </div>

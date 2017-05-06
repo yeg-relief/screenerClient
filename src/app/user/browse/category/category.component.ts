@@ -21,6 +21,10 @@ import { Animations } from '../../../shared/animations';
     md-progress-spinner {
       margin: 10% auto 0 auto;
     }
+
+    .program-animation-container {
+      will-change: opacity;
+    }
   `],
   animations: [
     Animations.fadeinAndOut
