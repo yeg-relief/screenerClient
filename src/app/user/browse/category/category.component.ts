@@ -25,6 +25,14 @@ import { Animations } from '../../../shared/animations';
     .program-animation-container {
       will-change: opacity;
     }
+    
+    app-user-facing-program {
+      margin-bottom: 0.5em;
+    }
+
+    app-user-facing-program:first-child {
+      margin-top: 0.5em;
+    }
   `],
   animations: [
     Animations.fadeinAndOut
