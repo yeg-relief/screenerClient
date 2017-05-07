@@ -7,7 +7,17 @@
   border: solid lightgrey 0.1em;
   display: flex;
   flex-direction: column;
-  height: 45vh;
+  height: 54vh;
+}
+
+section {
+  height: 10vh;
+  width: 95%; 
+  margin: 1vh auto;
+  padding: 0.5em;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
 }
 
 #question-container > *:not(button):not([formGroupName="key"]) {
@@ -36,14 +46,6 @@ div[formGroupName="key"] > select {
   width: 80%;
   margin-left: 5vw;
   margin-right: 5vw;
-}
-
-#number-select-options {
-  width: 95%; 
-  margin: 1vh auto;
-  border: solid lightgrey 0.1em;
-  background-color: ghostwhite;
-  padding: 0.5em;
 }
 
 option {

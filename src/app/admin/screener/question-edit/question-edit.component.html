@@ -29,29 +29,29 @@
     <md-option *ngFor="let control of CONTROL_TYPE_VALUES" [value]="control.value"> {{ control.display }} </md-option>
   </md-select>
 
+  <!--
   <div *ngIf=" (form$ | async)?.errors" id="errors"> 
     errors: {{ (form$ | async)?.errors | json }}
   </div>
+  -->
 
-</form>
-
-<section 
-    id="number-select-options" 
-    *ngIf="controlType === 'NumberSelect'"
-    [formGroup]="optionForm"
-    class="flex flex-column">
-    <div class="col-12 flex" [@fade]>
+  <section [formGroup]="optionForm">
+    <div class="col-12 flex" [@controlType]="controlType">
       <md-input-container class="col-9">
         <input mdInput placeholder="option value" formControlName="optionValue">
       </md-input-container>
       <button class="col-2" id="option-add-button" md-raised-button color="primary" [disabled]="!optionForm.valid ? true : null" (click)="addOption()"> ADD </button>
     </div>
 
-    <div class="flex" id="option-chip-container" [@fade]>
+    <div class="flex"  [@controlType]="controlType" id="option-chip-container">
       <md-chip-list>
         <md-chip *ngFor="let option of options" (click)="spliceOption(option)">{{ option }}</md-chip>
       </md-chip-list>
     </div>
-</section>
+  </section>
+
+</form>
+
+
 
 

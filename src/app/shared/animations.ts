@@ -107,16 +107,22 @@ export const Animations: {[key: string]: AnimationEntryMetadata} = {
       }))
     ])
   ]),
-  fade: trigger('fade', [
-    transition(':enter',  [
-      animate('0.3s ease-in', style({
+  fade: trigger('controlType', [
+    state('NumberSelect', style({
+      opacity: 1
+    })),
+    state('*', style({
+      opacity: 0
+    })),
+    transition('NumberSelect => *', [
+      animate('0.3s ease-out', style({
         opacity: 0
       }))
     ]),
-    transition(':leave', [
-      animate('0.3s ease-out', style({
-        opacity: 0,
+    transition('* => NumberSelect', [
+      animate('0.3s ease-in', style({
+        opacity: 1
       }))
-    ])
+    ]),
   ])
 }
