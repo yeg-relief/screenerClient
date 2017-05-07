@@ -11,8 +11,9 @@ import * as fromRoot from '../../reducer';
 import * as fromScreener from '../store/screener-reducer';
 import * as fromKeys from '../../keys/reducer';
 import * as fromPrograms from '../../programs/program-overview/reducer';
-
+import { QuestionEditErrorComponent } from './question-edit-error/question-edit-error.component';
 import { MdInputDirective } from '@angular/material';
+
 const questionOne = new FormGroup({
   key: new FormGroup({
     name: new FormControl('boolean_key'),
@@ -55,7 +56,7 @@ describe('QuestionEditComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ QuestionEditComponent ],
+      declarations: [ QuestionEditComponent, QuestionEditErrorComponent ],
       imports: [ 
         MaterialModule, 
         ReactiveFormsModule,

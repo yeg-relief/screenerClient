@@ -35,6 +35,9 @@ import { ScreenerContainerComponent } from './screener/screener-container/screen
 
 import { ScreenerImportsModule } from './screener/screener-imports/screener-imports.module';
 import { AppModule } from '../app.module';
+import { QuestionEditErrorComponent } from './screener/question-edit/question-edit-error/question-edit-error.component';
+
+
 
 @NgModule({
   imports: [
@@ -51,7 +54,7 @@ import { AppModule } from '../app.module';
     KeysModule,
     ReactiveFormsModule,
     FormsModule,
-    ScreenerImportsModule
+    ScreenerImportsModule,
   ],
   declarations: [
     AdminComponent,
@@ -61,6 +64,7 @@ import { AppModule } from '../app.module';
     QuestionEditComponent,
     ScreenerPreviewComponent,
     ScreenerContainerComponent,
+    QuestionEditErrorComponent,
   ],
   providers: [
     DataService, 

@@ -18,7 +18,7 @@ import { ScreenerToolbarComponent } from '../screener-toolbar/screener-toolbar.c
 import { QuestionEditComponent } from '../question-edit/question-edit.component'
 import { RequestOptions, Headers } from '@angular/http';
 import { AuthService } from '../../core/services/auth.service'
-
+import { QuestionEditErrorComponent } from '../question-edit/question-edit-error/question-edit-error.component';
 declare const btoa;
 
 const questionOne = new FormGroup({
@@ -94,7 +94,8 @@ describe('ScreenerOverviewComponent', () => {
         ScreenerOverviewComponent,
         ScreenerToolbarComponent,
         QuestionListComponent,
-        QuestionEditComponent
+        QuestionEditComponent,
+        QuestionEditErrorComponent
       ]
     })
     .compileComponents();

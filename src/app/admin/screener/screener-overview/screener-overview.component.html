@@ -1,7 +1,7 @@
-<div class="my-wrapper" style="margin: 0 auto; padding-left: 5vw; padding-right: 5vw;" >
+<div class="my-wrapper" [@routeAnimation]>
   <app-screener-toolbar> </app-screener-toolbar>
 
-  <div id="screener-content" class="flex col-12">
+  <div id="screener-content">
     
     <app-question-list 
         id="constant-question-list"
@@ -16,6 +16,7 @@
 
     <app-question-list
         *ngIf="(isExpandable$ | async) === true"
+        [@expandFromConstants]
         id="conditional-question-list"
         [questions]="conditionalQuestions$$ | async"
         [form]="form$ | async"
@@ -28,12 +29,12 @@
     </app-question-list>
 
 
-    <div id="question-content" *ngIf="(selectedConstantID$ | async) !== undefined">
+    <div id="question-content" 
+        *ngIf="(selectedConstantID$ | async) !== undefined" 
+        [@questionEdit]="questionEdit">
       <app-question-edit (delete)="handleDelete($event)"></app-question-edit>
     </div>
 
   </div>
 
-  <div class="p2"></div>
-  
 </div>

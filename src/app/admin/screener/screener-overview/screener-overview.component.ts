@@ -1,4 +1,4 @@
-import { Component, OnInit, Output, EventEmitter, ElementRef } from '@angular/core';
+import { Component, OnInit, Output, EventEmitter, ElementRef, HostBinding } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import { Store } from '@ngrx/store';
 import * as fromRoot from '../../reducer';
@@ -18,14 +18,22 @@ import 'rxjs/add/observable/combineLatest';
 import { DragDropManagerService } from '../question-list/drag-drop-manager.service';
 import { KeyFilterService } from '../services/key-filter.service';
 import { isConditionalQuestion, State } from '../store/screener-reducer';
+import { Animations } from '../../../shared/animations'
 
 @Component({
   selector: 'app-screener-overview',
   templateUrl: './screener-overview.component.html',
   styleUrls: ['./screener-overview.component.css'],
-  providers: [ DragDropManagerService, KeyFilterService ]
+  providers: [ DragDropManagerService, KeyFilterService ],
+  animations: [
+    Animations.routeAnimation,
+    Animations.conditionalQuestions,
+    Animations.questionEdit
+  ]
 })
 export class ScreenerOverviewComponent implements OnInit {
+  
+
   form$: Observable<FormGroup>;
   constantQuestions$: Observable<ID[]>;
   conditionalQuestions$: Observable<ID[]>;
@@ -35,6 +43,7 @@ export class ScreenerOverviewComponent implements OnInit {
   loading$: Observable<boolean>;
   error$: Observable<string>;
   isExpandable$: Observable<boolean>;
+  questionEdit: string;
 
   constant_type: QuestionType = QUESTION_TYPE_CONSTANT;
   conditional_type: QuestionType = QUESTION_TYPE_CONDITIONAL;
@@ -122,6 +131,10 @@ export class ScreenerOverviewComponent implements OnInit {
           Observable.of(form.get([constantID, 'expandable']).value)
         );
       }).multicast( new ReplaySubject(1) ).refCount();
+
+    this.isExpandable$
+      .takeUntil(this.destroySubs$)
+      .subscribe(isExpandable => this.questionEdit = isExpandable.toString())
       
 
     this.selectedConditionalID$ = this.store.let(fromRoot.getSelectedConditionalID);
