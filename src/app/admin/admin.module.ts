@@ -36,6 +36,8 @@ import { ScreenerContainerComponent } from './screener/screener-container/screen
 import { ScreenerImportsModule } from './screener/screener-imports/screener-imports.module';
 import { AppModule } from '../app.module';
 
+
+
 @NgModule({
   imports: [
     CommonModule,
@@ -51,7 +53,7 @@ import { AppModule } from '../app.module';
     KeysModule,
     ReactiveFormsModule,
     FormsModule,
-    ScreenerImportsModule
+    ScreenerImportsModule,
   ],
   declarations: [
     AdminComponent,

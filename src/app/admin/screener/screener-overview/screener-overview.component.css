@@ -1,30 +1,48 @@
-:host {
-  margin: 0 auto; 
-  height: 100%;
+/* for some reason :host isn't working so i have to wrap component */
+.my-wrapper {
   width: 95vw;
-}
-
-#question-content {
-  height: 55vh;
-  width: 100%;
-  margin-top: 2em;
+  height: 90vh;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  align-content: center;
+  justify-content: space-between;
+  padding: 0.5em 0;
 }
 
 #screener-content {
-  max-height: 55vh;
+  height: 55vh;
   width: 100%;
+  display: flex;
+}
+
+#screener-content > * {
+  height: 100%;
 }
 
 app-question-list {
-  height: 55vh;
+  width: 15vw
+}
+
+#question-content {
+  width: 60vw
+}
+
+@media screen and (max-width: 1000px) {
+  app-question-list {
+    width: 20vw
+  }
+
+  #question-content {
+    width: 53vw;
+  }
 }
 
 #constant-question-list {
-  flex: none;
-  width: 17em;
+  z-index: 999;
 }
 
 #conditional-question-list {
-  flex: none;
-  width: 15em !important;
+  position: relative;
+  will-change: transformX;
 }
