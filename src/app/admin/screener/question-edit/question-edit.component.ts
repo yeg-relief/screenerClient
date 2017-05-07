@@ -18,7 +18,8 @@ type QUESTION_KEY_TYPE = 'integer' | 'boolean' | 'invalid' | 'broken' | '';
   templateUrl: './question-edit.component.html',
   styleUrls: ['./question-edit.component.css'],
   animations: [
-    Animations.fade
+    Animations.fade,
+    Animations.genericFade
   ]
 })
 export class QuestionEditComponent implements OnInit, OnDestroy {
@@ -34,6 +35,7 @@ export class QuestionEditComponent implements OnInit, OnDestroy {
 
   selectedQuestionID$: Observable<ID>;
   form$: Observable<FormGroup>;
+  formErrors$: Observable<any[]>;
   selectedKeyType$: Observable<QUESTION_KEY_TYPE>;
   unusedKeys: Key[] = [];
   optionForm: FormGroup;
@@ -85,7 +87,11 @@ export class QuestionEditComponent implements OnInit, OnDestroy {
         .takeUntil(this.destroySubs$)
         .subscribe( keys => this.unusedKeys = [...keys])
           
-
+      /*
+      .map(form => form.errors)
+      .do( _ => console.log('FORM ERRORS'))
+      .map( errorObject => Object.keys(errorObject).map(key => errorObject[key]))*/
+      
     // local form(s)
 
     const digit_pattern = '^\\d+$'
@@ -153,6 +159,11 @@ export class QuestionEditComponent implements OnInit, OnDestroy {
         group.get('options').setValue([...group.get('options').value, optionValue]);
         this.optionForm.get('optionValue').setValue('');
       })
+  }
+
+  transformErrors(errorObj){
+    const errors = errorObj.errors;
+    return Object.keys(errors).map(key => errors[key]);
   }
 
   updateInternalControlType(controlType$: Observable<ControlType>): Observable<ControlType> {

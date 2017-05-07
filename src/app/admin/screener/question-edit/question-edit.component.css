@@ -1,13 +1,35 @@
-#question-container {
-  width: 100%;
-  justify-content: space-around; 
+main {
+  display: flex;
+  justify-content: space-between;
   background-color: whitesmoke;
   padding: 1em 0.5em 0.5em 1em;
   border-radius: 10px; 
   border: solid lightgrey 0.1em;
+  height: 100%;
+}
+
+#errors-container {
+  width: 15%;
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+
+#errors {
   display: flex;
   flex-direction: column;
-  height: 54vh;
+  align-content: flex-start;
+  width: 100%
+}
+
+#errors > app-question-edit-error {
+  margin-bottom: 0.25em;
+}
+
+#question-container {
+  width: 85%;
+  justify-content: space-around; 
+  display: flex;
+  flex-direction: column;
 }
 
 section {
@@ -22,14 +44,14 @@ section {
 
 #question-container > *:not(button):not([formGroupName="key"]) {
   padding: 1em;
-  width: 50%;
+  width: 70%;
   margin: 0 auto;
 }
 
  
 div[formGroupName="key"] {
   width: 30%;
-  margin-left: 25%;
+  margin-left: 15%;
 }
 
 div[formGroupName="key"] > select {
@@ -71,12 +93,4 @@ md-chip {
   margin-top: 1em; 
   margin-bottom: 1em;
   width: 100%;
-}
-
-
-
-#errors {
-  margin: 0 auto;
-  border: 0.15em solid red;
-  padding: 0.1em;
 }

@@ -15,6 +15,16 @@ export const Animations: {[key: string]: AnimationEntryMetadata} = {
       animate('400ms ease-out')
     ]),
   ]),
+  genericFade: trigger('genericFade', [
+    transition(':enter', [
+      style({opacity: 0}),
+      animate('700ms-ease-in')
+    ]),
+    transition(':leave', [
+      style({opacity: 1}),
+      animate('700ms-ease-out')
+    ])
+  ]),
   fadeinAndOut: trigger('fadeinAndOut', [
     state('in', style({opacity: '1'})),
     state('out', style({opacity: '0'})),

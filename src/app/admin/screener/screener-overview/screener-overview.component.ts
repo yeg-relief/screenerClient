@@ -198,9 +198,5 @@ export class ScreenerOverviewComponent implements OnInit {
 
   }
 
-  animationDone($event) {
-    console.log($event);
-  }
-
   ngOnDestroy() { this.destroySubs$.next(); }
 }

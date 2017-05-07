@@ -31,8 +31,7 @@
 
     <div id="question-content" 
         *ngIf="(selectedConstantID$ | async) !== undefined" 
-        [@questionEdit]="questionEdit"
-        (@questionEdit.done)="animationDone($event)">
+        [@questionEdit]="questionEdit">
       <app-question-edit (delete)="handleDelete($event)"></app-question-edit>
     </div>
 

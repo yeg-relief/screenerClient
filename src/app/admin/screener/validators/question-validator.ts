@@ -37,45 +37,45 @@ export function questionValidator(control: AbstractControl): {[key: string]: any
 
 
     if(label.length === 0){
-        errors = (<any>Object).assign({}, errors, {emptyLabel: true } ); 
+        errors = (<any>Object).assign({}, errors, {emptyLabel: 'This question does not have a label.' } ); 
     } 
 
     if(controlType === 'CheckBox' && key.type !== 'boolean' ){
-        errors = (<any>Object).assign({}, errors, {checkbox_mismatch: true } ); 
+        errors = (<any>Object).assign({}, errors, {checkbox_mismatch: 'A CheckBox question requires a boolean key.' } ); 
     } 
 
     if(controlType !== 'CheckBox' && key.type === 'boolean'){
-        errors = (<any>Object).assign({}, errors, {checkbox_mismatch: true } ); 
+        errors = (<any>Object).assign({}, errors, {checkbox_mismatch: 'A boolean key requires a CheckBox question.' } ); 
     } 
 
     if(controlType === 'NumberSelect' && options.length === 0){
-        errors = (<any>Object).assign({}, errors, {no_options: true} ); 
+        errors = (<any>Object).assign({}, errors, {no_options: 'This question requires options.'} ); 
     } 
 
     const rawControlType = <string>controlType;
     if(rawControlType === 'invalid')
     {
-        errors = (<any>Object).assign({}, errors, {unnassigned_controlType: rawControlType} );
+        errors = (<any>Object).assign({}, errors, {unnassigned_controlType: 'You need to assign a control type.'} );
     }
 
     if(key.name.substr(0, 7) === 'invalid') {
-        errors = (<any>Object).assign({}, errors, {unnassigned_key: true} );
+        errors = (<any>Object).assign({}, errors, {unnassigned_key: 'You need to assign a key.'} );
     }
 
     if(key.type === '') {
-        errors = (<any>Object).assign({}, errors, {invalid_key_type: true} );
+        errors = (<any>Object).assign({}, errors, {invalid_key_type: 'You need to assign a key.'} );
     }
 
     if(expandable && controlType !== 'CheckBox' && key.type !== 'boolean') {
-        errors = (<any>Object).assign({}, errors, {invalid_expandable: true} );
+        errors = (<any>Object).assign({}, errors, {invalid_expandable: 'An expandable question has to have a boolean key and a CheckBox.'} );
     }
 
     if(expandable && conditionals.length === 0) {
-        errors = (<any>Object).assign({}, errors, {empty_expandable: true} );
+        errors = (<any>Object).assign({}, errors, {empty_expandable: 'An expandable question requires conditional questions'} );
     }
 
     if(!expandable && conditionals.length > 0) {
-        errors = (<any>Object).assign({}, errors, {not_expandable_with_conditionals: true})
+        errors = (<any>Object).assign({}, errors, {not_expandable_with_conditionals: 'Conditional questions need to be within an expandable question.'})
     }
 
 

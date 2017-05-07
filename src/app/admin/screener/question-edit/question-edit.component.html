@@ -1,56 +1,60 @@
-<form [formGroup]="form$ | async" *ngIf="(form$ | async ) !== null" id="question-container">
-
-  <button md-mini-fab color="warn" (click)="deleteQuestion()">
-    <md-icon>clear</md-icon>
-  </button>
-
-  <md-input-container >
-    <input mdInput placeholder="Question Label" formControlName="label">
-  </md-input-container>
-
-  <div formGroupName="key" >
-    <select placeholder="Key" formControlName="name">
-      <option selected disabled [value]="(form$ | async)?.get(['key', 'name'])?.value">
-        <pre> {{ (form$ | async)?.get(['key', 'name']).value }} : {{ (form$ | async)?.get(['key', 'type']).value }} </pre>
-      </option>
-      <option *ngFor="let unusedKey of unusedKeys" [value]="unusedKey.name">
-        <pre>{{ unusedKey.name }} : {{ unusedKey.type }}</pre>
-      </option>
-    </select>
+<main [formGroup]="form$ | async" *ngIf="(form$ | async ) !== null">
+  <div id="errors-container">
+    <div *ngIf="(form$ | async).errors !== null" id="errors">
+      <app-question-edit-error *ngFor="let error of transformErrors( (form$ | async) )" [error]="error">
+      </app-question-edit-error>
+    </div>
   </div>
-  
-  <div class="checkbox-container">
-    <md-checkbox formControlName="expandable">
-      Expandable
-    </md-checkbox>
-  </div>
+  <form id="question-container" [formGroup]="form$ | async">
 
-  <md-select placeholder="Input Type" formControlName="controlType">
-    <md-option *ngFor="let control of CONTROL_TYPE_VALUES" [value]="control.value"> {{ control.display }} </md-option>
-  </md-select>
+    <button md-mini-fab color="warn" (click)="deleteQuestion()">
+      <md-icon>clear</md-icon>
+    </button>
 
-  <!--
-  <div *ngIf=" (form$ | async)?.errors" id="errors"> 
-    errors: {{ (form$ | async)?.errors | json }}
-  </div>
-  -->
+    <md-input-container >
+      <input mdInput placeholder="Question Label" formControlName="label">
+    </md-input-container>
 
-  <section [formGroup]="optionForm">
-    <div class="col-12 flex" [@controlType]="controlType">
-      <md-input-container class="col-9">
-        <input mdInput placeholder="option value" formControlName="optionValue">
-      </md-input-container>
-      <button class="col-2" id="option-add-button" md-raised-button color="primary" [disabled]="!optionForm.valid ? true : null" (click)="addOption()"> ADD </button>
+    <div formGroupName="key" >
+      <select placeholder="Key" formControlName="name">
+        <option selected disabled [value]="(form$ | async)?.get(['key', 'name'])?.value">
+          <pre> {{ (form$ | async)?.get(['key', 'name']).value }} : {{ (form$ | async)?.get(['key', 'type']).value }} </pre>
+        </option>
+        <option *ngFor="let unusedKey of unusedKeys" [value]="unusedKey.name">
+          <pre>{{ unusedKey.name }} : {{ unusedKey.type }}</pre>
+        </option>
+      </select>
+    </div>
+    
+    <div class="checkbox-container">
+      <md-checkbox formControlName="expandable">
+        Expandable
+      </md-checkbox>
     </div>
 
-    <div class="flex"  [@controlType]="controlType" id="option-chip-container">
-      <md-chip-list>
-        <md-chip *ngFor="let option of options" (click)="spliceOption(option)">{{ option }}</md-chip>
-      </md-chip-list>
-    </div>
-  </section>
+    <md-select placeholder="Input Type" formControlName="controlType">
+      <md-option *ngFor="let control of CONTROL_TYPE_VALUES" [value]="control.value"> {{ control.display }} </md-option>
+    </md-select>
 
-</form>
+    <section [formGroup]="optionForm">
+      <div class="col-12 flex" [@controlType]="controlType">
+        <md-input-container class="col-9">
+          <input mdInput placeholder="option value" formControlName="optionValue">
+        </md-input-container>
+        <button class="col-2" id="option-add-button" md-raised-button color="primary" [disabled]="!optionForm.valid ? true : null" (click)="addOption()"> ADD </button>
+      </div>
+
+      <div class="flex"  [@controlType]="controlType" id="option-chip-container">
+        <md-chip-list>
+          <md-chip *ngFor="let option of options" (click)="spliceOption(option)">{{ option }}</md-chip>
+        </md-chip-list>
+      </div>
+    </section>
+
+  </form>
+</main>
+
+
 
 
 

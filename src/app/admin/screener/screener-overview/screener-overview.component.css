@@ -45,4 +45,5 @@ app-question-list {
 #conditional-question-list {
   position: relative;
   will-change: transformX;
+  z-index: 999;
 }
