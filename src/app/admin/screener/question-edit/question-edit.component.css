@@ -1,37 +1,49 @@
-:host {
-  width: 100%; 
-}
-
 #question-container {
-  width: 80%;
-  margin-left: 5vw;  
-  justify-content: space-between; 
+  width: 100%;
+  justify-content: space-around; 
   background-color: whitesmoke;
   padding: 1em 0.5em 0.5em 1em;
   border-radius: 10px; 
-  border: 0.25em solid darkslateblue;
+  border: solid lightgrey 0.1em;
+  display: flex;
+  flex-direction: column;
+  height: 45vh;
 }
 
-#delete-container {
-  margin-left: 80%; 
-  width: 20%; 
-  padding-top: 1em; 
-  padding-bottom:1em
+#question-container > *:not(button):not([formGroupName="key"]) {
+  padding: 1em;
+  width: 50%;
+  margin: 0 auto;
+}
+
+ 
+div[formGroupName="key"] {
+  width: 30%;
+  margin-left: 25%;
+}
+
+div[formGroupName="key"] > select {
+  width: 100%;
+  position: relative;
+  background: darkorange;
+}
+
+#question-container > button {
+  margin-left: 90%; 
 }
 
 #option-chip-container{
   width: 80%;
   margin-left: 5vw;
   margin-right: 5vw;
-  background-color: lightgoldenrodyellow
 }
 
 #number-select-options {
-  width: 80%; 
-  margin: 1vh 5vw;
-  padding-bottom: 1em;
-  border: 0.25em solid darkslateblue;
-  padding: 0.25em;
+  width: 95%; 
+  margin: 1vh auto;
+  border: solid lightgrey 0.1em;
+  background-color: ghostwhite;
+  padding: 0.5em;
 }
 
 option {
@@ -59,12 +71,7 @@ md-chip {
   width: 100%;
 }
 
-.question-container-child {
-  padding: 1em;
-  width: 70%;
-  margin-left: 15%;
-  margin-right: 15%; 
-}
+
 
 #errors {
   margin: 0 auto;

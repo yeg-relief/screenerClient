@@ -10,12 +10,16 @@ import * as actions from '../store/screener-actions';
 import 'rxjs/add/operator/pairwise';
 import 'rxjs/add/operator/zip';
 import 'rxjs/add/operator/combineLatest';
+import { Animations } from '../../../shared/animations'
 type QUESTION_KEY_TYPE = 'integer' | 'boolean' | 'invalid' | 'broken' | '';
 
 @Component({
   selector: 'app-question-edit',
   templateUrl: './question-edit.component.html',
   styleUrls: ['./question-edit.component.css'],
+  animations: [
+    Animations.fade
+  ]
 })
 export class QuestionEditComponent implements OnInit, OnDestroy {
   readonly INVALID_TYPE: QUESTION_KEY_TYPE = 'invalid';

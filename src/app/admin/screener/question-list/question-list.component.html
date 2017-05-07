@@ -11,7 +11,7 @@
       [ngClass]="containerClasses">
     <h3 md-subheader *ngIf="type === constant_type">Screener Questions</h3>
     <h3 md-subheader *ngIf="type === conditional_type">Conditional Questions</h3>
-    <button class="col-2" md-mini-fab style="background-color:#0074d9" (click)="handleAddQuestion()"> 
+    <button class="col-2" md-mini-fab (click)="handleAddQuestion()"> 
       <i class="material-icons">add</i>
     </button>
   </div>

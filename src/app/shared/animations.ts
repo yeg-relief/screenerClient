@@ -76,11 +76,13 @@ export const Animations: {[key: string]: AnimationEntryMetadata} = {
   questionEdit: trigger('questionEdit', [
     state('true', 
       style({
-        transform: 'translateX(0)'
+        transform: 'translateX(0)',
+        opacity: 1
       })
     ),
     state('false', style({
-        transform: 'translateX(0)'
+        transform: 'translateX(0)',
+        opacity: 1
       })
     ),
     transition('true => false', [
@@ -88,5 +90,33 @@ export const Animations: {[key: string]: AnimationEntryMetadata} = {
         transform: 'translateX(-15vw)'
       }))
     ]),
+    transition('false => true', [
+      animate('0.3s ease-in', style({
+        transform: 'translateX(0.5vw)'
+      }))
+    ]),
+    transition(':enter', [
+      style({
+        opacity: 0,
+      }),
+      animate('0.3s ease-in')
+    ]),
+    transition(':leave', [
+      animate('0.3s ease-out', style({
+        opacity: 0,
+      }))
+    ])
+  ]),
+  fade: trigger('fade', [
+    transition(':enter',  [
+      animate('0.3s ease-in', style({
+        opacity: 0
+      }))
+    ]),
+    transition(':leave', [
+      animate('0.3s ease-out', style({
+        opacity: 0,
+      }))
+    ])
   ])
 }

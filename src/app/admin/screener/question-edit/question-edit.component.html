@@ -1,14 +1,15 @@
-<form [formGroup]="form$ | async" *ngIf="(form$ | async ) !== null" class="flex flex-column" id="question-container">
-  <div id="delete-container" class="flex flex-center">
-    <button md-mini-fab color="warn" style="margin: 0 auto" (click)="deleteQuestion()"><md-icon>clear</md-icon></button>
-  </div>
+<form [formGroup]="form$ | async" *ngIf="(form$ | async ) !== null" id="question-container">
 
-  <md-input-container class="question-container-child">
+  <button md-mini-fab color="warn" (click)="deleteQuestion()">
+    <md-icon>clear</md-icon>
+  </button>
+
+  <md-input-container >
     <input mdInput placeholder="Question Label" formControlName="label">
   </md-input-container>
 
-  <div formGroupName="key" class="question-container-child">
-    <select placeholder="Key" class="col-12" formControlName="name">
+  <div formGroupName="key" >
+    <select placeholder="Key" formControlName="name">
       <option selected disabled [value]="(form$ | async)?.get(['key', 'name'])?.value">
         <pre> {{ (form$ | async)?.get(['key', 'name']).value }} : {{ (form$ | async)?.get(['key', 'type']).value }} </pre>
       </option>
@@ -18,13 +19,13 @@
     </select>
   </div>
   
-  <div class="checkbox-container question-container-child">
+  <div class="checkbox-container">
     <md-checkbox formControlName="expandable">
       Expandable
     </md-checkbox>
   </div>
 
-  <md-select placeholder="Input Type" formControlName="controlType" class="question-container-child">
+  <md-select placeholder="Input Type" formControlName="controlType">
     <md-option *ngFor="let control of CONTROL_TYPE_VALUES" [value]="control.value"> {{ control.display }} </md-option>
   </md-select>
 
@@ -39,14 +40,14 @@
     *ngIf="controlType === 'NumberSelect'"
     [formGroup]="optionForm"
     class="flex flex-column">
-    <div class="col-12 flex">
+    <div class="col-12 flex" [@fade]>
       <md-input-container class="col-9">
         <input mdInput placeholder="option value" formControlName="optionValue">
       </md-input-container>
       <button class="col-2" id="option-add-button" md-raised-button color="primary" [disabled]="!optionForm.valid ? true : null" (click)="addOption()"> ADD </button>
     </div>
 
-    <div class="flex" id="option-chip-container">
+    <div class="flex" id="option-chip-container" [@fade]>
       <md-chip-list>
         <md-chip *ngFor="let option of options" (click)="spliceOption(option)">{{ option }}</md-chip>
       </md-chip-list>
