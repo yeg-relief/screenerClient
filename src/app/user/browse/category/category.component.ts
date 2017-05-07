@@ -35,8 +35,7 @@ import { Animations } from '../../../shared/animations';
     }
   `],
   animations: [
-    Animations.fadeinAndOut,
-    Animations.flyinHalf
+    Animations.fadeinAndOut
   ]
 })
 export class CategoryComponent implements OnInit{
