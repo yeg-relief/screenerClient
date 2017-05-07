@@ -5,7 +5,7 @@
       </app-question-edit-error>
     </div>
   </div>
-  <form id="question-container" [formGroup]="form$ | async">
+  <form id="question-container" *ngIf="fadeState === 'in'" [formGroup]="form$ | async" [@fadeinAndOut]="fadeState">
 
     <button md-mini-fab color="warn" (click)="deleteQuestion()">
       <md-icon>clear</md-icon>
