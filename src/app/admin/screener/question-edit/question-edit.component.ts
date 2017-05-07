@@ -10,6 +10,7 @@ import * as actions from '../store/screener-actions';
 import 'rxjs/add/operator/pairwise';
 import 'rxjs/add/operator/zip';
 import 'rxjs/add/operator/combineLatest';
+import 'rxjs/add/operator/throttleTime';
 import { Animations } from '../../../shared/animations'
 type QUESTION_KEY_TYPE = 'integer' | 'boolean' | 'invalid' | 'broken' | '';
 
@@ -19,7 +20,7 @@ type QUESTION_KEY_TYPE = 'integer' | 'boolean' | 'invalid' | 'broken' | '';
   styleUrls: ['./question-edit.component.css'],
   animations: [
     Animations.fade,
-    Animations.genericFade
+    Animations.fadeinAndOut
   ]
 })
 export class QuestionEditComponent implements OnInit, OnDestroy {
@@ -39,6 +40,7 @@ export class QuestionEditComponent implements OnInit, OnDestroy {
   selectedKeyType$: Observable<QUESTION_KEY_TYPE>;
   unusedKeys: Key[] = [];
   optionForm: FormGroup;
+  fadeState = 'in';
 
   controlType: ControlType = '';
   options: number[] = [];
@@ -71,7 +73,6 @@ export class QuestionEditComponent implements OnInit, OnDestroy {
 
       })
       .filter(id => id !== undefined)
-      
       .multicast( new ReplaySubject(1)).refCount()
 
     this.form$ = this.selectedQuestionID$
@@ -87,11 +88,13 @@ export class QuestionEditComponent implements OnInit, OnDestroy {
         .takeUntil(this.destroySubs$)
         .subscribe( keys => this.unusedKeys = [...keys])
           
-      /*
-      .map(form => form.errors)
-      .do( _ => console.log('FORM ERRORS'))
-      .map( errorObject => Object.keys(errorObject).map(key => errorObject[key]))*/
-      
+    const blah = this.form$
+      .takeUntil(this.destroySubs$)
+      .throttleTime(400)
+      .do(_ => this.fadeState = 'out')
+      .delay(300)
+      .do(_ => this.fadeState = 'in')
+      .subscribe()
     // local form(s)
 
     const digit_pattern = '^\\d+$'
