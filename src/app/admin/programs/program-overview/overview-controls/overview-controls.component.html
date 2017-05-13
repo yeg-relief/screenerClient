@@ -1,28 +1,29 @@
-<div [formGroup]="form" class="flex flex-center col-12" style="margin-top: 10px; margin-bottom: 10px;">
-  <div class="col-1"></div>
+<main [formGroup]="form">
+
   <button 
-    md-mini-fab color="primary" 
+    md-raised-button 
     *ngIf="loaded" 
     routerLink="/admin/programs/edit/new"
     [attr.disabled]="deleteInitiated? true : null">
-      <i class="material-icons">add</i>
+    New Program
   </button>
 
-  <div class="col-1"></div>
+  <div>
+    
+    <select formControlName="type" id="programFilter">
+      <option selected disabled [value]="''"> select filter type </option>
+      <option [value]="'none'"> no filter </option>
+      <option [value]="'tag'"> filter by tag </option>
+      <option [value]="'title'"> filter by title </option>
+    </select>
 
-  <select class="col-3" formControlName="type">
-    <option selected disabled [value]="''"> select filter type </option>
-    <option [value]="'none'"> no filter </option>
-    <option [value]="'tag'"> filter by tag </option>
-    <option [value]="'title'"> filter by title </option>
-  </select>
-  
+    <section *ngIf="filter.length > 0 && filter !== 'none'" [@fadeinAndOut]>
+      <md-icon >search</md-icon>
+      <md-input-container > 
+        <input mdInput  placeholder="filter">
+      </md-input-container>
+    </section>
+  </div>
 
-  <div class="px2"></div>
-
-  <md-input-container> <input mdInput placeholder="filter" formControlName="value"></md-input-container>
-
-  <div class="col-1 flex-grow"></div>
-
-</div>
+</main>
 

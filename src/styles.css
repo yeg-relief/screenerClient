@@ -3,7 +3,7 @@
 @import '~basscss/css/basscss.min.css';
 
 
-@import '~@angular/material/core/theming/prebuilt/indigo-pink.css';
+@import '~@angular/material/prebuilt-themes/indigo-pink.css';
 
 body {
   margin: 0;

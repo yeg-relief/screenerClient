@@ -2,13 +2,71 @@ option[value="invalid"][disabled] {
   display: none;
 }
 
+option {
+  background-color: darkorange;
+  color: white;
+}
+
 select{
   min-height: 3em;
+  position: relative;
+  background-color: darkorange;
+  color: white;
 }
 
-
-:host {
-  width: 100%;
+main {
+  width: 75%;
   min-height: 5em;
+  display: flex;
+  align-items: center;
+  margin: 2em auto 0 auto;
+  background-color: ghostwhite;
+  border: solid #d4c9c9 1px;
 }
 
+main > * {
+  height: 3em;
+}
+
+main > *:not(:first-child) {
+  margin-left: 0.5em;
+
+}
+
+main > *:first-child {
+  margin-left: 15%;
+}
+
+main > div {
+  display: flex;
+  width: 50%;
+  align-items: center;
+}
+
+main > div > * {
+  margin-right: 0.5em;
+}
+
+md-icon {
+  font-size: 36px;
+  padding-bottom: 2px;
+}
+
+button {
+  background-color: darkorange;
+  color: white;
+  font-weight: bold;
+}
+
+section {
+  display: flex;
+}
+
+section > md-icon {
+  padding-top: 0.25em;
+}
+
+section > *:not(:first-child) {
+  margin-left: 0.5em;
+  align-items: center;
+}

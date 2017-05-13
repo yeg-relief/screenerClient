@@ -10,3 +10,7 @@
   padding-bottom: 10em;
   background-color: lightgoldenrodyellow;
 }
+
+app-overview-controls {
+  padding-top: 2em;
+}

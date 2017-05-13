@@ -1,23 +1,22 @@
-<app-bread-crumb>
-  <app-overview-controls (onFilter)="handleFilter($event)" [loaded]="!(loading$ | async)"></app-overview-controls>
-</app-bread-crumb>
+<app-overview-controls (onFilter)="handleFilter($event)" [loaded]="!(loading$ | async)"></app-overview-controls>
+
 
 <div class="program-container" *ngIf="!(loading$ | async)">
   <div *ngFor="let program of (programs$ | async)" class="col-12 program flex">
     <div class="col-2"></div>
     <app-program-detail class="col-10" [program]="program"></app-program-detail>
     <div class="col-2 py2">
-      <app-program-detail-control [program]="program" (deleteEvent)="handleDelete($event)"></app-program-detail-control>
+      <app-program-detail-control [program]="program"></app-program-detail-control>
     </div>
   </div>
 </div>
 <div class="clearfix flex py2" *ngIf="(loading$ | async)">
   <div class="col-4"></div>
-  <md-progress-circle 
+  <md-progress-spinner 
     class="flex-grow" 
     color="accent" 
     mode="indeterminate">
-  </md-progress-circle>
+  </md-progress-spinner>
   <div class="col-4"></div>
 </div>
 <div class="empty-statement-container border rounded bg-maroon white py2 flex flex-center col-12" 
