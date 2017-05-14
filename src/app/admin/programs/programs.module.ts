@@ -14,6 +14,7 @@ import { ApplicationSideComponent } from './program-edit/application-side/applic
 import { ReactiveFormsModule } from '@angular/forms';
 import { ConditionEditComponent } from './program-edit/condition-edit/condition-edit.component';
 import { QueryEditComponent } from './program-edit/query-edit/query-edit.component';
+import { ProgramListPaginatorComponent } from './program-overview/program-list-paginator/program-list-paginator.component';
 
 @NgModule({
   imports: [
@@ -33,7 +34,8 @@ import { QueryEditComponent } from './program-edit/query-edit/query-edit.compone
     DeleteConfirmationComponent,
     ApplicationSideComponent,
     ConditionEditComponent,
-    QueryEditComponent
+    QueryEditComponent,
+    ProgramListPaginatorComponent
   ],
   providers: []
 })

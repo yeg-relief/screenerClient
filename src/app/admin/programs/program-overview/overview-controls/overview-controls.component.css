@@ -15,6 +15,7 @@ select{
 }
 
 main {
+  position: relative;
   width: 75%;
   min-height: 5em;
   display: flex;
@@ -69,4 +70,14 @@ section > md-icon {
 section > *:not(:first-child) {
   margin-left: 0.5em;
   align-items: center;
+}
+
+md-icon.filter_active {
+  color: darkorange;
+  opacity: 1;
+}
+
+md-icon.filter_inactive {
+  color: black;
+  opacity: 0.6;
 }

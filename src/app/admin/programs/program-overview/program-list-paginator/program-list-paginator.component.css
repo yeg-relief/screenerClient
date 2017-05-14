@@ -1,0 +1,58 @@
+main.container { 
+  width: 50%;
+  margin: 0 auto;
+  border-left: solid lightgray 1px;
+  border-right: solid lightgray 1px;
+  border-bottom: solid lightgray 1px;
+  background-color: ghostwhite;
+  display: flex;
+  flex-direction: row;
+}
+
+main > * {
+  text-align: center;
+}
+
+div.previous-page {
+  margin-left: 40%;
+  width: 1em;
+}
+
+div.controls {
+  display: flex;
+}
+
+div.next-page {
+  margin-right: 40%;
+  width: 1em;
+}
+
+div.current-page {
+  color: darkorange;
+  width: 1em;
+}
+
+md-icon:not(.disabled) {
+  cursor: pointer;
+  opacity: 1;
+}
+
+md-icon:hover:not(.disabled) {
+  color: darkorange;
+}
+
+md-icon.disabled {
+  cursor: default;
+  opacity: 0.6;
+}
+
+aside {
+  width: 50%;
+  margin: 0 auto;
+  font-weight: bolder;
+  font-style: 16px;
+  line-height: 16px;
+  padding-top: 1px;
+  padding-left: 1px;
+}
+

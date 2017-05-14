@@ -1,0 +1,10 @@
+<main class="container">
+  <div class="previous-page" > {{previousPage}} </div>
+  <div class="controls">
+    <md-icon [ngClass]="pages.previousPage" (click)="pageChange('previous')">chevron_left</md-icon>
+    <div class="current-page"> {{ metaData.currentPage }} </div>
+    <md-icon [ngClass]="pages.nextPage" (click)="pageChange('next')"> chevron_right</md-icon>
+  </div>
+  <div class="next-page" > {{nextPage}} </div> 
+</main>
+<aside>Showing page {{metaData.currentPage + 1 }} of {{metaData.totalPages}} page(s) </aside>

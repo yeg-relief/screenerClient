@@ -11,16 +11,15 @@
   <div>
     
     <select formControlName="type" id="programFilter">
-      <option selected disabled [value]="''"> select filter type </option>
       <option [value]="'none'"> no filter </option>
       <option [value]="'tag'"> filter by tag </option>
       <option [value]="'title'"> filter by title </option>
     </select>
 
-    <section *ngIf="filter.length > 0 && filter !== 'none'" [@fadeinAndOut]>
-      <md-icon >search</md-icon>
+    <section [@fadeinAndOut]>
+      <md-icon [ngClass]="styleIcon$ | async">search</md-icon>
       <md-input-container > 
-        <input mdInput  placeholder="filter">
+        <input mdInput placeholder="filter" formControlName="value" (keyup)="blurOnEnter($event)">
       </md-input-container>
     </section>
   </div>

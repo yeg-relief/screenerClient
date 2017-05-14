@@ -1,27 +1,23 @@
-<app-overview-controls (onFilter)="handleFilter($event)" [loaded]="!(loading$ | async)"></app-overview-controls>
+<div id="animation-wrapper" [@routeAnimation]>
+  <app-overview-controls [loaded]="!(loading$ | async)"></app-overview-controls>
 
+  <app-program-list-paginator [metaData]="pageMetaData$ | async"></app-program-list-paginator>
 
-<div class="program-container" *ngIf="!(loading$ | async)">
-  <div *ngFor="let program of (programs$ | async)" class="col-12 program flex">
-    <div class="col-2"></div>
-    <app-program-detail class="col-10" [program]="program"></app-program-detail>
-    <div class="col-2 py2">
+  <div class="program-list-container" *ngIf="(programs$ | async)?.length > 0 && !(loading$ | async)" >
+    <div class="program" *ngFor="let program of (programs$ | async)" [@fadeinAndOut]>
+      <app-program-detail [program]="program"></app-program-detail>
       <app-program-detail-control [program]="program"></app-program-detail-control>
     </div>
   </div>
-</div>
-<div class="clearfix flex py2" *ngIf="(loading$ | async)">
-  <div class="col-4"></div>
+
   <md-progress-spinner 
-    class="flex-grow" 
+    [@fadeinAndOut]
+    *ngIf="(loading$ | async)" 
     color="accent" 
     mode="indeterminate">
   </md-progress-spinner>
-  <div class="col-4"></div>
-</div>
-<div class="empty-statement-container border rounded bg-maroon white py2 flex flex-center col-12" 
-  *ngIf="(programs$ | async)?.length === 0 && !(loading$ | async)">
-  <div class="col-4"></div>
-  <div class="emtpy-statement col-4 center">No programs found</div>
-  <div class="col-4"></div>
+
+  <div class="empty-statement" *ngIf="(programs$ | async)?.length === 0 && !(loading$ | async)" [@fadeinAndOut]>
+    <div>No programs found</div>
+  </div>
 </div>
