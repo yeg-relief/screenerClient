@@ -5,13 +5,12 @@ option[value="invalid"][disabled] {
 option {
   background-color: darkorange;
   color: white;
+  padding-bottom: 0.5em;
 }
 
-select{
-  min-height: 3em;
-  position: relative;
-  background-color: darkorange;
-  color: white;
+md-select{
+  padding-bottom: 0.2em;
+  width: 30%;
 }
 
 main {
@@ -20,13 +19,14 @@ main {
   min-height: 5em;
   display: flex;
   align-items: center;
+  justify-content: flex-start;
   margin: 2em auto 0 auto;
   background-color: ghostwhite;
   border: solid #d4c9c9 1px;
 }
 
 main > * {
-  height: 3em;
+  height: 100%;
 }
 
 main > *:not(:first-child) {
@@ -54,10 +54,24 @@ md-icon {
 }
 
 button {
-  background-color: darkorange;
-  color: white;
-  font-weight: bold;
+  background-color: transparent;
 }
+
+i.material-icons {
+  background-color: orange;
+  color: white;
+}
+
+i.material-icons.select-option {
+  background-color: inherit;
+  color: darkorange;
+}
+
+i.material-icons.select-option.filter_inactive {
+  color: black;
+  opacity: 0.6;
+}
+
 
 section {
   display: flex;
@@ -81,3 +95,9 @@ md-icon.filter_inactive {
   color: black;
   opacity: 0.6;
 }
+
+md-option {
+  display: flex;
+  align-items: center;
+}
+

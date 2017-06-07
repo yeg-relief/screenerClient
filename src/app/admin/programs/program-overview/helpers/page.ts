@@ -3,7 +3,7 @@ import { ProgramState } from './program-state';
 import { PageMetaData, pageMetaDataFactory } from './page-meta-data';
 import { ApplicationFacingProgram } from '../../../models';
 
-export const PAGE_SIZE = 1;
+export const PAGE_SIZE = 10;
 export class Page<T> {
   pageContent: T[];
 

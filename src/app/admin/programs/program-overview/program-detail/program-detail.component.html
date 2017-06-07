@@ -1,11 +1,8 @@
-<div class="py1"></div>
 <md-card>
-  <md-button-toggle-group (change)="viewChange($event.value)" [value]="views[0].value">
-    <md-button-toggle *ngFor="let view of views" [value]="view.value">
-        {{view.value}}
-    </md-button-toggle>
-  </md-button-toggle-group>
-  <div class="py1"></div>
+  <md-card-actions>
+    <button md-button (click)="openQueryDialog()"><i class="material-icons">content_copy</i></button>
+  </md-card-actions>
+
   <section *ngIf="selectedView === 'user'">
     <md-card-title> {{program.user.title}}  </md-card-title>
     <md-card-subtitle> uploaded on: {{ program.user.created | date}}</md-card-subtitle>

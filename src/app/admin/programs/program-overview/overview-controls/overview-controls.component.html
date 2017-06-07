@@ -1,20 +1,21 @@
 <main [formGroup]="form">
 
   <button 
-    md-raised-button 
+    md-button
     *ngIf="loaded" 
     routerLink="/admin/programs/edit/new"
-    [attr.disabled]="deleteInitiated? true : null">
-    New Program
+    [attr.disabled]="deleteInitiated? true : null"
+    title="new program">
+    <i class="material-icons">add_box</i>
   </button>
 
   <div>
     
-    <select formControlName="type" id="programFilter">
-      <option [value]="'none'"> no filter </option>
-      <option [value]="'tag'"> filter by tag </option>
-      <option [value]="'title'"> filter by title </option>
-    </select>
+    <md-select formControlName="type" id="programFilter">
+      <md-option [value]="'none'"> <i class="material-icons filter_inactive select-option">search</i> disabled </md-option>
+      <md-option [value]="'tag'"> <i class="material-icons select-option">search</i> tag </md-option>
+      <md-option [value]="'title'"> <i class="material-icons select-option">search</i> title </md-option>
+    </md-select>
 
     <section [@fadeinAndOut]>
       <md-icon [ngClass]="styleIcon$ | async">search</md-icon>

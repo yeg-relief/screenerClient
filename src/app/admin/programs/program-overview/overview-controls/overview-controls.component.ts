@@ -33,7 +33,7 @@ export class OverviewControlsComponent implements OnInit, OnDestroy {
     const formChanges = this.form.valueChanges
       .debounceTime(100)
       .distinctUntilChanged()
-      .map(value => value.type !== '' && value.type !== 'none')
+      .map(value => value.type !== undefined && value.type !== '' && value.type !== 'none')
       .shareReplay()
 
     this.styleIcon$ = formChanges

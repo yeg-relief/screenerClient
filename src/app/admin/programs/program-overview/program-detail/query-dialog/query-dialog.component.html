@@ -1,0 +1,38 @@
+<div class="query-container"> 
+  <md-dialog-actions>
+    <button md-button (click)="clearState()">  <md-card-title> {{ program.user.title }} queries </md-card-title> </button>
+    <button md-button (click)="newQuery()" title="new query"><i class="material-icons add">note_add</i></button>
+    <button md-button (click)="newQuery(true)" title="new query from template"><i class="material-icons add">inbox</i></button>
+    <div class="flex-grow"></div>
+    <button md-button md-dialog-close><i class="material-icons clear">clear</i></button>
+  </md-dialog-actions>
+  
+
+  <div>{{ program.application.length }} total queries.</div>
+  
+  <md-input-container>
+    <input mdInput placeholder="filter by key" disabled/>
+  </md-input-container>
+
+  <md-card class="condition-container" [ngSwitch]="(queryState | async)">
+    <div *ngSwitchCase="'new'">
+      new QUERY
+    </div>
+
+    <div *ngSwitchCase="'template'">
+      template QUERY
+    </div>
+
+    <div *ngSwitchCase="'edit'">
+      <app-query-edit-v2 [query]="(editQuery | async)" (update)="updateQuery($event)"></app-query-edit-v2>
+    </div>
+
+    <div *ngSwitchCase="'delete'">
+      are you sure you want to delete? 
+    </div>
+  </md-card>
+
+  <section>
+    <app-query-display (edit)="handleEdit($event)" (delete)="handleDelete($event)" *ngFor="let query of (queries | async)" [query]="query" ></app-query-display>
+  </section>
+</div>

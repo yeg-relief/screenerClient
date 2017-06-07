@@ -15,6 +15,10 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { ConditionEditComponent } from './program-edit/condition-edit/condition-edit.component';
 import { QueryEditComponent } from './program-edit/query-edit/query-edit.component';
 import { ProgramListPaginatorComponent } from './program-overview/program-list-paginator/program-list-paginator.component';
+import { QueryDialogComponent } from './program-overview/program-detail/query-dialog/query-dialog.component';
+import { QueryDisplayComponent } from './common/query-display/query-display.component';
+import { QueryEditV2Component } from './program-edit/query-edit-v2/query-edit-v2.component';
+import { ConditionEditV2Component } from './program-edit/condition-edit-v2/condition-edit-v2.component';
 
 @NgModule({
   imports: [
@@ -35,7 +39,14 @@ import { ProgramListPaginatorComponent } from './program-overview/program-list-p
     ApplicationSideComponent,
     ConditionEditComponent,
     QueryEditComponent,
-    ProgramListPaginatorComponent
+    ProgramListPaginatorComponent,
+    QueryDialogComponent,
+    QueryDisplayComponent,
+    QueryEditV2Component,
+    ConditionEditV2Component,
+  ],
+  entryComponents: [
+    QueryDialogComponent
   ],
   providers: []
 })

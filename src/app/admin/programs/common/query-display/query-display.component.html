@@ -1,0 +1,44 @@
+<div class="col-10 bg-darken-2 flex border" style="margin: 0 auto; margin-top: 0.5em;">
+  <table style="width:80%;">
+    <colgroup span="4">
+      <col style="width: 25%;">
+      <col style="width: 25%;">
+      <col style="width: 25%;">
+      <col style="width: 25%;">
+    </colgroup>
+    <thead class="border-bottom">
+      <tr>
+        <th>Key</th>
+        <th>Type</th>
+        <th>Qualifier</th>
+        <th>Value</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let condition of query.conditions">
+        <td>{{condition.key.name}}</td>
+        <td>{{condition.key.type}}</td>
+        <div [ngSwitch]="condition.qualifier">
+          <td *ngSwitchCase="'lessThan'"> &lt; </td>
+          <td *ngSwitchCase="'lessThanOrEqual'"> &lt;= </td>
+          <td *ngSwitchCase="'equal'"> = </td>
+          <td *ngSwitchCase="'greaterThanOrEqual'"> &gt;= </td>
+          <td *ngSwitchCase="'greaterThan'"> &gt; </td>
+          <td *ngSwitchDefault></td>
+        </div>
+        <td>{{condition.value}}</td>
+      </tr>
+    </tbody>
+  </table>
+  <div style="width: 5%;">
+    <button md-button color="primary" (click)="edit.emit(query.id)">
+      <i class="material-icons">create</i>
+    </button>
+  </div>
+  <div class="px1"></div>
+  <div style="width: 5%">
+    <button md-button color="warn" (click)="delete.emit(query.id)">
+      <i class="material-icons">clear</i>
+    </button>
+  </div>
+</div>

@@ -18,7 +18,7 @@ export class FilterMessage {
 export function applyFilter(source: Observable<ProgramState>): Observable<ProgramState> {
   return source
     .switchMap((state: ProgramState) => {
-      if (state.filter === undefined) {
+      if (state.filter === undefined || state.filter.type === undefined || state.filter.value === undefined) {
         return Observable.of(new ProgramState(state.programs, state.filter, state.meta))
       }
       const programs = state.programs;

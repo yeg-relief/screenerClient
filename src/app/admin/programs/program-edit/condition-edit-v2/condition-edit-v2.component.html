@@ -1,0 +1,34 @@
+<form [formGroup]="form" *ngIf="form !== null && form !== undefined">
+  <i class="material-icons ng-valid" *ngIf="form.valid">check_circle</i> 
+  <i class="material-icons ng-invalid" *ngIf="!form.valid">block</i>
+  <div formGroupName="key">
+    <select formControlName="name">
+      <option selected disabled [value]="''"> key </option>
+      <option  [value]="key.name" *ngFor="let key of (keys | async)" >{{ key.name }}</option>
+    </select>
+  </div>
+  <div id="condition" [ngClass]="keyTypes">
+    
+    <md-button-toggle-group formControlName="value" *ngIf="isBooleanKey | async" [value]="condition.value">
+      <md-button-toggle [value]="true"> true </md-button-toggle>
+      <md-button-toggle [value]="false"> false </md-button-toggle>
+    </md-button-toggle-group>  
+
+
+    <section *ngIf="isNumberKey | async">
+      
+      <select formControlName="qualifier" [value]="condition.qualifier">
+        <option disabled [value]="undefined"> invalid </option>
+        <option *ngFor="let qualifier of qualifiers" [value]="qualifier.value"> 
+          {{ qualifier.display }}
+        </option>
+      </select>
+      
+      
+      <md-input-container>
+        <input mdInput formControlName="value" [value]="condition.value"/>
+      </md-input-container>
+
+    </section>
+  </div>
+</form>
