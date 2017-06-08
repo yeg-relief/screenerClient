@@ -14,8 +14,8 @@
   </div>
 </app-bread-crumb>
 
-<!-- SAVE BAR -->
 <md-progress-bar mode="indeterminate" color="warn" *ngIf="saving$ | async"></md-progress-bar>
+
 <div class="p2 center mt1">
   <md-button-toggle-group [formControl]="view">
     <md-button-toggle *ngFor="let v of views" [value]="v">

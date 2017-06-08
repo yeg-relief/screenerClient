@@ -29,12 +29,7 @@ export class ConstructionRibbonComponent implements OnInit {
 
   ngOnInit(){
     const isAdminChange = this.router.events
-      .map(event => {
-        if (event instanceof NavigationEnd) {
-          return this.router.url;
-        }
-        return "don't care";
-      })
+      .map(event => event instanceof NavigationEnd ? this.router.url : "don't care")
       .filter(url => url !== "don't care")
       .debounceTime(60)
       .map( url => url.substring(0, 7) === '/admin/' );
@@ -45,22 +40,12 @@ export class ConstructionRibbonComponent implements OnInit {
       .delay(1000)
       .switchMap(val => Observable.of(val))
       .do( _ => this.fade = "out")
-      .subscribe( _ => {
-        this.shouldHide.hidden = false
-      })
+      .subscribe();
 
 
 
-    const adminRoute = isAdminChange.filter(val => val === false )
-      .subscribe( _ => this.shouldHide.hidden = false)
-
-
-
-
-      /*
-      .subscribe( val => {
-        this.backgroundClass.background = !val;
-        this.backgroundClass.backgroundcolor = val;
-      });*/
+    const adminRoute = isAdminChange.filter(val => val === true )
+      .do( _ => this.fade = "out")
+      .subscribe();
   }
 }

@@ -28,24 +28,24 @@ export const routing: ModuleWithProviders = RouterModule.forChild([
       {
         path: 'screener',
         component: ScreenerContainerComponent,
-        canActivate: [AuthGuardService],
+        //canActivate: [AuthGuardService],
         children: [
           {
             path: 'edit',
             component: ScreenerOverviewComponent,
-            canActivate: [AuthGuardService],
+            //canActivate: [AuthGuardService],
           },
           {
             path: 'preview',
             component: ScreenerPreviewComponent,
-            canActivate: [AuthGuardService],
+            //canActivate: [AuthGuardService],
           },
         ]
       },
       {
         path: 'programs',
         component: ProgramsComponent,
-        canActivate: [AuthGuardService],
+        //canActivate: [AuthGuardService],
         children: [
           {
             path: 'overview',
@@ -74,7 +74,7 @@ export const routing: ModuleWithProviders = RouterModule.forChild([
       {
         path: 'keys',
         component: KeysComponent,
-        canActivate: [AuthGuardService],
+        //canActivate: [AuthGuardService],
         children: [
           {
             path: 'overview',
