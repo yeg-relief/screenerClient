@@ -9,13 +9,13 @@
   </div>
   <div id="condition" [ngClass]="keyTypes">
     
-    <md-button-toggle-group formControlName="value" *ngIf="isBooleanKey | async" [value]="condition.value">
+    <md-button-toggle-group id="boolean-key-edit" formControlName="value" *ngIf="isBooleanKey | async" [value]="condition.value">
       <md-button-toggle [value]="true"> true </md-button-toggle>
       <md-button-toggle [value]="false"> false </md-button-toggle>
     </md-button-toggle-group>  
 
 
-    <section *ngIf="isNumberKey | async">
+    <section id="number-key-edit" *ngIf="isNumberKey | async">
       
       <select formControlName="qualifier" [value]="condition.qualifier">
         <option disabled [value]="undefined"> invalid </option>

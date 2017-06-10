@@ -20,6 +20,7 @@ export class QueryDialogComponent implements OnInit, OnDestroy {
   templateID: Observable<string>;
   editQuery: Observable<ProgramQuery>;
   blankQuery: Observable<ProgramQuery>;
+  selected: Observable<string>;
 
   constructor(
     public dialogRef: MdDialogRef<QueryDialogComponent>,
@@ -37,6 +38,8 @@ export class QueryDialogComponent implements OnInit, OnDestroy {
     this.queries = this.queryService.watchUrlForState().map(update => update.queries)
 
     this.editQuery = this.queryService.getEditQuery();
+
+    this.selected = this.editQuery.map(q => q.id);
 
     this.templateID = this.route.queryParams.filter(params => params.queryState === 'template').map(params => params.templateID);
 

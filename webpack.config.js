@@ -253,6 +253,17 @@ module.exports = {
   },
   "devServer": {
     "historyApiFallback": true,
-    
+    "proxy" :{
+      "/api/*": {
+        "changeOrigin": true,
+        "target": "http://localhost:3000",
+        "secure": false
+      },
+      "/protected/*": {
+        "changeOrigin": true,
+        "target": "http://localhost:3000",
+        "secure": false
+      }
+    }
   }
 };

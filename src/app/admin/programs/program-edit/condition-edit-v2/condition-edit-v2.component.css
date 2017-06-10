@@ -5,16 +5,10 @@ form {
   height: 5vh;
 }
 
-container {
-  display: flex;
-  width: 75%;
-  align-items: inherit;
-  height: 100%;
-}
-
 #condition {
   display: flex;
-  width: 60%;
+  width: 100%;
+  padding-left: 5%;
   align-items: inherit;
   height: 100%;
 }
@@ -33,4 +27,17 @@ container {
 
 #condition > *.ng-invalid {
   border: red solid 1px;
+}
+
+@media(min-width: 1024px) {
+  #number-key-edit > md-input-container {
+    margin-left: 1em;
+  }
+}
+
+
+@media(max-width: 1024px) {
+  #number-key-edit > md-input-container {
+    padding-left: 3px;
+  }
 }

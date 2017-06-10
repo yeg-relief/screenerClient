@@ -3,7 +3,6 @@ import { ProgramQuery, ApplicationFacingProgram, ProgramCondition } from '../../
 import { Router, ActivatedRoute } from '@angular/router';
 import { Observable } from 'rxjs/Observable';
 import { ReplaySubject } from 'rxjs/ReplaySubject';
-import { FormGroup, FormBuilder, FormArray } from '@angular/forms';
 import 'rxjs/add/observable/merge';
 
 @Injectable()
@@ -11,7 +10,6 @@ export class QueryEditService {
   queries: ReplaySubject<ProgramQuery[]>;
 
   constructor(
-    private fb: FormBuilder,
     private route: ActivatedRoute,
   ) {
     this.queries = new ReplaySubject();
@@ -83,8 +81,15 @@ export class QueryEditService {
       .concat(lowerCaseCharSet.toUpperCase())
       .concat("1234567890")
 
-    return new Array(LENGTH).map(_ => Math.floor(Math.random() * charSet.length)).join('');
-
+    const generateCharacters = () => {
+      const arr = new Array(LENGTH);
+      for(let i = 0; i < arr.length; i++){
+        arr[i] = charSet[Math.floor(Math.random() * charSet.length)];
+      }
+      return arr;
+    }
+    
+    return generateCharacters().join('');
   }
 
 }

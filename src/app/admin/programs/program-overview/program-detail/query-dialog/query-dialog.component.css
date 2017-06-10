@@ -4,7 +4,7 @@
   display: flex;
   flex-direction: column;
   height: 100%;
-  width: 90%;
+  width: 95%;
   margin: 0 auto;
 }
 
@@ -19,11 +19,16 @@ section {
   margin-top: 1vh;
 }
 
+section > * {
+  margin-top: 1em;
+}
+
 md-input-container {
   width: 30%;
 }
 
-md-card {
+#condition-container {
+  width: 100%;
   padding: 2em 4em;
 }
 
