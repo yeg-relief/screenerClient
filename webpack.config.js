@@ -174,7 +174,7 @@ module.exports = {
         "favicon.ico"
       ],
       "globOptions": {
-        "cwd": "/home/steve/YouCanBenefit/packages/screenerClient/src",
+        "cwd": path.resolve(__dirname, 'src'),
         "dot": true,
         "ignore": "**/.gitkeep"
       }
