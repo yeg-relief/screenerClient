@@ -1,5 +1,5 @@
 <div [ngClass]="styleClass">
-  <table style="width:80%;">
+  <table style="width:80%;" (click)="edit.emit(query.id)">
     <colgroup span="4">
       <col style="width: 25%;">
       <col style="width: 25%;">
@@ -30,12 +30,6 @@
       </tr>
     </tbody>
   </table>
-  <div style="width: 5%;">
-    <button md-button color="primary" (click)="edit.emit(query.id)">
-      <i class="material-icons">create</i>
-    </button>
-  </div>
-  <div class="px1"></div>
   <div style="width: 5%">
     <button md-button color="warn" (click)="delete.emit(query.id)">
       <i class="material-icons">clear</i>

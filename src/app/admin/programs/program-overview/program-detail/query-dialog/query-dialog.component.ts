@@ -33,9 +33,9 @@ export class QueryDialogComponent implements OnInit, OnDestroy {
     this.program = {...this.dialogRef._containerInstance.dialogConfig.data};
     this.queryService.queries.next(this.program.application);
 
-    this.queryState = this.queryService.watchUrlForState().map(update => update.mode);
+    this.queryState = this.queryService.watchUrlForState().debounceTime(50).map(update => update.mode);
 
-    this.queries = this.queryService.watchUrlForState().map(update => update.queries)
+    this.queries = this.queryService.watchUrlForState().debounceTime(50).map(update => update.queries)
 
     this.editQuery = this.queryService.getEditQuery();
 
@@ -93,13 +93,7 @@ export class QueryDialogComponent implements OnInit, OnDestroy {
   }
 
   updateQuery($event: ProgramQuery) {
-    Observable.of([$event.id, $event])
-      .let(this.queryService.setById)
-      .take(1)
-      .subscribe(update => {
-        console.log('updateQuery')
-        console.log(event)
-        console.log(update)
-      })
+    console.log('update QUERY')
+    this.queryService.setById($event.id, $event);
   }
 }

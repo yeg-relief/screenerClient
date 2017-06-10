@@ -27,9 +27,10 @@ md-input-container {
   width: 30%;
 }
 
-#condition-container {
+.condition-container {
   width: 100%;
-  padding: 2em 4em;
+  min-height: 30vh;
+  padding: 1em;
 }
 
 i.material-icons.clear {
@@ -38,4 +39,13 @@ i.material-icons.clear {
 
 i.material-icons.add {
   color: green;
+}
+
+#entry-point {
+  display: flex;
+  width: 90%;
+  margin: 0 auto;
+  padding: 3em 0;
+  align-items: center;
+  justify-content: space-between;
 }

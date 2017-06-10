@@ -19,7 +19,9 @@ export class QueryEditService {
     return Observable.merge(
       this.route.queryParams.map(paramMap => paramMap.queryState).startWith(this.route.queryParamMap['queryState']),
       this.queries
-    ).scan( (state, update) => {
+    )
+    .debounceTime(100)
+    .scan( (state, update) => {
       if (update instanceof Array)
         state.queries = [...update];
       else if (typeof update === 'string')
@@ -37,25 +39,24 @@ export class QueryEditService {
     .filter(x => x !== undefined)
   }
 
-  setById(input$: Observable<[string, ProgramQuery]>): Observable<ProgramQuery> {
-    return Observable.zip(
-      input$,
-      this.queries
-    ).map( ([ [id, update], queries ] ) => {
-      let record = queries.find(q => q.id === id)
-      if (record) {
-        record = update;
-      } else {
-        queries = [...queries, update];
-      }
-      this.queries.next(queries)
-      return record;
-    })
+  setById(id: string, data: ProgramQuery) {
+    console.log('called')
+    this.queries
+      .map(queries => {
+        let q = queries.find(q => q.id == id);
+        if (!q) return queries;
+
+        q = data;
+        return queries;
+      })
+      .subscribe(queries => this.queries.next(queries))
+
+
   }
 
   getEditQuery(): Observable<ProgramQuery> {
     return this.watchUrlForState()
-      .debounceTime(200)
+      .debounceTime(100)
       .filter(state => state.mode === 'edit')
       .map(state => state.queries.find(q => q.id === this.route.snapshot.queryParams['queryID']))
       .filter(x => x != null)

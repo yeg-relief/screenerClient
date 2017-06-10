@@ -7,7 +7,9 @@ export function conditionValidator(control: AbstractControl): {[key: string]: an
   const key: Key = control.get('key').value;
   const value: boolean | string  = control.get('value').value;
   const type: string = control.get('type').value;
-  const qualifier: string = control.get('qualifier').value;
+  let qualifier: string = '';
+  if (control.get('qualifer') !== null)
+    qualifier = control.get('qualifier').value;
 
   let errors = {};
 
@@ -25,17 +27,19 @@ export function conditionValidator(control: AbstractControl): {[key: string]: an
   }
     
   if (isNumber) {
-    if (!qualifier || typeof qualifier !== 'string' || qualifier === 'qualifier'){
+    if (control.get('qualifier') !== null && control.get('qualifier').value === ''){
       errors['invalidQualifier'] = '(b) The qualifier is invalid.';
       control.get('qualifier').setErrors({err: 'The qualifier is invalid.'})
     }
       
   }
 
-  if (isBoolean && qualifier != null ) {
+  if (isBoolean && qualifier !== '' ) {
     errors['invalidQualifier'] = '(a) The qualifier is invalid.';
   }
 
   if (Object.keys(errors).length === 0) return null;
+
+  console.log(errors)
   return errors;
 }

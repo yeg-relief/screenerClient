@@ -1,8 +1,6 @@
 <div class="query-container"> 
   <md-dialog-actions>
     <button md-button (click)="clearState()">  <md-card-title> {{ program.user.title }} queries </md-card-title> </button>
-    <button md-button (click)="newQuery()" title="new query"><i class="material-icons add">note_add</i></button>
-    <button disabled md-button (click)="newQuery(true)" title="[future] query template"><i class="material-icons add">inbox</i></button>
     <div class="flex-grow"></div>
     <button md-button md-dialog-close><i class="material-icons clear">clear</i></button>
   </md-dialog-actions>
@@ -29,6 +27,15 @@
 
     <div *ngSwitchCase="'delete'">
       are you sure you want to delete? 
+    </div>
+
+    <div *ngSwitchDefault id="entry-point">
+      <button md-button (click)="newQuery()" title="new query">
+        <img src="assets/ic_note_add_black_24px.svg">
+      </button>
+      <button disabled md-button (click)="newQuery(true)" title="[future] query template">
+        <img src="assets/ic_inbox_black_24px.svg">
+      </button>
     </div>
   </md-card>
 

@@ -1,7 +1,7 @@
 import { Component, OnInit, OnDestroy, Input, Output, EventEmitter, ChangeDetectionStrategy } from '@angular/core';
 import { ProgramCondition } from '../../../models/program';
 import { conditionValidator } from './condition-edit.validator';
-import { FormControl, Validators, FormGroup, FormBuilder, Validator } from '@angular/forms';
+import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { Key } from '../../../models/key';
 import { Store } from '@ngrx/store';
 import * as fromRoot from '../../../reducer';
@@ -9,8 +9,7 @@ import { Observable } from 'rxjs/Observable';
 import { Subscription } from 'rxjs/Subscription';
 import { ReplaySubject } from 'rxjs/ReplaySubject';
 import 'rxjs/add/operator/multicast';
-import 'rxjs/add/operator/do';
-import 'rxjs/add/observable/zip';
+
 @Component({
   selector: 'app-condition-edit-v2',
   templateUrl: './condition-edit-v2.component.html',
@@ -33,6 +32,7 @@ export class ConditionEditV2Component implements OnInit, OnDestroy {
     number: false,
     integer: false
   };
+  timeout;
   readonly qualifiers = [
     {
       display: '>', value: 'greaterThan'
@@ -52,43 +52,75 @@ export class ConditionEditV2Component implements OnInit, OnDestroy {
   ];
 
 
-  constructor(private fb: FormBuilder, private store: Store<fromRoot.State>) { }
+  constructor(
+    private store: Store<fromRoot.State>
+    ) { }
 
   ngOnInit() {
 
-    this.keys = this.store.let(fromRoot.allLoadedKeys).multicast(new ReplaySubject(1)).refCount();
+    this.keys = this.store.let(fromRoot.allLoadedKeys)
+                    .withLatestFrom(this.form.valueChanges.map(f => f.key).startWith(this.form.value))
+                    .map( ([keys, selected]) => keys.filter(k => k.name !== selected.name))
+                    .multicast(new ReplaySubject(1)).refCount();
 
-    this.selectedKeyName = this.form.valueChanges.debounceTime(100)
-      .map(val => val.key.name)
-      .filter(x => x)
-      .startWith(this.condition.key.name)
-      .multicast(new ReplaySubject(1)).refCount()
-
-    this.selectedKey = Observable.combineLatest(
-        this.keys,
-        this.selectedKeyName
-    )
-      .throttleTime(60)
-      .map( ([keys, name]) => keys.find(k => k.name === name))
-      .filter(x => x !== undefined)
-      .multicast(new ReplaySubject(1)).refCount()
-      .startWith(this.condition.key);
-
-    this.subscription = this.selectedKey
-      .pairwise()
-      .filter( ([a, b]) => a.type && b.type && a.type !== b.type)
-      .map( ([_, update]) => update)
-      .subscribe(newKey => {
-        
-      })
-
-
-    this.isBooleanKey = this.selectedKey.map(key => key.type === 'boolean');
-    this.isNumberKey = this.selectedKey.map(key => key.type === 'integer' || key.type === 'number');
+    this.isBooleanKey = this.form.valueChanges
+      .map(f => f.key.type === 'boolean')
+      .startWith(this.form.value.key.type === 'boolean');
     
+    this.isNumberKey = this.form.valueChanges
+      .map(f => f.key.type === 'integer' || f.key.type === 'number')
+      .startWith(this.form.value.key.type === 'integer' || this.form.value.key.type === 'number');;
+    
+
+    this.subscription = this.form.valueChanges
+      .debounceTime(100)
+      .subscribe(update => this.update.emit(update));
   }
 
   ngOnDestroy(){
     if (this.subscription && !this.subscription.closed) this.subscription.unsubscribe();
+  }
+
+  changeKey($event) {
+    const newKey: Key = JSON.parse($event.target.value);
+
+    if (newKey.type === 'boolean') {
+      this.handleBooleanChange(newKey);
+      
+    } else if (newKey.type === 'integer' || newKey.type === 'number') {
+      this.handleNumberChange(newKey);
+    }
+  }
+
+  stringifyKey(key) {
+    return typeof key === 'object' ? JSON.stringify(key) : null;
+  }
+
+  handleBooleanChange(key: Key) {
+    if (this.form.get('qualifier') !== null) 
+      this.form.removeControl('qualifier')
+    
+    this.form.setValue({
+      key: key,
+      value: true,
+      type: 'boolean'
+    });
+
+    this.form.get('value').setValidators([Validators.required])
+  }
+
+  handleNumberChange(key: Key) {
+    if (this.form.get('qualifier') === null) 
+      this.form.addControl('qualifier', new FormControl(this.qualifiers[2].value))
+    
+    this.form.setValue({
+      key: key,
+      value: 0,
+      qualifier: this.qualifiers[2].value,
+      type: 'number'
+    });
+
+    this.form.get('value').setValidators([Validators.required, Validators.pattern('^\\d+$')])
+
   }
 }

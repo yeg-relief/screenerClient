@@ -1,7 +1,7 @@
 import { Component, OnInit, Input, Output, EventEmitter, ChangeDetectionStrategy } from '@angular/core';
 import { ProgramQuery, ProgramCondition } from '../../../models/program';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
-import { FormArray } from '@angular/forms';
+import { FormArray, AbstractControl } from '@angular/forms';
 import { ConditionEditService } from '../../program-overview/services/condition-edit.service';
 
 @Component({
@@ -14,9 +14,10 @@ import { ConditionEditService } from '../../program-overview/services/condition-
 export class QueryEditV2Component implements OnInit {
   @Input() query: ProgramQuery;
   @Output() update = new EventEmitter<ProgramQuery>();
-  conditionForms: FormArray;
+  queryForm: FormArray;
   conditionWasChanged = new BehaviorSubject(false);
   private _localConditions: ProgramCondition[];
+  timeout;
 
   constructor(private conditionService: ConditionEditService) { }
 
@@ -24,35 +25,42 @@ export class QueryEditV2Component implements OnInit {
     this._localConditions = this.query.conditions
       .map(mutableCondition => (<any>Object).assign({}, mutableCondition));
 
-    this.conditionForms = this.conditionService.condtionsToControls(this._localConditions);
-
-    console.log(this.conditionForms)
+    this.queryForm = this.conditionService.condtionsToControls(this._localConditions);
   }
 
   ngOnChanges(simpleChange) {
     const _conds = simpleChange.query.currentValue.conditions;
 
-    this.conditionForms = this.conditionService.condtionsToControls(_conds)
+    this.queryForm = this.conditionService.condtionsToControls(_conds)
     this._localConditions = _conds;
+    this.conditionWasChanged.next(false);
   }
 
   handleUpdate($event: ProgramCondition){  
+    
     if (!$event) return;
     
-    let changedCondition = this._localConditions.find(condition => condition.key.name === $event.key.name);
+    let changedConditions: AbstractControl[] = 
+      this.queryForm.controls.filter(cond => cond.value.key.name === $event.key.name);
+
+    let changedCondition = changedConditions.length === 1 ? changedConditions[0] : undefined;
 
     if (!changedCondition) return;
 
-    changedCondition = (<any>Object).assign({}, $event);
+    changedCondition.setValue($event);
     this.conditionWasChanged.next(true);
+    this.commitChanges();
+    
   }
 
   commitChanges() {
     const data: ProgramQuery = {
       id: this.query.id,
       guid: this.query.guid,
-      conditions: [...this._localConditions]
+      conditions: [...this.queryForm.value]
     }
+
+    console.log(data);
 
     this.update.emit(data);
   }

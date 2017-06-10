@@ -8,6 +8,7 @@ export class ConditionEditService {
   constructor(private fb: FormBuilder) { }
 
   condtionsToControls(conditions: ProgramCondition[]): FormArray {
+    // assign different validators based upon boolean or interger key type
     const valueControl = condition => {
       return condition.key.type === 'boolean' ? new FormControl(condition.value, Validators.required) :
         condition.key.type === 'number' || condition.key.type === 'integer' ?
@@ -15,11 +16,17 @@ export class ConditionEditService {
           null;
     }
 
-    const controls = conditions.map(cond => this.fb.group({
-      key: this.newKeyControl(cond.key),
-      value: valueControl(cond),
-      qualifier: new FormControl(cond.qualifier)
-    }), { validator: conditionValidator })
+    const controls = conditions.map(
+      cond => {
+
+        return this.fb.group({
+          key: this.newKeyControl(cond.key),
+          value: valueControl(cond),
+          qualifier: new FormControl(cond.qualifier),
+          type: ''
+        }, { validator: conditionValidator })
+
+      })
     this._formArray = new FormArray(controls);
 
     return this._formArray;

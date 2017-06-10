@@ -1,8 +1,9 @@
 form {
   display: flex;
-  width: 100%;
+  width: 90%;
   align-items: center;
   height: 5vh;
+  margin: 0 auto;
 }
 
 #condition {
@@ -31,13 +32,13 @@ form {
 
 @media(min-width: 1024px) {
   #number-key-edit > md-input-container {
-    margin-left: 1em;
+    margin-left: 1.5em;
   }
 }
 
 
 @media(max-width: 1024px) {
   #number-key-edit > md-input-container {
-    padding-left: 3px;
+    padding-left: 1em;
   }
 }

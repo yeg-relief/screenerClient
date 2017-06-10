@@ -1,5 +1,5 @@
 <div style="min-height: 3vh">
-  <button md-button class="enabled" *ngIf="(conditionWasChanged | async) === true">
+  <button md-button class="enabled" *ngIf="queryForm.valid">
     <i  class="material-icons">save</i>
   </button>
 </div>
@@ -7,6 +7,6 @@
 <app-condition-edit-v2 
   (update)="handleUpdate($event)" 
   *ngFor="let condition of query.conditions;let i = index"
-  [form]="conditionForms.controls[i]" 
+  [form]="queryForm.controls[i]" 
   [condition]="condition"> 
 </app-condition-edit-v2>
