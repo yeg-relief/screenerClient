@@ -1,18 +1,25 @@
-import { Injectable } from '@angular/core';
+import { Injectable, OnDestroy } from '@angular/core';
 import { ProgramQuery, ApplicationFacingProgram, ProgramCondition } from '../../../models/program';
 import { Router, ActivatedRoute } from '@angular/router';
 import { Observable } from 'rxjs/Observable';
+import { Subscription } from 'rxjs/Subscription';
 import { ReplaySubject } from 'rxjs/ReplaySubject';
 import 'rxjs/add/observable/merge';
 
 @Injectable()
-export class QueryEditService {
+export class QueryEditService implements OnDestroy {
   queries: ReplaySubject<ProgramQuery[]>;
-
+  private _queries: ProgramQuery[];
+  private subscription: Subscription;
   constructor(
     private route: ActivatedRoute,
   ) {
     this.queries = new ReplaySubject();
+    this.subscription = this.queries.subscribe(qs => this._queries = qs);
+  }
+
+  ngOnDestroy(){
+    if (this.subscription && !this.subscription.closed) this.subscription.unsubscribe();
   }
 
   watchUrlForState(): Observable<any> {
@@ -40,18 +47,16 @@ export class QueryEditService {
   }
 
   setById(id: string, data: ProgramQuery) {
-    console.log('called')
-    this.queries
-      .map(queries => {
-        let q = queries.find(q => q.id == id);
-        if (!q) return queries;
+    const index = this._queries.findIndex(q => q.id === id)
+    console.log(index);
+    console.log(this._queries)
+    if (index < 0){
+      console.warn(`query with id: ${id} not found.`);
+      return;
+    }
 
-        q = data;
-        return queries;
-      })
-      .subscribe(queries => this.queries.next(queries))
-
-
+    this._queries[index] = data;
+    this.queries.next(this._queries);
   }
 
   getEditQuery(): Observable<ProgramQuery> {

@@ -73,7 +73,7 @@ export class ConditionEditV2Component implements OnInit, OnDestroy {
     
 
     this.subscription = this.form.valueChanges
-      .debounceTime(100)
+      .debounceTime(500)
       .subscribe(update => this.update.emit(update));
   }
 
