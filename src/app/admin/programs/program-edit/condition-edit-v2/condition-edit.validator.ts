@@ -40,6 +40,5 @@ export function conditionValidator(control: AbstractControl): {[key: string]: an
 
   if (Object.keys(errors).length === 0) return null;
 
-  console.log(errors)
   return errors;
 }

@@ -48,8 +48,6 @@ export class QueryEditService implements OnDestroy {
 
   setById(id: string, data: ProgramQuery) {
     const index = this._queries.findIndex(q => q.id === id)
-    console.log(index);
-    console.log(this._queries)
     if (index < 0){
       console.warn(`query with id: ${id} not found.`);
       return;

@@ -32,15 +32,19 @@ export class ProgramDetailComponent implements OnInit {
   }
 
   openQueryDialog() {
+    if ( this.program === undefined ) return;
+
     let dialogRef = this.dialog.open(QueryDialogComponent, {
-      width: '90vw',
-      height: '90vh',
+      width: '100vw',
+      height: '95vh',
       data: this.program
     })
-    console.log(this.program)
     dialogRef.afterClosed().take(1).subscribe(_ => {
-      this.program.application = dialogRef._containerInstance.dialogConfig.data;
-      this.update.emit(this.program);
+      if (dialogRef._containerInstance.dialogConfig.data !== undefined){
+        this.program.application = dialogRef._containerInstance.dialogConfig.data;
+        this.update.emit(this.program);
+      }
+      
     })
   }
 }

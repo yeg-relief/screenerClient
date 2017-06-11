@@ -54,9 +54,10 @@ export class ProgramOverviewComponent implements OnInit {
     )
       .let(helpers.updateState)
       .let(helpers.applyFilter)
-      .let(helpers.applyPagination)
-      .do( ([page, update]) => update ? this.pageService.setState(update) : null)
-      .map( ([page, _]) => page.pageContent)
+      //.let(helpers.applyPagination)
+      //.do( ([page, update]) => update ? this.pageService.setState(update) : null)
+      //.map( ([page, _]) => page.pageContent)
+      .map(state => state.programs)
       .shareReplay();
 
     this.loading$ = this.store.let(fromRoot.areProgramsLoaded);

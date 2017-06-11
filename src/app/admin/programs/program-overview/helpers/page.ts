@@ -11,7 +11,6 @@ export class Page<T> {
     inputContent: T[],
     metaData: PageMetaData,
   ) {
-    console.log('NEW PAGE');
     if (inputContent === undefined || !Array.isArray(inputContent)) 
       this.pageContent = [];
     else {
@@ -21,7 +20,6 @@ export class Page<T> {
       end = start + metaData.pageSize;
       this.pageContent = inputContent.slice(start, end);
     }
-    console.log(this.pageContent)
   }
 }
 

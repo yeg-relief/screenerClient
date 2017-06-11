@@ -19,6 +19,7 @@ import { QueryDialogComponent } from './program-overview/program-detail/query-di
 import { QueryDisplayComponent } from './common/query-display/query-display.component';
 import { QueryEditV2Component } from './program-edit/query-edit-v2/query-edit-v2.component';
 import { ConditionEditV2Component } from './program-edit/condition-edit-v2/condition-edit-v2.component';
+import { NewConditionComponent } from './program-edit/new-condition/new-condition.component';
 
 @NgModule({
   imports: [
@@ -44,6 +45,7 @@ import { ConditionEditV2Component } from './program-edit/condition-edit-v2/condi
     QueryDisplayComponent,
     QueryEditV2Component,
     ConditionEditV2Component,
+    NewConditionComponent,
   ],
   entryComponents: [
     QueryDialogComponent

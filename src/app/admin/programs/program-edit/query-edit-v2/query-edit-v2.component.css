@@ -8,6 +8,17 @@ button.enabled {
   opacity: 1.0;
 }
 
+button.ng-invalid {
+  color: red;
+}
+
 condition-edit-v2 {
-  width: 70%;
+  width: 90%;
+}
+
+app-new-condition{
+  width: 100%;
+  margin-bottom: 1em;
+  padding: 2px;
+  border: solid lightgrey 1px;
 }

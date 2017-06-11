@@ -1,7 +1,7 @@
 import { Component, OnInit, Input, Output, EventEmitter, ChangeDetectionStrategy } from '@angular/core';
 import { ProgramQuery, ProgramCondition } from '../../../models/program';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
-import { FormArray, AbstractControl } from '@angular/forms';
+import { FormArray, AbstractControl, FormControl } from '@angular/forms';
 import { ConditionEditService } from '../../program-overview/services/condition-edit.service';
 
 @Component({
@@ -65,4 +65,28 @@ export class QueryEditV2Component implements OnInit {
     this.valid.emit(this.queryForm.valid);
   }
 
+  handleSave($event: ProgramCondition) {
+    const [ control, ..._]   = this.conditionService.condtionsToControls([$event]).controls
+    this.queryForm.insert(0, control)
+    const data: ProgramQuery = {
+      id: this.query.id,
+      guid: this.query.guid,
+      conditions: [...this.queryForm.value]
+    }
+    this.update.emit(data);
+    this.valid.emit(this.queryForm.valid);
+  }
+
+  handleDelete($event: number) {
+    if (this.queryForm.length >= $event && $event >= 0) 
+      this.queryForm.removeAt($event);
+
+    const data: ProgramQuery = {
+      id: this.query.id,
+      guid: this.query.guid,
+      conditions: [...this.queryForm.value]
+    }
+    this.update.emit(data);
+    this.valid.emit(this.queryForm.valid);
+  }
 }

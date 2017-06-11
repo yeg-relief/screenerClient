@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy, Input, Output, EventEmitter, ChangeDetectionStrategy } from '@angular/core';
+import { Component, OnInit, OnDestroy, Input, Output, EventEmitter, ChangeDetectionStrategy, OnChanges } from '@angular/core';
 import { ProgramCondition } from '../../../models/program';
 import { conditionValidator } from './condition-edit.validator';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
@@ -16,10 +16,11 @@ import 'rxjs/add/operator/multicast';
   styleUrls: ['./condition-edit-v2.component.css'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class ConditionEditV2Component implements OnInit, OnDestroy {
+export class ConditionEditV2Component implements OnInit, OnDestroy, OnChanges {
   @Input() form: FormGroup;
   @Input() condition: ProgramCondition;
   @Output() update = new EventEmitter<ProgramCondition>();
+  _form = new ReplaySubject<FormGroup>();
   keys: Observable<Key[]>;
   selectedKeyName: Observable<string>;
   selectedKey: Observable<Key>;
@@ -59,15 +60,19 @@ export class ConditionEditV2Component implements OnInit, OnDestroy {
   ngOnInit() {
 
     this.keys = this.store.let(fromRoot.allLoadedKeys)
-                    .withLatestFrom(this.form.valueChanges.map(f => f.key).startWith(this.form.value))
-                    .map( ([keys, selected]) => keys.filter(k => k.name !== selected.name))
+                    .map(keys => [{name: 'invalid', type: 'invalid'}, ...keys])
+                    .startWith(this.form.value.key)
                     .multicast(new ReplaySubject(1)).refCount();
 
     this.isBooleanKey = this.form.valueChanges
+      .filter(x => x !== undefined && x.key !== undefined)
+      .filter(_ => this.form.get('value') !== null)
       .map(f => f.key.type === 'boolean')
       .startWith(this.form.value.key.type === 'boolean');
     
     this.isNumberKey = this.form.valueChanges
+      .filter(x => x !== undefined && x.key !== undefined)
+      .filter(_ => this.form.get('value') !== null)
       .map(f => f.key.type === 'integer' || f.key.type === 'number')
       .startWith(this.form.value.key.type === 'integer' || this.form.value.key.type === 'number');;
     
@@ -75,6 +80,18 @@ export class ConditionEditV2Component implements OnInit, OnDestroy {
     this.subscription = this.form.valueChanges
       .debounceTime(750)
       .subscribe(update => this.update.emit(update));
+  }
+
+  ngOnChanges(changes){
+    if (changes.form !== undefined && changes.form.currentValue !== changes.form.previousValue){
+      this.form.setValue(changes.form.currentValue.value)
+    }
+      
+  }
+
+  isKeySelected(key) {
+    const k = this.form.get('key').value;
+    return (key.name === k.name && k.type === key.type);
   }
 
   ngOnDestroy(){

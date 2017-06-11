@@ -31,6 +31,12 @@
     </tbody>
   </table>
   <div style="width: 5%">
+    <button md-button color="primary" (click)="edit.emit(query.id)">
+      <i class="material-icons">edit</i>
+    </button>
+  </div>
+  <div class="px2"></div>
+  <div style="width: 5%">
     <button md-button color="warn" (click)="delete.emit(query.id)">
       <i class="material-icons">clear</i>
     </button>

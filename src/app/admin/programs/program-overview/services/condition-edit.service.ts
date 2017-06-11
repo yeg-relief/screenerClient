@@ -32,6 +32,18 @@ export class ConditionEditService {
     return this._formArray;
   }
 
+  blankConditionControl() {
+    return this.fb.group({
+      key: this.fb.group({
+        name: 'invalid',
+        type: 'invalid'
+      }),
+      value: 'invalid',
+      qualifier: 'invalid',
+      type: 'invalid'
+    }, { validator: conditionValidator })
+  }
+
   updateConditionShape(key, conditionFormGroup) {
     const localFormIndex = this._formArray.controls.findIndex(c => c === conditionFormGroup);
 

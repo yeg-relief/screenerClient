@@ -3,9 +3,6 @@
   overflow-y: auto;
   display: flex;
   flex-direction: column;
-  height: 100%;
-  width: 95%;
-  margin: 0 auto;
 }
 
 md-dialog-actions {
@@ -30,6 +27,9 @@ md-input-container {
 .condition-container {
   width: 100%;
   min-height: 30vh;
+  max-height: 40vh;
+  overflow-y: auto;
+  overflow-x: hidden;
   padding: 1em;
 }
 
@@ -49,7 +49,21 @@ i.material-icons.save {
   margin: 0 auto;
   padding: 3em 0;
   align-items: center;
-  justify-content: space-between;
+  justify-content: space-around;
+}
+
+.entry-point-img {
+  width: 96px;
+  color: green;
+}
+
+#edit-query-container {
+  width: 100%;
+  margin-top: 2vh;
+}
+
+#delete-confirmation {
+  width: 100%;
 }
 
 #delete-confirmation > section {

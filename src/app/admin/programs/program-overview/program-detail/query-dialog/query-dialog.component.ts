@@ -71,7 +71,12 @@ export class QueryDialogComponent implements OnInit, OnDestroy {
   }
 
   clearState(){
-    this.router.navigate([], {relativeTo: this.route});
+    this.router.navigate([], {
+      relativeTo: this.route,
+      queryParams: {
+        queryState: ''
+      }
+    });
   }
 
   newQuery(template=false) {
@@ -95,13 +100,15 @@ export class QueryDialogComponent implements OnInit, OnDestroy {
 
   updateQuery($event: ProgramQuery) {
     this.queryService.setById($event.id, $event);
+    
   }
 
   handleCancel(){
     this.router.navigate([], {
       queryParams: {}
     })
-    .then(() => this.dialogRef.close())  
+    .then(() => this.dialogRef.close())
+    .then(() => this.dialogRef._containerInstance.dialogConfig.data = undefined);
   }
 
   handleSave(){
@@ -110,6 +117,10 @@ export class QueryDialogComponent implements OnInit, OnDestroy {
       queryParams: {}
     })
     .then(() => this.dialogRef._containerInstance.dialogConfig.data = this.queryService.getQueries())
-    .then(() => this.dialogRef.close())
+    .then(() => this.dialogRef.close());
+  }
+
+  trackByFn(item: ProgramQuery){
+    return item.id;
   }
 }

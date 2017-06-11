@@ -10,11 +10,3 @@
 .selected {
   border-color: darkorange;
 }
-
-table {
-  cursor: pointer;
-}
-
-table:hover {
-  background-color: lightskyblue;
-}

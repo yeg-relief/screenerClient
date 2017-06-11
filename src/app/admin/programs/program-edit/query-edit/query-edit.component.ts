@@ -20,7 +20,6 @@ export class QueryEditComponent {
   }
 
   handleEdit(condition) {
-    console.log(condition);
     setTimeout( () => {
       if (this.editCondition$) this.editCondition$.emit(condition);
     }, 10);

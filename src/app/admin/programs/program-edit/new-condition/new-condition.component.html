@@ -1,0 +1,11 @@
+<main style="display:flex; align-items: center;">
+  <button md-button title="save this condition">
+    <i *ngIf="canSave" (click)="handleSave()" color="primary" class="material-icons">save</i>
+  </button>
+  <app-condition-edit-v2
+    style="width:95%"
+    [form]="form"
+    [condition]="condition"
+    (update)="handleUpdate($event)">
+  </app-condition-edit-v2>
+</main>

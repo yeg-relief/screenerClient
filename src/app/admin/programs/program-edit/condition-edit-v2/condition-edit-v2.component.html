@@ -1,12 +1,14 @@
 <form [formGroup]="form" *ngIf="form !== null && form !== undefined">
+  <ng-content select="button"></ng-content>
   <i class="material-icons ng-valid" *ngIf="form.valid">check_circle</i> 
   <i class="material-icons ng-invalid" *ngIf="!form.valid">block</i>
   <div>
     <select (change)="changeKey($event)">
-      <option disabled [value]="''"> key </option>
       <option 
-        [selected]="form.get(['key', 'name']).value === key.name" 
-        [value]="stringifyKey(key)" *ngFor="let key of (keys | async)" >{{ key.name }}</option>
+        [selected]="isKeySelected(key)"
+        [value]="stringifyKey(key)" 
+        *ngFor="let key of (keys | async)" 
+        >{{ key.name }}</option>
     </select>
   </div>
   <div id="condition" [ngClass]="keyTypes">
@@ -32,4 +34,5 @@
 
     </section>
   </div>
+
 </form>

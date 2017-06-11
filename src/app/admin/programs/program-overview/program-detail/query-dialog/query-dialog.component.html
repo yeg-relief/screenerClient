@@ -28,7 +28,7 @@
       template QUERY
     </div>
 
-    <div *ngSwitchCase="'edit'">
+    <div id="edit-query-container" *ngSwitchCase="'edit'">
       <app-query-edit-v2 
         [query]="(editQuery | async)" 
         (update)="updateQuery($event)"
@@ -45,16 +45,16 @@
     </div>
 
     <div *ngSwitchDefault id="entry-point">
-      <button md-button (click)="newQuery()" title="new query">
-        <img src="assets/ic_note_add_black_24px.svg">
+      <button md-button (click)="newQuery()" style="background-color: green" title="new query">
+        <img id="start-new-program" width="96px" src="assets/ic_note_add_black_24px.svg">
       </button>
       <button disabled md-button (click)="newQuery(true)" title="[future] query template">
-        <img src="assets/ic_inbox_black_24px.svg">
+        <img  width="96px" src="assets/ic_inbox_black_24px.svg">
       </button>
     </div>
   </md-card>
 
   <section>
-    <app-query-display [selected]="selected | async" (edit)="handleEdit($event)" (delete)="handleDelete($event)" *ngFor="let query of (queries | async)" [query]="query" ></app-query-display>
+    <app-query-display [selected]="selected | async" (edit)="handleEdit($event)" (delete)="handleDelete($event)" *ngFor="let query of (queries | async); trackBy: trackByFn" [query]="query" ></app-query-display>
   </section>
 </div>

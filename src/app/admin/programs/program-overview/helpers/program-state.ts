@@ -38,16 +38,13 @@ export function updateState(input$: Observable<FilterMessage | ApplicationFacing
       state.programs = [...update].sort(programComparator);
       return state;
     } else if (update instanceof PageMetaData) {
-      console.log('page-meta-update');
       state.meta = update
       return state;
     } else if (typeof update === 'object' && update.guid !== undefined) {
-      console.log('program update');
-      console.log(update)
       const index = state.programs.findIndex(p => p.guid === update.guid)
 
       if (index >= 0) {
-        state.programs.splice(index, 1, update)
+        state.programs[index] = update;
       }
       return state;
     }
