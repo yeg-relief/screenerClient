@@ -1,8 +1,6 @@
 md-card {
   font-family: 'Open Sans', sans-serif;
   height: 35vh;
-  overflow-x: hidden;
-  overflow-y: scroll;
 }
 
 md-button-toggle {
