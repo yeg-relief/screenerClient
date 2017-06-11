@@ -23,4 +23,8 @@ export class QueryDisplayComponent implements OnChanges{
         this.styleClass.selected = true : this.styleClass.selected = false;
     } 
   }
+
+  outputBothEvents() {
+    this.delete.emit(this.query.id)
+  }
 }

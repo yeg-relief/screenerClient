@@ -98,4 +98,7 @@ export class QueryEditService implements OnDestroy {
     return generateCharacters().join('');
   }
 
+  getQueries() {
+    return this._queries;
+  }
 }

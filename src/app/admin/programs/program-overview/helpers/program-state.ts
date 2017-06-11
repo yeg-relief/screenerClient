@@ -20,7 +20,7 @@ export class ProgramState {
 }
 
 
-export function updateState(input$: Observable<FilterMessage | ApplicationFacingProgram[] | PageMetaData>)
+export function updateState(input$: Observable<FilterMessage | ApplicationFacingProgram[] | PageMetaData | ApplicationFacingProgram>)
   : Observable<ProgramState> {
   
   const INITIAL_STATE =
@@ -30,7 +30,7 @@ export function updateState(input$: Observable<FilterMessage | ApplicationFacing
     pageMetaDataFactory([])
   );
   
-  return input$.scan((state: ProgramState, update: FilterMessage | ApplicationFacingProgram[] | PageMetaData) => {
+  return input$.scan((state: ProgramState, update: FilterMessage | ApplicationFacingProgram[] | PageMetaData | ApplicationFacingProgram) => {
     if (update instanceof FilterMessage) {
       state.filter = update;
       return state;
@@ -40,6 +40,15 @@ export function updateState(input$: Observable<FilterMessage | ApplicationFacing
     } else if (update instanceof PageMetaData) {
       console.log('page-meta-update');
       state.meta = update
+      return state;
+    } else if (typeof update === 'object' && update.guid !== undefined) {
+      console.log('program update');
+      console.log(update)
+      const index = state.programs.findIndex(p => p.guid === update.guid)
+
+      if (index >= 0) {
+        state.programs.splice(index, 1, update)
+      }
       return state;
     }
 

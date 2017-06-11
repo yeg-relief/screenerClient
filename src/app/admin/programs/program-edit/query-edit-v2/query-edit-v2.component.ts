@@ -14,6 +14,7 @@ import { ConditionEditService } from '../../program-overview/services/condition-
 export class QueryEditV2Component implements OnInit {
   @Input() query: ProgramQuery;
   @Output() update = new EventEmitter<ProgramQuery>();
+  @Output() valid = new EventEmitter<boolean>();
   queryForm: FormArray;
   conditionWasChanged = new BehaviorSubject(false);
   private _localConditions: ProgramCondition[];
@@ -60,9 +61,8 @@ export class QueryEditV2Component implements OnInit {
       conditions: [...this.queryForm.value]
     }
 
-    console.log(data);
-
     this.update.emit(data);
+    this.valid.emit(this.queryForm.valid);
   }
 
 }

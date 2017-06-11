@@ -2,7 +2,14 @@
   <md-dialog-actions>
     <button md-button (click)="clearState()">  <md-card-title> {{ program.user.title }} queries </md-card-title> </button>
     <div class="flex-grow"></div>
-    <button md-button md-dialog-close><i class="material-icons clear">clear</i></button>
+    <button
+      md-button
+      title="you have unsaved changes"  
+      *ngIf="valid | async"
+      (click)="handleSave()">
+      <i class="material-icons save">save</i>
+    </button>
+    <button md-button (click)="handleCancel()" title="cancel changes"><i class="material-icons clear">clear</i></button>
   </md-dialog-actions>
   
 
@@ -22,11 +29,19 @@
     </div>
 
     <div *ngSwitchCase="'edit'">
-      <app-query-edit-v2 [query]="(editQuery | async)" (update)="updateQuery($event)"></app-query-edit-v2>
+      <app-query-edit-v2 
+        [query]="(editQuery | async)" 
+        (update)="updateQuery($event)"
+        (valid)="valid.emit($event)">
+      </app-query-edit-v2>
     </div>
 
-    <div *ngSwitchCase="'delete'">
-      are you sure you want to delete? 
+    <div id="delete-confirmation" *ngSwitchCase="'delete'">
+      <p> Are you sure you would like to delete this query ? </p>
+      <section>
+        <button md-raised-button color="primary"> yes </button>
+        <button md-raised-button color="primary"> no </button>
+      </section>
     </div>
 
     <div *ngSwitchDefault id="entry-point">

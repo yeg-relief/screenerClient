@@ -37,9 +37,11 @@ i.material-icons.clear {
   color: red;
 }
 
-i.material-icons.add {
+i.material-icons.save {
   color: green;
 }
+
+
 
 #entry-point {
   display: flex;
@@ -48,4 +50,12 @@ i.material-icons.add {
   padding: 3em 0;
   align-items: center;
   justify-content: space-between;
+}
+
+#delete-confirmation > section {
+  height:50%;
+  width: 40%;
+  border: 1px solid transparent;
+  display: flex;
+  justify-content: space-evenly;
 }

@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy, ChangeDetectionStrategy } from '@angular/core';
+import { Component, OnInit, OnDestroy, ChangeDetectionStrategy, EventEmitter } from '@angular/core';
 import { MdDialogRef } from '@angular/material';
 import { ProgramQuery, ApplicationFacingProgram } from '../../../../models/program';
 import { Router, ActivatedRoute } from '@angular/router';
@@ -21,6 +21,7 @@ export class QueryDialogComponent implements OnInit, OnDestroy {
   editQuery: Observable<ProgramQuery>;
   blankQuery: Observable<ProgramQuery>;
   selected: Observable<string>;
+  valid = new EventEmitter<boolean>(true);
 
   constructor(
     public dialogRef: MdDialogRef<QueryDialogComponent>,
@@ -31,7 +32,7 @@ export class QueryDialogComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.program = {...this.dialogRef._containerInstance.dialogConfig.data};
-    this.queryService.queries.next(this.program.application);
+    this.queryService.queries.next(this.program.application.map(p => Object.assign({}, p)))
 
     this.queryState = this.queryService.watchUrlForState().debounceTime(50).map(update => update.mode);
 
@@ -93,7 +94,22 @@ export class QueryDialogComponent implements OnInit, OnDestroy {
   }
 
   updateQuery($event: ProgramQuery) {
-    console.log('update QUERY')
     this.queryService.setById($event.id, $event);
+  }
+
+  handleCancel(){
+    this.router.navigate([], {
+      queryParams: {}
+    })
+    .then(() => this.dialogRef.close())  
+  }
+
+  handleSave(){
+
+    this.router.navigate([], {
+      queryParams: {}
+    })
+    .then(() => this.dialogRef._containerInstance.dialogConfig.data = this.queryService.getQueries())
+    .then(() => this.dialogRef.close())
   }
 }

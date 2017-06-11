@@ -1,5 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, EventEmitter } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
+import { Subject } from 'rxjs/Subject';
 import 'rxjs/add/observable/merge';
 import 'rxjs/add/operator/shareReplay';
 import { ApplicationFacingProgram } from '../../models/program';
@@ -27,6 +28,7 @@ export class ProgramOverviewComponent implements OnInit {
   programs$: Observable<ApplicationFacingProgram[]>;
   loading$: Observable<boolean>;
   pageMetaData$: Observable<helpers.PageMetaData>;
+  programUpdate$ = new EventEmitter<ApplicationFacingProgram>();
   currentPage = 0;
 
   constructor(
@@ -48,6 +50,7 @@ export class ProgramOverviewComponent implements OnInit {
       this.store.let(fromRoot.getLoadedPrograms),
       this.filterService.form.valueChanges.distinctUntilChanged().map(update => new helpers.FilterMessage(update)),
       this.pageService.valueChanges.map(config => new helpers.PageMetaData(config)),
+      this.programUpdate$
     )
       .let(helpers.updateState)
       .let(helpers.applyFilter)
@@ -58,5 +61,9 @@ export class ProgramOverviewComponent implements OnInit {
 
     this.loading$ = this.store.let(fromRoot.areProgramsLoaded);
     this.pageMetaData$ = this.pageService.valueChanges;
+  }
+
+  handleUpdate($event) {
+    this.programUpdate$.emit($event);
   }
 }

@@ -1,7 +1,4 @@
 <form [formGroup]="form" *ngIf="form !== null && form !== undefined">
-  <div *ngIf="!form.valid">
-    {{ form.errors }}
-  </div>
   <i class="material-icons ng-valid" *ngIf="form.valid">check_circle</i> 
   <i class="material-icons ng-invalid" *ngIf="!form.valid">block</i>
   <div>
