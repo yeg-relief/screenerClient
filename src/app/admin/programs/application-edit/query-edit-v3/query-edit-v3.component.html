@@ -1,0 +1,14 @@
+
+<main>
+  <section id="header">
+    <h3> selected query </h3>
+    <button md-raised-button (click)="saveQuery()" [disabled]="!programQuery.form.valid || programQuery.form.pristine">save</button>
+    <button md-raised-button (click)="newCondition()" [disabled]="!programQuery.form.valid">new condition</button>
+  </section>
+  <section id="conditions">
+      <app-condition-edit-v3 *ngFor="let condition of programQuery.conditions" [condition]="condition">
+
+      </app-condition-edit-v3>
+    
+  </section>
+</main>

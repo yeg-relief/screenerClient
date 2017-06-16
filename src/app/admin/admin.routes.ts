@@ -21,6 +21,8 @@ import { ScreenerContainerComponent } from './screener/screener-container/screen
 import { ScreenerOverviewComponent } from './screener/screener-overview/screener-overview.component'
 import { ScreenerPreviewComponent } from './screener/screener-preview/screener-preview.component';
 
+import { ApplicationEditComponent } from './programs/application-edit/application-edit.component'
+
 export const routing: ModuleWithProviders = RouterModule.forChild([
   {
     path: '', component: AdminComponent,
@@ -52,7 +54,11 @@ export const routing: ModuleWithProviders = RouterModule.forChild([
             component: ProgramOverviewComponent,
             resolve: {
               programs: ProgramsResolverService
-            }
+            },
+          },
+          {
+            path: 'application-edit/:guid',
+            component: ApplicationEditComponent
           },
           {
             path: 'edit/:guid',

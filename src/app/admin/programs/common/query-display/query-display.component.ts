@@ -1,5 +1,6 @@
 import { Component, Input, Output, ChangeDetectionStrategy, EventEmitter, OnChanges } from '@angular/core';
-import { ProgramQuery } from '../../../models/program';
+import { ProgramQueryClass } from '../../services/program-query.class';
+import { ProgramQuery } from '../../../models'
 @Component({
   selector: 'app-query-display',
   templateUrl: './query-display.component.html',
@@ -8,7 +9,7 @@ import { ProgramQuery } from '../../../models/program';
 })
 export class QueryDisplayComponent implements OnChanges{
   @Input() query: ProgramQuery;
-  @Input() selected: string
+  @Input() selected: ProgramQueryClass
   @Output() edit = new EventEmitter();
   @Output() delete = new EventEmitter();
   styleClass = {
@@ -18,8 +19,8 @@ export class QueryDisplayComponent implements OnChanges{
   constructor() { }
 
   ngOnChanges(changes){
-    if (changes.selected !== undefined) {
-      changes.selected.currentValue === this.query.id ? 
+    if (changes && changes.selected !== undefined && changes.selected.currentValue !== undefined) {
+      changes.selected.currentValue.data.id === this.query.id ? 
         this.styleClass.selected = true : this.styleClass.selected = false;
     } 
   }

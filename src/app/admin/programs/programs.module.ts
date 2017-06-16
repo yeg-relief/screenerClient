@@ -20,6 +20,11 @@ import { QueryDisplayComponent } from './common/query-display/query-display.comp
 import { QueryEditV2Component } from './program-edit/query-edit-v2/query-edit-v2.component';
 import { ConditionEditV2Component } from './program-edit/condition-edit-v2/condition-edit-v2.component';
 import { NewConditionComponent } from './program-edit/new-condition/new-condition.component';
+import { ApplicationEditComponent } from './application-edit/application-edit.component';
+import { ProgramModelService } from './services/program-model.service';
+import { QueryEditV3Component } from './application-edit/query-edit-v3/query-edit-v3.component';
+import { ConditionEditV3Component } from './application-edit/condition-edit-v3/condition-edit-v3.component';
+import { QueryService } from './services/query.service';
 
 @NgModule({
   imports: [
@@ -46,10 +51,16 @@ import { NewConditionComponent } from './program-edit/new-condition/new-conditio
     QueryEditV2Component,
     ConditionEditV2Component,
     NewConditionComponent,
+    ApplicationEditComponent,
+    QueryEditV3Component,
+    ConditionEditV3Component,
   ],
   entryComponents: [
     QueryDialogComponent
   ],
-  providers: []
+  providers: [
+    ProgramModelService,
+    QueryService
+  ]
 })
 export class ProgramsModule { }

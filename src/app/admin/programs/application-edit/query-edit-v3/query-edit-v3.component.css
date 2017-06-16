@@ -1,0 +1,31 @@
+app-condition-edit-v3 {
+  margin: 1em 0;
+}
+
+#header {
+  display: flex;
+  justify-content: space-around;
+}
+
+#conditions {
+  display: flex;
+  flex-direction: column;
+  width: 80%;
+  margin: 1em auto;
+}
+
+main {
+  border: solid 1px darkorange;
+  min-height: 400px;
+  display: flex;
+  flex-direction: column;
+}
+
+h3 {
+  margin-left: 1em;
+}
+
+.ng-invalid {
+  color: red;
+  border: 1px solid red;
+}

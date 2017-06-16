@@ -1,0 +1,14 @@
+main {
+  display: flex;
+  align-items: center;
+  height: 30px;
+  border-left: solid 1px lightgrey;
+}
+
+main > * {
+  margin-left: 1em;
+}
+
+.ng-invalid {
+  color: red;
+}

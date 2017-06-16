@@ -1,6 +1,6 @@
 <md-card>
   <md-card-actions>
-    <button md-button (click)="openQueryDialog()" title="view query details"><i class="material-icons">content_copy</i></button>
+    <button md-button routerLink="/admin/programs/application-edit/{{program.guid}}" title="edit queries"><i class="material-icons">content_copy</i></button>
   </md-card-actions>
 
   <section *ngIf="selectedView === 'user'">

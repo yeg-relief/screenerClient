@@ -1,0 +1,32 @@
+<div class="container" *ngIf="(form | async) !== null"> 
+  <header>
+    <h1>{{ (program | async)?.user.data?.title }} query details </h1>
+    <p>{{ (program | async)?.application.length }} queries on server.</p>
+    <button md-raised-button color="primary" title="new query">new query</button>
+    <button md-raised-button disabled title="[future] new query from template">from template</button>
+    <button md-raised-button color="warn" (click)="no_op()" title="cancel changes">
+      <i class="material-icons clear">clear</i>
+    </button>
+  </header>
+
+  <div class="flex">
+    <button
+      md-button
+      title="you have unsaved changes"  
+      *ngIf="(form | async).valid"
+      (click)="no_op()">
+      <i class="material-icons save">save</i>
+    </button>
+  </div>
+  
+
+  <div>{{ (form | async).value.application.length }} queries local.</div>
+
+  <span id="experiment" *ngIf="selected !== undefined">
+    <app-query-edit-v3 [programQuery]="selected"> </app-query-edit-v3>
+  </span>
+
+  <section>
+    <app-query-display [selected]="selected"  (edit)="selectQuery(query)" (delete)="no_op()" *ngFor="let query of (program | async).application" [query]="query.data" ></app-query-display>
+  </section>
+</div>
