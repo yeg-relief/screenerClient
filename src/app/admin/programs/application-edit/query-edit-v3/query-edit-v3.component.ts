@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, OnDestroy } from '@angular/core';
 import { ProgramConditionClass } from '../../services/program-condition.class';
 import { ProgramQueryClass } from '../../services/program-query.class';
 import { QueryService } from '../../services/query.service';
@@ -7,20 +7,35 @@ import { ReplaySubject } from 'rxjs/ReplaySubject';
 import 'rxjs/add/operator/multicast';
 import 'rxjs/add/operator/filter'
 import {MdSnackBar} from '@angular/material';
-
+import { QueryEvent } from '../../services';
+import { Subscription } from 'rxjs/Subscription';
 @Component({
   selector: 'app-query-edit-v3',
   templateUrl: './query-edit-v3.component.html',
   styleUrls: ['./query-edit-v3.component.css']
 })
-export class QueryEditV3Component implements OnInit {
+export class QueryEditV3Component implements OnInit, OnDestroy {
   @Input() programQuery: ProgramQueryClass;
+  private _subscription: Subscription;
   constructor(private service: QueryService, public snackBar: MdSnackBar) { }
 
-  ngOnInit() {}
+  ngOnInit() {
+    this._subscription = this.service.broadcast
+        .filter(event => event.type === this.service.update && event.id === this.programQuery.data.id)
+        .subscribe(event => {
+          this.programQuery.form.markAsDirty()
+          this.programQuery.commit()
+        })
+  }
+
+  ngOnDestroy(){
+    if (this._subscription !== undefined && !this._subscription.closed)
+      this._subscription.unsubscribe();
+  }
 
   newCondition() {
     this.programQuery.addCondition();
+    
   }
 
   saveQuery() {
@@ -28,13 +43,10 @@ export class QueryEditV3Component implements OnInit {
       this.service.createOrUpdate(this.programQuery, this.programQuery.data.guid)
       .take(1)
       .subscribe(val => {
-        if(val) {
+        if(val.created === true || val.result === 'updated') {
           this.snackBar.open('query saved.', '', {
             duration: 2000
           })
-          
-          // update the query here...
-          this.programQuery.form.setValue(this.programQuery.data);
         }
           
         else

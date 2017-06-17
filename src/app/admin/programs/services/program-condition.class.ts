@@ -1,4 +1,4 @@
-import { ProgramCondition, ProgramQuery } from '../../models'
+import { ProgramCondition, ProgramQuery, Key } from '../../models'
 import { FormGroup, FormBuilder, AbstractControl, Validators, FormControl, FormArray } from '@angular/forms';
 import { UserProgram } from './user-program.class';
 
@@ -13,12 +13,11 @@ export class ProgramConditionClass {
         name: 'invalid',
         type: 'invalid'
       },
-      value: '',
+      value: 'invalid',
       type: 'invalid',
-      qualifier: ''
+      qualifier: 'invalid'
     };
     this._initForm(fb);
-
   }
 
   private _initForm(fb: FormBuilder) {
@@ -30,10 +29,28 @@ export class ProgramConditionClass {
       value: new FormControl(this.data.value, Validators.required),
       type: new FormControl(this.data.type),
       qualifier: new FormControl(this.data.qualifier)
-    })
+    }, {validator: this.validator})
   }
 
-  validator(programGroup: AbstractControl): {[key: string]: any} {
+  validator(condition: AbstractControl): {[key: string]: any} {
+    const value = condition.value;
+    const key: Key = value.key;
+    const others = Object.keys(value).filter(k => k !== 'key')
+    const errors = {};
+
+    if (key.name === 'invalid' || key.type === 'invalid') {
+      errors['invalid_key'] = 'key is invalid';
+      condition.get('key').setErrors(errors);
+    }
+
+    others.forEach(prop => {
+      if(value[prop] === 'invalid')
+        errors[prop] = 'invalid'
+    })
+
+    if (Object.keys(errors).length > 0)
+      return errors;
+
     return null;
   }
 

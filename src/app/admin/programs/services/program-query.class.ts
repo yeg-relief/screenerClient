@@ -19,7 +19,6 @@ export class ProgramQueryClass {
 
     this.conditions = this.data.conditions.map(c => new ProgramConditionClass(fb, c));
     this._initForm(fb);
-
   }
 
   private _initForm(fb: FormBuilder) {
@@ -35,7 +34,6 @@ export class ProgramQueryClass {
     (<FormArray>this.form.get('conditions')).insert(0, condition.form);
     this.conditions = [condition, ...this.conditions]; 
   }
-
 
   commit() {
     this.data = this.form.value;

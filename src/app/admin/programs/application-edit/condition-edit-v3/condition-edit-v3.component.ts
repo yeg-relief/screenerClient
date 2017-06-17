@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, OnChanges, SimpleChanges } from '@angular/core';
 import { Key } from '../../../models/key'
 import { ProgramConditionClass } from '../../services/program-condition.class';
 import { ProgramModelService } from '../../services/program-model.service'
@@ -9,9 +9,12 @@ import { Observable } from 'rxjs/Observable';
   templateUrl: './condition-edit-v3.component.html',
   styleUrls: ['./condition-edit-v3.component.css']
 })
-export class ConditionEditV3Component implements OnInit {
+export class ConditionEditV3Component implements OnInit, OnChanges {
   @Input() condition: ProgramConditionClass;
   keys: Observable<Key[]>;
+  keyNameClasses = {
+    'ng-invalid': false
+  }
   readonly qualifiers = [
     {
       display: '>', value: 'greaterThan'
@@ -27,11 +30,17 @@ export class ConditionEditV3Component implements OnInit {
     },
     {
       display: '<', value: 'lessThan'
+    },
+    {
+      display: 'invalid', value: 'invalid'
     }
   ];
 
 
   constructor(private ps: ProgramModelService) { }
+
+  ngOnChanges(condition: SimpleChanges){
+  }
 
   ngOnInit() {
     this.keys = this.ps.keys.map(keys => keys.sort( (a, b) => a.name.localeCompare(b.name)) );
@@ -64,6 +73,14 @@ export class ConditionEditV3Component implements OnInit {
           booleanValueStrategy(this.condition.form);
         else 
           numberValueStrategy(this.condition.form);
+
+        setTimeout(() => {
+          if (this.condition.form.getError('invalid_key') !== null) {
+            this.keyNameClasses['ng-invalid'] = true;
+          } else {
+            this.keyNameClasses['ng-invalid'] = false;
+          }
+        }, 10);
       }
     });
   }
@@ -74,7 +91,7 @@ export class ConditionEditV3Component implements OnInit {
 
   isQualifierSelected(qualifierValue: string) { 
     const bleh = this.getKeyType() !== 'boolean' && 
-           this.condition.form.get('qualifier').value === qualifierValue;
+                 this.condition.form.get('qualifier').value === qualifierValue;
 
     return bleh;
   }

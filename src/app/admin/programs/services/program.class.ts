@@ -8,7 +8,7 @@ export class Program {
   user: UserProgram;
   guid: string;
   form: FormGroup;
-  data: ApplicationFacingProgram
+  data: ApplicationFacingProgram;
 
   constructor(opts, fb: FormBuilder){
 
@@ -48,6 +48,14 @@ export class Program {
 
   validator(programGroup: AbstractControl): {[key: string]: any} {
     return null;
+  }
+
+  updateQuery(id: string, update: ProgramQueryClass){
+    const targetQuery = this.application.find(q => q.data.id === update.data.id)
+    if (targetQuery !== undefined) {
+      targetQuery.form.setValue(update.form.value);
+      targetQuery.commit();
+    }
   }
 
 }

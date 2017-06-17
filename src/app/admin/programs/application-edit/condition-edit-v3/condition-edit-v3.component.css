@@ -9,6 +9,6 @@ main > * {
   margin-left: 1em;
 }
 
-.ng-invalid {
-  color: red;
+main.ng-invalid {
+  border: 1px solid red;
 }

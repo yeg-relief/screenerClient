@@ -4,11 +4,12 @@ import { ProgramCondition, ProgramQuery } from '../../models';
 import { ProgramQueryClass } from './program-query.class';
 import { AuthService } from '../../core/services/auth.service'
 import { Observable } from 'rxjs/Observable';
-
-
+import { ReplaySubject } from 'rxjs/ReplaySubject';
+import { QueryEvent} from './index';
 @Injectable()
 export class QueryService {
-
+  update = Symbol();
+  broadcast = new ReplaySubject<QueryEvent>();
   constructor(private http: Http, private authService: AuthService,) {}
 
   private getCredentials(): RequestOptions {
@@ -29,7 +30,19 @@ export class QueryService {
     const body = JSON.stringify({ data });
     return this.http.post('/protected/query/', body, creds)
       .map(res => res.json())
-      .do( _ => console.log(_))
+      .map( ([head, ...tail]) => head)
+      .do( res => {
+        if (res.created === true || res.result === 'updated') {
+          console.log(query.conditions)
+          query.conditions = query.conditions.sort( (a, b) => a.data.key.name.localeCompare(b.data.key.name))
+          console.log(query.conditions)
+          this.broadcast.next({
+            id: query.data.id,
+            data: query,
+            type: this.update
+          })
+        }
+      })
       .catch(this.loadError)
   }
 
