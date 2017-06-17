@@ -30,6 +30,6 @@ export class QueryDisplayComponent implements OnChanges, OnInit {
   }
 
   outputBothEvents() {
-    this.delete.emit(this.query.id)
+    this.delete.emit(this.query)
   }
 }

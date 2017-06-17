@@ -1,10 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { ProgramModelService } from '../services/program-model.service'
+import { QueryService } from '../services/query.service'
 import { Program } from '../services/program.class';
 import { ProgramQueryClass } from '../services/program-query.class';
 import { ActivatedRoute } from '@angular/router';
 import { FormGroup } from '@angular/forms'
-import { ApplicationFacingProgram } from '../../models/program';
+import { ApplicationFacingProgram, ProgramQuery } from '../../models/program';
 import { Observable } from 'rxjs/Observable';
 import { ReplaySubject } from 'rxjs/ReplaySubject';
 import { Subject } from 'rxjs/Subject';
@@ -25,6 +26,7 @@ export class ApplicationEditComponent implements OnInit {
 
   constructor(
     private modelService: ProgramModelService, 
+    private queryService: QueryService,
     private route: ActivatedRoute
   ) {}
 
@@ -42,11 +44,23 @@ export class ApplicationEditComponent implements OnInit {
     this.selected = query;
   }
 
-  no_op(){}
+  handleDelete(query: ProgramQuery){
+    this.queryService.deleteQuery(query)
+    // TODO: hook up the server endpoint
+        .subscribe(val => console.log(val))
+    /*
+    the following updates the UI
+
+    this.program.take(1)
+        .subscribe( program => {
+          const index = program.application.findIndex(q => q.data.id === query_id);
+          if (index >= 0) {
+            program.application.splice(index, 1);
+          }
+        })*/
+  }
 
   newQuery(){
-    
-
     this.program.take(1)
         .subscribe( program => {
           const query = this.modelService.getBlankQuery(program.data.guid);
