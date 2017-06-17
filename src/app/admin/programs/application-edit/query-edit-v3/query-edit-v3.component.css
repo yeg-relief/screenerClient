@@ -5,6 +5,16 @@ app-condition-edit-v3 {
 #header {
   display: flex;
   justify-content: space-around;
+  align-items: center;
+  width: 100%;
+}
+
+#header > button {
+  margin-left: 10px;
+}
+
+#header > *:last-child {
+  margin-right: 10px;
 }
 
 #conditions {

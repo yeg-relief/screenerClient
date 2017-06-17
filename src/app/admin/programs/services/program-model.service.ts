@@ -44,8 +44,9 @@ export class ProgramModelService {
 
   updateProgram(update: Program) {
     if (update.form.valid) {
-      return this._updateProgram(update.data).let(this._updateValueInCache)
-         
+      return this._updateProgram(update.data)
+                 .let(this._updateValueInCache)
+                 
     }
 
     return Observable.throw(Observable.of(`attempting to update an invalid program: ${update}`));
@@ -149,5 +150,31 @@ export class ProgramModelService {
       errMsg = error.message ? error.message : error.toString();
     }
     return Observable.throw(errMsg);
+  }
+
+  getBlankQuery(guid: string): ProgramQuery {
+    return {
+      id: this.generateRandomString(),
+      guid,
+      conditions: []
+    };
+  }
+
+  generateRandomString(): string {
+    const LENGTH = 26;
+    const lowerCaseCharSet = "abcdefghijklmnopqrstuvwxyz"
+    const charSet = lowerCaseCharSet
+      .concat(lowerCaseCharSet.toUpperCase())
+      .concat("1234567890")
+
+    const generateCharacters = () => {
+      const arr = new Array(LENGTH);
+      for(let i = 0; i < arr.length; i++){
+        arr[i] = charSet[Math.floor(Math.random() * charSet.length)];
+      }
+      return arr;
+    }
+    
+    return generateCharacters().join('');
   }
 }

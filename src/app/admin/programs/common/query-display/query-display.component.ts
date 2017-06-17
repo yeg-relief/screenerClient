@@ -1,4 +1,4 @@
-import { Component, Input, Output, ChangeDetectionStrategy, EventEmitter, OnChanges } from '@angular/core';
+import { Component, Input, Output, ChangeDetectionStrategy, EventEmitter, OnChanges, OnInit } from '@angular/core';
 import { ProgramQueryClass } from '../../services/program-query.class';
 import { ProgramQuery } from '../../../models'
 @Component({
@@ -7,7 +7,7 @@ import { ProgramQuery } from '../../../models'
   styleUrls: ['./query-display.component.css'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class QueryDisplayComponent implements OnChanges{
+export class QueryDisplayComponent implements OnChanges, OnInit {
   @Input() query: ProgramQuery;
   @Input() selected: ProgramQueryClass
   @Output() edit = new EventEmitter();
@@ -23,6 +23,10 @@ export class QueryDisplayComponent implements OnChanges{
       changes.selected.currentValue.data.id === this.query.id ? 
         this.styleClass.selected = true : this.styleClass.selected = false;
     } 
+  }
+
+  ngOnInit() {
+    this.query.conditions.sort( (a, b) => a.key.name.localeCompare(b.key.name) )
   }
 
   outputBothEvents() {

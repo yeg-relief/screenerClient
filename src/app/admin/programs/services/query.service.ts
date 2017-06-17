@@ -33,9 +33,7 @@ export class QueryService {
       .map( ([head, ...tail]) => head)
       .do( res => {
         if (res.created === true || res.result === 'updated') {
-          console.log(query.conditions)
           query.conditions = query.conditions.sort( (a, b) => a.data.key.name.localeCompare(b.data.key.name))
-          console.log(query.conditions)
           this.broadcast.next({
             id: query.data.id,
             data: query,

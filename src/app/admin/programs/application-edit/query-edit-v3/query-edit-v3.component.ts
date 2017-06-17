@@ -9,6 +9,8 @@ import 'rxjs/add/operator/filter'
 import {MdSnackBar} from '@angular/material';
 import { QueryEvent } from '../../services';
 import { Subscription } from 'rxjs/Subscription';
+import { FormArray } from '@angular/forms';
+
 @Component({
   selector: 'app-query-edit-v3',
   templateUrl: './query-edit-v3.component.html',
@@ -20,6 +22,8 @@ export class QueryEditV3Component implements OnInit, OnDestroy {
   constructor(private service: QueryService, public snackBar: MdSnackBar) { }
 
   ngOnInit() {
+    this.programQuery.conditions.sort( (a, b) => a.data.key.name.localeCompare(b.data.key.name));
+
     this._subscription = this.service.broadcast
         .filter(event => event.type === this.service.update && event.id === this.programQuery.data.id)
         .subscribe(event => {
@@ -35,7 +39,6 @@ export class QueryEditV3Component implements OnInit, OnDestroy {
 
   newCondition() {
     this.programQuery.addCondition();
-    
   }
 
   saveQuery() {
@@ -47,12 +50,15 @@ export class QueryEditV3Component implements OnInit, OnDestroy {
           this.snackBar.open('query saved.', '', {
             duration: 2000
           })
-        }
-          
-        else
+        }else{
           this.snackBar.open('error: query not saved.', '', {
             duration: 2000
           })
+        }
       })
+  }
+
+  handleRemove(condition) {
+    this.programQuery.removeCondition(condition);
   }
 }

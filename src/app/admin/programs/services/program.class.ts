@@ -9,9 +9,10 @@ export class Program {
   guid: string;
   form: FormGroup;
   data: ApplicationFacingProgram;
+  fb: FormBuilder;
 
   constructor(opts, fb: FormBuilder){
-
+    this.fb = fb;
     const queries = opts.application ? opts.application : [];
     const user = opts.user ? {...opts.user} : {
       guid: 'new',
@@ -33,13 +34,13 @@ export class Program {
       guid: this.guid
     };
 
-    this._initForm(fb);
+    this._initForm();
 
   }
 
-  private _initForm(fb: FormBuilder) {
+  private _initForm() {
     const queries = this.application.map(q => q.form);
-    this.form = fb.group({
+    this.form = this.fb.group({
       guid: new FormControl(this.guid, Validators.required),
       user: this.user._form,
       application: new FormControl(queries)
@@ -58,5 +59,11 @@ export class Program {
     }
   }
 
+  _addQuery(query: ProgramQuery): void {
+    const query_obj = new ProgramQueryClass(query, this.fb);
+    this.data.application = [ query_obj.data, ...this.data.application ]
+    this.application = [query_obj, ...this.application ];
+    this._initForm();
+  }
 }
 

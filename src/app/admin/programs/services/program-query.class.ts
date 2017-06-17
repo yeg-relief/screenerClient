@@ -35,6 +35,37 @@ export class ProgramQueryClass {
     this.conditions = [condition, ...this.conditions]; 
   }
 
+  removeCondition(condition: ProgramConditionClass) {
+    const foundCondition = this.conditions
+      .findIndex(c => this.hashCondition(c) === this.hashCondition(condition));
+    if (foundCondition >= 0) {
+      try {
+        (<FormArray>this.form.get('conditions')).removeAt(foundCondition);
+        this.conditions.splice(foundCondition, 1);
+      } catch (e) {
+        console.error(e)
+      }
+    }
+  }
+
+  private hashCondition(cond: ProgramConditionClass): string {
+    const sortedKeys = Object.keys(cond.data).sort( (a, b) => a.localeCompare(b));
+    const tmp = {};
+    for(const key of sortedKeys) {
+      tmp[key] = cond.data[key];
+    }
+    return JSON.stringify(tmp);
+  }
+
+  private _equal(targetCondition: ProgramConditionClass): (c: ProgramConditionClass) => boolean {
+
+    const hashedTarget = this.hashCondition(targetCondition);
+
+
+    return (otherCondition: ProgramConditionClass) => this.hashCondition(otherCondition) === hashedTarget;
+  } 
+
+
   commit() {
     this.data = this.form.value;
   }

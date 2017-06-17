@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, OnChanges, SimpleChanges } from '@angular/core';
+import { Component, OnInit, Input, OnChanges, SimpleChanges , Output, EventEmitter} from '@angular/core';
 import { Key } from '../../../models/key'
 import { ProgramConditionClass } from '../../services/program-condition.class';
 import { ProgramModelService } from '../../services/program-model.service'
@@ -11,6 +11,7 @@ import { Observable } from 'rxjs/Observable';
 })
 export class ConditionEditV3Component implements OnInit, OnChanges {
   @Input() condition: ProgramConditionClass;
+  @Output() remove = new EventEmitter();
   keys: Observable<Key[]>;
   keyNameClasses = {
     'ng-invalid': false
@@ -94,6 +95,10 @@ export class ConditionEditV3Component implements OnInit, OnChanges {
                  this.condition.form.get('qualifier').value === qualifierValue;
 
     return bleh;
+  }
+
+  deleteCondition() {
+    this.remove.emit(this.condition)
   }
 
 }

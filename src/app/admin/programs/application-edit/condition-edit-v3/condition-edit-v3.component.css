@@ -12,3 +12,7 @@ main > * {
 main.ng-invalid {
   border: 1px solid red;
 }
+
+.material-icons {
+  cursor: pointer;
+}

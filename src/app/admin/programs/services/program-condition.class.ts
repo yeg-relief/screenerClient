@@ -35,19 +35,19 @@ export class ProgramConditionClass {
   validator(condition: AbstractControl): {[key: string]: any} {
     const value = condition.value;
     const key: Key = value.key;
-    const others = Object.keys(value).filter(k => k !== 'key')
+    let others = Object.keys(value).filter(k => k !== 'key')
     const errors = {};
-
     if (key.name === 'invalid' || key.type === 'invalid') {
       errors['invalid_key'] = 'key is invalid';
       condition.get('key').setErrors(errors);
     }
 
+    others = value.key.type === 'boolean' ? others.filter(o => o !== 'qualifier') : others;
+
     others.forEach(prop => {
       if(value[prop] === 'invalid')
         errors[prop] = 'invalid'
     })
-
     if (Object.keys(errors).length > 0)
       return errors;
 

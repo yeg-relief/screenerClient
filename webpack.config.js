@@ -28,6 +28,7 @@ const postcssPlugins = function () {
             discardComments: { remove: (comment) => !importantCommentRe.test(comment) }
         };
         return [
+            require('lost'),
             postcssUrl({
                 url: (URL) => {
                     // Only convert root relative URLs, which CSS-Loader won't process into require().
