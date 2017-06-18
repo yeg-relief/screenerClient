@@ -29,6 +29,15 @@
   width: 60%;
   display: flex;
   flex-direction: column;
+  position: relative;
+}
+
+md-icon {
+  position: absolute;
+  top: 1em;
+  right: 1em;
+  color: steelblue;
+  cursor: pointer;
 }
 
 main > #query-edit {

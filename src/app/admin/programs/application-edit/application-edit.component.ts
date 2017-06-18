@@ -36,6 +36,7 @@ export class ApplicationEditComponent implements OnInit {
     this.program = this.modelService
       .findProgram(this.route.snapshot.params['guid'])
       .merge(this.update.filter(u => u !== undefined))
+      .do( p => this.data = p.data)
       .multicast(new ReplaySubject<Program>(1)).refCount();
 
     this.form = this.program.map(p => p.form).multicast(new ReplaySubject<FormGroup>(1)).refCount();
