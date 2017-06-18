@@ -17,18 +17,24 @@ app-condition-edit-v3 {
   margin-right: 10px;
 }
 
+#header > p {
+  width: 30%;
+  overflow: hidden; 
+  text-overflow: ellipsis;
+}
+
 #conditions {
   display: flex;
   flex-direction: column;
-  width: 80%;
-  margin: 1em auto;
+  border-top: lightgrey 1px solid;
 }
 
 main {
-  border: solid 1px darkorange;
+  border: dashed 1px darkorange;
   min-height: 400px;
   display: flex;
   flex-direction: column;
+  padding: 3em;
 }
 
 h3 {

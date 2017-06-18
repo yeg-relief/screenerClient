@@ -17,6 +17,7 @@ import { QueryEditComponent } from './program-edit/query-edit/query-edit.compone
 import { ProgramListPaginatorComponent } from './program-overview/program-list-paginator/program-list-paginator.component';
 import { QueryDialogComponent } from './program-overview/program-detail/query-dialog/query-dialog.component';
 import { QueryDisplayComponent } from './common/query-display/query-display.component';
+import { DeleteQueryDialog } from './common/query-display/query-display.component';
 import { QueryEditV2Component } from './program-edit/query-edit-v2/query-edit-v2.component';
 import { ConditionEditV2Component } from './program-edit/condition-edit-v2/condition-edit-v2.component';
 import { NewConditionComponent } from './program-edit/new-condition/new-condition.component';
@@ -54,9 +55,11 @@ import { QueryService } from './services/query.service';
     ApplicationEditComponent,
     QueryEditV3Component,
     ConditionEditV3Component,
+    DeleteQueryDialog
   ],
   entryComponents: [
-    QueryDialogComponent
+    QueryDialogComponent,
+    DeleteQueryDialog
   ],
   providers: [
     ProgramModelService,

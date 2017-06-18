@@ -44,13 +44,12 @@ export class QueryService {
       .catch(this.loadError)
   }
 
-  deleteQuery(query: ProgramQuery) {
+  deleteQuery(query_id: string) {
     const creds = this.getCredentials();
     creds.headers.append( 'Content-Type', 'application/json' );
-    const body = JSON.stringify({ query });
-    return this.http.delete(`/protected/query/${query.id}`, creds)
+    return this.http.delete(`/protected/query/${query_id}`, creds)
       .map(res => res.json())
-      .do( _ => console.log(_))
+      .map(res => res.found && res.result === 'deleted');
   }
 
   loadError(error: Response | any) {

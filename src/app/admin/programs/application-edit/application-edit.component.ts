@@ -4,11 +4,12 @@ import { QueryService } from '../services/query.service'
 import { Program } from '../services/program.class';
 import { ProgramQueryClass } from '../services/program-query.class';
 import { ActivatedRoute } from '@angular/router';
-import { FormGroup } from '@angular/forms'
+import { FormGroup, FormArray } from '@angular/forms'
 import { ApplicationFacingProgram, ProgramQuery } from '../../models/program';
 import { Observable } from 'rxjs/Observable';
 import { ReplaySubject } from 'rxjs/ReplaySubject';
 import { Subject } from 'rxjs/Subject';
+import {MdSnackBar} from '@angular/material';
 import 'rxjs/add/operator/multicast';
 import 'rxjs/add/operator/merge';
 
@@ -27,7 +28,8 @@ export class ApplicationEditComponent implements OnInit {
   constructor(
     private modelService: ProgramModelService, 
     private queryService: QueryService,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    public snackBar: MdSnackBar
   ) {}
 
   ngOnInit() {
@@ -44,20 +46,32 @@ export class ApplicationEditComponent implements OnInit {
     this.selected = query;
   }
 
-  handleDelete(query: ProgramQuery){
-    this.queryService.deleteQuery(query)
-    // TODO: hook up the server endpoint
-        .subscribe(val => console.log(val))
-    /*
-    the following updates the UI
-
-    this.program.take(1)
-        .subscribe( program => {
-          const index = program.application.findIndex(q => q.data.id === query_id);
-          if (index >= 0) {
-            program.application.splice(index, 1);
-          }
-        })*/
+  handleDelete(query_id: string){
+    Observable.combineLatest(
+      this.program.take(1),
+      this.queryService.deleteQuery(query_id).take(1).catch( err => Observable.of(err)),
+      this.form.take(1)
+    ).subscribe(
+      ([program, wasDeleted, form]) => {
+        console.log(form.get('application'))
+        const index = program.application.findIndex(q => q.data.id === query_id);
+        if (wasDeleted && index >= 0) {
+          program.application.splice(index, 1);
+          
+          console.log(form.get('application'))
+          //(<FormArray>form.get('application')).removeAt(index)
+          this.snackBar.open('query deleted','',{
+            duration: 2000
+          })
+        }
+        else 
+          this.snackBar.open('unable to delete query','',{
+            duration: 2000
+          })
+        
+      },
+      err => console.error(err)
+    );
   }
 
   newQuery(){

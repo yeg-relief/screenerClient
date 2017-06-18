@@ -15,7 +15,11 @@ export class ConditionEditV3Component implements OnInit, OnChanges {
   keys: Observable<Key[]>;
   keyNameClasses = {
     'ng-invalid': false
-  }
+  };
+  optional = {
+    boolean: false,
+    number: false,
+  };
   readonly qualifiers = [
     {
       display: '>', value: 'greaterThan'
@@ -32,9 +36,6 @@ export class ConditionEditV3Component implements OnInit, OnChanges {
     {
       display: '<', value: 'lessThan'
     },
-    {
-      display: 'invalid', value: 'invalid'
-    }
   ];
 
 
@@ -57,11 +58,17 @@ export class ConditionEditV3Component implements OnInit, OnChanges {
   }
 
   handleKeyChange($event) {
-    const booleanValueStrategy = form => form.get('value').setValue(true)
+    const booleanValueStrategy = form => {
+      form.get('value').setValue(true);
+      this.optional.boolean = true;
+      this.optional.number = false;
+    }
 
     const numberValueStrategy = form => {
       form.get('value').setValue(0);
       form.get('qualifier').setValue('lessThanOrEqual');
+      this.optional.boolean = false;
+      this.optional.number = true;
     }
 
     const name = $event.target.value;
