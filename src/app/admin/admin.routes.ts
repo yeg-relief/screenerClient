@@ -3,68 +3,52 @@ import { RouterModule } from '@angular/router';
 import { AdminComponent } from './admin.component';
 import { AuthGuardService } from './core/services/auth-guard.service';
 import { LoginComponent } from './core/login/login.component';
-
 import { ProgramsComponent } from './programs/programs.component';
 import { ProgramOverviewComponent } from './programs/program-overview/program-overview.component';
 import { ProgramEditComponent } from './programs/program-edit/program-edit.component';
-import { DeleteConfirmationComponent } from './programs/program-overview/delete-confirmation/delete-confirmation.component';
-import { QueryEditComponent } from './programs/program-edit/query-edit/query-edit.component';
-import { ProgramsResolverService } from './programs/program-overview/programs-resolver.service';
-
 import { KeyResolverService } from './keys/overview/key-resolver.service';
-
 import { KeysComponent } from './keys/keys.component';
 import { KeysOverviewComponent } from './keys/overview/overview.component';
 import { KeyEditComponent } from './keys/edit/key-edit.component';
-
 import { ScreenerContainerComponent } from './screener/screener-container/screener-container.component';
 import { ScreenerOverviewComponent } from './screener/screener-overview/screener-overview.component'
 import { ScreenerPreviewComponent } from './screener/screener-preview/screener-preview.component';
+import { ApplicationEditComponent } from './programs/application-edit/application-edit.component'
 
 export const routing: ModuleWithProviders = RouterModule.forChild([
   {
-    path: '', component: AdminComponent,
+    path: '', component: AdminComponent, 
+    //canActivate: [AuthGuardService],
     children: [
       {
         path: 'screener',
         component: ScreenerContainerComponent,
-        canActivate: [AuthGuardService],
         children: [
           {
             path: 'edit',
             component: ScreenerOverviewComponent,
-            canActivate: [AuthGuardService],
           },
           {
             path: 'preview',
             component: ScreenerPreviewComponent,
-            canActivate: [AuthGuardService],
           },
         ]
       },
       {
         path: 'programs',
         component: ProgramsComponent,
-        canActivate: [AuthGuardService],
         children: [
           {
             path: 'overview',
             component: ProgramOverviewComponent,
-            resolve: {
-              programs: ProgramsResolverService
-            }
+          },
+          {
+            path: 'application-edit/:guid',
+            component: ApplicationEditComponent
           },
           {
             path: 'edit/:guid',
             component: ProgramEditComponent,
-          },
-          {
-            path: 'delete/:guid',
-            component: DeleteConfirmationComponent,
-          },
-          {
-            path: 'query-edit/:guid/:id',
-            component: QueryEditComponent
           },
           {
             path: '', pathMatch: 'full', redirectTo: 'overview'
@@ -74,7 +58,6 @@ export const routing: ModuleWithProviders = RouterModule.forChild([
       {
         path: 'keys',
         component: KeysComponent,
-        canActivate: [AuthGuardService],
         children: [
           {
             path: 'overview',

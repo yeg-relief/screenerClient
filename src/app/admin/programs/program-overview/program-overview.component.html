@@ -1,28 +1,27 @@
-<app-bread-crumb>
-  <app-overview-controls (onFilter)="handleFilter($event)" [loaded]="!(loading$ | async)"></app-overview-controls>
-</app-bread-crumb>
+<div id="animation-wrapper" 
+  [@routeAnimation] 
+  *ngIf="programs | async; else loadingScreen; let programs">
+    <app-overview-controls></app-overview-controls>
+    
 
-<div class="program-container" *ngIf="!(loading$ | async)">
-  <div *ngFor="let program of (programs$ | async)" class="col-12 program flex">
-    <div class="col-2"></div>
-    <app-program-detail class="col-10" [program]="program"></app-program-detail>
-    <div class="col-2 py2">
-      <app-program-detail-control [program]="program" (deleteEvent)="handleDelete($event)"></app-program-detail-control>
+    <div class="program-list-container" *ngIf="programs.length > 0">
+      <section id="program-count"> {{ programs.length }} program(s) present.</section>
+      <div class="program" *ngFor="let program of programs">
+        <app-program-detail 
+          [program]="program" 
+          (delete)="handleDelete($event)">
+        </app-program-detail>
+      </div>
     </div>
-  </div>
+    <div class="empty-statement" *ngIf="programs.length === 0">
+      <div>No programs found</div>
+    </div>
 </div>
-<div class="clearfix flex py2" *ngIf="(loading$ | async)">
-  <div class="col-4"></div>
-  <md-progress-circle 
-    class="flex-grow" 
+
+<ng-template #loadingScreen>
+  <md-progress-spinner 
+    [@fadeinAndOut]
     color="accent" 
     mode="indeterminate">
-  </md-progress-circle>
-  <div class="col-4"></div>
-</div>
-<div class="empty-statement-container border rounded bg-maroon white py2 flex flex-center col-12" 
-  *ngIf="(programs$ | async)?.length === 0 && !(loading$ | async)">
-  <div class="col-4"></div>
-  <div class="emtpy-statement col-4 center">No programs found</div>
-  <div class="col-4"></div>
-</div>
+  </md-progress-spinner>
+</ng-template>

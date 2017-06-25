@@ -1,142 +1,93 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, EventEmitter } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
-import 'rxjs/add/operator/switchMap';
-import 'rxjs/add/operator/filter';
-import 'rxjs/add/operator/toArray';
-import 'rxjs/add/operator/let';
-import 'rxjs/add/operator/multicast';
-import 'rxjs/add/operator/map';
+import { Subject } from 'rxjs/Subject';
 import 'rxjs/add/observable/merge';
-import 'rxjs/add/observable/from';
-import 'rxjs/add/observable/of';
-import { ReplaySubject } from 'rxjs/ReplaySubject';
-import { BehaviorSubject } from 'rxjs/BehaviorSubject'
+import 'rxjs/add/operator/shareReplay';
 import { ApplicationFacingProgram } from '../../models/program';
-import { Store } from '@ngrx/store';
-import { DataService } from '../../data.service';
-import * as fromRoot from '../../reducer';
-import * as fromKeys from '../../keys/actions';
-import * as programOverview from './actions';
 import { ActivatedRoute } from '@angular/router'
+import { Animations } from '../../../shared/animations';
+import { FilterService } from './services'; 
+import  * as helpers from './helpers';
+import {MdDialog, MdDialogRef} from '@angular/material';
+import { ProgramModelService } from '../services/program-model.service';
+import {MdSnackBar} from '@angular/material';
 
 @Component({
   selector: 'app-program-overview',
   templateUrl: './program-overview.component.html',
-  styleUrls: ['./program-overview.component.css']
+  styleUrls: ['./program-overview.component.css'],
+  animations: [
+    Animations.fadeinAndOut, 
+    Animations.routeAnimation
+  ],
+  providers: [ FilterService ]
 })
 export class ProgramOverviewComponent implements OnInit {
-  programs$: Observable<ApplicationFacingProgram[]>;
-  loading$: Observable<boolean>;
-  filter = new BehaviorSubject<FilterMessage>(new FilterMessage({type: '', value: ''}));
-  constructor(private store: Store<fromRoot.State>, private dataService: DataService, private route: ActivatedRoute) { }
+  programs: Observable<ApplicationFacingProgram[]>;
+  programUpdate$ = new EventEmitter<ApplicationFacingProgram>();
+  currentPage = 0;
+
+  constructor(
+    private route: ActivatedRoute,
+    private filterService: FilterService,
+    public dialog: MdDialog,
+    public snackBar: MdSnackBar,
+    private model: ProgramModelService) { }
 
   ngOnInit() {
-    const programs = this.route.snapshot.data['programs'];
-    if (programs !== undefined && Array.isArray(programs)) {
-      this.store.dispatch(new programOverview.LoadProgramsSuccess(programs[0]));
-      this.store.dispatch(new fromKeys._LoadKeysSuccess(programs[1]));
-    }
 
-    const initialState = {
-      filter: new FilterMessage({ type: '', value: '' }),
-      programs: []
-    }
-
-    this.programs$ = Observable.merge(
-      this.store.let(fromRoot.getLoadedPrograms),
-      this.filter
+    this.programs = Observable.merge(
+      this.model.getPrograms(),
+      this.filterService.form.valueChanges.distinctUntilChanged().map(update => new helpers.FilterMessage(update)),
+      this.programUpdate$
     )
-      .scan((state: ProgramState, update: FilterMessage | ApplicationFacingProgram[]) => {
-        if (update instanceof FilterMessage) {
-          state.filter = new FilterMessage(update)
-          return state;
-        } else if (Array.isArray(update)) {
-          state.programs = [...update].sort(programComparator);
-          return state;
-        }
-
-        return initialState;
-      }, initialState)
-      .let(applyFilter)
-      .multicast(new ReplaySubject<any>(1)).refCount();
-
-    this.loading$ = this.store.let(fromRoot.areProgramsLoaded);
+      .let(helpers.updateState)
+      .let(helpers.applyFilter)
+      .map(state => state.programs)
+      .do(_ => console.log(_))
+      .shareReplay();
   }
 
-  handleFilter($event){
-    this.filter.next( new FilterMessage($event) );
+  handleUpdate($event) {
+    this.programUpdate$.emit($event);
   }
-}
 
-class ProgramState {
-  filter: FilterMessage;
-  programs: ApplicationFacingProgram[];
-
-  constructor(filter: FilterMessage, programs: ApplicationFacingProgram[]) {
-    this.filter = filter;
-    this.programs = programs;
+  handleDelete(guid: string) {
+    this._delete(guid).then();
   }
-}
 
-class FilterMessage {
-  type: '' | 'tag' | 'title'| 'none' = '';
-  value: string = '';
-
-  constructor(update) {
-    this.type = update.type;
-    this.value = update.value;
-  }
-}
-
-function programComparator(a: ApplicationFacingProgram, b: ApplicationFacingProgram): number {
-  const titleA = a.user.title.toUpperCase();
-  const titleB = b.user.title.toUpperCase();
-
-  if (titleA < titleB) return -1;
-
-  if (titleB < titleA) return 1;
-
-  return 0;
-}
-
-
-function applyFilter(source: Observable<ProgramState>): Observable<ApplicationFacingProgram[]> {
-  return source
-    .switchMap((state: ProgramState) => {
-      const programs = state.programs;
-      switch (state.filter.type) {
-        case '': {
-          return Observable.of(programs);
-        }
-
-        case 'tag': {
-          const filterTag = state.filter.value;
-          
-          return Observable.from(programs)
-            .filter(program => program.user.tags.find(tag => tag === filterTag) !== undefined)
-            .toArray();
-        }
-
-        case 'title': {
-          if (state.filter.value === ''){
-            return Observable.of([]);
-          }
-
-
-          const regexp = new RegExp(state.filter.value.toLowerCase().trim());
-
-          return Observable.from(programs)
-            .filter(program => regexp.test(program.user.title.toLowerCase().trim()))
-            .toArray();
-        }
-
-        case 'none': {
-          return Observable.of(programs);
-        }
-
-        default: {
-          return Observable.of(programs);
-        }
+  private async _delete(guid: string) {
+    let dialogref = this.dialog.open(DeleteProgramDialog);
+    const confirmation = await dialogref.afterClosed().toPromise();
+    if (confirmation) {
+      const success = this.model.deleteProgram(guid).toPromise();
+      if (success) {
+        this.snackBar.open('program deleted successfully', '', {
+          duration: 2000
+        })
+      } else {
+        this.snackBar.open('error deleting program', '', {
+          duration: 2000
+        })
       }
-    })
+    }
+  }
+}
+
+@Component({
+  selector: 'app-delete-program-dialog',
+  template: `
+    <h2 md-dialog-title>Delete Program</h2>
+    <md-dialog-content>
+      Are you sure that you would like to delete this program?
+    </md-dialog-content>
+    <md-dialog-actions>
+      <button md-button [md-dialog-close]="false">No</button>
+      <!-- Can optionally provide a result for the closing dialog. -->
+      <button md-button [md-dialog-close]="true">Yes</button>
+    </md-dialog-actions>
+  `,
+})
+export class DeleteProgramDialog {
+  constructor(public dialogRef: MdDialogRef<DeleteProgramDialog>) {}
 }

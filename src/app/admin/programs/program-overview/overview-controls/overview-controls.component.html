@@ -1,28 +1,29 @@
-<div [formGroup]="form" class="flex flex-center col-12" style="margin-top: 10px; margin-bottom: 10px;">
-  <div class="col-1"></div>
+<main [formGroup]="form">
+
   <button 
-    md-mini-fab color="primary" 
+    md-button
     *ngIf="loaded" 
     routerLink="/admin/programs/edit/new"
-    [attr.disabled]="deleteInitiated? true : null">
-      <i class="material-icons">add</i>
+    [attr.disabled]="deleteInitiated? true : null"
+    title="new program">
+    <i class="material-icons">add_box</i>
   </button>
 
-  <div class="col-1"></div>
+  <div>
+    
+    <md-select formControlName="type" id="programFilter">
+      <md-option [value]="'none'"> <i class="material-icons filter_inactive select-option">search</i> disabled </md-option>
+      <md-option [value]="'tag'"> <i class="material-icons select-option">search</i> tag </md-option>
+      <md-option [value]="'title'"> <i class="material-icons select-option">search</i> title </md-option>
+    </md-select>
 
-  <select class="col-3" formControlName="type">
-    <option selected disabled [value]="''"> select filter type </option>
-    <option [value]="'none'"> no filter </option>
-    <option [value]="'tag'"> filter by tag </option>
-    <option [value]="'title'"> filter by title </option>
-  </select>
-  
+    <section [@fadeinAndOut]>
+      <md-icon [ngClass]="styleIcon$ | async">search</md-icon>
+      <md-input-container > 
+        <input mdInput placeholder="filter" formControlName="value" (keyup)="blurOnEnter($event)">
+      </md-input-container>
+    </section>
+  </div>
 
-  <div class="px2"></div>
-
-  <md-input-container> <input mdInput placeholder="filter" formControlName="value"></md-input-container>
-
-  <div class="col-1 flex-grow"></div>
-
-</div>
+</main>
 

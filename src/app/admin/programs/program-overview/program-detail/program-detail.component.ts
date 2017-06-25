@@ -1,5 +1,6 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, EventEmitter, Output } from '@angular/core';
 import { ApplicationFacingProgram } from '../../../models/program';
+import { MdDialog, MdDialogRef } from '@angular/material';
 
 @Component({
   selector: 'app-program-detail',
@@ -8,18 +9,15 @@ import { ApplicationFacingProgram } from '../../../models/program';
 })
 export class ProgramDetailComponent implements OnInit {
   @Input() program: ApplicationFacingProgram;
+  @Output() delete = new EventEmitter<string>()
   selectedView: string;
 
   views = [
-    {
-      value: 'user'
-    },
-    {
-      value: 'application'
-    }
+    { value: 'user' },
+    { value: 'application'}
   ];
 
-  constructor() { }
+  constructor(public dialog: MdDialog) { }
 
   ngOnInit() {
     this.selectedView = this.views[0].value;
@@ -30,5 +28,9 @@ export class ProgramDetailComponent implements OnInit {
     if (index >= 0) {
       this.selectedView = this.views[index].value;
     }
+  }
+
+  openQueryDialog() {
+    if ( this.program === undefined ) return;
   }
 }
