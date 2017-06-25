@@ -23,8 +23,7 @@ import {MdSnackBar} from '@angular/material';
   providers: [ FilterService ]
 })
 export class ProgramOverviewComponent implements OnInit {
-  programs$: Observable<ApplicationFacingProgram[]>;
-  loading$: Observable<boolean>;
+  programs: Observable<ApplicationFacingProgram[]>;
   programUpdate$ = new EventEmitter<ApplicationFacingProgram>();
   currentPage = 0;
 
@@ -37,7 +36,7 @@ export class ProgramOverviewComponent implements OnInit {
 
   ngOnInit() {
 
-    this.programs$ = Observable.merge(
+    this.programs = Observable.merge(
       this.model.getPrograms(),
       this.filterService.form.valueChanges.distinctUntilChanged().map(update => new helpers.FilterMessage(update)),
       this.programUpdate$

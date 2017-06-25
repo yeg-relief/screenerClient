@@ -9,7 +9,6 @@ import { MdDialog, MdDialogRef } from '@angular/material';
 })
 export class ProgramDetailComponent implements OnInit {
   @Input() program: ApplicationFacingProgram;
-  @Output() update = new EventEmitter<ApplicationFacingProgram>();
   @Output() delete = new EventEmitter<string>()
   selectedView: string;
 
