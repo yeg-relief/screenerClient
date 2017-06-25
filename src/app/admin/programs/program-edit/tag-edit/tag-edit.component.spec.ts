@@ -1,20 +1,20 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { QueryEditV2Component } from './query-edit-v2.component';
+import { TagEditComponent } from './tag-edit.component';
 
-describe('QueryEditV2Component', () => {
-  let component: QueryEditV2Component;
-  let fixture: ComponentFixture<QueryEditV2Component>;
+describe('TagEditComponent', () => {
+  let component: TagEditComponent;
+  let fixture: ComponentFixture<TagEditComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ QueryEditV2Component ]
+      declarations: [ TagEditComponent ]
     })
     .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(QueryEditV2Component);
+    fixture = TestBed.createComponent(TagEditComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

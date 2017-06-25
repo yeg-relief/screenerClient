@@ -4,7 +4,7 @@
   </section>
 
   <main>
-    <md-icon [routerLink]="['..', '..', 'edit', data.guid]" [replaceUrl]="true" mdTooltip="Edit description">create</md-icon>
+    <md-icon routerLink="../../edit/{{data.guid}}" [replaceUrl]="true" mdTooltip="Edit description">create</md-icon>
     <header id="program-details">
       
       <h1>{{ (program | async)?.user.data?.title }} query details </h1>

@@ -10,9 +10,6 @@ import { EffectsModule } from '@ngrx/effects';
 import { MaterialModule } from '@angular/material';
 import { DataService } from './data.service';
 import { AdminCoreModule } from './core/admin-core.module';
-import { ProgramOverviewEffects } from './programs/program-overview/effects';
-import { ProgramEditEffects } from './programs/program-edit/effects';
-import { ProgramDeleteEffects } from './programs/program-overview/delete-confirmation/effects';
 import { KeyResolverService } from './keys/overview/key-resolver.service';
 import { ProgramsModule } from './programs/programs.module';
 import { KeysModule } from './keys/keys.module';
@@ -45,9 +42,6 @@ import { QuestionEditErrorComponent } from './screener/question-edit/question-ed
     routing,
     MaterialModule,
     StoreModule.provideStore(reducer),
-    EffectsModule.run(ProgramOverviewEffects),
-    EffectsModule.run(ProgramEditEffects),
-    EffectsModule.run(ProgramDeleteEffects),
     EffectsModule.run(ScreenerEffects),
     AdminCoreModule,
     ProgramsModule,

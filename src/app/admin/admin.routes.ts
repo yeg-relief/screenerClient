@@ -7,8 +7,6 @@ import { LoginComponent } from './core/login/login.component';
 import { ProgramsComponent } from './programs/programs.component';
 import { ProgramOverviewComponent } from './programs/program-overview/program-overview.component';
 import { ProgramEditComponent } from './programs/program-edit/program-edit.component';
-import { DeleteConfirmationComponent } from './programs/program-overview/delete-confirmation/delete-confirmation.component';
-import { QueryEditComponent } from './programs/program-edit/query-edit/query-edit.component';
 import { ProgramsResolverService } from './programs/program-overview/programs-resolver.service';
 
 import { KeyResolverService } from './keys/overview/key-resolver.service';
@@ -63,14 +61,6 @@ export const routing: ModuleWithProviders = RouterModule.forChild([
           {
             path: 'edit/:guid',
             component: ProgramEditComponent,
-          },
-          {
-            path: 'delete/:guid',
-            component: DeleteConfirmationComponent,
-          },
-          {
-            path: 'query-edit/:guid/:id',
-            component: QueryEditComponent
           },
           {
             path: '', pathMatch: 'full', redirectTo: 'overview'

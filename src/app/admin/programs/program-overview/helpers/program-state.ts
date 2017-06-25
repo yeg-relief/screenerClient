@@ -1,44 +1,37 @@
 import { ApplicationFacingProgram } from '../../../models/program';
-import { FilterMessage, PageMetaData, pageMetaDataFactory, PAGE_SIZE  } from './index';
+import { FilterMessage } from './index';
 import { Observable } from 'rxjs/Observable';
 
 
 export class ProgramState {
   filter: FilterMessage;
   programs: ApplicationFacingProgram[];
-  meta: PageMetaData;
   updateMeta;
 
   constructor(
     programs: ApplicationFacingProgram[],
-    filter: FilterMessage,
-    meta: PageMetaData) {
+    filter: FilterMessage) {
     this.programs = [...programs];
     this.filter = (<any>Object).assign({}, filter);
-    this.meta = (<any>Object).assign({}, meta)
   }
 }
 
 
-export function updateState(input$: Observable<FilterMessage | ApplicationFacingProgram[] | PageMetaData | ApplicationFacingProgram>)
+export function updateState(input$: Observable<FilterMessage | ApplicationFacingProgram[] | ApplicationFacingProgram>)
   : Observable<ProgramState> {
   
   const INITIAL_STATE =
   new ProgramState(
     [],
     new FilterMessage({ type: '', value: 'none' }),
-    pageMetaDataFactory([])
   );
   
-  return input$.scan((state: ProgramState, update: FilterMessage | ApplicationFacingProgram[] | PageMetaData | ApplicationFacingProgram) => {
+  return input$.scan((state: ProgramState, update: FilterMessage | ApplicationFacingProgram[] | ApplicationFacingProgram) => {
     if (update instanceof FilterMessage) {
       state.filter = update;
       return state;
     } else if (Array.isArray(update)) {
       state.programs = [...update].sort(programComparator);
-      return state;
-    } else if (update instanceof PageMetaData) {
-      state.meta = update
       return state;
     } else if (typeof update === 'object' && update.guid !== undefined) {
       const index = state.programs.findIndex(p => p.guid === update.guid)

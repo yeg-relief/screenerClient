@@ -1,7 +1,6 @@
 import { Component, OnInit, Input, EventEmitter, Output } from '@angular/core';
 import { ApplicationFacingProgram } from '../../../models/program';
 import { MdDialog, MdDialogRef } from '@angular/material';
-import { QueryDialogComponent } from './query-dialog/query-dialog.component';
 
 @Component({
   selector: 'app-program-detail',
@@ -11,6 +10,7 @@ import { QueryDialogComponent } from './query-dialog/query-dialog.component';
 export class ProgramDetailComponent implements OnInit {
   @Input() program: ApplicationFacingProgram;
   @Output() update = new EventEmitter<ApplicationFacingProgram>();
+  @Output() delete = new EventEmitter<string>()
   selectedView: string;
 
   views = [
@@ -33,18 +33,5 @@ export class ProgramDetailComponent implements OnInit {
 
   openQueryDialog() {
     if ( this.program === undefined ) return;
-
-    let dialogRef = this.dialog.open(QueryDialogComponent, {
-      width: '100vw',
-      height: '95vh',
-      data: this.program
-    })
-    dialogRef.afterClosed().take(1).subscribe(_ => {
-      if (dialogRef._containerInstance.dialogConfig.data !== undefined){
-        this.program.application = dialogRef._containerInstance.dialogConfig.data;
-        this.update.emit(this.program);
-      }
-      
-    })
   }
 }

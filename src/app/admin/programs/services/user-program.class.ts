@@ -14,6 +14,7 @@ export class UserProgram {
   _form: FormGroup;
 
   constructor(opts, fb: FormBuilder){
+
     const obj = {
       guid:  opts.guid ? opts.guid : '',
       title: opts.title ? opts.title : '',

@@ -13,9 +13,17 @@ export class Program {
 
   constructor(opts, fb: FormBuilder){
     this.fb = fb;
-    const queries = opts.application ? opts.application : [];
-    const user = opts.user ? {...opts.user} : {
-      guid: 'new',
+    // disgusting abuse of ternary operators incoming 
+    const queries = opts ? opts.application ? opts.application : [] : [];
+    const user = opts ? opts.user ? {...opts.user} : {
+      guid: this.generateRandomString(),
+      title: '',
+      details: '',
+      externalLink: '',
+      created: 0,
+      tags: []
+    } : {
+      guid: this.generateRandomString(),
       title: '',
       details: '',
       externalLink: '',
@@ -23,7 +31,7 @@ export class Program {
       tags: []
     };
 
-    this.guid = opts.guid ? opts.guid : 'new';
+    this.guid = opts ? opts.guid ? opts.guid : user.guid : user.guid;
 
     this.user = new UserProgram(user, fb);
     this.application = queries.map(q => new ProgramQueryClass(q, fb));
@@ -64,6 +72,24 @@ export class Program {
     this.data.application = [ query_obj.data, ...this.data.application ]
     this.application = [query_obj, ...this.application ];
     this._initForm();
+  }
+
+  generateRandomString(): string {
+    const LENGTH = 26;
+    const lowerCaseCharSet = "abcdefghijklmnopqrstuvwxyz"
+    const charSet = lowerCaseCharSet
+      .concat(lowerCaseCharSet.toUpperCase())
+      .concat("1234567890")
+
+    const generateCharacters = () => {
+      const arr = new Array(LENGTH);
+      for(let i = 0; i < arr.length; i++){
+        arr[i] = charSet[Math.floor(Math.random() * charSet.length)];
+      }
+      return arr;
+    }
+    
+    return generateCharacters().join('');
   }
 }
 

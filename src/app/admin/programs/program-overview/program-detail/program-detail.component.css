@@ -3,6 +3,15 @@ md-card {
   height: 35vh;
 }
 
+md-card-actions {
+  position: relative;
+  width: 100%;
+}
+
+md-card-actions > button[md-button]:hover {
+  color: darkorange;
+}
+
 md-button-toggle {
   font-family: 'Open Sans', sans-serif;
 }
@@ -11,3 +20,9 @@ table {
   width: 90%;
   margin: 0 auto;
 }
+
+.delete-program-button {
+  position: absolute;
+  right: 1em;
+}
+

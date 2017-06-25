@@ -1,6 +1,8 @@
 <md-card>
   <md-card-actions>
     <button md-button routerLink="/admin/programs/application-edit/{{program.guid}}" title="edit queries"><i class="material-icons">content_copy</i></button>
+    <button md-button routerLink="/admin/programs/edit/{{program.guid}}" title="edit details"><i class="material-icons">create</i></button>
+    <button class="delete-program-button" md-button color="warn" (click)="delete.emit(program.guid)" title="delete program"><i class="material-icons">clear</i></button>
   </md-card-actions>
 
   <section *ngIf="selectedView === 'user'">

@@ -19,13 +19,13 @@ export function applyFilter(source: Observable<ProgramState>): Observable<Progra
   return source
     .switchMap((state: ProgramState) => {
       if (state.filter === undefined || state.filter.type === undefined || state.filter.value === undefined) {
-        return Observable.of(new ProgramState(state.programs, state.filter, state.meta))
+        return Observable.of(new ProgramState(state.programs, state.filter))
       }
       const programs = state.programs;
 
       switch (state.filter.type) {
         case '': {
-          return Observable.of(new ProgramState(state.programs, state.filter, state.meta));
+          return Observable.of(new ProgramState(state.programs, state.filter));
         }
 
         case 'tag': {
@@ -34,12 +34,12 @@ export function applyFilter(source: Observable<ProgramState>): Observable<Progra
           return Observable.from(programs)
             .filter(program => program.user.tags.find(tag => tag === filterTag) !== undefined)
             .toArray()
-            .map(programs => new ProgramState(programs, state.filter, state.meta))
+            .map(programs => new ProgramState(programs, state.filter))
         }
 
         case 'title': {
           if (state.filter.value === '') {
-            return Observable.of(new ProgramState([], state.filter, state.meta));
+            return Observable.of(new ProgramState([], state.filter));
           }
 
 
@@ -48,15 +48,15 @@ export function applyFilter(source: Observable<ProgramState>): Observable<Progra
           return Observable.from(programs)
             .filter(program => regexp.test(program.user.title.toLowerCase().trim()))
             .toArray()
-            .map(programs => new ProgramState(programs, state.filter, state.meta))
+            .map(programs => new ProgramState(programs, state.filter))
         }
 
         case 'none': {
-          return Observable.of(new ProgramState(programs, state.filter, state.meta));
+          return Observable.of(new ProgramState(programs, state.filter));
         }
 
         default: {
-          return Observable.of(new ProgramState(programs, state.filter, state.meta));
+          return Observable.of(new ProgramState(programs, state.filter));
         }
       }
     })

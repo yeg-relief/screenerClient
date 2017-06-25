@@ -7,8 +7,10 @@ import { Observable } from 'rxjs/Observable';
 import { ReplaySubject } from 'rxjs/ReplaySubject';
 import { Subscription } from 'rxjs/Subscription';
 import { Program } from './program.class';
+import { UserProgram } from './user-program.class';
 import { FormBuilder } from '@angular/forms';
 import 'rxjs/add/operator/take';
+import 'rxjs/add/observable/fromPromise';
 
 @Injectable()
 export class ProgramModelService {
@@ -39,7 +41,8 @@ export class ProgramModelService {
   findProgram(guid: string): Observable<Program> {
     return this._cache.asObservable()
       .map(programs => programs.find(this._findProgram(guid)))
-      .map(p => p !== undefined ? new Program(p, this.fb) : null);
+      .map(p => p !== undefined ? new Program(p, this.fb) : null)
+      .map(p => p === null ? new Program(undefined, this.fb) : p)
   }
 
   updateProgram(update: Program) {
@@ -54,6 +57,39 @@ export class ProgramModelService {
 
   newProgram(): Program {
     return new Program({}, this.fb);
+  }
+
+  getPrograms(): Observable<ApplicationFacingProgram[]> {
+    return this._cache;
+  }
+
+  private async _updateUserProgramInCache(program: UserFacingProgram, resp: any)
+  : Promise<boolean> 
+  {
+    console.log(resp)
+    if (resp.result === 'updated' || resp.result === 'created') {
+      const cache = await this._cache.take(1).toPromise();
+      const val = cache.find(p => p.guid === program.guid);
+
+      if (val) {
+        val.user = program;
+        this._cache.next(cache);
+      } else {
+        this._cache.next([{guid: program.guid, application: [], user: program},  ...cache]);
+      }
+      return true;
+    }
+    return false;
+  }
+
+
+  saveUserProgram(program: UserFacingProgram): Observable<boolean> {
+    const creds = this.getCredentials();
+    creds.headers.append('Content-Type', 'application/json' );
+
+    return this.http.put('/protected/program-description/', { data: JSON.stringify(program) }, creds)
+      .map( res => res.json() )
+      .flatMap( res => Observable.fromPromise(this._updateUserProgramInCache(program, res)))
   }
 
   saveProgram(program: Program): Observable<boolean> {
@@ -74,10 +110,10 @@ export class ProgramModelService {
 
   }
 
-  deleteProgram(program: Program): Observable<boolean> {
-    return this._deleteProgram(program.data).do(res => {
+  deleteProgram(guid: string): Observable<boolean> {
+    return this._deleteProgram(guid).do(res => {
       if (res) {
-        this._cache.subscribe(cache => this._cache.next(cache.filter(p => p.guid !== program.data.guid)))
+        this._cache.take(1).subscribe(cache => this._cache.next(cache.filter(p => p.guid !== guid)))
       } 
     })
   }
@@ -124,9 +160,9 @@ export class ProgramModelService {
       .catch(this.loadError)
   }
 
-  private _deleteProgram(program: ApplicationFacingProgram) {
+  private _deleteProgram(guid: string) {
     const creds = this.getCredentials();
-    return this.http.delete(`/protected/program/${program.guid}`, creds)
+    return this.http.delete(`/protected/program/${guid}`, creds)
       .map(res => res.json())
       // object is an es response, the array is the remaining programs
       .map( (res: [boolean, object, Array<ApplicationFacingProgram>]) => res[0])

@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { ProgramModelService } from './services/program-model.service'
 
 @Component({
   template:
@@ -11,11 +12,14 @@ import { Component, OnInit } from '@angular/core';
     .overview-wrapper {}
 
 
-  `]
+  `],
+  providers: [
+    ProgramModelService
+  ]
 })
 export class ProgramsComponent implements OnInit {
 
-  constructor() { }
+  constructor(public model: ProgramModelService) { }
 
   ngOnInit() {
   }
