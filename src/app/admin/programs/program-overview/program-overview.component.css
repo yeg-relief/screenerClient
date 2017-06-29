@@ -53,5 +53,12 @@ md-progress-spinner {
 }
 
 
+#program-count {
+  padding: 1em;
+  background-color: whitesmoke;
+  border: solid 1px lightgrey;
+  border-radius: 2px;
+}
+
 
 

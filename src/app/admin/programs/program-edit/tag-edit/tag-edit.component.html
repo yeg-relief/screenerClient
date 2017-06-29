@@ -1,0 +1,14 @@
+<div id="tag-input">
+  <md-input-container>
+    <input mdInput [formControl]="tagInput" placeholder="tag"/>
+  </md-input-container>
+  <button md-button [attr.disabled]="!tagInput.valid">
+    <md-icon 
+      (click)="addTag()"
+      mdTooltip="add tag" 
+      [style.color]="!tagInput.valid ? 'red' : 'green'">done</md-icon>
+  </button>
+  <md-chip-list class="flex-grow">
+    <md-chip (click)="removeTagAt(i)" *ngFor="let tag of tags.value; let i = index">{{ tag }}</md-chip>
+  </md-chip-list>
+</div>

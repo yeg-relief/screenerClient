@@ -1,5 +1,10 @@
+<<<<<<< HEAD
 <div class="col-10 bg-darken-2 flex border" style="margin: 0 auto; margin-top: 0.5em;">
   <table style="width:80%;">
+=======
+<div [ngClass]="styleClass">
+  <table style="width:80%;" (click)="edit.emit(query.id)">
+>>>>>>> bdeb572a20a76e566029961b3aa0831bcc86a495
     <colgroup span="4">
       <col style="width: 25%;">
       <col style="width: 25%;">
@@ -30,14 +35,14 @@
       </tr>
     </tbody>
   </table>
-  <div style="width: 5%;">
+  <div style="width: 5%">
     <button md-button color="primary" (click)="edit.emit(query.id)">
-      <i class="material-icons">create</i>
+      <i class="material-icons">edit</i>
     </button>
   </div>
-  <div class="px1"></div>
+  <div class="px2"></div>
   <div style="width: 5%">
-    <button md-button color="warn" (click)="delete.emit(query.id)">
+    <button md-button color="warn" (click)="handleDelete(query.id)">
       <i class="material-icons">clear</i>
     </button>
   </div>

@@ -1,7 +1,6 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, EventEmitter, Output } from '@angular/core';
 import { ApplicationFacingProgram } from '../../../models/program';
 import { MdDialog, MdDialogRef } from '@angular/material';
-import { QueryDialogComponent } from './query-dialog/query-dialog.component';
 
 @Component({
   selector: 'app-program-detail',
@@ -10,6 +9,7 @@ import { QueryDialogComponent } from './query-dialog/query-dialog.component';
 })
 export class ProgramDetailComponent implements OnInit {
   @Input() program: ApplicationFacingProgram;
+  @Output() delete = new EventEmitter<string>()
   selectedView: string;
 
   views = [
@@ -31,10 +31,6 @@ export class ProgramDetailComponent implements OnInit {
   }
 
   openQueryDialog() {
-    let dialogRef = this.dialog.open(QueryDialogComponent, {
-      width: '90vw',
-      height: '90vh',
-      data: this.program
-    });
+    if ( this.program === undefined ) return;
   }
 }

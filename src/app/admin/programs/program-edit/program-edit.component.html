@@ -1,63 +1,49 @@
-<app-bread-crumb [formGroup]="form">
-  <div class="flex col-10 p1" style="overflow: hidden;">
-    <div class="px2"></div>
-    <button 
-      [disabled]="form.invalid  ? true : null"
-      md-raised-button 
-      color="primary"
-      (click)="submit()">SAVE</button>
-    <div class="px2"></div>
-    <button md-raised-button 
-      color="primary"
-      routerLink="/admin/programs/overview">CANCEL</button>
-    <div class="flex-grow"></div>
-  </div>
-</app-bread-crumb>
+<main *ngIf="program | async; else loadingScreen; let program">
+  <md-card id="overview">
+    <md-card-header>
+      <md-card-title> <h3>{{ program.data.title }} </h3></md-card-title>
+      <md-card-subtitle>last updated: {{ ( program.data.created | date ) }} </md-card-subtitle>
+      <md-icon 
+          mdTooltip="delete program" 
+          id="delete-program" 
+          (click)="handleDeleteClick()"> clear </md-icon>
+      <md-icon 
+          id="save-program" 
+          mdTooltip="save program queries"
+          (click)="handlSaveClick()">save</md-icon>
+      <md-icon 
+          id="edit-queries" 
+          mdTooltip="edit program queries"
+          (click)="handleQueryClick()">content_copy</md-icon>
+    </md-card-header>
+  </md-card>
 
-<!-- SAVE BAR -->
-<md-progress-bar mode="indeterminate" color="warn" *ngIf="saving$ | async"></md-progress-bar>
-<div class="p2 center mt1">
-  <md-button-toggle-group [formControl]="view">
-    <md-button-toggle *ngFor="let v of views" [value]="v">
-      {{v}}
-    </md-button-toggle>
-  </md-button-toggle-group>
-</div>
-<div [hidden]="hide" id="user-edit" class="border rounded">
-  <section class="main-container flex flex-column flex-center" [formGroup]="form">
-    <div class="col-12" formGroupName="user">
-      <md-input-container class="container-item">
-        <input mdInput  placeholder="title" formControlName="title">
+  <form id="editable-area" [formGroup]="program._form">
+    
+    <app-edit-row [icon]="'public'" [tooltip]="'Give the program an appropriate title'">
+      <md-input-container>
+        <input mdInput formControlName="title" placeholder="program title"/>
       </md-input-container>
-      <div class="py1"></div>
-      <textarea placeholder="description" class="container-item" rows="4" formControlName="details"></textarea>
-      <div class="py1"></div>
-      <md-input-container class="container-item">
-        <input mdInput  placeholder="link" formControlName="externalLink">
-      </md-input-container>
-      <div class="container-item flex">
-        <div class="ml1 mr1 p1 border bg-silver" *ngFor="let tag of form.get(['user', 'tags'])?.value">
-          {{ tag }} <div style="cursor:pointer" (click)="removeTag(tag)">X</div>
-        </div>
-      </div>
-      <div class="container-item flex flex-center">
-        <md-input-container class="col-8"> 
-          <input mdInput class="mr2" placeholder="tag name" formControlName="tag"> 
-        </md-input-container>
-        <div class="col-1"></div>
-        <button md-mini-fab color="primary" (click)="addTag()">
-          <i class="material-icons">add</i>
-        </button>
-      </div>
-    </div>
-  </section>
-</div>
+    </app-edit-row>
 
-<section class="col-12">
-  <app-application-side
-    *ngIf="(view$ | async) === 'application'"
-    [program]="form.get('application')"
-    [guid]="form.get('guid').value"
-    (saveQueries)="addQuery($event)">
-  </app-application-side>
-</section>
+    <app-edit-row [icon]="'create'" [tooltip]="'Describe the program to the user.'">
+      <textarea id="program-details" rows="10" cols="50" name="details"  mdInput formControlName="details">
+        {{program.data.details }} 
+      </textarea>
+    </app-edit-row>
+
+    <app-edit-row [icon]="'link'" [tooltip]="'Every program can have an external link'">
+      <md-input-container id="link">
+        <span mdPrefix> http:// </span>
+        <input mdInput placeholder="www.link.ca" prefix formControlName="externalLink"/>
+      </md-input-container>
+    </app-edit-row>
+
+    <app-edit-row [icon]="'label'" [tooltip]="'tag the program with a category'">
+      <app-tag-edit [tags]="program._form.get('tags')"></app-tag-edit>
+    </app-edit-row>
+
+  </form>
+</main>
+
+<ng-template #loadingScreen>loading...</ng-template>

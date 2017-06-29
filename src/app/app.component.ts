@@ -16,7 +16,6 @@ import 'rxjs/add/operator/multicast';
     <main id="main-outlet" [ngClass]="backgroundClass">
       <router-outlet></router-outlet>
     <main>
-
   `,
   styles: [
     `
@@ -64,16 +63,13 @@ export class AppComponent implements OnInit {
 
   ngOnInit() {
 
+    const isAdminRoute = url => url.substring(0, 7) === '/admin/';
+
     this.router.events
-      .map(event => {
-        if (event instanceof NavigationEnd) {
-          return this.router.url;
-        }
-        return "don't care";
-      })
-      .filter(url => url !== "don't care")
+      .map(event => event instanceof NavigationEnd ? this.router.url : undefined)
+      .filter(url => url !== undefined)
       .debounceTime(60)
-      .map( url => url.substring(0, 7) === '/admin/' )
+      .map( url => isAdminRoute(url) )
       .subscribe( val => {
         this.backgroundClass.background = !val;
         this.backgroundClass.backgroundcolor = val;

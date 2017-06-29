@@ -1,13 +1,14 @@
 <md-card>
   <md-card-actions>
-    <button md-button (click)="openQueryDialog()"><i class="material-icons">content_copy</i></button>
+    <button md-button routerLink="/admin/programs/application-edit/{{program.guid}}" title="edit queries"><i class="material-icons">content_copy</i></button>
+    <button md-button routerLink="/admin/programs/edit/{{program.guid}}" title="edit details"><i class="material-icons">create</i></button>
+    <button class="delete-program-button" md-button (click)="delete.emit(program.guid)" title="delete program"><i class="material-icons">clear</i></button>
   </md-card-actions>
 
-  <section *ngIf="selectedView === 'user'">
     <md-card-title> {{program.user.title}}  </md-card-title>
     <md-card-subtitle> uploaded on: {{ program.user.created | date}}</md-card-subtitle>
     <md-card-content>
-      <p>{{ program.user.details }} </p>
+      <pre>{{ program.user.details }} </pre>
     </md-card-content>
     <md-card-subtitle>
       link: {{ program.user.externalLink }}
@@ -20,41 +21,4 @@
         {{tag}}
       </div>
     </div>
-  </section>
-  <section *ngIf="selectedView === 'application' && program.application.length > 0" >
-    <div style="margin-bottom: 0.2em"> {{ program.user.title }} has {{ program.application.length }} queries </div>
-    <div *ngFor="let query of program.application" class="py2 border rounded" style="margin-bottom: 0.2em">
-      <table>
-        <colgroup span="4">
-          <col style="width: 25%;">
-          <col style="width: 25%;">
-          <col style="width: 25%;">
-          <col style="width: 25%;">
-        </colgroup>
-        <tr>
-          <th>Key</th>
-          <th>Type</th>
-          <th>Qualifier</th>
-          <th>Value</th>  
-        </tr>
-        <tr *ngFor="let condition of query.conditions">
-          <td>{{condition?.key.name}}</td>
-          <td>{{condition?.key.type}}</td>
-          <div [ngSwitch]="condition.qualifier">
-            <td *ngSwitchCase="'lessThan'"> &lt; </td>
-            <td *ngSwitchCase="'lessThanOrEqual'"> &lt;= </td>
-            <td *ngSwitchCase="'equal'"> = </td>
-            <td *ngSwitchCase="'greaterThanOrEqual'"> &gt;= </td>
-            <td *ngSwitchCase="'greaterThan'"> &gt; </td>
-            <td *ngSwitchDefault></td>
-          </div>
-          <td>{{condition.value}}</td>    
-        </tr>
-      </table>
-    </div>
-  </section>
-  <section *ngIf="selectedView === 'application' && program.application.length === 0" >
-    <div class="center">There are no conditions associated with this program </div>
-  </section>
 </md-card>
-<div class="py1"></div>
