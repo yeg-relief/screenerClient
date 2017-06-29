@@ -11,6 +11,7 @@ import { UserProgram } from './user-program.class';
 import { FormBuilder } from '@angular/forms';
 import 'rxjs/add/operator/take';
 import 'rxjs/add/observable/fromPromise';
+import 'rxjs/add/observable/zip';
 
 @Injectable()
 export class ProgramModelService {
