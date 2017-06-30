@@ -67,7 +67,6 @@ export class ProgramModelService {
   private async _updateUserProgramInCache(program: UserFacingProgram, resp: any)
   : Promise<boolean> 
   {
-    console.log(resp)
     if (resp.result === 'updated' || resp.result === 'created') {
       const cache = await this._cache.take(1).toPromise();
       const val = cache.find(p => p.guid === program.guid);

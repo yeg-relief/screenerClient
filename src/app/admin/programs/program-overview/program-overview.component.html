@@ -9,7 +9,8 @@
       <div class="program" *ngFor="let program of programs">
         <app-program-detail 
           [program]="program" 
-          (delete)="handleDelete($event)">
+          (delete)="handleDelete($event)"
+          (details)="handleDetailInspection($event)">
         </app-program-detail>
       </div>
     </div>

@@ -11,9 +11,7 @@ export class TagEditComponent implements OnInit {
   tagInput = new FormControl('', Validators.pattern('[a-zA-Z0-9]{2,8}'))
   constructor() { }
 
-  ngOnInit() {
-    this.tagInput.valueChanges.subscribe(x => console.log(x))
-  }
+  ngOnInit() {}
 
   addTag() {
     if (this.tagInput.valid && this.tagInput.value.trim().length > 0 ) {

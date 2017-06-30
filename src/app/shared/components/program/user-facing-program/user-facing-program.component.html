@@ -1,9 +1,9 @@
 <md-card class="program-width">
   <md-card-title> {{program?.title}} </md-card-title>
   <md-card-content>
-      <p>{{ program?.details }} </p>
+      <p>{{ program?.description }} </p>
   </md-card-content>
-  <a *ngIf="program.externalLink?.length > 0" href="http://{{ program?.externalLink }}" target="_blank">
+  <a *ngIf="program.externalLink?.length > 0" href="http://{{ program.externalLink }}" target="_blank">
     more information
   </a>
   <md-card-actions>
@@ -12,24 +12,4 @@
       routerLink="/browse-programs/{{tag}}"
       routerLinkActive="active"> {{tag}} </button>
   </md-card-actions>
-  <!--
-  <div class="clearfix flex">
-    <div 
-      class="col-2 border bg-silver black center rounded mr1 sm-show" 
-      style="cursor: pointer;"
-      *ngFor="let tag of program?.tags"
-      routerLink="/browse-programs/{{tag}}">
-      {{tag}}
-    </div>
-  </div>
-  <div class="clearfix flex flex-column flex-center">
-    <div 
-      class="col-6 border bg-silver black center rounded mr1 sm-hide mt1 mb1" 
-      style="cursor: pointer;"
-      *ngFor="let tag of program?.tags"
-      routerLink="/browse-programs/{{tag}}">
-      {{tag}}
-    </div>
-  </div>
-  -->
 </md-card>

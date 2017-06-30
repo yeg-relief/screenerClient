@@ -54,13 +54,10 @@ export class ApplicationEditComponent implements OnInit {
       this.form.take(1)
     ).subscribe(
       ([program, wasDeleted, form]) => {
-        console.log(form.get('application'))
         const index = program.application.findIndex(q => q.data.id === query_id);
         if (wasDeleted && index >= 0) {
           program.application.splice(index, 1);
           
-          console.log(form.get('application'))
-          //(<FormArray>form.get('application')).removeAt(index)
           this.snackBar.open('query deleted','',{
             duration: 2000
           })

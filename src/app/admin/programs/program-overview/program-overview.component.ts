@@ -1,4 +1,4 @@
-import { Component, OnInit, EventEmitter } from '@angular/core';
+import { Component, OnInit, EventEmitter, Inject } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
 import { Subject } from 'rxjs/Subject';
 import 'rxjs/add/observable/merge';
@@ -11,6 +11,7 @@ import  * as helpers from './helpers';
 import {MdDialog, MdDialogRef} from '@angular/material';
 import { ProgramModelService } from '../services/program-model.service';
 import {MdSnackBar} from '@angular/material';
+import {MD_DIALOG_DATA} from '@angular/material';
 
 @Component({
   selector: 'app-program-overview',
@@ -46,6 +47,19 @@ export class ProgramOverviewComponent implements OnInit {
       .map(state => state.programs)
       .do(_ => console.log(_))
       .shareReplay();
+  }
+
+  handleDetailInspection(guid: string) {
+    this.programs.take(1).toPromise()
+      .then( programs => programs.find(p => p.guid === guid) )
+      .then( programToInpect => {
+        this.dialog.open(DescriptionProgramDialog, {
+          data: {
+            title: programToInpect.user.title,
+            details: programToInpect.user.details
+          }
+        })
+      });
   }
 
   handleUpdate($event) {
@@ -91,3 +105,20 @@ export class ProgramOverviewComponent implements OnInit {
 export class DeleteProgramDialog {
   constructor(public dialogRef: MdDialogRef<DeleteProgramDialog>) {}
 }
+
+@Component({
+  selector: 'app-description-program-dialog',
+  template: `
+    <h2 md-dialog-title> {{ data.title }} </h2>
+    <md-dialog-content>
+      {{ data.details }}
+    </md-dialog-content>
+    <md-dialog-actions>
+      <button md-button md-dialog-close>Close</button>
+    </md-dialog-actions>
+  `,
+})
+export class DescriptionProgramDialog {
+  constructor(@Inject(MD_DIALOG_DATA) public data: any) {}
+}
+
