@@ -5,11 +5,12 @@
     <button class="delete-program-button" md-button (click)="delete.emit(program.guid)" title="delete program"><i class="material-icons">clear</i></button>
   </md-card-actions>
 
-    <md-card-title> {{program.user.title}}  </md-card-title>
+    <md-card-title>
+       <span>{{program.user.title}}</span>
+       <span mdTooltip="program details" (click)="detailView(program.guid)"><md-icon>import_contacts</md-icon></span>  
+    </md-card-title>
     <md-card-subtitle> uploaded on: {{ program.user.created | date}}</md-card-subtitle>
-    <md-card-content>
-      <pre>{{ program.user.details }} </pre>
-    </md-card-content>
+    <md-card-content>{{ program.user.description }}</md-card-content>
     <md-card-subtitle>
       link: {{ program.user.externalLink }}
     </md-card-subtitle>

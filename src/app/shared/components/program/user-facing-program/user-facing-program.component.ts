@@ -12,5 +12,6 @@ export class UserFacingProgramComponent implements OnInit {
   constructor() { }
 
   ngOnInit() {
+    console.log(this.program);
   }
 }

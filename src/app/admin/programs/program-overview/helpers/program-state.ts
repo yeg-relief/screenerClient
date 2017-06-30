@@ -12,8 +12,10 @@ export class ProgramState {
     programs: ApplicationFacingProgram[],
     filter: FilterMessage) {
     this.programs = [...programs];
+    this.filter = (<any>Object).assign({}, filter);
   }
 }
+
 
 export function updateState(input$: Observable<FilterMessage | ApplicationFacingProgram[] | ApplicationFacingProgram>)
   : Observable<ProgramState> {

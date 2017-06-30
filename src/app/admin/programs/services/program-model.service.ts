@@ -11,6 +11,7 @@ import { UserProgram } from './user-program.class';
 import { FormBuilder } from '@angular/forms';
 import 'rxjs/add/operator/take';
 import 'rxjs/add/observable/fromPromise';
+import 'rxjs/add/observable/zip';
 
 @Injectable()
 export class ProgramModelService {
@@ -66,7 +67,6 @@ export class ProgramModelService {
   private async _updateUserProgramInCache(program: UserFacingProgram, resp: any)
   : Promise<boolean> 
   {
-    console.log(resp)
     if (resp.result === 'updated' || resp.result === 'created') {
       const cache = await this._cache.take(1).toPromise();
       const val = cache.find(p => p.guid === program.guid);

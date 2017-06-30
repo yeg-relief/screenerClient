@@ -79,7 +79,6 @@ export class ProgramEditComponent implements OnInit, OnDestroy {
   private async _goToQueries(){
     const program = await this.program.take(1).toPromise();
     const form = program._form;
-    console.log(form)
     let saveBeforeNavigate = false;
     
     if (program._form.dirty) {

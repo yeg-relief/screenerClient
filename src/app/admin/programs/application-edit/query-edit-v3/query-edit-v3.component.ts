@@ -7,7 +7,6 @@ import { ReplaySubject } from 'rxjs/ReplaySubject';
 import 'rxjs/add/operator/multicast';
 import 'rxjs/add/operator/filter'
 import {MdSnackBar} from '@angular/material';
-import { QueryEvent } from '../../services';
 import { Subscription } from 'rxjs/Subscription';
 import { FormArray } from '@angular/forms';
 

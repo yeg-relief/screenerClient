@@ -1,9 +1,0 @@
-button.disabled {
-  color: grey;
-  opacity: 0.6;
-}
-
-button.enabled {
-  color: green;
-  opacity: 1.0;
-}
