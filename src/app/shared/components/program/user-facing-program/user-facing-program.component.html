@@ -1,7 +1,7 @@
 <md-card class="program-width">
   <md-card-title> {{program?.title}} </md-card-title>
   <md-card-content>
-      <p>{{ program?.description }} </p>
+      <p>{{ program?.details }} </p>
   </md-card-content>
   <a *ngIf="program.externalLink?.length > 0" href="http://{{ program.externalLink }}" target="_blank">
     more information
