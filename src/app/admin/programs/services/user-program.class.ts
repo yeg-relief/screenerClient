@@ -18,6 +18,7 @@ export class UserProgram {
     const obj = {
       guid:  opts.guid ? opts.guid : '',
       title: opts.title ? opts.title : '',
+      description: opts.description ? opts.description : '',
       details: opts.details ? opts.details : '',
       externalLink: opts.externalLink ? opts.externalLink : '',
       created: opts.created ? opts.created : 0,
@@ -36,6 +37,7 @@ export class UserProgram {
     this._form = fb.group({
       guid: new FormControl(this.data.guid, Validators.required),
       title: new FormControl(this.data.title, Validators.required),
+      description: new FormControl(this.data.description, Validators.required),
       details: new FormControl(this.data.details, Validators.required),
       externalLink: new FormControl(this.data.externalLink),
       created: new FormControl(this.data.created),

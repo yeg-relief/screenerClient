@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ProgramsComponent } from './programs.component';
-import { ProgramOverviewComponent, DeleteProgramDialog } from './program-overview/program-overview.component';
+import { ProgramOverviewComponent, DeleteProgramDialog, DescriptionProgramDialog } from './program-overview/program-overview.component';
 import { RouterModule } from '@angular/router';
 import { MaterialModule } from '@angular/material';
 import { AdminCoreModule } from '../core/admin-core.module';
@@ -41,12 +41,14 @@ import { EditRowComponent } from './program-edit/edit-row/edit-row.component';
     TagEditComponent,
     EditRowComponent,
     UnsavedChangesDialog,
-    DeleteProgramDialog
+    DeleteProgramDialog,
+    DescriptionProgramDialog
   ],
   entryComponents: [
     DeleteQueryDialog,
     UnsavedChangesDialog,
-    DeleteProgramDialog
+    DeleteProgramDialog,
+    DescriptionProgramDialog
   ],
   providers: [
     ProgramModelService,

@@ -1,4 +1,4 @@
-import { Component, OnInit, EventEmitter } from '@angular/core';
+import { Component, OnInit, EventEmitter, Inject } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
 import { Subject } from 'rxjs/Subject';
 import 'rxjs/add/observable/merge';
@@ -11,6 +11,7 @@ import  * as helpers from './helpers';
 import {MdDialog, MdDialogRef} from '@angular/material';
 import { ProgramModelService } from '../services/program-model.service';
 import {MdSnackBar} from '@angular/material';
+import {MD_DIALOG_DATA} from '@angular/material';
 
 @Component({
   selector: 'app-program-overview',
@@ -46,6 +47,21 @@ export class ProgramOverviewComponent implements OnInit {
       .map(state => state.programs)
       .do(_ => console.log(_))
       .shareReplay();
+  }
+
+  handleDetailInspection(guid: string) {
+    this.programs.take(1).toPromise()
+      .then( programs => programs.find(p => p.guid === guid) )
+      .then( programToInpect => {
+        this.dialog.open(DescriptionProgramDialog, {
+          data: {
+            title: programToInpect.user.title,
+            details: programToInpect.user.details,
+          },
+          width: '50vw',
+          height: '50vh'
+        })
+      });
   }
 
   handleUpdate($event) {
@@ -91,3 +107,64 @@ export class ProgramOverviewComponent implements OnInit {
 export class DeleteProgramDialog {
   constructor(public dialogRef: MdDialogRef<DeleteProgramDialog>) {}
 }
+
+@Component({
+  selector: 'app-description-program-dialog',
+  template: `
+    <!DOCTYPE html>
+    <main class="wrapper">
+      <h2 md-dialog-title> {{ data.title }} </h2>
+      <md-dialog-content>
+        <textarea disabled>
+          {{ data.details }}
+        </textarea>     
+      </md-dialog-content>
+      <md-dialog-actions>
+        <button md-button md-dialog-close>Close</button>
+      </md-dialog-actions>
+    </main>
+  `,
+  styles: [
+    `
+      .wrapper {
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        width: 100%;
+        height: 100%;
+        overflow: hidden;
+      }
+
+      h2[md-dialog-title] {
+        font-weight: bolder;
+        padding-left: 2em;
+        margin-top: 2em;
+        background-color: lightgrey;
+        font-size: x-large;
+        border: dashed 2px darkorange;
+      }
+
+      md-dialog-content {
+        margin: 0em 2em;
+        min-height: 50%;
+        border-radius: 5px;
+      }
+
+      textarea {
+        height: 223px;
+        width: 426px;
+        font-size: large;
+        resize: none;
+        overflow: auto;
+      }
+
+      button[md-dialog-close] {
+        background-color: darkorange;
+      }
+    `
+  ]
+})
+export class DescriptionProgramDialog {
+  constructor(@Inject(MD_DIALOG_DATA) public data: any) {}
+}
+

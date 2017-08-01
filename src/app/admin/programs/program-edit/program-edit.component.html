@@ -26,7 +26,13 @@
       </md-input-container>
     </app-edit-row>
 
-    <app-edit-row [icon]="'create'" [tooltip]="'Describe the program to the user.'">
+    <app-edit-row [icon]="'subject'" [tooltip]="'Write a one line description.'">
+      <md-input-container [style.width]="'100%'">
+        <input mdInput formControlName="description" placeholder="program description"/>
+      </md-input-container>
+    </app-edit-row>
+
+    <app-edit-row [icon]="'create'" [tooltip]="'Write a more detailed overview.'">
       <textarea id="program-details" rows="10" cols="50" name="details"  mdInput formControlName="details">
         {{program.data.details }} 
       </textarea>

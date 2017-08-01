@@ -2,33 +2,37 @@
   <header class="center py2" >
     <img src="assets/logo.svg" class="logo-image">
   </header>
-  <div class="p2"></div>
+  <div class="p2">
+    <div class="ribbon">
+      <span>Under Construction</span>
+    </div>
+  </div>
   <!-- MEDIUM AND LARGER SCREENS -->
   <section class="large-description-container" *ngIf="!loading" >
       <div class="large-site-description">
-        <div class="section-text">
-          Answer a few questions to find out some helpful benefits you could apply for.
+        <div class="section-text program-details">
+          Answer a few questions to find benefits you could apply for.
         </div>
         <a routerLink="/master-screener/questions">
-          <button md-raised-button >QUESTIONNAIRE</button>
+          <button md-raised-button >Start Questionnaire</button>
         </a>
       </div>
 
       <div class="large-site-description" >
-        <div class="section-text">
-          See the benefits available in Edmonton for people with a lower income.
+        <div class="section-text program-details">
+          See the list of benefits available for people in Edmonton.
         </div>
         <a routerLink="/browse-programs/all">
-          <button md-raised-button >BROWSE</button>
+          <button md-raised-button >Browse Benefits</button>
         </a>
       </div>
 
       <div class="large-site-description">
-        <div class="section-text">
-          How to obtain relevant documentation
+        <div class="section-text program-details">
+          How to get the documents you need to apply for benefits.
         </div>
         <a routerLink="/quick-links"  fragment="documentation">
-          <button md-raised-button >DOCUMENTATION</button>
+          <button md-raised-button >Documents</button>
         </a>
       </div>
   </section>
@@ -39,7 +43,7 @@
       <section class="col-10">
         <div class="program-details col-12 flex flex-column">
           <div class="center">
-            <p> Answer a few questions to find out some helpful benefits you could apply for.
+            <p> Answer a few questions to find benefits you could apply for.
           </div>
           <a class="center" routerLink="/master-screener/questions">
             <button md-raised-button>Questionnaire</button>
@@ -49,20 +53,20 @@
         <div class="py2 xs-hide"></div>
         <div class="program-details col-12 flex flex-column">
           <div class="center">
-            <p> See the benefits available in Edmonton for people with a lower income.
+            <p> See the list of benefits available for people in Edmonton.
           </div>
           <a class="center" routerLink="/browse-programs/all">
-            <button md-raised-button>BROWSE</button>
+            <button md-raised-button>Browse Benefits</button>
           </a>
         </div>
 
         <div class="py2 xs-hide"></div>
         <div class="program-details col-12 flex flex-column">
           <div class="center">
-            <p> How to obtain relevant documentation
+            <p> How to get the documents you need to apply for benefits.
           </div>
           <a class="center" routerLink="/quick-links"  fragment="documentation">
-            <button md-raised-button>DOCUMENTATION</button>
+            <button md-raised-button>Documents</button>
           </a>
         </div>
 

@@ -17,7 +17,8 @@ import { AuthGuardService } from './admin/core/services/auth-guard.service';
 import { QuickLinksComponent } from './user/quick-links/quick-links.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ReactiveFormsModule } from '@angular/forms';
-import { ConstructionRibbonComponent } from './construction-ribbon/construction-ribbon.component'
+import { ConstructionRibbonComponent } from './construction-ribbon/construction-ribbon.component';
+
 @NgModule({
   declarations: [
     AppComponent,

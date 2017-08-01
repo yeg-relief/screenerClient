@@ -21,13 +21,13 @@ section {
   justify-content: space-around;
 }
 
-@media screen and (max-width: 1023.99px){
+@media screen and (max-width: 1030px){
   .large-description-container {
     display: none;
   }
 }
 
-@media screen and (min-width: 1024px){
+@media screen and (min-width: 1030px){
   .large-description-container {
     display: default;
   }
@@ -178,5 +178,23 @@ button:hover {
     height: 15vh;
     padding-bottom: 2em;
   }
+}
+
+.ribbon {
+  background-color: #a00;
+  overflow: hidden;
+  white-space: nowrap;
+  box-shadow: 0 0 10px #888;
+}
+.ribbon span {
+  border: 1px solid #faa;
+  color: #fff;
+  display: block;
+  font: bold 81.25% 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  margin: 1px 0;
+  padding: 10px 50px;
+  text-align: center;
+  text-decoration: none;
+  text-shadow: 0 0 5px #444;
 }
 
