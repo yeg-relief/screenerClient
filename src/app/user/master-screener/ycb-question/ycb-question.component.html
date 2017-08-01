@@ -18,7 +18,8 @@
       </div>
 
       <div *ngSwitchCase="'CheckBox'">
-        <md-card-title> <md-checkbox [formControlName]="question.key"> {{ question.label }} </md-checkbox> </md-card-title>
+        <md-card-title><label for="question.key"> {{ question.label }} </label></md-card-title>
+        <md-checkbox name="question.key" [formControlName]="question.key"> yes  </md-checkbox> 
       </div>
 
 
