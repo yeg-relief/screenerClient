@@ -1,13 +1,23 @@
 <md-card class="program-width">
-  <md-card-title> {{program?.title}} </md-card-title>
+  <div class="program-title-row" mdTooltip="program details" (click)="openModal()">
+    <md-icon>content_copy</md-icon>
+    <md-card-title class="title"> {{program?.title}} </md-card-title>
+  </div>
   <md-card-content>
       <p>{{ program?.description }} </p>
+      <div>
+        <p> <a (click)="openModal()" mdTooltip="program details"> details </a>
+      </div>
   </md-card-content>
-  <a *ngIf="program.externalLink?.length > 0" href="http://{{ program.externalLink }}" target="_blank">
+  <a 
+    *ngIf="program.externalLink?.length"
+    mdTooltip="{{ program.externalLink }}" 
+    href="http://{{ program.externalLink }}" 
+    target="_blank">
     more information
   </a>
   <md-card-actions>
-    <button md-raised-button 
+    <button md-button 
       *ngFor="let tag of program?.tags" 
       routerLink="/browse-programs/{{tag}}"
       routerLinkActive="active"> {{tag}} </button>

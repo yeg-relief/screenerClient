@@ -2,7 +2,6 @@
 
   <button 
     md-button
-    *ngIf="loaded" 
     routerLink="/admin/programs/edit/new"
     [attr.disabled]="deleteInitiated? true : null"
     title="new program">
