@@ -15,7 +15,7 @@ import 'rxjs/add/operator/multicast';
     <!--<app-construction-ribbon></app-construction-ribbon>-->
     <main id="main-outlet" [ngClass]="backgroundClass">
       <router-outlet></router-outlet>
-    <main>
+    </main>
   `,
   styles: [
     `

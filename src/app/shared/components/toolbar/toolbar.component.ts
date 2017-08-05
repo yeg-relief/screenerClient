@@ -81,7 +81,7 @@ export class ToolbarComponent implements OnInit {
     }.bind(this);
 
     const addAdminRoutes = navigationStart
-      .map(url => url.split('/').includes('admin'))
+      .map(url => url.split('/').indexOf('admin') > -1)
       .subscribe(val => {
         if (val && !hasAdminRoutes()) {
           this.routes = [...this.userRoutes, ...this.adminRoutes];
