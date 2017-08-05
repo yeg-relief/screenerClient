@@ -10,14 +10,15 @@
   box-shadow: 0 0 10px #888;
   width: 60vw;
   margin: 0 auto;
+  text-align: center;
 }
 .ribbon span {
   border: 1px solid #faa;
   color: #fff;
   display: block;
-  font: bold 81.25% 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  font: bold 110% 'Helvetica Neue', Helvetica, Arial, sans-serif;
   margin: 1px 0;
-  padding: 10px 50px;
+  padding: 10px 0;
   text-align: center;
   text-decoration: none;
   text-shadow: 0 0 5px #444;
