@@ -1,183 +1,6 @@
 .home {
-  width: 100vw;
+  width: 95vw;
   overflow: auto;
-}
-
-header {
-  margin-top: 7vh;
-}
-section {
-  overflow: hidden;
-}
-
-.section-text {
-  width: 80%;
-}
-
-.large-description-container{
-  width: 95%; 
-  margin: 0 auto;
-  display: flex;
-  justify-content: space-around;
-}
-
-@media screen and (max-width: 1030px){
-  .large-description-container {
-    display: none;
-  }
-}
-
-@media screen and (min-width: 1030px){
-  .large-description-container {
-    display: default;
-  }
-}
-
-.large-site-description{
-  width: 33.33%;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-}
-
-main {
-  overflow-x: hidden;
-  will-change: opacity;
-}
-
-main > header > .header-title {
-  background-color: rgba(248,248,255, 0.7);
-}
-
-.program-details {
-  background-color: rgba(248,248,255, 0.7);
-}
-
-p {
-  font-family: 'Open Sans', sans-serif;
-  display: inline-block;
-  background-color: rgba(248,248,255, 0.7);
-}
-
-button {
-  width: 75%;
-  background-color: darkorange;
-  color: white;
-}
-
-button:hover {
-  background-color: pink;
-  color: black;
-}
-
-
-@media(min-width: 64em) {
-  main > header > .header-title {
-    font-size: 80px;
-  }
-  
-  .program-details {
-    min-width: 25em;
-  }
-  .logo-image {
-    width: 50vw;
-  }
-
-  .home {
-    overflow-x: hidden;
-    overflow-y: hidden;
-  }
-}
-
-
-@media(min-width: 52em) and (max-width:64em) {
-  main > header > .header-title {
-    font-size: 80px;
-  }
-  
-  main > header > .header-description > div > p {
-    max-width: 28em;
-  }
-  
-  .program-details {
-    max-width: 52em;
-    height: 10vh;
-  }
-  
-
-  .logo-image {
-    width: 55vw;
-  }
-
-  .home {
-    overflow-x: hidden;
-    overflow-y: hidden;
-  }
-}
-
-
-@media(min-width: 40em) and (max-width: 52em) {
-  main > header > .header-title {
-    font-size: 65px;
-  }
-  
-  main > header > .header-description > div > p {
-    max-width: 28em;
-  }
-  
-  .program-details {
-    max-width: 40em;
-    height: 15vh;
-    padding-bottom: 1em;
-  }
-
-
-  .logo-image {
-    width: 65vw;
-  }
-}
-
-
-@media(min-width: 30em) and (max-width: 40em){
-  main > header > .header-title {
-    font-size: 40px;
-  }
-  main > header > .header-description > div > p {
-    max-width: 28em;
-    font-size: 90%;
-  }
-
-  .logo-image {
-    width: 75vw;
-  }
-
-  .program-details {
-    max-width: 30em;
-    height: 15vh;
-    padding-bottom: 2em;
-  }
-
-}
-
-
-@media(max-width: 30em){
-  main > header > .header-title {
-    font-size: 30px;
-  }
-  main > header > .header-description > div > p {
-    max-width: 28em;
-    font-size: 80%;
-  }
-
-  .logo-image {
-    width: 80vw;
-  }
-
-  .program-details {
-    max-width: 20em;
-    height: 15vh;
-    padding-bottom: 2em;
-  }
 }
 
 .ribbon {
@@ -185,6 +8,8 @@ button:hover {
   overflow: hidden;
   white-space: nowrap;
   box-shadow: 0 0 10px #888;
+  width: 60vw;
+  margin: 0 auto;
 }
 .ribbon span {
   border: 1px solid #faa;
@@ -196,5 +21,77 @@ button:hover {
   text-align: center;
   text-decoration: none;
   text-shadow: 0 0 5px #444;
+}
+
+section.link-container {
+  overflow-x: hidden;
+  margin: 2em auto;
+  justify-content: space-around;
+  text-align: center;
+}
+
+.logo-image {
+  margin-top: 2vh;
+}
+
+
+@media screen and (min-width: 50em) {
+  section.link-container {
+    display: flex;
+    width: 70vw;
+  }
+
+  section.feature-description:nth-child(2) {
+    margin: 0 2em;
+  }
+
+  .logo-image {
+    width: 60vw;
+    margin-left: 20vw;
+  }
+
+  section.link-container > section.feature-description {
+    padding: 1em;
+  }
+}
+
+@media screen and (max-width: 50em) {
+  section.link-container {
+    display: flex;
+    flex-direction: column;
+    width: 90vw;
+    margin: 2em auto;
+    justify-content: space-around;
+  }
+
+  section.feature-description:nth-child(2) {
+    margin: 2em 0;
+  }
+
+  .logo-image {
+    width: 80vw;
+    margin-left: 10vw;
+  }
+
+  section.link-container > section.feature-description {
+    padding: 0.3em;
+  }
+}
+
+
+
+section.link-container > section.feature-description {
+  display: flex;
+  flex: auto 0 1;
+  flex-direction: column;
+  width: 100%;
+  background-color: rgba(248,248,255,.7);
+  justify-content: center;
+  align-items: center;
+}
+
+section.link-container > section.feature-description > a > button {
+  background-color: darkorange;
+  color: white;
 }
 
