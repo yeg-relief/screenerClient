@@ -35,6 +35,11 @@ section.link-container {
   margin-top: 2vh;
 }
 
+section.feature-description {
+  border: solid darkorange 1px;
+  border-radius: 2px;
+}
+
 
 @media screen and (min-width: 50em) {
   section.link-container {
@@ -94,5 +99,9 @@ section.link-container > section.feature-description {
 section.link-container > section.feature-description > a > button {
   background-color: darkorange;
   color: white;
+}
+
+.feature-description > p {
+  width: 100%;
 }
 
