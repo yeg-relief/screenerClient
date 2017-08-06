@@ -12,8 +12,7 @@ import 'rxjs/add/operator/multicast';
   selector: 'app-root',
   template: `
     <app-toolbar></app-toolbar>
-    <!--<app-construction-ribbon></app-construction-ribbon>-->
-    <main id="main-outlet" [ngClass]="backgroundClass">
+    <main id="main-outlet" class="background">
       <router-outlet></router-outlet>
     </main>
   `,
@@ -21,8 +20,8 @@ import 'rxjs/add/operator/multicast';
     `
       #main-outlet {
         min-height: 94vh;
-        width: 100%;
-        margin-top: 0;
+        width: 98vw;
+        margin: 0 auto;
       }
     `,
     `

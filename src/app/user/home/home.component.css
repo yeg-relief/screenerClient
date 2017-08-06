@@ -102,6 +102,7 @@ section.link-container > section.feature-description > a > button {
 }
 
 .feature-description > p {
-  width: 100%;
+  width: 70%;
+  margin: 0 auto 0.3em auto;
 }
 
