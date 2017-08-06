@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import {
   trigger,
   state,
@@ -21,4 +21,11 @@ import {
     ])
   ]
 })
-export class HomeComponent {}
+export class HomeComponent implements OnInit {
+  isIE: boolean;
+
+  ngOnInit() {
+      const userAgent: string = window ? window.navigator.userAgent: '';
+      this.isIE = userAgent.includes('Trident');
+  }
+}

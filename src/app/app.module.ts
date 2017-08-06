@@ -18,6 +18,7 @@ import { QuickLinksComponent } from './user/quick-links/quick-links.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ReactiveFormsModule } from '@angular/forms';
 import { ConstructionRibbonComponent } from './construction-ribbon/construction-ribbon.component';
+import { IeSucksComponent } from './user/home/ie-sucks/ie-sucks.component';
 
 @NgModule({
   declarations: [
@@ -28,6 +29,7 @@ import { ConstructionRibbonComponent } from './construction-ribbon/construction-
     HomeComponent,
     QuickLinksComponent,
     ConstructionRibbonComponent,
+    IeSucksComponent,
   ],
   imports: [
     BrowserModule,

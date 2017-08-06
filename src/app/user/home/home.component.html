@@ -2,9 +2,9 @@
 
   <img src="assets/logo.svg" class="logo-image">
 
-  <div class="ribbon" [@fadein]> <span>Under Construction</span> </div>
+  <div class="ribbon"> <span>Under Construction</span> </div>
 
-  <section class="link-container">
+  <section class="link-container" >
     <section class="feature-description">
       <p>Answer a few questions to find benefits you could apply for.</p>
       <a routerLink="/master-screener/questions">
@@ -25,6 +25,11 @@
         <button md-raised-button >Documents</button>
       </a>
     </section>
+
+    <app-ie-sucks *ngIf="isIE"></app-ie-sucks>
   </section>
+
+
+
 
 </main>

@@ -12,7 +12,7 @@ import 'rxjs/add/operator/multicast';
   selector: 'app-root',
   template: `
     <app-toolbar></app-toolbar>
-    <main id="main-outlet" class="background">
+    <main id="main-outlet" [ngClass]="backgroundClass">
       <router-outlet></router-outlet>
     </main>
   `,
@@ -52,15 +52,18 @@ import 'rxjs/add/operator/multicast';
   providers: [ ]
 })
 export class AppComponent implements OnInit {
-
+  isIE: boolean;
   backgroundClass = {
     background: true,
     backgroundcolor: false 
-  }
+  };
 
   constructor(private router: Router){}
 
   ngOnInit() {
+
+    const userAgent: string = window ? window.navigator.userAgent: '';
+    this.isIE = userAgent.includes('Trident');
 
     const isAdminRoute = url => url.substring(0, 7) === '/admin/';
 
@@ -70,8 +73,15 @@ export class AppComponent implements OnInit {
       .debounceTime(60)
       .map( url => isAdminRoute(url) )
       .subscribe( val => {
-        this.backgroundClass.background = !val;
-        this.backgroundClass.backgroundcolor = val;
+        if (this.isIE) {
+            this.backgroundClass.background = false;
+            this.backgroundClass.backgroundcolor = true;
+        } else {
+            this.backgroundClass.background = !val;
+            this.backgroundClass.backgroundcolor = val;
+        }
+
+
       });
   }
 }

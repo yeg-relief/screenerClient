@@ -29,6 +29,7 @@ section.link-container {
   margin: 2em auto;
   justify-content: space-around;
   text-align: center;
+  max-height: 60vh;
 }
 
 .logo-image {
@@ -38,6 +39,7 @@ section.link-container {
 section.feature-description {
   border: solid darkorange 1px;
   border-radius: 2px;
+  flex: 25vw 0 1;
 }
 
 
@@ -88,9 +90,8 @@ section.feature-description {
 
 section.link-container > section.feature-description {
   display: flex;
-  flex: auto 0 1;
+  flex: 100% 0 1;
   flex-direction: column;
-  width: 100%;
   background-color: rgba(248,248,255,.7);
   justify-content: center;
   align-items: center;
