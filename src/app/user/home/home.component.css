@@ -43,7 +43,7 @@ section.feature-description {
 }
 
 
-@media screen and (min-width: 50em) {
+@media screen and (min-width: 53em) {
   section.link-container {
     display: flex;
     width: 70vw;
@@ -54,6 +54,7 @@ section.feature-description {
   }
 
   .logo-image {
+    margin-top: 5vh;
     width: 60vw;
     margin-left: 20vw;
   }
@@ -63,7 +64,7 @@ section.feature-description {
   }
 }
 
-@media screen and (max-width: 50em) {
+@media screen and (max-width: 53em) {
   section.link-container {
     display: flex;
     flex-direction: column;
