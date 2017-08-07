@@ -1,6 +1,5 @@
-import { ProgramCondition, ProgramQuery, Key } from '../../models'
+import { ProgramCondition, Key } from '../../models'
 import { FormGroup, FormBuilder, AbstractControl, Validators, FormControl, FormArray } from '@angular/forms';
-import { UserProgram } from './user-program.class';
 
 export class ProgramConditionClass {
   data: ProgramCondition;
@@ -47,7 +46,14 @@ export class ProgramConditionClass {
     others.forEach(prop => {
       if(value[prop] === 'invalid')
         errors[prop] = 'invalid'
-    })
+    });
+
+    if (key.type === 'number' && Number.isNaN(Number.parseInt(value.value, 10))) {
+      debugger;
+      console.log(value.value);
+      errors['invalid-number-value'] = `${value.value} is not a valid number`;
+    }
+
     if (Object.keys(errors).length > 0)
       return errors;
 

@@ -1,13 +1,11 @@
-import { Injectable, OnInit, OnDestroy } from '@angular/core';
+import { Injectable } from '@angular/core';
 import { Http , RequestOptions} from '@angular/http';
 import { ApplicationFacingProgram, ProgramCondition, ProgramQuery, Key } from '../../models'
 import { UserFacingProgram } from '../../../shared/models'
 import { AuthService } from '../../core/services/auth.service'
 import { Observable } from 'rxjs/Observable';
 import { ReplaySubject } from 'rxjs/ReplaySubject';
-import { Subscription } from 'rxjs/Subscription';
 import { Program } from './program.class';
-import { UserProgram } from './user-program.class';
 import { FormBuilder } from '@angular/forms';
 import 'rxjs/add/operator/take';
 import 'rxjs/add/observable/fromPromise';
@@ -61,14 +59,14 @@ export class ProgramModelService {
   }
 
   getPrograms(): Observable<ApplicationFacingProgram[]> {
-    return this._cache;
+    return this._cache.asObservable();
   }
 
   private async _updateUserProgramInCache(program: UserFacingProgram, resp: any)
   : Promise<boolean> 
   {
     if (resp.result === 'updated' || resp.result === 'created') {
-      const cache = await this._cache.take(1).toPromise();
+      const cache = await this._cache.asObservable().take(1).toPromise();
       const val = cache.find(p => p.guid === program.guid);
 
       if (val) {
@@ -92,28 +90,10 @@ export class ProgramModelService {
       .flatMap( res => Observable.fromPromise(this._updateUserProgramInCache(program, res)))
   }
 
-  saveProgram(program: Program): Observable<boolean> {
-    if (program.data.guid !== 'new')
-      return Observable.throw(Observable.of("Attempting to save program without 'new' guid."))
-
-    const s = this._saveProgram(program.data).multicast(new ReplaySubject(1)).refCount();
-    
-    const saved = s.take(1)
-      .filter(saved => saved === true)
-      .mapTo(program.data)
-      .let(this._updateValueInCache)
-      .mapTo(true);
-
-    const notSaved = s.take(1).filter(saved => saved === false);
-
-    return Observable.merge(saved, notSaved)
-
-  }
-
-  deleteProgram(guid: string): Observable<boolean> {
+    deleteProgram(guid: string): Observable<boolean> {
     return this._deleteProgram(guid).do(res => {
       if (res) {
-        this._cache.take(1).subscribe(cache => this._cache.next(cache.filter(p => p.guid !== guid)))
+        this._cache.asObservable().take(1).subscribe(cache => this._cache.next(cache.filter(p => p.guid !== guid)))
       } 
     })
   }
@@ -180,8 +160,7 @@ export class ProgramModelService {
     let errMsg: string;
     if (error instanceof Response) {
       const body = error.json() || '';
-      const err = body['message'] || JSON.stringify(body);
-      errMsg = err;
+      errMsg = body['message'] || JSON.stringify(body);
     } else {
       errMsg = error.message ? error.message : error.toString();
     }
@@ -198,10 +177,10 @@ export class ProgramModelService {
 
   generateRandomString(): string {
     const LENGTH = 26;
-    const lowerCaseCharSet = "abcdefghijklmnopqrstuvwxyz"
+    const lowerCaseCharSet = "abcdefghijklmnopqrstuvwxyz";
     const charSet = lowerCaseCharSet
       .concat(lowerCaseCharSet.toUpperCase())
-      .concat("1234567890")
+      .concat("1234567890");
 
     const generateCharacters = () => {
       const arr = new Array(LENGTH);
@@ -209,7 +188,7 @@ export class ProgramModelService {
         arr[i] = charSet[Math.floor(Math.random() * charSet.length)];
       }
       return arr;
-    }
+    };
     
     return generateCharacters().join('');
   }

@@ -1,17 +1,20 @@
-import { Component, OnInit, Input, OnChanges, SimpleChanges , Output, EventEmitter} from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter, OnDestroy} from '@angular/core';
 import { Key } from '../../../models/key'
 import { ProgramConditionClass } from '../../services/program-condition.class';
+import { ProgramCondition } from '../../../models';
 import { ProgramModelService } from '../../services/program-model.service'
 import { Observable } from 'rxjs/Observable';
+import { Subscription } from 'rxjs/Subscription';
 
 @Component({
   selector: 'app-condition-edit-v3',
   templateUrl: './condition-edit-v3.component.html',
   styleUrls: ['./condition-edit-v3.component.css']
 })
-export class ConditionEditV3Component implements OnInit, OnChanges {
+export class ConditionEditV3Component implements OnInit, OnDestroy {
   @Input() condition: ProgramConditionClass;
   @Output() remove = new EventEmitter();
+  valueWatcher: Subscription;
   keys: Observable<Key[]>;
   keyNameClasses = {
     'ng-invalid': false
@@ -41,11 +44,26 @@ export class ConditionEditV3Component implements OnInit, OnChanges {
 
   constructor(private ps: ProgramModelService) { }
 
-  ngOnChanges(condition: SimpleChanges){
+  ngOnInit() {
+    this.keys = this.ps.keys.asObservable().map(keys => keys.sort( (a, b) => a.name.localeCompare(b.name)) );
+
+    this.valueWatcher = this.condition.form
+        .valueChanges
+        .filter( (c: ProgramCondition) => c.key.type === 'number')
+        .subscribe( condition => {
+
+          const parsedNumber = Number.parseInt(condition.value, 10);
+
+          if ( Number.isNaN(parsedNumber) || parsedNumber.toString(10).length !== condition.value) {
+            this.condition.form.get('value').setErrors({
+                'invalid-value': condition.value
+            })
+          }
+        })
   }
 
-  ngOnInit() {
-    this.keys = this.ps.keys.map(keys => keys.sort( (a, b) => a.name.localeCompare(b.name)) );
+  ngOnDestroy() {
+    if (this.valueWatcher && !this.valueWatcher.closed) this.valueWatcher.unsubscribe();
   }
 
 
@@ -62,14 +80,14 @@ export class ConditionEditV3Component implements OnInit, OnChanges {
       form.get('value').setValue(true);
       this.optional.boolean = true;
       this.optional.number = false;
-    }
+    };
 
     const numberValueStrategy = form => {
       form.get('value').setValue(0);
       form.get('qualifier').setValue('lessThanOrEqual');
       this.optional.boolean = false;
       this.optional.number = true;
-    }
+    };
 
     const name = $event.target.value;
     this.keys.take(1).map(keys => keys.find(k => k.name === name)).subscribe(key => {
@@ -97,11 +115,9 @@ export class ConditionEditV3Component implements OnInit, OnChanges {
     return this.condition.form.value.key.type;
   }
 
-  isQualifierSelected(qualifierValue: string) { 
-    const bleh = this.getKeyType() !== 'boolean' && 
-                 this.condition.form.get('qualifier').value === qualifierValue;
-
-    return bleh;
+  isQualifierSelected(qualifierValue: string) {
+    return this.getKeyType() !== 'boolean' &&
+        this.condition.form.get('qualifier').value === qualifierValue;
   }
 
   deleteCondition() {
