@@ -14,7 +14,8 @@ import { Subscription } from 'rxjs/Subscription';
 export class ConditionEditV3Component implements OnInit, OnDestroy {
   @Input() condition: ProgramConditionClass;
   @Output() remove = new EventEmitter();
-  valueWatcher: Subscription;
+  valueWatcherNumber: Subscription;
+  valueWatcherBoolean: Subscription;
   keys: Observable<Key[]>;
   keyNameClasses = {
     'ng-invalid': false
@@ -46,8 +47,8 @@ export class ConditionEditV3Component implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.keys = this.ps.keys.asObservable().map(keys => keys.sort( (a, b) => a.name.localeCompare(b.name)) );
-
-    this.valueWatcher = this.condition.form
+    /*
+    this.valueWatcherNumber = this.condition.form
         .valueChanges
         .filter( (c: ProgramCondition) => c.key.type === 'number')
         .subscribe( condition => {
@@ -59,11 +60,20 @@ export class ConditionEditV3Component implements OnInit, OnDestroy {
                 'invalid-value': condition.value
             })
           }
-        })
+        });
+
+    this.valueWatcherBoolean = this.condition.form.get('key').valueChanges
+        .subscribe(key => {
+          if (key.type === 'boolean' && this.condition.form.get('value').hasError('invalid-value')) {
+            this.condition.form.setErrors({});
+          }
+        })*/
   }
 
   ngOnDestroy() {
-    if (this.valueWatcher && !this.valueWatcher.closed) this.valueWatcher.unsubscribe();
+    if (this.valueWatcherNumber && !this.valueWatcherNumber.closed) this.valueWatcherNumber.unsubscribe();
+
+    if (this.valueWatcherBoolean && !this.valueWatcherBoolean.closed) this.valueWatcherBoolean.unsubscribe();
   }
 
 

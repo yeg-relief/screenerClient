@@ -1,9 +1,23 @@
 main {
   display: flex;
-  justify-content: space-around;
+  justify-content: flex-start;
   align-items: center;
+  align-self: flex-start;
   height: 1em;
   width: 100%;
+}
+
+md-icon {
+  flex: 10% 0 0;
+}
+
+md-button-toggle-group {
+  flex: 100% 1 0;
+  align-items: flex-start;
+}
+
+select {
+  flex: 25% 0 0;
 }
 
 main.ng-invalid {
@@ -16,9 +30,10 @@ main.ng-invalid {
 }
 
 .number {
-  width: 80%;
+  flex: 60% 0 0;
 }
 
 .boolean {
-  width: 80%;
+  flex: 60% 1 0;
+  display: flex;
 }

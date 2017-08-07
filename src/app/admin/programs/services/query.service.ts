@@ -33,6 +33,9 @@ export class QueryService {
             query: query.form.value,
             guid: program_guid
         };
+
+        console.log(data);
+
         const body = JSON.stringify({ data });
         return this.http.post('/protected/query/', body, creds)
             .map(res => res.json())
@@ -71,28 +74,35 @@ export class QueryService {
 
     static parseStringValues(conditions: ProgramConditionClass[]): ProgramConditionClass[] {
         return conditions.map((c: ProgramConditionClass) => {
-            return typeof c.data.key.type === 'string' && c.data.key.type === 'number' ? QueryService.executeParse(c) : c
+            const type = c.form.get(['key', 'type']).value;
+
+            return type === 'number' ? QueryService.executeParse(c) : c
         });
     }
 
     static removeEmptyValues(conditions: ProgramConditionClass[]): ProgramConditionClass[] {
-        const removedInvalids = conditions.filter(c => c.data.value !== undefined && c.data.value !== null);
-        if (removedInvalids.length !== conditions.length) {
-            throw new Error('invalid values')
+        for (const c of conditions) {
+            let val = c.form.value.value;
+            if (typeof val === 'string' && val.match(/[^$,.\d]/)){
+                throw new Error(`invalid value detected: ${c.form.value.value}`);
+            } else if (typeof val === 'string') {
+                c.form.get('value').setValue(Number.parseInt(val, 10));
+            } else if (typeof val === 'number') {
+                c.form.get('value').setValue(Number.parseInt( val.toString(10), 10));
+            }
         }
 
         return conditions;
     }
 
     static executeParse(condition: ProgramConditionClass) : ProgramConditionClass {
-        condition.data.value = Number.parseInt((<string>condition.data.value), 10);
+        condition.form.get('value').setValue(Number.parseInt((<string>condition.data.value), 10));
 
 
-        if (Number.isNaN(condition.data.value)) {
+        if (Number.isNaN(condition.form.value.value)) {
             throw new Error(`A condition with name: ${condition.data.key.name} is an invalid number.`);
         }
-
-        condition.data.key.type = (<any>typeof condition.data.value);
+        
         return condition;
     }
 }
