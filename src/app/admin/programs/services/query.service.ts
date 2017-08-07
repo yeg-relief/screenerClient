@@ -102,7 +102,7 @@ export class QueryService {
         if (Number.isNaN(condition.form.value.value)) {
             throw new Error(`A condition with name: ${condition.data.key.name} is an invalid number.`);
         }
-        
+
         return condition;
     }
 }
