@@ -28,7 +28,6 @@
         <md-select [formControlName]="question.key">
           <md-option [value]="null"> select an option </md-option>
           <md-option *ngFor="let option of question.options" [value]="option"> {{ option }} </md-option>
-
         </md-select>
       </div>
 

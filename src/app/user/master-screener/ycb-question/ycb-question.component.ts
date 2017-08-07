@@ -115,17 +115,30 @@ export class YcbQuestionComponent implements OnInit, OnDestroy {
 
   checkEnter(keyDownEvent) {
     const ENTER_KEY = 13;
-    if (keyDownEvent.keyCode === ENTER_KEY)
-      keyDownEvent.target.blur();
+    if (keyDownEvent.keyCode === ENTER_KEY) keyDownEvent.target.blur();
   }
 
   handleInput(textInput: string) {
     const isValid = this.form.get(this.question.key).valid;
 
-    if (!isValid && this.errorInDOM === 'outDOM')
-      this.errorInDOM = 'inDOM'
-    else if (isValid && this.errorInDOM === 'inDOM')
-      this.errorInDOM = 'outDOM'
+    if (!isValid) {
+        this.addError();
+    } else if (isValid && this.form.hasError('invalid input', [this.question.key, 'number'])) {
+        console.warn(`form has error on key: ${this.question.key}, but the form says it is valid: ${isValid}`);
+    }
 
+    if (!isValid && this.errorInDOM === 'outDOM'){
+        this.errorInDOM = 'inDOM';
+    }
+    else if (isValid && this.errorInDOM === 'inDOM'){
+        this.errorInDOM = 'outDOM';
+    }
+  }
+
+  addError() {
+      this.form.setErrors({
+          ...this.form.errors,
+          [this.question.key]: {number: 'invalid input'}
+      })
   }
 }

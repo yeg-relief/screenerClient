@@ -11,16 +11,16 @@
         (onHide)="removeControls($event)"></app-ycb-question>
     </div>
 
-    <div class="submit-wrapper rounded flex">
-      <button
-        class="flex-grow" 
-        md-raised-button 
-        [style.background-color]="'darkorange'"
-        [style.color]="'black'"
-        type="submit">
-        SUBMIT
-      </button>
-    </div>
+
+    <button
+      id="submit-button"
+      md-raised-button
+      type="submit"
+      mdTooltip="Click to submit your information.">
+      <span>SUBMIT</span>
+      <md-icon>send</md-icon>
+    </button>
+
 
   </form>
   <div class="center"*ngIf="errorMessage.length === 0 && questions.length === 0"><strong>There are no questions available</strong></div>

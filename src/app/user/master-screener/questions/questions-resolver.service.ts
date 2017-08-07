@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Resolve, ActivatedRouteSnapshot } from '@angular/router'
+import { ActivatedRouteSnapshot } from '@angular/router'
 import { MasterScreenerService } from '../master-screener.service';
 import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/observable/throw';
@@ -22,9 +22,9 @@ export class QuestionsResolverService {
           return Observable.throw({error: 'questions are not an array', data})
         }
 
-        data.questions.sort(this.findAndSort.bind(this))
+        data.questions.sort(QuestionsResolverService.findAndSort);
 
-        data.conditionalQuestions.forEach(this.findAndSort.bind(this))
+        data.conditionalQuestions.forEach(QuestionsResolverService.findAndSort);
 
 
 
@@ -33,13 +33,13 @@ export class QuestionsResolverService {
       .catch(err => Observable.of({error: err}));
   }
 
-  findAndSort(q) {
+  static findAndSort(q) {
     if(Array.isArray(q.options)) {
-      q.options.sort(this.sortOptions);
+      q.options.sort(QuestionsResolverService.sortOptions);
     }
   }
 
-  sortOptions(a, b) {
+  static sortOptions(a, b) {
     return a - b;
   }
 }

@@ -5,13 +5,7 @@ import { MasterScreenerService } from '../master-screener.service';
 import { QuestionControlService } from './question-control.service';
 import { Question } from '../../../admin/models';
 import { Animations } from '../../../shared/animations';
-import {
-  trigger,
-  state,
-  style,
-  animate,
-  transition,
-} from '@angular/animations'
+
 
 @Component({
   templateUrl: './questions.component.html',
@@ -57,7 +51,7 @@ export class QuestionsComponent implements OnInit, OnDestroy {
 
   onSubmit() {
     this.timeout = setTimeout(() => this.loading = true, 60);
-    this.masterScreenerService.loadResults(this.form.value)
+    this.masterScreenerService.loadResults(this.form)
       .then(results => this.masterScreenerService.results = [...results])
       .then(() => this.router.navigateByUrl('/master-screener/results'))
       .catch(() => this.errorMessage = 'unable to load results, try later.');
