@@ -18,7 +18,7 @@ import { ApplicationEditComponent } from './programs/application-edit/applicatio
 export const routing: ModuleWithProviders = RouterModule.forChild([
   {
     path: '', component: AdminComponent, 
-    canActivate: [AuthGuardService],
+    //canActivate: [AuthGuardService],
     children: [
       {
         path: 'screener',

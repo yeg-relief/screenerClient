@@ -1,18 +1,14 @@
-import { async, ComponentFixture, TestBed, getTestBed, ComponentFixtureAutoDetect, inject,  } from '@angular/core/testing';
-import { ReflectiveInjector, Injectable, OnDestroy, ModuleWithProviders, DebugElement } from '@angular/core';
+import { async, ComponentFixture, TestBed,  } from '@angular/core/testing';
 import { QuestionEditComponent } from './question-edit.component';
 import { MaterialModule } from '@angular/material';
-import { ReactiveFormsModule, FormsModule, FormGroup, FormControl, FormBuilder, FormControlName } from '@angular/forms';
-import { StoreModule, Store, State, ActionReducer, provideStore, Dispatcher, Action } from '@ngrx/store';
-import { Observable, BehaviorSubject } from 'rxjs';
+import { ReactiveFormsModule, FormGroup, FormControl, FormBuilder, FormControlName } from '@angular/forms';
+import { StoreModule, } from '@ngrx/store';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { By } from '@angular/platform-browser';
 import * as fromRoot from '../../reducer';
 import * as fromScreener from '../store/screener-reducer';
 import * as fromKeys from '../../keys/reducer';
-import * as fromPrograms from '../../programs/program-overview/reducer';
 import { QuestionEditErrorComponent } from './question-edit-error/question-edit-error.component';
-import { MdInputDirective } from '@angular/material';
 
 const questionOne = new FormGroup({
   key: new FormGroup({
@@ -20,15 +16,15 @@ const questionOne = new FormGroup({
     type: new FormControl('boolean')
   }),
   label: new FormControl('question label'),
-  controlType: new FormControl('CheckBox'),
+  controlType: new FormControl('Toggle'),
   id: new FormControl('fake_id'),
   index: new FormControl(0),
   options: new FormControl([]),
   conditionalQuestions: new FormControl([]),
   expandable: new FormControl(false)
-})
+});
 
-const form = new FormGroup({})
+const form = new FormGroup({});
 form.addControl('fake_id', questionOne);
 
 
@@ -43,7 +39,7 @@ const screenerState: fromScreener.State  = {
     {name: 'integer_key', type: 'integer'}
   ],
   created: 0
-}
+};
 
 
 
@@ -51,8 +47,6 @@ const screenerState: fromScreener.State  = {
 describe('QuestionEditComponent', () => {
   let component: QuestionEditComponent;
   let fixture: ComponentFixture<QuestionEditComponent>;
-  let de: DebugElement;
-  let el: any;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
@@ -63,7 +57,6 @@ describe('QuestionEditComponent', () => {
         StoreModule.provideStore(fromRoot.reducer, { 
           screener: screenerState, 
           keyOverview: fromKeys.initialState,
-          programOverview: fromPrograms.initialState
         }),
         BrowserAnimationsModule
       ],
@@ -87,11 +80,11 @@ describe('QuestionEditComponent', () => {
   });
 
   it('should display data representative of questionOne', () => {
-    const formControls = fixture.debugElement.queryAll(By.directive(FormControlName))
+    const formControls = fixture.debugElement.queryAll(By.directive(FormControlName));
     
     const label = formControls.find( debugElem => debugElem.attributes.formControlName === 'label');
     expect(label).toBeDefined();
-    expect(label.nativeElement.value).toEqual('question label')
+    expect(label.nativeElement.value).toEqual('question label');
 
     const controlType = formControls.find( debugElem => debugElem.attributes.formControlName === 'controlType');
     expect(controlType).toBeDefined();
@@ -104,80 +97,9 @@ describe('QuestionEditComponent', () => {
     const name = formControls.find( debugElem => debugElem.attributes.formControlName === 'name' );
 
     expect(name.nativeElement.textContent.replace(/\s+/g, ''))
-      .toEqual('boolean_key:booleaninteger_key:integer')
+      .toEqual('boolean_key:booleaninteger_key:integer');
 
     expect(name.nativeElement.value).toEqual('boolean_key');
   })
 });
 
-/*
-class MockStore {
-  // can't get name... how to supply mock data?  
-  let(fn: Function) {
-    console.log(fn.name)
-    console.log(fn)
-  }
-}
-
-describe('QuestionEditComponent v2', () => {
-  let component: QuestionEditComponent;
-  let fixture: ComponentFixture<QuestionEditComponent>;
-  let de: DebugElement;
-  let el: any;
-
-  beforeEach(async(() => {
-    TestBed.configureTestingModule({
-      declarations: [ QuestionEditComponent ],
-      imports: [ 
-        MaterialModule, 
-        ReactiveFormsModule,
-        StoreModule.provideStore(fromRoot.reducer),
-        BrowserAnimationsModule
-      ],
-      providers: [
-        FormBuilder,
-        {provide: Store, useClass: MockStore}
-      ]
-    })
-    .compileComponents();
-  }));
-
-  beforeEach(() => {
-    fixture = TestBed.createComponent(QuestionEditComponent);
-    component = fixture.componentInstance;
-    fixture.detectChanges();
-  });
-
-  it('should create', () => {
-    
-    
-    expect(component).toBeTruthy();
-  });
-
-  it('should display data representative of questionOne', () => {
-    /*
-    const formControls = fixture.debugElement.queryAll(By.directive(FormControlName))
-    
-    const label = formControls.find( debugElem => debugElem.attributes.formControlName === 'label');
-    expect(label).toBeDefined();
-    expect(label.nativeElement.value).toEqual('question label')
-
-    const controlType = formControls.find( debugElem => debugElem.attributes.formControlName === 'controlType');
-    expect(controlType).toBeDefined();
-    expect(controlType.nativeElement.textContent).toEqual('Input Type  ');
-
-    const expandable = formControls.find( debugElem => debugElem.attributes.formControlName === 'expandable');
-    expect(expandable).toBeDefined();
-    expect(expandable.nativeElement.getElementsByTagName('input')[0].checked).toEqual(false);
-
-    const name = formControls.find( debugElem => debugElem.attributes.formControlName === 'name' );
-
-    expect(name.nativeElement.textContent.replace(/\s+/g, ''))
-      .toEqual('boolean_key:booleaninteger_key:integer')
-
-    expect(name.nativeElement.value).toEqual('boolean_key');
-    
-  })
-});
-
-*/

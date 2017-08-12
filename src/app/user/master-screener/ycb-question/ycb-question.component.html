@@ -1,5 +1,5 @@
 <md-card style="background-color: lightyellow;">
-  <form [formGroup]="form">
+  <form novalidate [formGroup]="form">
 
     <section [ngSwitch]="question.controlType">
 
@@ -17,7 +17,7 @@
         </div>
       </div>
 
-      <div *ngSwitchCase="'CheckBox'">
+      <div *ngSwitchCase="'Toggle'">
         <md-card-title><label for="question.key"> {{ question.label }} </label></md-card-title>
         <md-checkbox name="question.key" [formControlName]="question.key"> yes  </md-checkbox> 
       </div>

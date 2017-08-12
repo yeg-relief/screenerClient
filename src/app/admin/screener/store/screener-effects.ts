@@ -1,10 +1,8 @@
 import { Injectable } from '@angular/core';
-import { Http, Headers, RequestOptions } from '@angular/http';
+import { Http, } from '@angular/http';
 import { Actions, Effect } from '@ngrx/effects';
 import { Observable } from 'rxjs/Observable';
 import { ScreenerActionTypes } from './screener-actions';
-import { AuthService } from '../../core/services/auth.service'
-import { Screener } from '../../models';
 import 'rxjs/add/operator/retry';
 import 'rxjs/add/operator/timeout';
 
@@ -16,13 +14,12 @@ export class ScreenerEffects {
   constructor(
     private http: Http,
     private actions$: Actions,
-    private authService: AuthService
   ) { }
 
   
 
   @Effect() loadData$ = this.actions$
-      .ofType(ScreenerActionTypes.LOAD_DATA)
+      .filter(action => action.type === ScreenerActionTypes.LOAD_DATA)
       .map(action => action.payload)
       .switchMap(requestOptions => 
         this.http.get(URL, requestOptions)
@@ -34,8 +31,9 @@ export class ScreenerEffects {
 
 
   @Effect() saveData$ = this.actions$
-      .ofType(ScreenerActionTypes.SAVE_DATA)
+      .filter(action => action.type === ScreenerActionTypes.SAVE_DATA)
       .map(action => [action.payload.screener, action.payload.credentials])
+      .do( thing => console.log(thing) )
       .switchMap( ([payload, options]) => {
         return this.http.post(URL, payload, options)
           .map(res => ({ type: ScreenerActionTypes.SAVE_DATA_SUCCESS, payload: res.json().response }))

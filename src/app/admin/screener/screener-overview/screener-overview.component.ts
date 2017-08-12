@@ -1,10 +1,10 @@
-import { Component, OnInit, Output, EventEmitter, ElementRef, HostBinding } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import { Store } from '@ngrx/store';
 import * as fromRoot from '../../reducer';
 import * as actions  from '../store/screener-actions';
 import { 
-  Question, ID, QuestionType, 
+  ID, QuestionType,
   QUESTION_TYPE_CONSTANT, QUESTION_TYPE_CONDITIONAL 
 } from '../../models';
 import { Observable } from 'rxjs/Observable';
@@ -58,11 +58,11 @@ export class ScreenerOverviewComponent implements OnInit {
   ) {}
 
   ngOnInit() {
-    const dispatchSwap = (lifted, target) => this.store.dispatch(new actions.SwapQuestions({lifted, target }))
+    const dispatchSwap = (lifted, target) => this.store.dispatch(new actions.SwapQuestions({lifted, target }));
 
-    const dispatchDrop = (questionID, containerType) => this.store.dispatch(new actions.DropQuestion({questionID, containerType}))
+    const dispatchDrop = (questionID, containerType) => this.store.dispatch(new actions.DropQuestion({questionID, containerType}));
 
-    this.dragManager.dragState.takeUntil(this.destroySubs$).subscribe(val => {
+    this.dragManager.dragState.takeUntil(this.destroySubs$.asObservable()).subscribe(val => {
       if (val.target === 'constant_container' || val.target === 'conditional_container') {
         dispatchDrop(val.lifted, val.target);
         setTimeout( () => {
@@ -87,7 +87,7 @@ export class ScreenerOverviewComponent implements OnInit {
 
     this.form$ = this.store.let(fromRoot.getForm).multicast( new ReplaySubject(1) ).refCount();
 
-    this.constantQuestions$ = this.reloadConstantQuestions
+    this.constantQuestions$ = this.reloadConstantQuestions.asObservable()
       .withLatestFrom(this.form$)
       .filter(form => form !== null)
       .map( ([_, form]) => { 
@@ -96,7 +96,7 @@ export class ScreenerOverviewComponent implements OnInit {
         return ids.filter(id => form.get(id) !== null)
           .filter(id => isConditionalQuestion(id, state) === false )
           .sort( (a, b) => form.get([a, 'index']).value - form.get([b, 'index']).value);
-      })
+      });
 
     this.selectedConstantID$ = this.store.let(fromRoot.getSelectedConstantID)
       .multicast( new ReplaySubject(1) ).refCount();
@@ -115,10 +115,10 @@ export class ScreenerOverviewComponent implements OnInit {
 
         return conditionalIDS.sort( (a, b) => form.get([a, 'index']).value - form.get([b, 'index']).value )
 
-      })
+      });
       
-    this.conditionalQuestions$$ = this.reloadConditionalQuestions
-      .mergeMap(_ => this.conditionalQuestions$)
+    this.conditionalQuestions$$ = this.reloadConditionalQuestions.asObservable()
+      .mergeMap(_ => this.conditionalQuestions$);
 
     this.isExpandable$ = Observable.combineLatest(this.form$, this.selectedConstantID$)
       .switchMap( ([form, constantID]) => {
@@ -133,8 +133,8 @@ export class ScreenerOverviewComponent implements OnInit {
       }).multicast( new ReplaySubject(1) ).refCount();
 
     this.isExpandable$
-      .takeUntil(this.destroySubs$)
-      .subscribe(isExpandable => this.questionEdit = isExpandable.toString())
+      .takeUntil(this.destroySubs$.asObservable())
+      .subscribe(isExpandable => this.questionEdit = isExpandable.toString());
       
 
     this.selectedConditionalID$ = this.store.let(fromRoot.getSelectedConditionalID);
@@ -150,7 +150,7 @@ export class ScreenerOverviewComponent implements OnInit {
     this.loading$
       .filter(loading => loading === false)
       .take(1)
-      .subscribe( _ => {
+      .subscribe( () => {
         setTimeout( () => { 
           if (this.reloadConstantQuestions !== undefined) this.reloadConstantQuestions.next(''); 
         }, 0);
@@ -167,7 +167,7 @@ export class ScreenerOverviewComponent implements OnInit {
       this.store.dispatch(new actions.AddQuestion({}));
       setTimeout( () => { 
         if (this.reloadConstantQuestions !== undefined) this.reloadConstantQuestions.next(''); 
-      }, 0)
+      }, 0);
       return; 
     }
 

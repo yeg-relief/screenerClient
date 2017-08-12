@@ -1,5 +1,5 @@
 <section class="rounded border">
-  <form [formGroup]="form">
+  <form novalidate [formGroup]="form">
     <div [ngSwitch]="question.controlType">
       
       <div *ngSwitchCase="'NumberInput'">

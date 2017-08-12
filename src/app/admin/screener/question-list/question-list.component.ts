@@ -1,10 +1,9 @@
-import { Component, Input, Output, EventEmitter, OnInit, OnDestroy, ElementRef } from '@angular/core';
+import { Component, Input, Output, EventEmitter, OnInit, OnDestroy } from '@angular/core';
 import { FormGroup } from '@angular/forms';
-import { Question, ID, QuestionType, QUESTION_TYPE_CONDITIONAL, QUESTION_TYPE_CONSTANT } from '../../models';
+import { ID, QuestionType, QUESTION_TYPE_CONDITIONAL, QUESTION_TYPE_CONSTANT } from '../../models';
 
 import { Observable } from 'rxjs/Observable';
 import { Subject } from 'rxjs/Subject';
-import { ReplaySubject } from 'rxjs/ReplaySubject';
 import { Subscription } from 'rxjs/Subscription';
 import 'rxjs/add/observable/fromEvent';
 import { Store } from '@ngrx/store';
@@ -51,16 +50,16 @@ export class QuestionListComponent implements OnInit, OnDestroy {
   handleAddQuestion() {
     if (this.type === QUESTION_TYPE_CONSTANT ) {
       Promise.resolve(this.addQuestion.emit({type: QUESTION_TYPE_CONSTANT}))
-        .then( _ => setTimeout( () => this.selectTarget(this.questions[this.questions.length - 1]), 60))
-        .then( _ => {
+        .then( () => setTimeout( () => this.selectTarget(this.questions[this.questions.length - 1]), 60))
+        .then( () => {
           const id = this.questions[this.questions.length -1];
           this.showSelection(id);
-        })
+        });
       return;
     } else if (this.type === QUESTION_TYPE_CONDITIONAL ) {
       Promise.resolve(this.addQuestion.emit({type: QUESTION_TYPE_CONDITIONAL, host_id: this.host_id}))
-        .then( _ => setTimeout( () => this.selectTarget(this.questions[this.questions.length -1]), 60))
-        .then( _ => {
+        .then( () => setTimeout( () => this.selectTarget(this.questions[this.questions.length -1]), 60))
+        .then( () => {
           const id = this.questions[this.questions.length -1];
           this.showSelection(id);
         })
@@ -94,7 +93,7 @@ export class QuestionListComponent implements OnInit, OnDestroy {
       this.store.let(fromRoot.getSelectedConstantID),
       this.store.let(fromRoot.getSelectedConditionalID)
     )
-    .takeUntil(this.destroySubs$)
+    .takeUntil(this.destroySubs$.asObservable())
     .subscribe( ([constantID, conditionalID]) => { 
       const presentConstant = this.questions.find(qid => qid === constantID);
       const presentConditional = this.questions.find(qid => qid === conditionalID);
@@ -109,7 +108,7 @@ export class QuestionListComponent implements OnInit, OnDestroy {
     });
 
     this.keyFilter.filteredKey$
-      .takeUntil(this.destroySubs$)
+      .takeUntil(this.destroySubs$.asObservable())
       .map( (update: any) => update.keyNames)
       .filter( keys => keys !== undefined && keys !== null && Array.isArray(keys))
       .subscribe( (keys) => {
@@ -117,7 +116,7 @@ export class QuestionListComponent implements OnInit, OnDestroy {
         if(Object.keys(this.form.value).length > keys.length){
           for (const id of this.questions) {
             if(this.classes[id] === undefined) this.initializeStyle(id);
-            if (keys.find(keyName => keyName === this.form.value[id].key.name)) 
+            if (keys.find(keyName => keyName === this.form.value[id].key.name))
               this.classes[id]['filtered_me'] = true;
             else 
               this.classes[id]['filtered_me'] = false;
@@ -145,7 +144,7 @@ export class QuestionListComponent implements OnInit, OnDestroy {
   showSelection(selectedID) {
     const element = document.getElementById(selectedID);
     scrollIntoView(element);
-    const index = this.questions.findIndex(id => id === selectedID)
+    const index = this.questions.findIndex(id => id === selectedID);
     const targetID = index >= 0 ? this.questions[index] : undefined;
     this.selectTarget(targetID);
   }
@@ -272,7 +271,7 @@ export class QuestionListComponent implements OnInit, OnDestroy {
         targetClassNames = targetNode.className.split(" ");
       }
       
-      i++
+      i++;
       if (i > 5) break;
     }
     // dropped into another question
@@ -320,7 +319,7 @@ export class QuestionListComponent implements OnInit, OnDestroy {
     
   }
 
-  dragEnd($event) {
+  dragEnd() {
     for(const key in this.classes) {
       this.classes[key]['dragOver'] = false;
       this.classes[key]['dragStart'] = false;
