@@ -1,5 +1,5 @@
-import { ValidatorFn, AbstractControl } from '@angular/forms';
-import { Question, ControlType } from '../../models';
+import { AbstractControl } from '@angular/forms';
+import { ControlType } from '../../models';
 import { Key } from '../../models';
 
 export function questionValidator(control: AbstractControl): {[key: string]: any} {
@@ -8,17 +8,17 @@ export function questionValidator(control: AbstractControl): {[key: string]: any
     const label: string = control.get('label').value; 
     const controlType: ControlType = control.get('controlType').value;
      
-    let key: Key = { name: 'invalid.sdkjflsajfkljsalfkjsdlkfjslf', type: ''};
-     
+    let key: Key = { name: 'invalid.sdkjflsajfkljsalfkjsdlkfjslfINVALIDinvalid', type: ''};
+
     let options: number[] = [];
-    let conditionals: string[] = []; 
+    let conditionals: string[] = [];
     let expandable: boolean = false;
     
     if (control.get('expandable') !== null) {
         expandable = control.get('expandable').value;
     }
-    
-    
+
+
     if (control.get('options') !== null){
         options = control.get('options').value;
     }
@@ -31,7 +31,7 @@ export function questionValidator(control: AbstractControl): {[key: string]: any
         key = control.get('key').value;
     } 
 
-    let errors = { }
+    let errors = { };
 
   
 
@@ -40,12 +40,12 @@ export function questionValidator(control: AbstractControl): {[key: string]: any
         errors = (<any>Object).assign({}, errors, {emptyLabel: 'This question does not have a label.' } ); 
     } 
 
-    if(controlType === 'CheckBox' && key.type !== 'boolean' ){
-        errors = (<any>Object).assign({}, errors, {checkbox_mismatch: 'A CheckBox question requires a boolean key.' } ); 
+    if(controlType === 'Toggle' && key.type !== 'boolean' ){
+        errors = (<any>Object).assign({}, errors, {checkbox_mismatch: 'A Toggle question requires a boolean key.' } );
     } 
 
-    if(controlType !== 'CheckBox' && key.type === 'boolean'){
-        errors = (<any>Object).assign({}, errors, {checkbox_mismatch: 'A boolean key requires a CheckBox question.' } ); 
+    if(controlType !== 'Toggle' && key.type === 'boolean'){
+        errors = (<any>Object).assign({}, errors, {checkbox_mismatch: 'A boolean key requires a Toggle question.' } );
     } 
 
     if(controlType === 'NumberSelect' && options.length === 0){
@@ -66,8 +66,8 @@ export function questionValidator(control: AbstractControl): {[key: string]: any
         errors = (<any>Object).assign({}, errors, {invalid_key_type: 'You need to assign a key.'} );
     }
 
-    if(expandable && controlType !== 'CheckBox' && key.type !== 'boolean') {
-        errors = (<any>Object).assign({}, errors, {invalid_expandable: 'An expandable question has to have a boolean key and a CheckBox.'} );
+    if(expandable && controlType !== 'Toggle' && key.type !== 'boolean') {
+        errors = (<any>Object).assign({}, errors, {invalid_expandable: 'An expandable question has to have a boolean key and a Toggle.'} );
     }
 
     if(expandable && conditionals.length === 0) {

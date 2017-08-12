@@ -1,17 +1,14 @@
 /* tslint:disable:no-unused-variable */
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
-import { DebugElement, Injectable, OnDestroy } from '@angular/core';
 import { MaterialModule } from '@angular/material';
 import { ReactiveFormsModule, FormGroup, FormControl } from '@angular/forms';
 import { QuestionListComponent } from './question-list.component';
-import { Action, StoreModule } from '@ngrx/store';
-import { BehaviorSubject } from 'rxjs';
+import { StoreModule } from '@ngrx/store';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import * as fromRoot from '../../reducer';
 import * as fromScreener from '../store/screener-reducer';
 import * as fromKeys from '../../keys/reducer';
-import * as fromPrograms from '../../programs/program-overview/reducer';
 import { DragDropManagerService } from './drag-drop-manager.service';
 import { KeyFilterService } from '../services/key-filter.service';
 
@@ -22,15 +19,15 @@ const questionOne = new FormGroup({
     type: new FormControl('boolean')
   }),
   label: new FormControl('question label'),
-  controlType: new FormControl('CheckBox'),
+  controlType: new FormControl('Toggle'),
   id: new FormControl('fake_id'),
   index: new FormControl(0),
   options: new FormControl([]),
   conditionalQuestions: new FormControl([]),
   expandable: new FormControl(false)
-})
+});
 
-const form = new FormGroup({})
+const form = new FormGroup({});
 form.addControl('fake_id', questionOne);
 
 
@@ -45,7 +42,7 @@ const screenerState: fromScreener.State  = {
     {name: 'integer_key', type: 'integer'}
   ],
   created: 0
-}
+};
 
 
 
@@ -62,7 +59,6 @@ describe('QuestionListComponent', () => {
         StoreModule.provideStore(fromRoot.reducer, { 
           screener: screenerState, 
           keyOverview: fromKeys.initialState,
-          programOverview: fromPrograms.initialState
         }), 
       ],
       providers: [ DragDropManagerService, KeyFilterService ],
@@ -86,19 +82,19 @@ describe('QuestionListComponent', () => {
   });
 
   it('should show a single constant question', () => {
-    const questionListHeader = fixture.debugElement.query(By.css('#constant_container'))
+    const questionListHeader = fixture.debugElement.query(By.css('#constant_container'));
     expect(questionListHeader).not.toBeNull();
-    const h3 = questionListHeader.query(By.css('h3'))
+    const h3 = questionListHeader.query(By.css('h3'));
     expect(h3).not.toBeNull();
     expect(h3.nativeElement.innerText).toEqual('Screener Questions');
-    const headerButton = questionListHeader.query(By.css('button'))
+    const headerButton = questionListHeader.query(By.css('button'));
     expect(headerButton).not.toBeNull();
     
     component.questions.forEach( id=> {
-      const question = fixture.debugElement.query(By.css(`#${id}-constant-list-item`))
+      const question = fixture.debugElement.query(By.css(`#${id}-constant-list-item`));
       expect(question).not.toBeNull();
-      const [key, controlType] = question.queryAll(By.css('h4')).map(i => i.nativeElement.innerText)
-      expect(key).toEqual(form.get([id, 'key']).value.name)
+      const [key, controlType] = question.queryAll(By.css('h4')).map(i => i.nativeElement.innerText);
+      expect(key).toEqual(form.get([id, 'key']).value.name);
       expect(controlType).toEqual(form.get([id, 'controlType']).value)
     })
     

@@ -15,7 +15,7 @@ describe('DragDropManagerService', () => {
       const sub = service.dragState.subscribe(dragstate => {
         expect(dragstate.lifted).toEqual('');
         expect(dragstate.target).toEqual('');
-      })
+      });
       sub.unsubscribe();    
   }));
 
@@ -26,7 +26,7 @@ describe('DragDropManagerService', () => {
         .subscribe(dragstate => {
           expect(dragstate.lifted).toEqual('');
           expect(dragstate.target).toEqual('');
-      })
+      });
       sub.unsubscribe();
 
       sub = service.dragState
@@ -34,7 +34,7 @@ describe('DragDropManagerService', () => {
         .subscribe(dragstate => {
           expect(dragstate.lifted).toEqual('');
           expect(dragstate.target).toEqual('');
-      })
+      });
       sub.unsubscribe();
   }));
 
@@ -45,7 +45,7 @@ describe('DragDropManagerService', () => {
         .subscribe(dragstate => {
           expect(dragstate.lifted).toEqual('fake-id');
           expect(dragstate.target).toEqual('');
-      })
+      });
       sub.unsubscribe();
   }));
 
@@ -57,7 +57,7 @@ describe('DragDropManagerService', () => {
         .subscribe(dragstate => {
           expect(dragstate.lifted).toEqual('fake-id');
           expect(dragstate.target).toEqual('');
-      })
+      });
       sub.unsubscribe();
   }));
 
@@ -69,7 +69,7 @@ describe('DragDropManagerService', () => {
         .subscribe(dragstate => {
           expect(dragstate.lifted).toEqual('fake-id');
           expect(dragstate.target).toEqual('');
-      })
+      });
       sub.unsubscribe();
   }));
   
@@ -81,7 +81,7 @@ describe('DragDropManagerService', () => {
         .subscribe(dragstate => {
           expect(dragstate.lifted).toEqual('fake-id');
           expect(dragstate.target).toEqual('fake-id-2');
-      })
+      });
       sub.unsubscribe();
   }));
 });

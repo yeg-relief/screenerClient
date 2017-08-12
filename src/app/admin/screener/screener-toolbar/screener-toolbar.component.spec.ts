@@ -1,21 +1,16 @@
 /* tslint:disable:no-unused-variable */
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
-import { DebugElement, Injectable, OnDestroy } from '@angular/core';
 import { ScreenerToolbarComponent } from './screener-toolbar.component';
 import { MaterialModule } from '@angular/material';
 import { ReactiveFormsModule, FormGroup, FormControl } from '@angular/forms'
-import { Action, StoreModule } from '@ngrx/store';
-import { BehaviorSubject, Observable } from 'rxjs';
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { StoreModule } from '@ngrx/store';
+import { Observable } from 'rxjs';
 import * as fromRoot from '../../reducer';
 import * as fromScreener from '../store/screener-reducer';
 import * as fromKeys from '../../keys/reducer';
-import * as fromPrograms from '../../programs/program-overview/reducer';
-import { RequestOptions, Headers } from '@angular/http';
 import { AuthService } from '../../core/services/auth.service'
 import { KeyFilterService } from '../services/key-filter.service'
-import { RouterLink } from '@angular/router';
 
 declare const btoa;
 
@@ -25,15 +20,15 @@ const questionOne = new FormGroup({
     type: new FormControl('boolean')
   }),
   label: new FormControl('question label'),
-  controlType: new FormControl('CheckBox'),
+  controlType: new FormControl('Toggle'),
   id: new FormControl('fake_id'),
   index: new FormControl(0),
   options: new FormControl([]),
   conditionalQuestions: new FormControl([]),
   expandable: new FormControl(false)
-})
+});
 
-const form = new FormGroup({})
+const form = new FormGroup({});
 form.addControl('fake_id', questionOne);
 
 
@@ -48,26 +43,14 @@ const screenerState: fromScreener.State  = {
     {name: 'integer_key', type: 'integer'}
   ],
   created: 0
-}
+};
 
 
 class MockAuthService {
   credentials: string;
-  isLoggedIn = false;
-  login(user, password){
+  login(){
     this.credentials = btoa('user' + ":" + 'password');
     return Observable.of({login: true})
-  }
-
-  logout() {
-    this.isLoggedIn = false;
-    this.credentials = '';
-  }
-
-  getCredentials(): RequestOptions {
-    const headers = new Headers();
-    headers.append("Authorization", "Basic " + this.credentials);
-    return new RequestOptions({ headers: headers });
   }
 }
 
@@ -83,7 +66,6 @@ describe('ScreenerToolbarComponent', () => {
         StoreModule.provideStore(fromRoot.reducer, { 
           screener: screenerState, 
           keyOverview: fromKeys.initialState,
-          programOverview: fromPrograms.initialState
         })
       ],
       providers: [
@@ -114,30 +96,14 @@ describe('ScreenerToolbarComponent', () => {
 
     const buttons = fixture.debugElement.queryAll(By.css('button'));
     expect(buttons).not.toBeNull();
-    expect(buttons.length).toEqual(2)
-    expect(buttons[0].nativeElement.disabled).toEqual(false)
-    expect(buttons[1].nativeElement.disabled).toEqual(false)
-    expect(buttons[1].attributes['routerLink']).toEqual('/admin/screener/preview')
+    expect(buttons.length).toEqual(2);
+    expect(buttons[0].nativeElement.disabled).toEqual(false);
+    expect(buttons[1].nativeElement.disabled).toEqual(false);
+    expect(buttons[1].attributes['routerLink']).toEqual('/admin/screener/preview');
   });
 
   it('should show two keys in the key filter', () => {
     const autocomplete = fixture.debugElement.query(By.css('md-autocomplete'));
     expect(autocomplete).not.toBeNull();
-    /*
-    having trouble testing autocomplete... consider if this is worth it, bcuz material libary proabably
-    has tested this functionality
-
-    console.log(autocomplete.children)
-    console.log(autocomplete.childNodes)
-    component.adminControls.get('keyFilter').setValue('boo');
-    console.log('-----------')
-    console.log(autocomplete.nativeElement)
-    console.log(fixture.debugElement.nativeElement)
-    const options = fixture.debugElement.queryAll(By.css('md-option'));
-    expect(options).not.toBeNull();
-    expect(options.length).toEqual(2);
-    expect(options[0].nativeElement.innerText).toEqual('boolean_key')
-    expect(options[1].nativeElement.innerText).toEqual('integer_key')
-    */
   });
 });

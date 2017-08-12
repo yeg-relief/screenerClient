@@ -19,9 +19,11 @@ export class MasterScreenerService {
 
     loadResults(form: FormGroup) {
         const updatedForm = MasterScreenerService.checkForInvalid(form);
+        const transformedFormValues = MasterScreenerService.transformValuesFromString(updatedForm);
+        console.log(transformedFormValues);
         const headers = new Headers({ 'Content-Type': 'application/json' });
         const options = new RequestOptions({ headers: headers });
-        const body = JSON.stringify({ data: updatedForm.value});
+        const body = JSON.stringify({ data: transformedFormValues});
         return this.http.post('/api/notification/', body, options)
             .map(res => res.json().response)
             .catch(MasterScreenerService.loadError)
@@ -31,10 +33,34 @@ export class MasterScreenerService {
     static checkForInvalid(form: FormGroup): FormGroup {
         if (!form.valid) {
             for (const key in form.errors) {
-                form.removeControl(key);
+                if (form.get(key)){
+                    form.removeControl(key);
+                }
             }
         }
         return form;
+    }
+
+    static transformValuesFromString(form: FormGroup): Object {
+        let values = form.value;
+
+        for (const key in values) {
+
+            if ( values.hasOwnProperty(key) ) {
+                let val = values[key];
+
+                if ( (val === 'true' || val === 'false')  ) {
+                    values[key] = val === 'true';
+                }
+
+                if ( !Number.isNaN(Number.parseInt(val, 10) ) ) {
+                    values[key] = Number.parseInt(val, 10);
+                }
+
+            }
+        }
+
+        return values;
     }
 
     static handleError(error: Response | any): Observable<any> {

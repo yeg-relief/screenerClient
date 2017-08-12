@@ -1,7 +1,7 @@
 <h1 class="center"> Eligibility Screener </h1>
 <main *ngIf="!loading" [@flyinHalf]>
   <div *ngIf="errorMessage" class="center"> <strong>{{errorMessage}} </strong></div>
-  <form (ngSubmit)="onSubmit()" [formGroup]="form" *ngIf="errorMessage.length === 0 && questions.length > 0">
+  <form novalidate (ngSubmit)="onSubmit()" [formGroup]="form" *ngIf="errorMessage.length === 0 && questions.length > 0">
   
     <div class="questions">
       <app-ycb-question *ngFor="let question of questions" 

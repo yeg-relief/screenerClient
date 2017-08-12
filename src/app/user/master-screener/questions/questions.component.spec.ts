@@ -103,7 +103,7 @@ class MockActivatedRoute {
           questions: [{
             key: 'boolean_key',
             label: 'a fake question',
-            controlType: 'CheckBox',
+            controlType: 'Toggle',
             id: 'fake_id',
             index: 0,
             options: undefined,
