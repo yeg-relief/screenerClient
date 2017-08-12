@@ -35,7 +35,7 @@ export class ApplicationEditComponent implements OnInit {
   ngOnInit() {
     this.program = this.modelService
       .findProgram(this.route.snapshot.params['guid'])
-      .merge(this.update.filter(u => u !== undefined))
+      .merge(this.update.asObservable().filter(u => u !== undefined))
       .do( p => this.data = p.data)
       .multicast(new ReplaySubject<Program>(1)).refCount();
 

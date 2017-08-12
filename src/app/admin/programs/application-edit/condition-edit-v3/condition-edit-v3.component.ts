@@ -47,27 +47,6 @@ export class ConditionEditV3Component implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.keys = this.ps.keys.asObservable().map(keys => keys.sort( (a, b) => a.name.localeCompare(b.name)) );
-    /*
-    this.valueWatcherNumber = this.condition.form
-        .valueChanges
-        .filter( (c: ProgramCondition) => c.key.type === 'number')
-        .subscribe( condition => {
-
-          const parsedNumber = Number.parseInt(condition.value, 10);
-
-          if ( Number.isNaN(parsedNumber) || parsedNumber.toString(10).length !== condition.value) {
-            this.condition.form.get('value').setErrors({
-                'invalid-value': condition.value
-            })
-          }
-        });
-
-    this.valueWatcherBoolean = this.condition.form.get('key').valueChanges
-        .subscribe(key => {
-          if (key.type === 'boolean' && this.condition.form.get('value').hasError('invalid-value')) {
-            this.condition.form.setErrors({});
-          }
-        })*/
   }
 
   ngOnDestroy() {

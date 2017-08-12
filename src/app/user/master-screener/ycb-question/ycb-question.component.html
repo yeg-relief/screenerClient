@@ -1,49 +1,56 @@
 <md-card style="background-color: lightyellow;">
-  <form novalidate [formGroup]="form">
+    <form novalidate [formGroup]="form">
 
-    <section [ngSwitch]="question.controlType">
+        <section [ngSwitch]="question.controlType">
 
-      <div *ngSwitchCase="'NumberInput'">
+            <div *ngSwitchCase="'NumberInput'">
 
-        <md-card-title id="question-label"> {{ question.label }} </md-card-title>
+                <md-card-title id="question-label"> {{ question.label }} </md-card-title>
 
-        <div class="py1"></div>
-        <md-input-container>
-          <input mdInput (input)="handleInput($event.target.value)" [formControlName]="question.key" placeholder="input here" (keypress)="checkEnter($event)">
-        </md-input-container>
+                <div class="py1"></div>
+                <md-input-container>
+                    <input mdInput (input)="handleInput($event.target.value)" [formControlName]="question.key" placeholder="input here" (keypress)="checkEnter($event)">
+                </md-input-container>
 
-        <div class="error-container" [@error]="errorInDOM">
-          Please, answer using only a number with no spaces.
-        </div>
-      </div>
+                <div class="error-container" [@error]="errorInDOM">
+                    Please, answer using only a number with no spaces.
+                </div>
+            </div>
 
-      <div *ngSwitchCase="'Toggle'">
-        <md-card-title><label for="question.key"> {{ question.label }} </label></md-card-title>
-        <md-checkbox name="question.key" [formControlName]="question.key"> yes  </md-checkbox> 
-      </div>
+            <div *ngSwitchCase="'Toggle'">
+                <md-card-title id="question-label"> {{ question.label }} </md-card-title>
+                <md-button-toggle-group [formControlName]="question.key">
+                    <md-button-toggle value="true">
+                        yes
+                    </md-button-toggle>
+                    <md-button-toggle value="false">
+                        no
+                    </md-button-toggle>
+                </md-button-toggle-group>
+            </div>
 
 
-      <div *ngSwitchCase="'NumberSelect'">
-        <md-card-title id="question-label"> {{ question.label }} </md-card-title>
-        <md-select [formControlName]="question.key">
-          <md-option [value]="null"> select an option </md-option>
-          <md-option *ngFor="let option of question.options" [value]="option"> {{ option }} </md-option>
-        </md-select>
-      </div>
+            <div *ngSwitchCase="'NumberSelect'">
+                <md-card-title id="question-label"> {{ question.label }} </md-card-title>
+                <md-select [formControlName]="question.key">
+                    <md-option [value]="null"> select an option </md-option>
+                    <md-option *ngFor="let option of question.options" [value]="option"> {{ option }} </md-option>
+                </md-select>
+            </div>
 
-      <div *ngSwitchDefault> <strong> {{ question.controlType }} is invalid </strong> </div>
-    </section>
-  </form>
-  
-  <div *ngIf="showQuestions" class="conditional-container" 
-    [@questionExpand]="expand" (@questionExpand.done)="animationDone($event)">
-    <app-ycb-question
-      *ngFor="let expandableQuestion of conditionalQuestions"
-      [question]="expandableQuestion"
-      [form]="form">
-    </app-ycb-question>
-  </div>
+            <div *ngSwitchDefault> <strong> {{ question.controlType }} is invalid </strong> </div>
+        </section>
+    </form>
 
-  
-  <div class="py1"></div>
+    <div *ngIf="showQuestions" class="conditional-container"
+         [@questionExpand]="expand" (@questionExpand.done)="animationDone($event)">
+        <app-ycb-question
+                *ngFor="let expandableQuestion of conditionalQuestions"
+                [question]="expandableQuestion"
+                [form]="form">
+        </app-ycb-question>
+    </div>
+
+
+    <div class="py1"></div>
 </md-card>

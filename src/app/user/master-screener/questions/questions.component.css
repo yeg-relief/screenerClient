@@ -27,11 +27,11 @@ main {
 @media(min-width: 64em) {
   .questions {
    width: 60%;
-   margin: 0% 20%;
+   margin: 0 20%;
   }
   .submit-wrapper {
     width: 60%;
-    margin: 0% 20%;
+    margin: 0 20%;
   }
   .floating-submit {
     display: none;
@@ -42,12 +42,12 @@ main {
 @media(min-width: 52em) and (max-width:64em) {
   .questions {
     width: 70%;
-    margin: 0% 15%;
+    margin: 0 15%;
   }
   
   .submit-wrapper {
     width: 70%;
-    margin: 0% 15%;
+    margin: 0 15%;
   }
 
   .floating-submit {
@@ -58,12 +58,12 @@ main {
 @media(min-width: 40em) and (max-width: 52em) {
   .questions {
     width: 80%;
-    margin: 0% 10%;
+    margin: 0 10%;
   }
   
   .submit-wrapper {
     width: 80%;
-    margin: 0% 10%;
+    margin: 0 10%;
   }
 
   .floating-submit {
@@ -77,12 +77,12 @@ main {
 @media(min-width: 30em) and (max-width: 40em){
   .questions {
     width: 90%;
-    margin: 0% 2%;
+    margin: 0 2%;
   }
   
   .submit-wrapper {
     width: 90%;
-    margin: 0% 2%;
+    margin: 0 2%;
   }
 
   .floating-submit {
