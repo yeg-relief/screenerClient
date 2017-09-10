@@ -1,12 +1,12 @@
 <md-card class="program-width">
-  <div class="program-title-row" mdTooltip="program details" (click)="openModal()">
+  <div class="program-title-row" mdTooltip="program details" mdTooltipPosition="left"  (click)="openModal()">
     <md-icon>content_copy</md-icon>
     <md-card-title class="title"> {{program?.title}} </md-card-title>
   </div>
   <md-card-content>
       <p>{{ program?.description }} </p>
       <div>
-        <p> <a (click)="openModal()" mdTooltip="program details"> details </a>
+        <p> <a (click)="openModal()"> details </a>
       </div>
   </md-card-content>
   <a 

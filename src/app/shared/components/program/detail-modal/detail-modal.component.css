@@ -1,65 +1,79 @@
 .wrapper {
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  width: 100%;
-  height: 100%;
-  overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    background-color: #ececec;
 }
 
 h2[md-dialog-title] {
-  font-weight: bolder;
-  padding-left: 2em;
-  margin-top: 2em;
-  font-size: x-large;
-  border: solid 2px darkorange;
+    font-weight: bolder;
+    padding-left: 45%;
+    padding-bottom: 1rem;
+    font-size: xx-large;
+    padding-top: 1rem;
+    background-color: darkorange;
+    color: white;
+}
+
+md-dialog-actions {
+    padding-bottom: 1.25rem;
+    padding-left: 2em
 }
 
 md-dialog-content {
-  margin: 0em auto;
-  min-height: 50%;
-  border-radius: 5px;
-  width: 80%;
+    margin: 0em auto;
+    min-height: 50%;
+    border-radius: 5px;
+    width: 80%;
+    overflow-x: hidden;
+    overflow-y: auto;
+    border: solid 1px lightgray;
+    background-color: ghostwhite;
 }
 
 md-dialog-content > textarea {
-  width: 100%;
-  background-color: transparent;
-  border: none;
+    width: 100%;
+    background-color: transparent;
+    border: none;
 }
 
 @media screen and (min-width: 600px) {
-  textarea {
-    height: 223px;
-    width: 426px;
-    font-size: large;
-    resize: none;
-    overflow: auto;
-  }
+    textarea {
+        height: 223px;
+        width: 426px;
+        font-size: large;
+        resize: none;
+        overflow: auto;
+    }
 }
 
 @media screen and (min-width: 300px) and (max-width: 600px) {
-  textarea {
-    height: 223px;
-    width: 375px;
-    font-size: large;
-    resize: none;
-    overflow: auto;
-  }
+    textarea {
+        height: 223px;
+        width: 375px;
+        font-size: large;
+        resize: none;
+        overflow: auto;
+    }
 }
 
 @media screen and (max-width: 300px) {
-  textarea {
-    height: 223px;
-    width: 290px;
-    font-size: large;
-    resize: none;
-    overflow: auto;
-  }
+    textarea {
+        height: 223px;
+        width: 290px;
+        font-size: large;
+        resize: none;
+        overflow: auto;
+    }
 }
 
 
 
 button[md-dialog-close] {
-  background-color: darkorange;
+    margin-bottom: 1rem;
+    background-color: darkorange;
+    color: white;
 }
