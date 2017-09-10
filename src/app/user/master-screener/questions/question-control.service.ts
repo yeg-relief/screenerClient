@@ -7,9 +7,11 @@ export class QuestionControlService {
     constructor() { }
 
     toFormGroup(questions: Question[]): FormGroup {
-        if (questions === undefined || !Array.isArray(questions) ) {
+        if (!questions || !Array.isArray(questions) ) {
             return new FormGroup({});
         }
+
+        questions.sort( (a, b) => a.index - b.index);
 
         const group = questions.reduce((acc, question) => {
             if ( question.key && question.controlType === 'NumberInput') {
