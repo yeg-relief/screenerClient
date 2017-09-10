@@ -1,10 +1,8 @@
 import { Component, OnInit, EventEmitter, Inject } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
-import { Subject } from 'rxjs/Subject';
 import 'rxjs/add/observable/merge';
 import 'rxjs/add/operator/shareReplay';
 import { ApplicationFacingProgram } from '../../models/program';
-import { ActivatedRoute } from '@angular/router'
 import { Animations } from '../../../shared/animations';
 import { FilterService } from './services'; 
 import  * as helpers from './helpers';
@@ -29,7 +27,6 @@ export class ProgramOverviewComponent implements OnInit {
   currentPage = 0;
 
   constructor(
-    private route: ActivatedRoute,
     private filterService: FilterService,
     public dialog: MdDialog,
     public snackBar: MdSnackBar,
@@ -45,7 +42,6 @@ export class ProgramOverviewComponent implements OnInit {
       .let(helpers.updateState)
       .let(helpers.applyFilter)
       .map(state => state.programs)
-      .do(_ => console.log(_))
       .shareReplay();
   }
 

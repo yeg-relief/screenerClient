@@ -3,6 +3,7 @@ import { Key } from './models/key';
 import { Observable } from 'rxjs/Observable';
 import { Http, Response, RequestOptions } from '@angular/http';
 import { AuthService } from './core/services/auth.service'
+import 'rxjs/add/operator/catch';
 
 @Injectable()
 export class DataService {
