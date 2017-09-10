@@ -116,7 +116,7 @@ export class QuestionEditComponent implements OnInit, OnDestroy {
             .subscribe( ([[prevKey, currKey], form]) => {
 
                 const type = this.unusedKeys.find(k => k.name === currKey.name) ?
-                    this.unusedKeys.find(k => k.name === currKey.name) : null;
+                    this.unusedKeys.find(k => k.name === currKey.name).type : null;
                 form.get(['key', 'type']).setValue(type);
                 if ( (prevKey && currKey) && (prevKey.name && currKey.name) && prevKey.name.substr(0, 7) !== 'invalid'){
                     this.unusedKeys = this.unusedKeys.filter(k => k.name !== currKey.name)

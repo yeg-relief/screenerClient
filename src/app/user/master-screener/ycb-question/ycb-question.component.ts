@@ -88,9 +88,13 @@ export class YcbQuestionComponent implements OnInit, OnDestroy {
         } else if (this.isNumberSelect()) {
             this.question.options.sort( (a, b) => a > b);
         } else if (this.isMultiSelect()) {
-            this.question.options.sort( (a, b) => a.trim().localeCompare(b.trim()));
+            const keys = this.question.multiSelectOptions.map(o => o.key.name);
+            keys.forEach(keyName => {
+                if (this.form.get(keyName)){
+                    this.form.get(keyName).setValue(false);
+                }
+            });
         }
-
     }
 
     ngOnDestroy() {
@@ -126,16 +130,7 @@ export class YcbQuestionComponent implements OnInit, OnDestroy {
     }
 
     isMultiSelect() {
-        const allText = array => {
-            for(const val of array) {
-                if (typeof val !== 'string') return false;
-            }
-            return true;
-        };
-
-        return Array.isArray(this.question.multiSelectOptions) &&
-            this.question.options.multiSelectOptions > 0 &&
-            allText(this.question.multiSelectOptions);
+        return Array.isArray(this.question.multiSelectOptions) && this.question.multiSelectOptions.length > 0;
     }
 
     checkEnter(keyDownEvent) {

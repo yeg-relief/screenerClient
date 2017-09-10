@@ -56,7 +56,6 @@ export class MasterScreenerService {
                 if ( !Number.isNaN(Number.parseInt(val, 10) ) ) {
                     values[key] = Number.parseInt(val, 10);
                 }
-
             }
         }
 
