@@ -4,12 +4,12 @@ import { QueryService } from '../services/query.service'
 import { Program } from '../services/program.class';
 import { ProgramQueryClass } from '../services/program-query.class';
 import { ActivatedRoute } from '@angular/router';
-import { FormGroup, FormArray } from '@angular/forms'
-import { ApplicationFacingProgram, ProgramQuery } from '../../models/program';
+import { FormGroup } from '@angular/forms'
+import { ApplicationFacingProgram } from '../../models/program';
 import { Observable } from 'rxjs/Observable';
 import { ReplaySubject } from 'rxjs/ReplaySubject';
 import { Subject } from 'rxjs/Subject';
-import {MdSnackBar} from '@angular/material';
+import { MdSnackBar } from '@angular/material';
 import 'rxjs/add/operator/multicast';
 import 'rxjs/add/operator/merge';
 

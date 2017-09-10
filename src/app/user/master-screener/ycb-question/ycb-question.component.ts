@@ -95,6 +95,10 @@ export class YcbQuestionComponent implements OnInit, OnDestroy {
                 }
             });
         }
+        /* TODO: consult with stakeholders on default value of false.
+        else if (this.question.controlType === 'Toggle') {
+            this.form.get(this.question.key).setValue(false);
+        }*/
     }
 
     ngOnDestroy() {
