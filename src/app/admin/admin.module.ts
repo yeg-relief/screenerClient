@@ -27,6 +27,8 @@ import { ScreenerContainerComponent } from './screener/screener-container/screen
 import { ScreenerImportsModule } from './screener/screener-imports/screener-imports.module';
 import { AppModule } from '../app.module';
 import { QuestionEditErrorComponent } from './screener/question-edit/question-edit-error/question-edit-error.component';
+import { MultSelectQuestionsComponent } from './screener/question-edit/mult-select-questions/mult-select-questions.component';
+import { OptionsComponent } from './screener/question-edit/mult-select-questions/options/options.component';
 
 
 
@@ -53,6 +55,8 @@ import { QuestionEditErrorComponent } from './screener/question-edit/question-ed
     ScreenerPreviewComponent,
     ScreenerContainerComponent,
     QuestionEditErrorComponent,
+    MultSelectQuestionsComponent,
+    OptionsComponent,
   ],
   providers: [
     DataService, 

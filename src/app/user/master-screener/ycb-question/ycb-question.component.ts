@@ -4,7 +4,6 @@ import { Subscription } from 'rxjs/Subscription';
 import { ReplaySubject } from 'rxjs/ReplaySubject';
 import { Observable } from 'rxjs/Observable';
 import { QuestionControlService } from '../questions/question-control.service';
-import { Animations } from '../../../shared/animations';
 import 'rxjs/add/observable/merge';
 import 'rxjs/add/operator/multicast';
 import 'rxjs/add/operator/mapTo';
@@ -63,7 +62,7 @@ export class YcbQuestionComponent implements OnInit, OnDestroy {
     ngOnInit() {
 
         if (this.isExpandableQuestion()) {
-            this.onExpand.emit(this.question.conditionalQuestions);
+            // this.onExpand.emit(this.question.conditionalQuestions);
 
             const change = this.form.get(this.question.key).valueChanges
                 .filter(value => typeof value === 'string' && (value === 'true' || value === 'false'))
@@ -72,11 +71,11 @@ export class YcbQuestionComponent implements OnInit, OnDestroy {
 
 
             const expand = change.filter(value => value === true)
-                .do(_ => this.onExpand.emit(this.question.conditionalQuestions))
+                .do(_ => this.onExpand.emit({id: this.question.id, conditionals: this.question.conditionalQuestions}))
                 .do(_ => this.expand !== 'expanded' ? this.expand = 'expanded' : null);
 
             const hide = change.filter(val => val === false)
-                .do(_ => this.onHide.emit(this.question.conditionalQuestions))
+                .do(_ => this.onHide.emit({id: this.question.id, conditionals: this.question.conditionalQuestions}))
                 .do(_ => this.expand !== 'collapsed' ? this.expand = 'collapsed' : null);
 
 
@@ -86,6 +85,10 @@ export class YcbQuestionComponent implements OnInit, OnDestroy {
 
             this.subscriptions = [...this.subscriptions, merged];
 
+        } else if (this.isNumberSelect()) {
+            this.question.options.sort( (a, b) => a > b);
+        } else if (this.isMultiSelect()) {
+            this.question.options.sort( (a, b) => a.trim().localeCompare(b.trim()));
         }
 
     }
@@ -110,8 +113,29 @@ export class YcbQuestionComponent implements OnInit, OnDestroy {
             this.question.conditionalQuestions.length > 0;
     }
 
-    hasInputControl() {
-        return this.question.controlType === 'NumberInput';
+    isNumberSelect() {
+        const allNumbers = array => {
+            for(const val of array) {
+                if (typeof val !== 'number') return false;
+            }
+            return true;
+        };
+
+
+        return Array.isArray(this.question.options) && this.question.options.length > 0 && allNumbers(this.question.options);
+    }
+
+    isMultiSelect() {
+        const allText = array => {
+            for(const val of array) {
+                if (typeof val !== 'string') return false;
+            }
+            return true;
+        };
+
+        return Array.isArray(this.question.multiSelectOptions) &&
+            this.question.options.multiSelectOptions > 0 &&
+            allText(this.question.multiSelectOptions);
     }
 
     checkEnter(keyDownEvent) {
