@@ -7,7 +7,6 @@ import * as keysActions from '../actions';
 import * as fromRoot from '../../reducer';
 import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/operator/withLatestFrom';
-import 'rxjs/add/operator/scan';
 import 'rxjs/add/operator/takeUntil';
 import 'rxjs/add/operator/take';
 import 'rxjs/add/operator/map';
@@ -57,17 +56,15 @@ export class KeyEditComponent implements OnInit, OnDestroy {
   ) { }
 
   ngOnInit() {
-    this.keys$ = this.store.let(fromRoot.allLoadedKeys).takeUntil(this.destroy$);
+    this.keys$ = this.store.let(fromRoot.allLoadedKeys).takeUntil(this.destroy$.asObservable());
     const form$ = this.form.valueChanges;
 
     form$
       .withLatestFrom(this.keys$)
-      .scan( (accum, [form, keys]) => {
-        return keys.filter(programKey => programKey.name === form.name);
-      }, [])
+      .map( ([form, keys]) => keys.filter(programKey => programKey.name === form.name))
       // if array is empty then there are no duplicates => return true
       .map(duplicateKeys => duplicateKeys.length === 0)
-      .takeUntil(this.destroy$)
+      .takeUntil(this.destroy$.asObservable())
       .subscribe(
         (noDuplicate) => this.uniqueKeyName = noDuplicate,
         (err) => console.log(err),
