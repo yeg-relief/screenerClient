@@ -1,32 +1,36 @@
 .conditional-container {
-  display: flex;
-  flex-direction: column;
-  margin-top: 1em;
+    display: flex;
+    flex-direction: column;
+    margin-top: 1em;
 }
 
 .error-container {
-  display: flex;
-  align-content: center;
-  justify-content: flex-start;
-  width: 100%;
-  border: lightcoral solid 0.1em;
-  will-change: opacity;
-  padding: 0.25em 0 0.25em 0.25em;
+    display: flex;
+    align-content: center;
+    justify-content: flex-start;
+    width: 100%;
+    border: lightcoral solid 0.1em;
+    will-change: opacity;
+    padding: 0.25em 0 0.25em 0.25em;
 }
 
 md-select {
-  height: 3em; 
-  width: 50%;
+    height: 3em;
+    width: 50%;
+}
+
+.multi-select-checkbox {
+    margin-right: 1em;
 }
 
 
 @media(max-width: 30em){
-  md-card {
-    width: 90%;
-  }
+    md-card {
+        width: 90%;
+    }
 
-  select {
-    height: 3em; 
-    min-width: 90%;
-  }
+    select {
+        height: 3em;
+        min-width: 90%;
+    }
 }

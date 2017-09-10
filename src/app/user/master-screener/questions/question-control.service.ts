@@ -4,33 +4,61 @@ import { Question } from '../../../admin/models';
 
 @Injectable()
 export class QuestionControlService {
-  constructor() { }
+    constructor() { }
 
-  toFormGroup(questions: Question[]): FormGroup {
-    if (questions === undefined || !Array.isArray(questions) ) {
-      return new FormGroup({});
+    toFormGroup(questions: Question[]): FormGroup {
+        if (questions === undefined || !Array.isArray(questions) ) {
+            return new FormGroup({});
+        }
+
+        const group = questions.reduce((acc, question) => {
+            if ( question.key && question.controlType === 'NumberInput') {
+                acc[question.key] = new FormControl('', Validators.pattern('^\\d+$'));
+            } else if (!question.key && question.controlType === 'Multiselect' && Array.isArray(question.multiSelectOptions)) {
+                for (const selectQuestion of question.multiSelectOptions) {
+                    acc[selectQuestion.key.name] = new FormControl('');
+                }
+            } else if(question.key ) {
+                acc[question.key] = new FormControl('');
+            }
+            return acc;
+        }, {});
+        console.log(new FormGroup(group).controls);
+        return new FormGroup(group);
     }
 
-    const group = questions.reduce((acc, question) => {
-      if ( question.key !== undefined && question.controlType === 'NumberInput') 
-        acc[question.key] = new FormControl('', Validators.pattern('^\\d+$'))
-      else if(question.key !== undefined ) 
-        acc[question.key] = new FormControl('')
-      return acc;
-    }, {});
-    
-    return new FormGroup(group);
-  }
+    addQuestions(questions: Question[], form: FormGroup) {
+        debugger;
+        let extractedQuestions = questions.reduce( (accumulator, question) => {
+            let questions = [];
+            if (question.controlType === 'Multiselect') {
+                questions = question.multiSelectOptions;
+            } else {
+                questions = [question];
+            }
+            return [...accumulator, ...questions];
+        }, []);
 
-  addQuestions(questions: Question[], form: FormGroup) {
-    questions
-      .filter(question => !form.contains(question.key))
-      .forEach( question => form.addControl(question.key, new FormControl('')));
-  }
 
-  removeQuestions(questions: Question[], form: FormGroup) {
-    questions
-      .filter(question => form.contains(question.key))
-      .forEach(question => form.removeControl(question.key));
-  }
+
+        extractedQuestions
+            .filter(question => !form.contains(question.key))
+            .forEach( question => form.addControl(question.key, new FormControl('')));
+    }
+
+    removeQuestions(questions: Question[], form: FormGroup) {
+        let extractedQuestions = questions.reduce( (accumulator, question) => {
+            let questions = [];
+            if (question.controlType === 'Multiselect') {
+                questions = question.multiSelectOptions;
+            } else {
+                questions = [question];
+            }
+            return [...accumulator, ...questions];
+        }, []);
+
+        extractedQuestions
+            .filter(question => form.contains(question.key))
+            .forEach(question => form.removeControl(question.key));
+    }
 }

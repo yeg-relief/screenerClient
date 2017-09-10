@@ -1,11 +1,7 @@
 import { Observable } from 'rxjs/Observable';
 import { combineReducers } from '@ngrx/store';
-import { compose } from '@ngrx/core/compose';
 import * as fromKeyOverview from './keys/reducer';
 import * as fromScreener from './screener/store/screener-reducer';
-import 'rxjs/add/operator/concatMap';
-import 'rxjs/add/operator/find';
-import { ApplicationFacingProgram } from './models/program';
 import { createSelector } from 'reselect';
 
 export interface State {
@@ -42,8 +38,6 @@ export const getScreenerError = createSelector(getScreenerState, fromScreener.ge
 export const isScreenerLoading = createSelector(getScreenerState, fromScreener.isLoading, );
 
 export const getConstantQuestions = createSelector(getScreenerState, fromScreener.getConstantQuestions, );
-
-export const getConditionalQuestions = createSelector(fromScreener.getConditionalQuestionIDS, getScreenerState);
 
 export const getSelectedConstantID = createSelector( getScreenerState, fromScreener.getSelectedConstantID);
 

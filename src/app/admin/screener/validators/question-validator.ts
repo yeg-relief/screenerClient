@@ -58,11 +58,11 @@ export function questionValidator(control: AbstractControl): {[key: string]: any
         errors = (<any>Object).assign({}, errors, {unnassigned_controlType: 'You need to assign a control type.'} );
     }
 
-    if(key.name.substr(0, 7) === 'invalid') {
+    if(key.name && controlType !== 'Multiselect' && key.name.substr(0, 7) === 'invalid') {
         errors = (<any>Object).assign({}, errors, {unnassigned_key: 'You need to assign a key.'} );
     }
 
-    if(key.type === '') {
+    if(key.type && key.type.length === 0 && controlType !== 'Multiselect') {
         errors = (<any>Object).assign({}, errors, {invalid_key_type: 'You need to assign a key.'} );
     }
 
