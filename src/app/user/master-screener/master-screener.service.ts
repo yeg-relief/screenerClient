@@ -57,6 +57,10 @@ export class MasterScreenerService {
                     values[key] = Number.parseInt(val, 10);
                 }
 
+                if ( (val === '')) {
+                    values[key] = false;
+                }
+
             }
         }
 
