@@ -89,7 +89,6 @@ export class YcbQuestionComponent implements OnInit, OnDestroy {
             this.question.options.sort( (a, b) => a > b);
         } else if (this.isMultiSelect()) {
             const keys = this.question.multiSelectOptions.map(o => o.key.name);
-
             keys.forEach(keyName => {
                 if (this.form.get(keyName)){
                     this.form.get(keyName).setValue(false);
