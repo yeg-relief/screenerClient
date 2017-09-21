@@ -1,4 +1,4 @@
-#tag-input {
+:host {
   display: flex;
   align-content: center;
   justify-content: flex-start;

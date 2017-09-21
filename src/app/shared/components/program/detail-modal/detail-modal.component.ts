@@ -1,22 +1,24 @@
-import { Component, OnInit, Inject, ElementRef, AfterViewInit } from '@angular/core';
+import { Component, Inject, OnInit } from '@angular/core';
 import { MD_DIALOG_DATA } from '@angular/material';
 @Component({
-  selector: 'app-detail-modal',
-  templateUrl: './detail-modal.component.html',
-  styleUrls: ['./detail-modal.component.css']
+    selector: 'app-detail-modal',
+    templateUrl: './detail-modal.component.html',
+    styleUrls: ['./detail-modal.component.css']
 })
-export class DetailModalComponent implements OnInit, AfterViewInit {
-  width: number;
-  constructor(
-    @Inject(MD_DIALOG_DATA) public data: any, 
-    private elRef:ElementRef
-  ) { }
+export class DetailModalComponent implements  OnInit {
+    constructor(@Inject(MD_DIALOG_DATA) public data: any) { }
 
-  ngOnInit() {}
+    ngOnInit() {
+        if (this.data.detailLinks.length > 0) {
+            this.data.detailLinks = this.data.detailLinks.map(link => {
+                if (link.substring(0, 8) != 'http://') {
+                    return 'http://' + link;
+                }
+                return link;
+            })
+        } else {
+            this.data.detailLinks = [];
+        }
 
-  ngAfterViewInit(){
-    console.log(this.elRef.nativeElement.getBoundingClientRect());
-    this.width = this.elRef.nativeElement.getBoundingClientRect().width;
-  }
-
+    }
 }

@@ -63,7 +63,7 @@ export class AppComponent implements OnInit {
 
         this.router.events
             .map(event => event instanceof NavigationEnd ? this.router.url : undefined)
-            .filter(url => url !== undefined)
+            .filter(url => !!url)
             .debounceTime(60)
             .map( url => isAdminRoute(url) )
             .subscribe( val => {

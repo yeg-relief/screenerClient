@@ -18,6 +18,7 @@ import { ConditionEditV3Component } from './application-edit/condition-edit-v3/c
 import { QueryService } from './services/query.service';
 import { TagEditComponent } from './program-edit/tag-edit/tag-edit.component';
 import { EditRowComponent } from './program-edit/edit-row/edit-row.component';
+import { DetailsLinksComponent } from './program-edit/details-links/details-links.component';
 
 @NgModule({
   imports: [
@@ -42,7 +43,8 @@ import { EditRowComponent } from './program-edit/edit-row/edit-row.component';
     EditRowComponent,
     UnsavedChangesDialog,
     DeleteProgramDialog,
-    DescriptionProgramDialog
+    DescriptionProgramDialog,
+    DetailsLinksComponent
   ],
   entryComponents: [
     DeleteQueryDialog,

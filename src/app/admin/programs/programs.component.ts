@@ -1,27 +1,20 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { ProgramModelService } from './services/program-model.service'
 
 @Component({
-  template:
-  `
-    <div class="col col-12 flex flex-column overview-wrapper">
-      <router-outlet></router-outlet>
-    </div>
-  `,
+  template: '<router-outlet></router-outlet>',
   styles: [`
-    .overview-wrapper {}
-
-
+    :host {
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+    }
   `],
   providers: [
     ProgramModelService
   ]
 })
-export class ProgramsComponent implements OnInit {
+export class ProgramsComponent  {
 
   constructor(public model: ProgramModelService) { }
-
-  ngOnInit() {
-  }
-
 }

@@ -2,8 +2,6 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { AdminComponent } from './admin.component';
 import { routing } from './admin.routes';
-import { AuthGuardService } from './core/services/auth-guard.service';
-import { AuthService } from './core/services/auth.service';
 import { StoreModule } from '@ngrx/store';
 import { reducer } from './reducer';
 import { EffectsModule } from '@ngrx/effects';
@@ -25,45 +23,44 @@ import { KeyFilterService } from './screener/services/key-filter.service';
 import { ScreenerPreviewComponent } from './screener/screener-preview/screener-preview.component';
 import { ScreenerContainerComponent } from './screener/screener-container/screener-container.component';
 import { ScreenerImportsModule } from './screener/screener-imports/screener-imports.module';
-import { AppModule } from '../app.module';
 import { QuestionEditErrorComponent } from './screener/question-edit/question-edit-error/question-edit-error.component';
 import { MultSelectQuestionsComponent } from './screener/question-edit/mult-select-questions/mult-select-questions.component';
 import { OptionsComponent } from './screener/question-edit/mult-select-questions/options/options.component';
-
-
+import { UserFacingProgramModule } from '../shared/modules/user-facing-program.module';
 
 @NgModule({
-  imports: [
-    CommonModule,
-    routing,
-    MaterialModule,
-    StoreModule.provideStore(reducer),
-    EffectsModule.run(ScreenerEffects),
-    AdminCoreModule,
-    ProgramsModule,
-    KeysModule,
-    ReactiveFormsModule,
-    FormsModule,
-    ScreenerImportsModule,
-  ],
-  declarations: [
-    AdminComponent,
-    ScreenerOverviewComponent,
-    ScreenerToolbarComponent,
-    QuestionListComponent,
-    QuestionEditComponent,
-    ScreenerPreviewComponent,
-    ScreenerContainerComponent,
-    QuestionEditErrorComponent,
-    MultSelectQuestionsComponent,
-    OptionsComponent,
-  ],
-  providers: [
-    DataService, 
-    HttpModule, 
-    KeyResolverService,
-    DragDropManagerService,
-    KeyFilterService
-  ]
+    imports: [
+        CommonModule,
+        routing,
+        MaterialModule,
+        StoreModule.provideStore(reducer),
+        EffectsModule.run(ScreenerEffects),
+        AdminCoreModule,
+        ProgramsModule,
+        KeysModule,
+        ReactiveFormsModule,
+        FormsModule,
+        ScreenerImportsModule,
+        UserFacingProgramModule
+    ],
+    declarations: [
+        AdminComponent,
+        ScreenerOverviewComponent,
+        ScreenerToolbarComponent,
+        QuestionListComponent,
+        QuestionEditComponent,
+        ScreenerPreviewComponent,
+        ScreenerContainerComponent,
+        QuestionEditErrorComponent,
+        MultSelectQuestionsComponent,
+        OptionsComponent,
+    ],
+    providers: [
+        DataService,
+        HttpModule,
+        KeyResolverService,
+        DragDropManagerService,
+        KeyFilterService
+    ]
 })
 export class AdminModule { }

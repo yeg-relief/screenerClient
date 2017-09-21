@@ -1,14 +1,23 @@
 <!DOCTYPE html>
 <main class="wrapper">
-  <h2 md-dialog-title> {{ data.title }} </h2>
+    <h2 md-dialog-title> {{ data.title }} </h2>
 
-  <md-dialog-content>
-    <textarea disabled>
-      {{ data.details }}
-    </textarea>
-  </md-dialog-content>
+    <md-dialog-content>
+        <textarea disabled>
+          {{ data.details }}
+        </textarea>
+    </md-dialog-content>
 
-  <md-dialog-actions>
-    <button md-button md-dialog-close>Close</button>
-  </md-dialog-actions>
+    <section class="detail-links" *ngIf="data.detailLinks.length > 0">
+        <h3> Additional Links</h3>
+        <ul>
+            <li *ngFor="let link of data.detailLinks">
+                <a [href]=link target="_blank">{{link}}</a>
+            </li>
+        </ul>
+    </section>
+
+    <md-dialog-actions>
+        <button md-button md-dialog-close>Close</button>
+    </md-dialog-actions>
 </main>

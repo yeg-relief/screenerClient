@@ -1,20 +1,13 @@
-import { Component, OnInit, ViewEncapsulation } from '@angular/core';
-import { DataService } from './data.service';
-import { AuthGuardService } from './core/services/auth-guard.service';
-import { AuthService } from './core/services/auth.service';
-
+import { Component } from '@angular/core';
 @Component({
-  selector: 'app-admin',
-  templateUrl: './admin.component.html',
-  styleUrls: ['./admin.component.css'],
-  encapsulation: ViewEncapsulation.None,
-  providers: [ ]
+    selector: 'app-admin',
+    template: '<router-outlet ></router-outlet>',
+    styles: [`
+        :host {
+            background-color: lightgoldenrodyellow;
+            overflow-x: hidden;
+        }
+    `],
+    providers: [ ]
 })
-export class AdminComponent implements OnInit {
-
-  constructor() { }
-
-  ngOnInit() {
-  }
-
-}
+export class AdminComponent {}
