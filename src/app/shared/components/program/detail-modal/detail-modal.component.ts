@@ -9,15 +9,15 @@ export class DetailModalComponent implements  OnInit {
     constructor(@Inject(MD_DIALOG_DATA) public data: any) { }
 
     ngOnInit() {
+        this.data.detailLinks = this.data.detailLinks || [];
+
         if (this.data.detailLinks.length > 0) {
             this.data.detailLinks = this.data.detailLinks.map(link => {
-                if (link.substring(0, 8) != 'http://') {
+                if (link.substring(0, 8) !== 'http://') {
                     return 'http://' + link;
                 }
                 return link;
             })
-        } else {
-            this.data.detailLinks = [];
         }
 
     }
