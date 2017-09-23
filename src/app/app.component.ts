@@ -15,7 +15,7 @@ import 'rxjs/add/operator/multicast';
     styles: [
         `
       #main-outlet {
-        min-height: 94vh;
+        height: 95vh;
         width: 100vw;
         margin: 0 auto;
         overflow-x: hidden;

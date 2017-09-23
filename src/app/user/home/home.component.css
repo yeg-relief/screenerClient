@@ -1,110 +1,164 @@
 .home {
-  width: 95vw;
-  overflow: auto;
+    width: 95vw;
+    overflow-x: hidden;
 }
 
 .ribbon {
-  background-color: #a00;
-  overflow: hidden;
-  white-space: nowrap;
-  box-shadow: 0 0 10px #888;
-  width: 60vw;
-  margin: 0 auto;
-  text-align: center;
+    background-color: #a00;
+    overflow: hidden;
+    white-space: nowrap;
+    box-shadow: 0 0 10px #888;
+    width: 60vw;
+    margin: 0 auto;
+    text-align: center;
 }
 .ribbon span {
-  border: 1px solid #faa;
-  color: #fff;
-  display: block;
-  font: bold 110% 'Helvetica Neue', Helvetica, Arial, sans-serif;
-  margin: 1px 0;
-  padding: 10px 0;
-  text-align: center;
-  text-decoration: none;
-  text-shadow: 0 0 5px #444;
+    border: 1px solid #faa;
+    color: #fff;
+    display: block;
+    font: bold 110% 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    margin: 1px 0;
+    padding: 10px 0;
+    text-align: center;
+    text-decoration: none;
+    text-shadow: 0 0 5px #444;
 }
 
 section.link-container {
-  overflow-x: hidden;
-  margin: 2em auto;
-  justify-content: space-around;
-  text-align: center;
-  max-height: 60vh;
+    overflow-x: hidden;
+    margin: 2em auto;
+    justify-content: space-around;
+    text-align: center;
 }
 
 .logo-image {
-  margin-top: 2vh;
+    margin-top: 2vh;
 }
 
 section.feature-description {
-  border: solid darkorange 1px;
-  border-radius: 2px;
-  flex: 25vw 0 1;
-}
-
-
-@media screen and (min-width: 53em) {
-  section.link-container {
-    display: flex;
-    width: 70vw;
-  }
-
-  section.feature-description:nth-child(2) {
-    margin: 0 2em;
-  }
-
-  .logo-image {
-    margin-top: 5vh;
-    width: 60vw;
-    margin-left: 20vw;
-  }
-
-  section.link-container > section.feature-description {
-    padding: 1em;
-  }
-}
-
-@media screen and (max-width: 53em) {
-  section.link-container {
+    border: solid darkorange 2px;
+    border-radius: 10px;
     display: flex;
     flex-direction: column;
-    width: 90vw;
-    margin: 2em auto;
-    justify-content: space-around;
-  }
+}
 
-  section.feature-description:nth-child(2) {
-    margin: 2em 0;
-  }
 
-  .logo-image {
-    width: 80vw;
-    margin-left: 10vw;
-  }
+@media screen and (min-width: 69em) {
+    section.link-container {
+        display: flex;
+        width: 70vw;
+    }
 
-  section.link-container > section.feature-description {
-    padding: 0.3em;
-  }
+    section.feature-description:nth-child(2) {
+        margin: 0 2em;
+    }
+
+    .logo-image {
+        margin-top: 5vh;
+        width: 60vw;
+        margin-left: 20vw;
+    }
+
+    section.link-container > section.feature-description {
+        padding: 2em;
+        height: 19vh;
+    }
+}
+/*
+@media screen and (min-width: 37em) and (max-width: 65em) {
+    section.link-container {
+        width: 50vw !important;
+    }
+}*/
+
+@media screen and (min-width: 30em) and (max-width: 69em) {
+    section.link-container {
+        display: flex;
+        flex-direction: column;
+        width: 60vw;
+        margin: 2em auto;
+        justify-content: space-around;
+    }
+
+    section.feature-description:nth-child(2) {
+        margin: 2em 0;
+    }
+
+    .logo-image {
+        width: 80vw;
+        margin-left: 10vw;
+    }
+
+    section.link-container > section.feature-description {
+        padding: 1em;
+        height: 15vh;
+        display: flex;
+        flex-direction: row !important;
+    }
+
+
+    section > a {
+        width: 45%;
+    }
+
+    p {
+        width: 50% !important;
+    }
+
+    a > button {
+        width: 55%;
+    }
+}
+
+@media screen and (max-width: 30em) {
+    section.link-container {
+        display: flex;
+        flex-direction: column;
+        width: 90vw;
+        margin: 2em auto;
+        justify-content: space-around;
+    }
+
+    section.feature-description:nth-child(2) {
+        margin: 2em 0;
+    }
+
+    .logo-image {
+        width: 80vw;
+        margin-left: 10vw;
+    }
+
+    section.link-container > section.feature-description {
+        padding: 0.5em;
+        height: 17vh;
+    }
+
+    .ribbon {
+        width: 80vw !important;
+    }
 }
 
 
 
 section.link-container > section.feature-description {
-  display: flex;
-  flex: 100% 0 1;
-  flex-direction: column;
-  background-color: rgba(248,248,255,.7);
-  justify-content: center;
-  align-items: center;
+    display: flex;
+    flex-direction: column;
+    background-color: rgba(248,248,255, 1);
+    justify-content: space-between;
+    align-items: center;
+    overflow: hidden;
 }
 
 section.link-container > section.feature-description > a > button {
-  background-color: darkorange;
-  color: white;
+    background-color: darkorange;
+    color: white;
 }
 
 .feature-description > p {
-  width: 70%;
-  margin: 0 auto 0.3em auto;
+    width: 70%;
+    margin: 0 auto 0.3em auto;
+    text-align: center;
 }
+
+
 
