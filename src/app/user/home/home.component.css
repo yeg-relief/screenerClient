@@ -6,33 +6,40 @@
 .ribbon {
     background-color: #a00;
     overflow: hidden;
-    white-space: nowrap;
     box-shadow: 0 0 10px #888;
     width: 60vw;
     margin: 0 auto;
-    text-align: center;
+    border-radius: 5px;
+
 }
 .ribbon span {
-    border: 1px solid #faa;
     color: #fff;
-    display: block;
-    font: bold 110% 'Helvetica Neue', Helvetica, Arial, sans-serif;
-    margin: 1px 0;
-    padding: 10px 0;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    padding: 0.5rem;
+}
+
+.ribbon > span > p {
+    margin: 0;
+    height: 100%;
     text-align: center;
-    text-decoration: none;
-    text-shadow: 0 0 5px #444;
 }
 
 section.link-container {
     overflow-x: hidden;
     margin: 2em auto;
     justify-content: space-around;
-    text-align: center;
 }
 
 .logo-image {
     margin-top: 2vh;
+}
+
+p {
+    text-align: left;
+    font-size: larger;
+    font-weight: bold;
 }
 
 section.feature-description {
@@ -60,7 +67,7 @@ section.feature-description {
     }
 
     section.link-container > section.feature-description {
-        padding: 2em;
+        padding: 0.5em;
         height: 19vh;
     }
 }
@@ -98,7 +105,7 @@ section.feature-description {
 
 
     section > a {
-        width: 45%;
+        width: 30%;
     }
 
     p {
@@ -144,7 +151,7 @@ section.link-container > section.feature-description {
     display: flex;
     flex-direction: column;
     background-color: rgba(248,248,255, 1);
-    justify-content: space-between;
+    justify-content: space-around;
     align-items: center;
     overflow: hidden;
 }
@@ -157,7 +164,6 @@ section.link-container > section.feature-description > a > button {
 .feature-description > p {
     width: 70%;
     margin: 0 auto 0.3em auto;
-    text-align: center;
 }
 
 
