@@ -22,7 +22,7 @@ export class BrowseService {
             .catch(this.loadError);
     }
 
-    getCategories(): Promise<string[]> {
+    getCategories() {
         return this.programs$
         // flatten programs
             .switchMap(x => x)
@@ -35,7 +35,6 @@ export class BrowseService {
                 });
                 return allTags;
             }, [])
-            .toPromise()
             .catch( Observable.throw('error getting categories'));
     }
 

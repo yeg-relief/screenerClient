@@ -6,6 +6,7 @@
     height: 100%;
     overflow: hidden;
     background-color: #ececec;
+    position: relative;
 }
 
 h2[md-dialog-title] {
@@ -18,13 +19,28 @@ h2[md-dialog-title] {
     color: white;
 }
 
+.close-button {
+    position: absolute;
+    right: 2px;
+    top: 1em;
+}
+
+.close-button > md-icon {
+    color: ghostwhite;
+}
+
+.header {
+    width: 100%;
+    display: flex;
+}
+
 md-dialog-actions {
     padding-bottom: 1.25rem;
     padding-left: 2em
 }
 
 md-dialog-content {
-    margin: 0em auto;
+    margin: 0 auto;
     min-height: 50%;
     border-radius: 5px;
     width: 80%;
@@ -50,7 +66,7 @@ md-dialog-content > textarea {
     }
 
     .detail-links {
-        margin: 0 auto;
+        margin: 0 auto 3rem auto;
         width: 80%;
     }
 }
@@ -65,7 +81,7 @@ md-dialog-content > textarea {
     }
 
     .detail-links {
-        margin: 0 auto;
+        margin: 0 auto 3rem auto;
         width: 80%;
     }
 }
@@ -80,13 +96,12 @@ md-dialog-content > textarea {
     }
 
     .detail-links {
-        margin: 0 auto;
+        margin: 0 auto 5rem auto;
         width: 80%;
     }
 }
 
 ul {
-
     width: 100%;
     display: flex;
     flex-wrap: wrap;
@@ -99,7 +114,10 @@ li {
 
 
 button[md-dialog-close] {
-    margin-bottom: 2rem;
-    background-color: darkorange;
-    color: white;
+    position: absolute;
+    left: 2px;
+    bottom: 1em;
+    color: darkorange;
+    font-size: large;
+    font-weight: bold;
 }

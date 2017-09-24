@@ -12,6 +12,8 @@ import { MdSnackBar } from '@angular/material';
 import { MD_DIALOG_DATA } from '@angular/material';
 import { DetailModalComponent } from '../../../shared/components/program/detail-modal/detail-modal.component';
 
+
+
 @Component({
     selector: 'app-program-overview',
     templateUrl: './program-overview.component.html',
@@ -54,9 +56,10 @@ export class ProgramOverviewComponent implements OnInit {
                     data: {
                         title: programToInpect.user.title,
                         details: programToInpect.user.details,
+                        detailLinks: programToInpect.user.detailLinks || []
                     },
                     width: '75vw',
-                    height: '50vh'
+                    height: '75vh'
                 })
             });
     }
@@ -114,7 +117,15 @@ export class DeleteProgramDialog {
       <md-dialog-content>
         <textarea disabled>
           {{ data.details }}
-        </textarea>     
+        </textarea>
+        <section class="detail-links" *ngIf="data.detailLinks.length > 0">
+          <h3> Additional Links</h3>
+          <ul>
+              <li *ngFor="let link of data.detailLinks">
+                  <a [href]=link target="_blank">{{link}}</a>
+              </li>
+          </ul>
+        </section>
       </md-dialog-content>
       <md-dialog-actions>
         <button md-button md-dialog-close>Close</button>
@@ -158,7 +169,20 @@ export class DeleteProgramDialog {
       button[md-dialog-close] {
         background-color: darkorange;
       }
-    `
+
+
+      ul {
+
+          width: 100%;
+          display: flex;
+          flex-wrap: wrap;
+      }
+
+      li {
+          margin-right: 2rem;
+      }
+
+        `
     ]
 })
 export class DescriptionProgramDialog {

@@ -1,12 +1,16 @@
 <md-card class="program-width">
-  <div class="program-title-row" mdTooltip="program details" mdTooltipPosition="left"  (click)="openModal()">
-    <md-icon>content_copy</md-icon>
-    <md-card-title class="title"> {{program?.title}} </md-card-title>
-  </div>
+
+    <div class="program-title-row" mdTooltip="program details" mdTooltipPosition="left">
+      <md-icon>content_copy</md-icon>
+      <a [routerLink]="['./']" [queryParams]="{ program: program.title }">
+        <md-card-title class="title"> {{program?.title}} </md-card-title>
+      </a>
+    </div>
+
   <md-card-content>
       <p>{{ program?.description }} </p>
       <div>
-        <p> <a (click)="openModal()"> details </a>
+        <p> <a [routerLink]="['./']" [queryParams]="{ program: program.title }"> details </a>
       </div>
   </md-card-content>
   <a 

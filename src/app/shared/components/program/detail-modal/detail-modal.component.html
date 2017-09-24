@@ -1,6 +1,10 @@
 <!DOCTYPE html>
 <main class="wrapper">
     <h2 md-dialog-title> {{ data.title }} </h2>
+    <button md-button class="close-button">
+        <md-icon [style.color]="'white'" (click)="close()">cancel</md-icon>
+    </button>
+
 
     <md-dialog-content>
         <textarea disabled>
@@ -17,7 +21,5 @@
         </ul>
     </section>
 
-    <md-dialog-actions>
-        <button md-button md-dialog-close>Close</button>
-    </md-dialog-actions>
+    <button md-button md-dialog-close>Close</button>
 </main>
