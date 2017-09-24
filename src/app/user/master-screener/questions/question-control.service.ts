@@ -25,12 +25,10 @@ export class QuestionControlService {
             }
             return acc;
         }, {});
-        console.log(new FormGroup(group).controls);
         return new FormGroup(group);
     }
 
     addQuestions(questions: Question[], form: FormGroup) {
-        debugger;
         let extractedQuestions = questions.reduce( (accumulator, question) => {
             let questions = [];
             if (question.controlType === 'Multiselect') {

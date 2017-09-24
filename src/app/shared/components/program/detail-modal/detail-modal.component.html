@@ -12,8 +12,8 @@
         </textarea>
     </md-dialog-content>
 
-    <section class="detail-links" *ngIf="data.detailLinks.length > 0">
-        <h3> Additional Links</h3>
+    <section class="detail-links">
+        <h3 *ngIf="data.detailLinks.length > 0">  Additional Links</h3>
         <ul>
             <li *ngFor="let link of data.detailLinks">
                 <a [href]=link target="_blank">{{link}}</a>

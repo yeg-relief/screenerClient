@@ -113,7 +113,7 @@ section.feature-description {
     }
 
     a > button {
-        width: 55%;
+        width: 75%;
     }
 }
 
@@ -137,7 +137,7 @@ section.feature-description {
 
     section.link-container > section.feature-description {
         padding: 0.5em;
-        height: 17vh;
+        height: 24vh;
     }
 
     .ribbon {
