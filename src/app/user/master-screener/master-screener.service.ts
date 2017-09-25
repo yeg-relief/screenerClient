@@ -6,11 +6,12 @@ import 'rxjs/add/operator/catch';
 import { Question } from '../../shared';
 import { Http, Response, Headers, RequestOptions } from '@angular/http';
 import { FormGroup } from "@angular/forms";
+import { ProgramsServiceService } from "../programs-service.service";
 
 @Injectable()
 export class MasterScreenerService {
     results = [];
-    constructor(private http: Http) { }
+    constructor(private http: Http, private programService: ProgramsServiceService) { }
 
     loadQuestions(): Observable<Question[]> {
         return this.http.get('/api/screener/')
@@ -21,12 +22,12 @@ export class MasterScreenerService {
     loadResults(form: FormGroup) {
         const updatedForm = MasterScreenerService.checkForInvalid(form);
         const transformedFormValues = MasterScreenerService.transformValuesFromString(updatedForm);
-        console.log(transformedFormValues);
         const headers = new Headers({ 'Content-Type': 'application/json' });
         const options = new RequestOptions({ headers: headers });
         const body = JSON.stringify({ data: transformedFormValues});
         return this.http.post('/api/notification/', body, options)
             .map(res => res.json().response)
+            .do(programs => this.programService.addPrograms(programs))
             .catch(MasterScreenerService.loadError)
             .toPromise();
     }

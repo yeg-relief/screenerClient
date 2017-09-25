@@ -6,22 +6,25 @@ import { CategoryComponent } from './category/category.component';
 import { UserFacingProgramModule } from '../../shared/modules/user-facing-program.module';
 import { MaterialModule } from '@angular/material';
 import { RouterModule } from '@angular/router';
-import { BrowseService } from './browse.service';
+import { browseRouting } from "./browse.routes";
+import { CategoryListComponent } from './category/category-list/category-list.component';
 
 @NgModule({
-  imports: [
-    CommonModule,
-    RouterModule,
-    HttpModule,
-    UserFacingProgramModule,
-    MaterialModule
-  ],
-  declarations: [
-    BrowseComponent,
-    CategoryComponent
-  ],
-  providers: [
-    
-  ]
+    imports: [
+        CommonModule,
+        RouterModule,
+        HttpModule,
+        UserFacingProgramModule,
+        MaterialModule,
+        browseRouting
+    ],
+    declarations: [
+        BrowseComponent,
+        CategoryComponent,
+        CategoryListComponent
+    ],
+    providers: [
+
+    ]
 })
 export class BrowseModule { }

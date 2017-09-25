@@ -9,15 +9,17 @@ import 'rxjs/add/operator/reduce';
 import 'rxjs/add/operator/multicast';
 import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/catch';
-
+import 'rxjs/add/operator/do';
+import { ProgramsServiceService } from '../programs-service.service';
 
 @Injectable()
 export class BrowseService {
     programs$;
 
-    constructor(private http: Http) {
+    constructor(private http: Http, private programService: ProgramsServiceService) {
         this.programs$ =  this.http.get('/api/programs')
             .map(res => res.json().programs)
+            .do(programs => this.programService.addPrograms(programs))
             .multicast( new ReplaySubject(1) ).refCount()
             .catch(this.loadError);
     }

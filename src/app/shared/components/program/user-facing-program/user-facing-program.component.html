@@ -2,7 +2,7 @@
 
     <div class="program-title-row" mdTooltip="program details" mdTooltipPosition="left">
       <md-icon>content_copy</md-icon>
-      <a [routerLink]="['./']" [queryParams]="{ program: program.title }">
+      <a [routerLink]="['./details' + '/' + program.guid]">
         <md-card-title class="title"> {{program?.title}} </md-card-title>
       </a>
     </div>
@@ -10,7 +10,7 @@
   <md-card-content>
       <p>{{ program?.description }} </p>
       <div>
-        <p> <a [routerLink]="['./']" [queryParams]="{ program: program.title }"> details </a>
+        <p> <a [routerLink]="['./details' + '/' + program.guid]"> details </a>
       </div>
   </md-card-content>
   <a 

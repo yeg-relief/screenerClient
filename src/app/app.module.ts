@@ -1,5 +1,4 @@
 import { BrowserModule,  } from '@angular/platform-browser';
-import { CommonModule } from '@angular/common';
 import { NgModule,  } from '@angular/core';
 import { routing }  from './app.routes';
 import { AppComponent } from './app.component';
@@ -19,33 +18,35 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ReactiveFormsModule } from '@angular/forms';
 import { ConstructionRibbonComponent } from './construction-ribbon/construction-ribbon.component';
 import { IeSucksComponent } from './user/home/ie-sucks/ie-sucks.component';
+import { ProgramsServiceService } from './user/programs-service.service';
 
 @NgModule({
-  declarations: [
-    AppComponent,
-    ToolbarComponent,
-    PageNotFoundComponent,
-    AboutComponent,
-    HomeComponent,
-    QuickLinksComponent,
-    ConstructionRibbonComponent,
-    IeSucksComponent,
-  ],
-  imports: [
-    BrowserModule,
-    BrowserAnimationsModule,
-    MasterScreenerModule,
-    BrowseModule,
-    routing,
-    MaterialModule,
-    ReactiveFormsModule
-  ],
-  providers: [
-    MasterScreenerService, 
-    BrowseService,
-    AuthService,
-    AuthGuardService,
-  ],
-  bootstrap: [AppComponent]
+    declarations: [
+        AppComponent,
+        ToolbarComponent,
+        PageNotFoundComponent,
+        AboutComponent,
+        HomeComponent,
+        QuickLinksComponent,
+        ConstructionRibbonComponent,
+        IeSucksComponent,
+    ],
+    imports: [
+        BrowserModule,
+        BrowserAnimationsModule,
+        MasterScreenerModule,
+        BrowseModule,
+        routing,
+        MaterialModule,
+        ReactiveFormsModule
+    ],
+    providers: [
+        MasterScreenerService,
+        BrowseService,
+        AuthService,
+        AuthGuardService,
+        ProgramsServiceService
+    ],
+    bootstrap: [AppComponent]
 })
 export class AppModule { }

@@ -8,6 +8,7 @@ import { ProgramRowComponent } from
     '../components/program/user-facing-program/program-row/program-row.component'
 import { DetailModalComponent } from '../components/program/detail-modal/detail-modal.component';
 import { ProgramModalService } from '../components/program-modal.service';
+import { ProgramDetailComponent } from '../components/program/program-detail/program-detail.component';
 @NgModule({
     imports: [
         CommonModule,
@@ -19,6 +20,7 @@ import { ProgramModalService } from '../components/program-modal.service';
         UserFacingProgramComponent,
         ProgramRowComponent,
         DetailModalComponent,
+        ProgramDetailComponent
     ],
     providers: [
         ProgramModalService
@@ -26,9 +28,10 @@ import { ProgramModalService } from '../components/program-modal.service';
     exports: [
         UserFacingProgramComponent,
         ProgramRowComponent,
+        ProgramDetailComponent
     ],
     entryComponents: [
         DetailModalComponent
     ]
 })
-export class UserFacingProgramModule {};
+export class UserFacingProgramModule {}
