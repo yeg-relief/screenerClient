@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ProgramsServiceService } from "../../../../user/programs-service.service";
-import { ActivatedRoute } from "@angular/router";
+import { ActivatedRoute, Router } from "@angular/router";
 import { UserFacingProgram } from "../../../models/program";
 
 @Component({
@@ -11,11 +11,13 @@ import { UserFacingProgram } from "../../../models/program";
 export class ProgramDetailComponent implements OnInit {
     program: Promise<UserFacingProgram | string>;
     guid: string;
+    allLinks = [];
     error = '';
 
     constructor(
         private programService: ProgramsServiceService,
-        private route: ActivatedRoute
+        private route: ActivatedRoute,
+        private router: Router
     ) { }
 
     ngOnInit() {
@@ -27,6 +29,19 @@ export class ProgramDetailComponent implements OnInit {
                         program.detailLinks = program.detailLinks || [];
                         return program;
                     })
+                    .then( program => {
+                        this.allLinks = [program.externalLink, ...program.detailLinks];
+                        return program;
+                    })
+                    .then(program => {
+                        this.allLinks = this.allLinks.map(link => {
+                            if (link.substring(0, 8) !== 'http://') {
+                                return 'http://' + link;
+                            }
+                            return link;
+                        });
+                        return program;
+                    })
                     .catch(_ => {
                         this.error = 'Can not retrieve program.';
                         return undefined;
@@ -34,5 +49,9 @@ export class ProgramDetailComponent implements OnInit {
 
 
         }
+    }
+
+    close() {
+        this.router.navigate(['../../'], { relativeTo: this.route });
     }
 }

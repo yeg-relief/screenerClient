@@ -1,5 +1,4 @@
 .wrapper {
-    min-height: 100vh;
     margin: 0 auto;
     display: flex;
     flex-direction: column;
@@ -30,18 +29,22 @@ pre {
     word-wrap: break-word;
     white-space: pre-wrap;
     overflow-x: hidden;
-    background-color: whitesmoke;
-    color: black;
-    font-weight: bold;
-    font-size: large;
-    border: solid 1px lightblue;
     border-radius: 10px;
     flex-grow: 3;
     flex-shrink: 0;
+    padding: 1em;
 }
 
 md-icon {
     color: #70707f;
+}
+
+md-card-title {
+    font-size: larger !important;
+}
+
+ul {
+    list-style: disc url('/assets/ic_link_black_24px.svg') outside;
 }
 
 @media screen and (min-width: 600px) {
@@ -50,10 +53,6 @@ md-icon {
         padding: 10px;
     }
 
-    .detail-links {
-        margin: 0 auto 3rem auto;
-        width: 80%;
-    }
 }
 
 @media screen and (min-width: 360px) and (max-width: 600px) {
@@ -62,10 +61,6 @@ md-icon {
         padding: 5px;
     }
 
-    .detail-links {
-        margin: 0 auto 3rem auto;
-        width: 80%;
-    }
 }
 
 @media screen and (max-width: 360px) {
@@ -74,8 +69,4 @@ md-icon {
         padding: 2px;
     }
 
-    .detail-links {
-        margin: 0 auto 5rem auto;
-        width: 80%;
-    }
 }
