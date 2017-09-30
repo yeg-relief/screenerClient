@@ -49,8 +49,7 @@ section.feature-description {
     flex-direction: column;
 }
 
-
-@media screen and (min-width: 69em) {
+@media screen and (min-width: 89em) {
     section.link-container {
         display: flex;
         width: 70vw;
@@ -68,7 +67,46 @@ section.feature-description {
 
     section.link-container > section.feature-description {
         padding: 0.5em;
-        height: 19vh;
+        height: 18vh;
+        position: relative;
+        display: block !important;
+    }
+
+    section.link-container > section.feature-description > a > button {
+        position: absolute;
+        bottom: 5px;
+        left: 30%;
+    }
+}
+
+
+@media screen and (min-width: 69em) and (max-width: 89em){
+    section.link-container {
+        display: flex;
+        width: 70vw;
+    }
+
+    section.feature-description:nth-child(2) {
+        margin: 0 2em;
+    }
+
+    .logo-image {
+        margin-top: 5vh;
+        width: 60vw;
+        margin-left: 20vw;
+    }
+
+    section.link-container > section.feature-description {
+        padding: 0.5em;
+        height: 20vh;
+        position: relative;
+        display: block !important;
+    }
+
+    section.link-container > section.feature-description > a > button {
+        position: absolute;
+        bottom: 5px;
+        left: 30%;
     }
 }
 /*
@@ -78,7 +116,7 @@ section.feature-description {
     }
 }*/
 
-@media screen and (min-width: 30em) and (max-width: 69em) {
+@media screen and (min-width: 37em) and (max-width: 69em) {
     section.link-container {
         display: flex;
         flex-direction: column;
@@ -117,7 +155,7 @@ section.feature-description {
     }
 }
 
-@media screen and (max-width: 30em) {
+@media screen and (min-width: 21em) and (max-width: 37em) {
     section.link-container {
         display: flex;
         flex-direction: column;
@@ -142,6 +180,34 @@ section.feature-description {
 
     .ribbon {
         width: 80vw !important;
+    }
+}
+
+@media screen and (max-width: 21em) {
+    section.link-container {
+        display: flex;
+        flex-direction: column;
+        width: 90vw;
+        margin: 2em auto;
+        justify-content: space-around;
+    }
+
+    section.feature-description:nth-child(2) {
+        margin: 2em 0;
+    }
+
+    .logo-image {
+        width: 90vw;
+        margin-left: 10vw;
+    }
+
+    section.link-container > section.feature-description {
+        padding: 0.25em;
+        height: 32vh;
+    }
+
+    .ribbon {
+        width: 90vw !important;
     }
 }
 
