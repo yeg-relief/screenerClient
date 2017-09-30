@@ -9,18 +9,22 @@ import { ProgramRowComponent } from
 import { DetailModalComponent } from '../components/program/detail-modal/detail-modal.component';
 import { ProgramModalService } from '../components/program-modal.service';
 import { ProgramDetailComponent } from '../components/program/program-detail/program-detail.component';
+import { ProgramListComponent } from "../components/program-list/program-list.component";
+import { ListTagContainerComponent } from "../components/program-list/list-tag-container/list-tag-container.component";
+
 @NgModule({
     imports: [
         CommonModule,
         MaterialModule,
         RouterModule,
-
     ],
     declarations: [
         UserFacingProgramComponent,
         ProgramRowComponent,
         DetailModalComponent,
-        ProgramDetailComponent
+        ProgramDetailComponent,
+        ProgramListComponent,
+        ListTagContainerComponent
     ],
     providers: [
         ProgramModalService
@@ -28,7 +32,9 @@ import { ProgramDetailComponent } from '../components/program/program-detail/pro
     exports: [
         UserFacingProgramComponent,
         ProgramRowComponent,
-        ProgramDetailComponent
+        ProgramDetailComponent,
+        ProgramListComponent,
+        ListTagContainerComponent
     ],
     entryComponents: [
         DetailModalComponent

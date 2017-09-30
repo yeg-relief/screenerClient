@@ -19,15 +19,7 @@ main {
     will-change: opacity;
 }
 
-@media(min-width: 64em) {
-    section {
-        width: 50%;
-        margin: 0 auto;
-    }
-}
-
-
-@media(min-width: 40em) and (max-width:64em) {
+@media(min-width: 40em){
     section {
         width: 80%;
         margin: 0 auto;

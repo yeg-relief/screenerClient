@@ -15,7 +15,7 @@
     </md-card-title>
 
     <div [@flyinHalf]>
-      <app-user-facing-program *ngFor="let response of results" [program]="response"></app-user-facing-program>
+      <app-program-list [programs]="results"></app-program-list>
     </div>
   </section>
 </main>
