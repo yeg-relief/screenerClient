@@ -1,0 +1,14 @@
+:host {
+    display: flex;
+    flex-wrap: wrap;
+    margin-bottom: 0.25em;
+}
+
+div{
+    margin-left: 1em;
+}
+
+md-chip {
+    padding: 0.5em;
+    border-radius: 5px;
+}

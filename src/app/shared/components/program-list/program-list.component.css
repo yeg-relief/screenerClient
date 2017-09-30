@@ -1,0 +1,17 @@
+:host {
+    background-color: transparent;
+}
+
+md-list {
+    border-left: solid lightgrey 1px;
+    border-right: solid lightgrey 1px;
+}
+
+h3 {
+    font-size: xx-large !important;
+}
+
+.program-item {
+    background-color: lightgoldenrodyellow;
+    cursor: pointer;
+}

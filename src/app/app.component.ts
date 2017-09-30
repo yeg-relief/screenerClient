@@ -8,15 +8,14 @@ import 'rxjs/add/operator/multicast';
     selector: 'app-root',
     template: `
     <app-toolbar></app-toolbar>
-    <main id="main-outlet" [ngClass]="backgroundClass">
+    <main id="main-outlet" 
+          [ngClass]="backgroundClass" [style.height]="height" [style.width]="width">
       <router-outlet></router-outlet>
     </main>
   `,
     styles: [
         `
       #main-outlet {
-        height: 95vh;
-        width: 100vw;
         margin: 0 auto;
         overflow-x: hidden;
       }
@@ -51,6 +50,8 @@ export class AppComponent implements OnInit {
         background: true,
         backgroundcolor: false
     };
+    height = '95vh';
+    width = '98vw';
 
     constructor(private router: Router){}
 
@@ -65,16 +66,25 @@ export class AppComponent implements OnInit {
             .map(event => event instanceof NavigationEnd ? this.router.url : undefined)
             .filter(url => !!url)
             .debounceTime(60)
-            .map( url => isAdminRoute(url) )
-            .subscribe( val => {
+            .map( url => [isAdminRoute(url), url] )
+            .subscribe( ([val, url]) => {
+                console.log(url);
+
                 if (this.isIE) {
                     this.backgroundClass.background = false;
                     this.backgroundClass.backgroundcolor = true;
                 } else {
-                    this.backgroundClass.background = !val;
-                    this.backgroundClass.backgroundcolor = val;
+                    this.backgroundClass.background = (val === false ||  val === 'false');
+                    this.backgroundClass.backgroundcolor = (val === true ||  val === 'true');
                 }
 
+                if ((<string>url).indexOf('details') === -1) {
+                    this.width = '98vw';
+                    this.height = '95vh';
+                } else if ((<string>url).indexOf('details') > -1 && window.innerWidth < 450){
+                    this.width = 'auto';
+                    this.height = 'auto';
+                }
 
             });
     }
