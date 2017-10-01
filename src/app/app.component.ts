@@ -62,14 +62,14 @@ export class AppComponent implements OnInit {
 
         const isAdminRoute = url => url.substring(0, 7) === '/admin/';
 
+
+
         this.router.events
             .map(event => event instanceof NavigationEnd ? this.router.url : undefined)
             .filter(url => !!url)
             .debounceTime(60)
             .map( url => [isAdminRoute(url), url] )
             .subscribe( ([val, url]) => {
-                console.log(url);
-
                 if (this.isIE) {
                     this.backgroundClass.background = false;
                     this.backgroundClass.backgroundcolor = true;
@@ -79,9 +79,17 @@ export class AppComponent implements OnInit {
                 }
 
                 if ((<string>url).indexOf('details') === -1) {
+                    console.log('here!!!!');
                     this.width = '98vw';
                     this.height = '95vh';
                 } else if ((<string>url).indexOf('details') > -1 && window.innerWidth < 450){
+                    this.width = 'auto';
+                    this.height = 'auto';
+                }
+
+                if ((<string>url).indexOf('questions') > -1 && window.innerWidth < 450) {
+                    console.log(url);
+                    console.log('here!!!!');
                     this.width = 'auto';
                     this.height = 'auto';
                 }

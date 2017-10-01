@@ -1,6 +1,7 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { BrowseService } from './browse.service';
 import { Subscription } from 'rxjs/Subscription';
+import { Observable } from "rxjs/Observable";
 import 'rxjs/add/operator/switchMap';
 import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/do';
@@ -20,7 +21,7 @@ import { ProgramModalService } from '../../shared/components/program-modal.servi
     providers: [ ProgramModalService ]
 })
 export class BrowseComponent implements OnInit, OnDestroy {
-    categories: Promise<string[]>;
+    categories: Observable<string[]>;
     errorMsg = '';
     subscriptions: Subscription[] = [];
 
@@ -40,7 +41,10 @@ export class BrowseComponent implements OnInit, OnDestroy {
             .subscribe();
 
         this.categories = this.browseService
-            .getCategories();
+            .getCategories()
+            .take(1)
+            .map(categories => categories.sort( (a, b) => a.localeCompare(b)) );
+
 
         this.subscriptions.push(
             this.route.firstChild.params.subscribe(params => {

@@ -1,7 +1,7 @@
 :host {
     display: flex;
     flex-wrap: wrap;
-    margin-bottom: 0.25em;
+    padding-bottom: 0.5em;
 }
 
 div{
@@ -11,4 +11,8 @@ div{
 md-chip {
     padding: 0.5em;
     border-radius: 5px;
+}
+
+.active {
+    background-color: darkorange;
 }
