@@ -1,106 +1,64 @@
-
-@media(min-width: 60em) {
-
-  .large-main {
-    height: 94vh;
-    width: 81vw;
-    left: 21vw;
-    overflow: auto;
-    position: fixed;
-    display: flex;
-    flex-direction: column;
-  }
-
-  md-card {
-    width: 19vw;
-    left: 0vw;
-    top: 7vw;
-    position: fixed;
-    padding-left: 3vw;
-    padding-right: 3vw;
-  }
-
-
-  md-sidenav-container {
-    display: none;
-  }
-
-  #sidenav-open {
-    display: none;
-  }
-
-  section {
-    background-color: rgba(248,248,255, 0.7);
-    margin: 0 auto;
-    width: 80%;
-  }
-}
-
-@media(min-width: 45em) and (max-width: 60em) {
-  .large-main {
-    height: 94vh;
-    width: 85vw;
-    left: 21vw;
-    overflow: auto;
-    position: fixed;
-    display: flex;
-    flex-direction: column;
-  }
-
-  section {
-    background-color: rgba(248,248,255, 0.7);
-    margin: 0 auto;
-    width: 80%;
-  }
-
-  md-card {
-    width: 15vw;
-    left: 0vw;
-    top: 7vw;
-    position: fixed;
-    padding-left: 3vw;
-    padding-right: 3vw;
-  }
-
-  md-sidenav-container {
-    display: none;
-  }
-
-  #sidenav-open {
-    display: none;
-  }
-}
-
-
-@media(max-width: 45em) {
-  md-sidenav-container {
-    height: 94vh;
-    width: 100vw;
-    position: fixed;
-  }
-
-  md-sidenav {
-    width: 20vw;
+md-sidenav-container {
     height: 100%;
-  }
+    width: 100%;
+    background-color: lightgoldenrodyellow;
+}
 
-  md-card {
-    display: none;
-  }
+md-sidenav {
+    background-color: lightgoldenrodyellow;
+}
 
-  .large-main {
-    display: none;
-  }
+.active-link {
+    background-color: darkorange;
+}
 
-  #sidenav-open {
-    position: fixed;
-    bottom: 2vw;
-    right: 3vw;
-  }
+app-quick-links-content {
+    width: 100%;
+}
 
-  section {
-    background-color: rgba(248,248,255, 0.7);
-    margin: 0 auto;
-    width: 95%;
-  }
+button[md-raised-button] {
+    position: sticky;
+    top: 5px;
+    left: 2px;
+    background-color: ghostwhite;
+}
+
+.content-container {
+    margin-bottom: 10px;
+}
+
+
+
+@media screen and (min-width: 750px) {
+
+    .medium-to-large-view {
+        display: flex;
+    }
+
+    .medium-to-large-view-content {
+        max-width: 1000px;
+    }
+
+    .medium-to-large-view > md-nav-list {
+        height: 100%;
+        max-width: 300px;
+        flex-shrink: 0;
+        border-right: 1px solid lightgrey;
+        border-bottom: 1px solid lightgrey;
+    }
+
+    .medium-to-large-view-content {
+        padding-left: 3em;
+        margin-left: 300px
+    }
+
+    md-nav-list {
+        position: fixed;
+    }
+}
+
+@media screen and (max-width: 750px) {
+    .medium-to-large-view {
+        display: none !important;
+    }
 }

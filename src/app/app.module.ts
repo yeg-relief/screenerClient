@@ -19,6 +19,7 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { ConstructionRibbonComponent } from './construction-ribbon/construction-ribbon.component';
 import { IeSucksComponent } from './user/home/ie-sucks/ie-sucks.component';
 import { ProgramsServiceService } from './user/programs-service.service';
+import { QuickLinksContentComponent } from './user/quick-links/quick-links-content/quick-links-content.component';
 
 @NgModule({
     declarations: [
@@ -30,6 +31,7 @@ import { ProgramsServiceService } from './user/programs-service.service';
         QuickLinksComponent,
         ConstructionRibbonComponent,
         IeSucksComponent,
+        QuickLinksContentComponent,
     ],
     imports: [
         BrowserModule,
