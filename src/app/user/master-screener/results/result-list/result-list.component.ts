@@ -8,7 +8,7 @@ import {ProgramsServiceService} from "../../../programs-service.service";
     templateUrl: './result-list.component.html',
     styleUrls: ['./result-list.component.css'],
     animations: [
-        Animations.flyinHalf
+        Animations.fadeinAndOut
     ]
 })
 export class ResultListComponent implements OnInit {

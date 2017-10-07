@@ -79,8 +79,7 @@ export class AppComponent implements OnInit {
                 }
 
                 if ((<string>url).indexOf('details') === -1) {
-                    console.log('here!!!!');
-                    this.width = '98vw';
+                    this.width = '100vw';
                     this.height = '95vh';
                 } else if ((<string>url).indexOf('details') > -1 && window.innerWidth < 450){
                     this.width = 'auto';
@@ -88,11 +87,16 @@ export class AppComponent implements OnInit {
                 }
 
                 if ((<string>url).indexOf('questions') > -1 && window.innerWidth < 450) {
-                    console.log(url);
-                    console.log('here!!!!');
                     this.width = 'auto';
                     this.height = 'auto';
                 }
+
+                if ((<string>url).indexOf('about') > -1) {
+                    this.backgroundClass.background = false;
+                    this.backgroundClass.backgroundcolor = true;
+                }
+
+
 
             });
     }
