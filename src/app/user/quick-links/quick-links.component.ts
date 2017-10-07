@@ -17,7 +17,7 @@ export class QuickLinksComponent implements OnInit, AfterViewInit {
 
     smallView: Observable<boolean>;
 
-    protected fragments = {
+    fragments = {
         'documentation' : [
             {
                 subtitle: 'Social Insurance Number',
