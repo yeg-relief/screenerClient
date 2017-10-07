@@ -96,6 +96,11 @@ export class AppComponent implements OnInit {
                     this.backgroundClass.backgroundcolor = true;
                 }
 
+                if ((<string>url).indexOf('quick-links') > -1) {
+                    this.backgroundClass.background = false;
+                    this.backgroundClass.backgroundcolor = true;
+                }
+
 
 
             });

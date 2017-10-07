@@ -8,6 +8,7 @@
 main {
     background-color: lightgoldenrodyellow;
     width: 90%;
+    position: fixed;
 }
 
 section {
