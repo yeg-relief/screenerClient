@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { Router, NavigationEnd } from '@angular/router';
+import {Router, NavigationEnd } from '@angular/router';
 import 'rxjs/add/operator/debounceTime';
-import 'rxjs/add/operator/multicast';
+import { InitialRedirectService } from "./initial-redirect.service";
 
 
 @Component({
@@ -53,9 +53,13 @@ export class AppComponent implements OnInit {
     height = '95vh';
     width = '98vw';
 
-    constructor(private router: Router){}
+    constructor(
+        private router: Router,
+        private initialRedirect: InitialRedirectService,
+    ){}
 
     ngOnInit() {
+        this.initialRedirect.doRedirect();
 
         const userAgent: string = window ? window.navigator.userAgent: '';
         this.isIE = userAgent.includes('Trident');
@@ -100,9 +104,8 @@ export class AppComponent implements OnInit {
                     this.backgroundClass.background = false;
                     this.backgroundClass.backgroundcolor = true;
                 }
-
-
-
             });
+
+
     }
 }

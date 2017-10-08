@@ -20,6 +20,8 @@ import { ConstructionRibbonComponent } from './construction-ribbon/construction-
 import { IeSucksComponent } from './user/home/ie-sucks/ie-sucks.component';
 import { ProgramsServiceService } from './user/programs-service.service';
 import { QuickLinksContentComponent } from './user/quick-links/quick-links-content/quick-links-content.component';
+import { InitialRedirectService } from "./initial-redirect.service";
+import { HttpClientModule}  from '@angular/common/http'
 
 @NgModule({
     declarations: [
@@ -40,14 +42,16 @@ import { QuickLinksContentComponent } from './user/quick-links/quick-links-conte
         BrowseModule,
         routing,
         MaterialModule,
-        ReactiveFormsModule
+        ReactiveFormsModule,
+        HttpClientModule
     ],
     providers: [
         MasterScreenerService,
         BrowseService,
         AuthService,
         AuthGuardService,
-        ProgramsServiceService
+        ProgramsServiceService,
+        InitialRedirectService
     ],
     bootstrap: [AppComponent]
 })
