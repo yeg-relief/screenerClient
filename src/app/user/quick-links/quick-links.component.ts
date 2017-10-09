@@ -5,6 +5,7 @@ import { Observable} from "rxjs/Observable";
 import 'rxjs/add/observable/fromEvent';
 import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/startWith'
+import 'rxjs/add/operator/filter'
 
 @Component({
     selector: 'app-quick-links',
@@ -159,7 +160,7 @@ export class QuickLinksComponent implements OnInit, AfterViewInit {
     }
 
     ngAfterViewInit() {
-        this.route.fragment.subscribe(f => {
+        this.route.fragment.filter(f => !!f).subscribe(f => {
             const element = document.querySelector("#" + f);
             if (element) {
                 element.scrollIntoView(true);
