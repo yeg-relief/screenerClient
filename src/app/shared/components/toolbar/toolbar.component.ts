@@ -102,14 +102,6 @@ export class ToolbarComponent implements OnInit {
         const navigationStart = this.router.events.filter(e => e instanceof NavigationEnd).map( e => e['url']);
 
 
-        const hasAdminRoutes = () => {
-            const urls = this.routes.map(routeTuple => routeTuple[0]);
-
-            return urls.includes("admin/screener/edit") &&
-                urls.includes("admin/programs/overview") &&
-                urls.includes("admin/keys/overview");
-        };
-
         navigationStart
             .do(url => {
                 const urlTuple = this.routesSmall.find( thing => url.substring(1) === thing[0]);
@@ -122,6 +114,7 @@ export class ToolbarComponent implements OnInit {
             .map(url => url.split('/').indexOf('admin') > -1)
             .subscribe(val => {
                 this.showAdminRoutes = this.authService.isLoggedIn;
+                this.cd.markForCheck();
             });
 
         this.selectControl
