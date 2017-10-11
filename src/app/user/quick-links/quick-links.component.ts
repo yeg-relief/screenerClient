@@ -116,7 +116,7 @@ export class QuickLinksComponent implements OnInit, AfterViewInit {
             {
                 subtitle: '2-1-1',
                 title: '2-1-1',
-                fragment: '211',
+                fragment: 'two_one_one',
                 content: `
                 <p> TODO: Luc provide text
                 `

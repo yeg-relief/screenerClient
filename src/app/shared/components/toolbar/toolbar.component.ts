@@ -55,7 +55,7 @@ export class ToolbarComponent implements OnInit {
         ["screener", "admin/screener/edit"],
         ["programs", "admin/programs/overview"],
         ["keys", "admin/keys/overview"]
-    ].sort((a,b) => a[0].localeCompare(b[0]));;
+    ].sort((a,b) => a[0].localeCompare(b[0]));
 
     routesSmall = [
         ["home", "home"],
@@ -63,7 +63,7 @@ export class ToolbarComponent implements OnInit {
         ["browse-programs/all", "browse"],
         ["quick-links#documentation", "links"],
         ["about", "about"]
-    ].sort((a,b) => a[0].localeCompare(b[0]));;
+    ].sort((a,b) => a[0].localeCompare(b[0]));
 
     selectControl = new FormControl(this.routesSmall[0][0]);
     form;
@@ -93,7 +93,6 @@ export class ToolbarComponent implements OnInit {
         private authService: AuthService) {}
 
     ngOnInit() {
-        console.log(this.authService.isLoggedIn);
         this.showAdminRoutes = this.authService.isLoggedIn;
         this.form = new FormGroup({ 'selectControl': this.selectControl });
         this.routes = [...this.userRoutes];
@@ -145,13 +144,12 @@ export class ToolbarComponent implements OnInit {
             this.setActive(this.activeMap['questions'])
         }
 
-
+        this.cd.markForCheck();
     }
 
     setActive(obj: any) {
         if (obj) {
             obj.active = true;
-            this.cd.markForCheck();
         }
     }
 }
