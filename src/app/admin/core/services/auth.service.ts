@@ -7,7 +7,7 @@ declare const btoa;
 
 @Injectable()
 export class AuthService {
-    isLoggedIn: boolean = !environment.production;
+    isLoggedIn: boolean =  !environment.production;
     private credentials: string;
     // store the URL so we can redirect after logging in
     redirectUrl = 'admin/screener/edit';
