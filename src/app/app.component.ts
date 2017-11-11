@@ -67,6 +67,11 @@ export class AppComponent implements OnInit {
         const isAdminRoute = url => url.substring(0, 7) === '/admin/';
 
 
+        /*
+            the following code needs a refactor
+
+         */
+
 
         this.router.events
             .map(event => event instanceof NavigationEnd ? this.router.url : undefined)
@@ -110,7 +115,10 @@ export class AppComponent implements OnInit {
                     this.backgroundClass.backgroundcolor = true;
                 }
 
-
+                if ((<string>url).indexOf('results') > -1) {
+                    this.backgroundClass.background = false;
+                    this.backgroundClass.backgroundcolor = true;
+                }
             });
 
 
