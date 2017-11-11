@@ -50,7 +50,7 @@ export class AppComponent implements OnInit {
         background: true,
         backgroundcolor: false
     };
-    height = '95vh';
+    height = 'default';
     width = '98vw';
 
     constructor(
@@ -84,7 +84,7 @@ export class AppComponent implements OnInit {
 
                 if ((<string>url).indexOf('details') === -1) {
                     this.width = '100vw';
-                    this.height = '95vh';
+                    this.height = 'auto';
                 } else if ((<string>url).indexOf('details') > -1 && window.innerWidth < 450){
                     this.width = 'auto';
                     this.height = 'auto';

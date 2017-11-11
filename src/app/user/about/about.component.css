@@ -16,7 +16,14 @@ section {
 
 .detail-section {
     display: flex;
+    flex-direction: column-reverse;
     align-items: center;
+}
+
+.detail-section > img {
+    width: 200px;
+    align-self: flex-start;
+    margin-bottom: 0.5em;
 }
 
 @media(min-width: 52em) {

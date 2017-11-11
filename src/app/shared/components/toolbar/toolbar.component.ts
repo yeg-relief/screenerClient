@@ -1,5 +1,4 @@
 import { Component, ChangeDetectionStrategy, OnInit, ChangeDetectorRef } from '@angular/core';
-import { FormControl, FormGroup } from '@angular/forms';
 import {Router, NavigationEnd } from '@angular/router';
 import 'rxjs/add/operator/withLatestFrom';
 import 'rxjs/add/operator/startWith';
@@ -43,10 +42,8 @@ export class ToolbarComponent implements OnInit {
 
     userRoutes = [
         ["home", "home"],
-        ["links", "quick-links"],
-        ["about", "about"],
         ["questions", "master-screener/questions"],
-        ["browse", "browse-programs/all"]
+        ["browse", "browse-programs/all"],
     ].sort((a,b) => a[0].localeCompare(b[0]));
 
 
@@ -57,16 +54,6 @@ export class ToolbarComponent implements OnInit {
         ["keys", "admin/keys/overview"]
     ].sort((a,b) => a[0].localeCompare(b[0]));
 
-    routesSmall = [
-        ["home", "home"],
-        ["master-screener/questions", "questionnaire"],
-        ["browse-programs/all", "browse"],
-        ["quick-links#documentation", "links"],
-        ["about", "about"]
-    ].sort((a,b) => a[0].localeCompare(b[0]));
-
-    selectControl = new FormControl(this.routesSmall[0][0]);
-    form;
     showAdminRoutes = false;
 
     activeMap = {
@@ -94,7 +81,6 @@ export class ToolbarComponent implements OnInit {
 
     ngOnInit() {
         this.showAdminRoutes = this.authService.isLoggedIn;
-        this.form = new FormGroup({ 'selectControl': this.selectControl });
         this.routes = [...this.userRoutes];
         this.buildActiveMap(window.location.pathname);
 
@@ -103,11 +89,6 @@ export class ToolbarComponent implements OnInit {
 
         navigationStart
             .do(url => {
-                const urlTuple = this.routesSmall.find( thing => url.substring(1) === thing[0]);
-                if (urlTuple) {
-                    this.selectControl.setValue(urlTuple[0]);
-                }
-
                 this.buildActiveMap(url);
             })
             .map(url => url.split('/').indexOf('admin') > -1)
@@ -115,15 +96,6 @@ export class ToolbarComponent implements OnInit {
                 this.showAdminRoutes = this.authService.isLoggedIn;
                 this.cd.markForCheck();
             });
-
-        this.selectControl
-            .valueChanges
-            .withLatestFrom(navigationStart)
-            .subscribe( ([val, route]) => {
-                this.router.navigateByUrl(val);
-            })
-
-
     }
 
     buildActiveMap(url) {

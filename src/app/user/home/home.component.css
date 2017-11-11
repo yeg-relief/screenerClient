@@ -1,10 +1,21 @@
 .home {
-    width: 95vw;
+    width: 100%;
     overflow-x: hidden;
+    position: relative;
+    height: 95vh;
+}
+
+section.footer {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    width: 100%;
+    background-color:darkorange;
 }
 
 .ribbon {
-    background-color: #a00;
+    background-color: darkorange;
     overflow: hidden;
     box-shadow: 0 0 10px #888;
     width: 60vw;
@@ -20,10 +31,8 @@
     padding: 0.5rem;
 }
 
-.ribbon > span > p {
-    margin: 0;
-    height: 100%;
-    text-align: center;
+.ribbon > span > a {
+    color: white
 }
 
 section.link-container {

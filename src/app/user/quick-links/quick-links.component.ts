@@ -86,66 +86,64 @@ export class QuickLinksComponent implements OnInit, AfterViewInit {
                 title: 'Direct Deposit Information',
                 fragment: 'direct-deposit-information',
                 content: `
-                <p>You can get it from your bank. You need 3 numbers your Transit ID, Your Bank ID, and your Account Number
+                <p>
+                    To sign up for direct deposit you can get the information you need from your bank. 
+                    You need 3 numbers: your branch/transit number, Bank ID number, and your Account Number. 
+                    You can get these with a direct deposit form from your bank or through your online banking.
                 </p>`
             }
-        ],
+        ].sort((a, b) => a.title.localeCompare(b.title)),
         'supports': [
-            {
-                subtitle: 'Alberta Works',
-                title: 'Alberta Works',
-                fragment: 'alberta-works',
-                content: `
-                <p>For people who are of working age (18-65) and do not have a permanent disability you 
-                can apply through Alberta Works for the Expected to Work, Barriers to Employment/Medical, 
-                or Learners programs. Visit the Alberta Works 
-                <a href= "http://www.humanservices.alberta.ca/financial-support/689"> website</a>
-                 for more information.
-                </p>`
-            },
-            {
-                subtitle: 'AISH',
-                title: 'AISH',
-                fragment: 'AISH',
-                content: `
-                <p>For people who are of working age (18-65) with a permanent disability you can apply for 
-                Assured Income for the Severely Handicapped (AISH). 
-                Visit the AISH <a href="https://www.alberta.ca/aish.aspx"> website </a> 
-                </p>`
-            },
             {
                 subtitle: '2-1-1',
                 title: '2-1-1',
                 fragment: 'two_one_one',
                 content: `
-                <p> TODO: Luc provide text
+                <p>
+                    2-1-1 is a free, confidential, multilingual, 24 hour information and referral system. 2-1-1 provides information on government 
+                    and community based health and social services. You can dial 2-1-1 to speak to an Information & Referral Specialist, or 
+                    search the online community resource directory at <a target="_blank" href="http://www.ab.211.ca">www.ab.211.ca</a> 
+                </p>
                 `
             },
             {
-                subtitle: 'LinkYEG',
-                title: 'LinkYEG',
-                fragment: 'LinkYEG',
+                subtitle: 'Alternative Benefits Navigator',
+                title: 'Federal/Provincial Benefits Navigator',
+                fragment: 'federal-provincial-benefits',
                 content: `
-                <p> TODO: Luc provide text
+                <p> For a more comprehensive list of available federal and provincial 
+                benefits check out the Government of Canada’s benefits navigator at 
+                <a target="_blank" href="http://www.canadabenefits.gc.ca">www.canadabenefits.gc.ca</a>
+                </p>
                 `
             },
             {
-                subtitle: 'Federal Benefits',
-                title: 'Federal Benefits',
-                fragment: 'federal-benefits',
+                subtitle: 'Make Tax Time Pay',
+                title: 'e4c Make Tax Time Pay',
+                fragment: 'mttp',
                 content: `
-                <p> TODO: Luc provide text
+                <p>
+                    e4c Make Tax Time Pay runs free tax clinics to help people in the Edmonton area with lower incomes get their 
+                    taxes done for free and apply for benefits. Most clinics are open during March and April but some are open all year.
+                    For a listing of currently available tax clinics please call 2-1-1
+                </p>
                 `
             },
             {
-                subtitle: 'Provincial Benefits',
-                title: 'Provincial Benefits',
-                fragment: 'provincial-benefits',
+                subtitle: 'Child and Family Benefits Calculator',
+                title: 'Child and Family Benefits Calculator',
+                fragment: 'child-family-benefit-calculator',
                 content: `
-                <p> TODO: Luc provide text
+                <p>
+                    You can use this calculator to see what child and family benefits you may be able to get and how much your payments may be. 
+                    Check out the calculator at 
+                    <a target="_blank" href="http://www.cra-arc.gc.ca/benefits-calculator/index.html">
+                        www.cra-arc.gc.ca/benefits-calculator/index.html
+                    </a>
+                </p>
                 `
             }
-        ]
+        ].sort((a, b) => a.title.localeCompare(b.title))
     };
 
     constructor(private route: ActivatedRoute) { }

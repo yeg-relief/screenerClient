@@ -1,12 +1,15 @@
 <md-sidenav-container class="small-to-medium-view" *ngIf="smallView | async">
     <md-sidenav #sidenav>
         <md-nav-list>
+            <h3>Documentation</h3>
             <a *ngFor="let item of fragments.documentation"
                 md-list-item
                 routerLink="/quick-links"
                 [fragment]="item.fragment">
                 {{item.subtitle}}
             </a>
+            <md-divider></md-divider>
+            <h3>Resources</h3>
             <a *ngFor="let item of fragments.supports"
                 md-list-item
                 routerLink="/quick-links"
@@ -17,7 +20,7 @@
     </md-sidenav>
 
     <div class="sidenav-content">
-        <button md-raised-button (click)="sidenav.open()" id="menu-button">
+        <button md-raised-button (click)="sidenav.open()" id="menu-button" [style.background-color]="'darkorange'">
             <md-icon>menu</md-icon>
         </button>
         <div class="content-container">
@@ -27,7 +30,7 @@
             </p>
             <md-divider></md-divider>
             <app-quick-links-content [fragments]="fragments.documentation"></app-quick-links-content>
-            <h1>Supports</h1>
+            <h1>Resources</h1>
             <p>In Alberta there are multiple available income supports available for individuals and families who do
                 not have a stable source of income.
             </p>
@@ -40,13 +43,15 @@
 
 <main class="medium-to-large-view">
     <md-nav-list>
+        <h3>Documentation</h3>
         <a *ngFor="let item of fragments.documentation"
            md-list-item
            routerLink="/quick-links"
            [fragment]="item.fragment">
             {{item.subtitle}}
-
         </a>
+        <md-divider></md-divider>
+        <h3>Resources</h3>
         <a *ngFor="let item of fragments.supports"
            md-list-item
            routerLink="/quick-links"
@@ -63,7 +68,7 @@
         </p>
         <md-divider></md-divider>
         <app-quick-links-content [fragments]="fragments.documentation"></app-quick-links-content>
-        <h1>Supports</h1>
+        <h1>Resources</h1>
         <p>In Alberta there are multiple available income supports available for individuals and families who do
             not have a stable source of income.
         </p>
