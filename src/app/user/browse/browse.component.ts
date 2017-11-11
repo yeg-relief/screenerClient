@@ -12,13 +12,11 @@ import 'rxjs/add/operator/multicast';
 import 'rxjs/add/operator/let';
 import 'rxjs/add/operator/take';
 import { ActivatedRoute, Router } from '@angular/router';
-import { ProgramModalService } from '../../shared/components/program-modal.service'
 
 @Component({
     selector: 'app-browse',
     templateUrl: './browse.component.html',
     styleUrls: ['./browse.component.css'],
-    providers: [ ProgramModalService ]
 })
 export class BrowseComponent implements OnInit, OnDestroy {
     categories: Observable<string[]>;
@@ -31,14 +29,10 @@ export class BrowseComponent implements OnInit, OnDestroy {
         private browseService: BrowseService,
         private route: ActivatedRoute,
         private router: Router,
-        private modalDetailService: ProgramModalService
     ) { }
 
     ngOnInit() {
 
-        this.browseService.programs$.take(1)
-            .let(this.modalDetailService.setPrograms.bind(this.modalDetailService))
-            .subscribe();
 
         this.categories = this.browseService
             .getCategories()

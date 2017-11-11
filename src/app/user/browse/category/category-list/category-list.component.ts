@@ -50,9 +50,11 @@ export class CategoryListComponent implements OnInit {
 
     filterByCategory(category: string) {
         if (category === 'all') {
-            this.filteredPrograms = this.programs;
+            this.filteredPrograms = this.programs.sort((a, b) => a.title.localeCompare(b.title));
         } else {
-            this.filteredPrograms = this.programs.filter(program => program.tags.indexOf(category) >= 0);
+            this.filteredPrograms =
+                this.programs.filter(program => program.tags.indexOf(category) >= 0)
+                    .sort((a, b) => a.title.localeCompare(b.title));
         }
         this.fade = 'in';
     }

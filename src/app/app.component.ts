@@ -83,7 +83,7 @@ export class AppComponent implements OnInit {
                 }
 
                 if ((<string>url).indexOf('details') === -1) {
-                    this.width = '100vw';
+                    this.width = 'auto';
                     this.height = 'auto';
                 } else if ((<string>url).indexOf('details') > -1 && window.innerWidth < 450){
                     this.width = 'auto';
@@ -104,6 +104,13 @@ export class AppComponent implements OnInit {
                     this.backgroundClass.background = false;
                     this.backgroundClass.backgroundcolor = true;
                 }
+
+                if ((<string>url).indexOf('browse') > -1) {
+                    this.backgroundClass.background = false;
+                    this.backgroundClass.backgroundcolor = true;
+                }
+
+
             });
 
 
