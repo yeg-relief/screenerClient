@@ -20,7 +20,7 @@ md-select {
 }
 
 .multi-select-checkbox {
-    margin-right: 1em;
+    margin-right: 0.5em;
 }
 
 
@@ -32,5 +32,9 @@ md-select {
     select {
         height: 3em;
         min-width: 90%;
+    }
+
+    .multi-select:not(:first-child) {
+        margin-top: 0.5em;
     }
 }
