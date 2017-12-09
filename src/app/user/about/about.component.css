@@ -26,6 +26,12 @@ section {
     margin-bottom: 0.5em;
 }
 
+#cybera-logo {
+    background-color: #70707f;
+    padding: 0.5em;
+    border-radius: 10px;
+}
+
 @media(min-width: 52em) {
     section {
         width: 50%;
