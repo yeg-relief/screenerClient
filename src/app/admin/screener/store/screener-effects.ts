@@ -23,10 +23,11 @@ export class ScreenerEffects {
       .map(action => action.payload)
       .switchMap(requestOptions => 
         this.http.get(URL, requestOptions)
-          .map(res => ({ type: ScreenerActionTypes.LOAD_DATA_SUCCESS, payload: res.json().response }))
-          .retry(2)
-          .timeout(TIMEOUT)
-          .catch(() => Observable.of({ type: ScreenerActionTypes.LOAD_DATA_FAILURE }))
+            .map(res => ({ type: ScreenerActionTypes.LOAD_DATA_SUCCESS, payload: res.json() }))
+            .do(console.log)
+            .retry(2)
+            .timeout(TIMEOUT)
+            .catch(() => Observable.of({ type: ScreenerActionTypes.LOAD_DATA_FAILURE }))
       );
 
 
@@ -36,7 +37,7 @@ export class ScreenerEffects {
       .do( thing => console.log(thing) )
       .switchMap( ([payload, options]) => {
         return this.http.post(URL, payload, options)
-          .map(res => ({ type: ScreenerActionTypes.SAVE_DATA_SUCCESS, payload: res.json().response }))
+          .map(res => ({ type: ScreenerActionTypes.SAVE_DATA_SUCCESS, payload: res.json() }))
           .timeout(TIMEOUT)
           .catch((e) => Observable.of({ type: ScreenerActionTypes.SAVE_DATA_FAILURE, payload: e.message }));
       })

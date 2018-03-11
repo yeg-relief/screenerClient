@@ -31,7 +31,7 @@ export function updateState(input$: Observable<FilterMessage | ApplicationFacing
       state.filter = update;
       return state;
     } else if (Array.isArray(update)) {
-      state.programs = [...update].sort(programComparator);
+      state.programs = [...update].filter(program => program.guid !== undefined && program.guid !== null).sort(programComparator);
       return state;
     } else if (typeof update === 'object' && update.guid !== undefined) {
       const index = state.programs.findIndex(p => p.guid === update.guid)

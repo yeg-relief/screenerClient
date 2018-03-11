@@ -203,7 +203,6 @@ export class QuestionEditComponent implements OnInit, OnDestroy {
             const ct = <ControlType>controlType;
 
             if (ct === 'Multiselect') {
-                console.log('here');
                 if (f.get('multiSelectOptions') === null) f.addControl('multiSelectOptions', new FormControl([]));
                 this.multiQuestions = f.get('multiSelectOptions').value;
             }
@@ -227,7 +226,6 @@ export class QuestionEditComponent implements OnInit, OnDestroy {
                 }
 
                 form.get('multiSelectOptions').setValue(options);
-                console.log(form.get('multiSelectOptions').value);
 
 
                 form.get(['key', 'name']).setValue(null);

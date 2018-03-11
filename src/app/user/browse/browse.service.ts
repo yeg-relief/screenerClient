@@ -17,8 +17,8 @@ export class BrowseService {
     programs$;
 
     constructor(private http: Http, private programService: ProgramsServiceService) {
-        this.programs$ =  this.http.get('/api/programs')
-            .map(res => res.json().programs)
+        this.programs$ =  this.http.get('/api/program')
+            .map(res => res.json())
             .do(programs => this.programService.addPrograms(programs))
             .multicast( new ReplaySubject(1) ).refCount()
             .catch(this.loadError);

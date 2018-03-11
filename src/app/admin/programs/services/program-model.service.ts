@@ -11,6 +11,7 @@ import 'rxjs/add/operator/take';
 import 'rxjs/add/observable/fromPromise';
 import 'rxjs/add/observable/zip';
 import 'rxjs/add/operator/catch';
+import 'rxjs/add/operator/do'
 
 @Injectable()
 export class ProgramModelService {
@@ -45,27 +46,11 @@ export class ProgramModelService {
             .map(p => p === null ? new Program(undefined, this.fb) : p)
     }
 
-    updateProgram(update: Program) {
-        if (update.form.valid) {
-            return this._updateProgram(update.data)
-                .let(this._updateValueInCache)
-
-        }
-
-        return Observable.throw(Observable.of(`attempting to update an invalid program: ${update}`));
-    }
-
-    newProgram(): Program {
-        return new Program({}, this.fb);
-    }
-
     getPrograms(): Observable<ApplicationFacingProgram[]> {
         return this._cache.asObservable();
     }
 
-    private async _updateUserProgramInCache(program: UserFacingProgram, resp: any)
-    : Promise<boolean>
-    {
+    private async _updateUserProgramInCache(program: UserFacingProgram, resp: any): Promise<boolean> {
         if (resp.result === 'updated' || resp.result === 'created') {
             const cache = await this._cache.asObservable().take(1).toPromise();
             const val = cache.find(p => p.guid === program.guid);
@@ -86,7 +71,7 @@ export class ProgramModelService {
         const creds = this.getCredentials();
         creds.headers.append('Content-Type', 'application/json' );
 
-        return this.http.put('/protected/program-description/', { data: JSON.stringify(program) }, creds)
+        return this.http.put('/protected/program-description/', program, creds)
             .map( res => res.json() )
             .flatMap( res => Observable.fromPromise(this._updateUserProgramInCache(program, res)))
     }
@@ -153,7 +138,7 @@ export class ProgramModelService {
     private _getKeys() {
         const creds = this.getCredentials();
         return this.http.get('/protected/key/', creds)
-            .map(res => res.json().keys)
+            .map(res => res.json())
             .catch(this.loadError);
     }
 

@@ -8,26 +8,30 @@
     <form novalidate (ngSubmit)="onSubmit()" [formGroup]="form" *ngIf="errorMessage.length === 0 && questions.length > 0">
 
         <div class="questions">
-            <app-ycb-question *ngFor="let question of questions"
-                              [question]="question"
-                              [conditionalQuestions]="gatherConditionals(question)"
-                              [form]="form" (onExpand)="addControls($event)"
-                              (onHide)="removeControls($event)"></app-ycb-question>
+            <app-ycb-question
+                *ngFor="let question of questions"
+                [question]="question"
+                [conditionalQuestions]="gatherConditionals(question)"
+                [form]="form"
+                (onExpand)="addControls($event)"
+                (onHide)="removeControls($event)">
+            </app-ycb-question>
         </div>
 
 
         <button
-                id="submit-button"
-                md-raised-button
-                type="submit"
-                mdTooltip="Click to submit your information.">
+            id="submit-button"
+            md-raised-button
+            type="submit"
+            mdTooltip="Click to submit your information."
+        >
             <span>SUBMIT</span>
             <md-icon>send</md-icon>
         </button>
 
 
     </form>
-    <div class="center"*ngIf="errorMessage.length === 0 && questions.length === 0"><strong>There are no questions available</strong></div>
+    <div class="center" *ngIf="errorMessage.length === 0 && questions.length === 0"><strong>There are no questions available</strong></div>
 </main>
 
 <div *ngIf="loading">

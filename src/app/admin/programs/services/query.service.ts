@@ -5,7 +5,6 @@ import { AuthService } from '../../core/services/auth.service'
 import { Observable } from 'rxjs/Observable';
 import { ReplaySubject } from 'rxjs/ReplaySubject';
 import { QueryEvent } from './index';
-import {FormGroup} from "@angular/forms";
 import {ProgramConditionClass} from "./program-condition.class";
 
 @Injectable()
@@ -34,12 +33,8 @@ export class QueryService {
             guid: program_guid
         };
 
-        console.log(data);
-
-        const body = JSON.stringify({ data });
-        return this.http.post('/protected/query/', body, creds)
+        return this.http.post('/protected/query/', data, creds)
             .map(res => res.json())
-            .map( ([head, ...tail]) => head)
             .do( res => {
                 if (res.created === true || res.result === 'updated') {
                     query.conditions = query.conditions.sort( (a, b) => a.data.key.name.localeCompare(b.data.key.name));
@@ -58,7 +53,7 @@ export class QueryService {
         creds.headers.append( 'Content-Type', 'application/json' );
         return this.http.delete(`/protected/query/${query_id}`, creds)
             .map(res => res.json())
-            .map(res => res.found && res.result === 'deleted');
+            .map(res => res.found && res.deleted);
     }
 
     static loadError(error: Response | any) {

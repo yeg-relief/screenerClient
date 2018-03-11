@@ -216,8 +216,7 @@ export function reducer(state = initialState, action: ScreenerActions): State {
 
             const screener = <Screener>action.payload;
 
-            if ( !Array.isArray(screener.conditionalQuestions) || !Array.isArray(screener.conditionalQuestions
-                    || !Array.isArray(screener.keys)) ){
+            if ( !Array.isArray(screener.questions) || !Array.isArray(screener.keys) || !Array.isArray(screener.conditionalQuestions)){
                 return (<any>Object).assign({}, state, {
                     loading: false,
                     error: 'loaded data is corrupt and unable to be displayed'

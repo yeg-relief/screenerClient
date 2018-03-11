@@ -24,9 +24,9 @@ export class MasterScreenerService {
         const transformedFormValues = MasterScreenerService.transformValuesFromString(updatedForm);
         const headers = new Headers({ 'Content-Type': 'application/json' });
         const options = new RequestOptions({ headers: headers });
-        const body = JSON.stringify({ data: transformedFormValues});
+        const body = JSON.stringify({ ...transformedFormValues });
         return this.http.post('/api/notification/', body, options)
-            .map(res => res.json().response)
+            .map(res => res.json())
             .do(programs => this.programService.addPrograms(programs))
             .catch(MasterScreenerService.loadError)
             .toPromise();
@@ -35,7 +35,7 @@ export class MasterScreenerService {
     static checkForInvalid(form: FormGroup): FormGroup {
         if (!form.valid) {
             for (const key in form.errors) {
-                if (form.get(key)){
+                if (form.errors.hasOwnProperty(key) && form.get(key)){
                     form.removeControl(key);
                 }
             }

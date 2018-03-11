@@ -9,11 +9,18 @@
 
                 <div class="py1"></div>
                 <md-input-container>
-                    <input mdInput (input)="handleInput($event.target.value)" [formControlName]="question.key" placeholder="input here" (keypress)="checkEnter($event)">
+                    <input
+                        type="number"
+                        mdInput
+                        (input)="handleInput($event.target.value)"
+                        [formControlName]="question.key"
+                        placeholder="answer"
+                        (keypress)="checkEnter($event)"
+                    />
                 </md-input-container>
 
                 <div class="error-container" [@error]="errorInDOM">
-                    Please, answer using only a number with no spaces.
+                    Please, answer using only a number with no spaces or commas.
                 </div>
             </div>
 
@@ -46,24 +53,21 @@
                         {{ q.text }}
                     </md-list-item>
                 </md-list>
-
-                <!--
-                <md-select [multiple]="true" [formControlName]="question.key" placeholder="select all that apply">
-                    <md-option *ngFor="let option of question.options" [value]="option"> {{ option }} </md-option>
-                </md-select>
-                -->
             </div>
 
             <div *ngSwitchDefault> <strong> {{ question.controlType }} is invalid </strong> </div>
         </section>
     </form>
 
-    <div *ngIf="showQuestions" class="conditional-container"
-         [@questionExpand]="expand" (@questionExpand.done)="animationDone($event)">
+    <div *ngIf="showQuestions"
+         class="conditional-container"
+         [@questionExpand]="expand"
+         (@questionExpand.done)="animationDone($event)"
+    >
         <app-ycb-question
-                *ngFor="let expandableQuestion of conditionalQuestions"
-                [question]="expandableQuestion"
-                [form]="form">
+            *ngFor="let expandableQuestion of conditionalQuestions"
+            [question]="expandableQuestion"
+            [form]="form">
         </app-ycb-question>
     </div>
 

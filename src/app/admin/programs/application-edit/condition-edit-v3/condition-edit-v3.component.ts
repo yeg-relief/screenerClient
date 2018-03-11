@@ -1,10 +1,10 @@
 import { Component, OnInit, Input, Output, EventEmitter, OnDestroy} from '@angular/core';
 import { Key } from '../../../models/key'
 import { ProgramConditionClass } from '../../services/program-condition.class';
-import { ProgramCondition } from '../../../models';
 import { ProgramModelService } from '../../services/program-model.service'
 import { Observable } from 'rxjs/Observable';
 import { Subscription } from 'rxjs/Subscription';
+import "rxjs/add/operator/do"
 
 @Component({
   selector: 'app-condition-edit-v3',
@@ -46,6 +46,8 @@ export class ConditionEditV3Component implements OnInit, OnDestroy {
   constructor(private ps: ProgramModelService) { }
 
   ngOnInit() {
+
+
     this.keys = this.ps.keys.asObservable().map(keys => keys.sort( (a, b) => a.name.localeCompare(b.name)) );
   }
 

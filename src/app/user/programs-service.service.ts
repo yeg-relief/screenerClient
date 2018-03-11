@@ -37,6 +37,6 @@ export class ProgramsServiceService {
     }
 
     private fetchProgram(guid: string) {
-        return this.httpClient.get(`api/program/${guid}`).map(res => res['data'])
+        return this.httpClient.get(`api/program/${guid}`)
     }
 }

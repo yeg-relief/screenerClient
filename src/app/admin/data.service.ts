@@ -4,6 +4,9 @@ import { Observable } from 'rxjs/Observable';
 import { Http, Response, RequestOptions } from '@angular/http';
 import { AuthService } from './core/services/auth.service'
 import 'rxjs/add/operator/catch';
+import 'rxjs/add/operator/map';
+import 'rxjs/add/operator/reduce';
+import 'rxjs/add/operator/mergeMap'
 
 @Injectable()
 export class DataService {
@@ -18,7 +21,7 @@ export class DataService {
     getKeys() {
         const creds = this.getCredentials();
         return this.keys$ = this.http.get('/protected/key/', creds)
-            .map(res => res.json().keys)
+            .map(res => res.json())
             .catch(this.loadError);
     }
 

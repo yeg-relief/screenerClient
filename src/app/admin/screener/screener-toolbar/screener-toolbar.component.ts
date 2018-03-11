@@ -92,7 +92,7 @@ export class ScreenerToolbarComponent implements OnInit {
 
       
       return (<any>Object).assign({}, question, {key: keyName});
-    }
+    };
 
 
     return input.map( screener => {

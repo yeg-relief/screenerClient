@@ -51,9 +51,9 @@ export class ApplicationEditComponent implements OnInit {
     Observable.combineLatest(
       this.program.take(1),
       this.queryService.deleteQuery(query_id).take(1).catch( err => Observable.of(err)),
-      this.form.take(1)
     ).subscribe(
-      ([program, wasDeleted, form]) => {
+      ([program, wasDeleted ]) => {
+
         const index = program.application.findIndex(q => q.data.id === query_id);
         if (wasDeleted && index >= 0) {
           program.application.splice(index, 1);
@@ -62,11 +62,11 @@ export class ApplicationEditComponent implements OnInit {
             duration: 2000
           })
         }
-        else 
-          this.snackBar.open('unable to delete query','',{
-            duration: 2000
-          })
-        
+        else {
+            this.snackBar.open('unable to delete query','',{
+                duration: 2000
+            })
+        }
       },
       err => console.error(err)
     );
