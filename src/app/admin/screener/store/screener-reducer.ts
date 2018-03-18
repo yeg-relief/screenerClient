@@ -216,14 +216,10 @@ export function reducer(state = initialState, action: ScreenerActions): State {
 
             const screener = <Screener>action.payload;
 
-            if ( !Array.isArray(screener.questions) || !Array.isArray(screener.keys) || !Array.isArray(screener.conditionalQuestions)){
-                return (<any>Object).assign({}, state, {
-                    loading: false,
-                    error: 'loaded data is corrupt and unable to be displayed'
-                })
-            }
-
-            const allQuestions = [...screener.conditionalQuestions, ...screener.questions];
+            const allQuestions = [
+                ...screener.conditionalQuestions || [],
+                ...screener.questions || []
+            ];
 
             let allQuestions_2: Question_2[] = [];
             for (const q of allQuestions) {
@@ -278,7 +274,7 @@ export function reducer(state = initialState, action: ScreenerActions): State {
 
 
         case ScreenerActionTypes.SAVE_DATA_SUCCESS: {
-            return (<any>Object).assign({}, state, { loading: false })
+            return state
         }
         case ScreenerActionTypes.SELECT_QUESTION: {
             if(action.payload === undefined || typeof action.payload !== 'string') return state;
@@ -430,7 +426,7 @@ export function getUnusedKeys(state$: Observable<State>) {
                 }
             }
             usedKeys = usedKeys.concat(multiKeys);
-            return allKeys.filter(key => !usedKeys.find(k => k.name === key.name));
+            return allKeys ? allKeys.filter(key => !usedKeys.find(k => k.name === key.name)) : []
         })
 }
 

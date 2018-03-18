@@ -14,65 +14,71 @@ import { ScreenerContainerComponent } from './screener/screener-container/screen
 import { ScreenerOverviewComponent } from './screener/screener-overview/screener-overview.component'
 import { ScreenerPreviewComponent } from './screener/screener-preview/screener-preview.component';
 import { ApplicationEditComponent } from './programs/application-edit/application-edit.component'
+import {DataComponent} from "./data/data.component";
 
 export const routing: ModuleWithProviders = RouterModule.forChild([
-  {
-    path: '', component: AdminComponent, 
-    canActivate: [AuthGuardService],
-    children: [
-      {
-        path: 'screener',
-        component: ScreenerContainerComponent,
+    {
+        path: '', component: AdminComponent,
+        canActivate: [AuthGuardService],
         children: [
-          {
-            path: 'edit',
-            component: ScreenerOverviewComponent,
-          },
-          {
-            path: 'preview',
-            component: ScreenerPreviewComponent,
-          },
-        ]
-      },
-      {
-        path: 'programs',
-        component: ProgramsComponent,
-        children: [
-          {
-            path: 'overview',
-            component: ProgramOverviewComponent,
-          },
-          {
-            path: 'application-edit/:guid',
-            component: ApplicationEditComponent
-          },
-          {
-            path: 'edit/:guid',
-            component: ProgramEditComponent,
-          },
-          {
-            path: '', pathMatch: 'full', redirectTo: 'overview'
-          },
-        ]
-      },
-      {
-        path: 'keys',
-        component: KeysComponent,
-        children: [
-          {
-            path: 'overview',
-            component: KeysOverviewComponent,
-            resolve: {
-              keys: KeyResolverService
+            {
+                path: 'screener',
+                component: ScreenerContainerComponent,
+                children: [
+                    {
+                        path: 'edit',
+                        component: ScreenerOverviewComponent,
+                    },
+                    {
+                        path: 'preview',
+                        component: ScreenerPreviewComponent,
+                    },
+                ]
+            },
+            {
+                path: 'programs',
+                component: ProgramsComponent,
+                children: [
+                    {
+                        path: 'overview',
+                        component: ProgramOverviewComponent,
+                    },
+                    {
+                        path: 'application-edit/:guid',
+                        component: ApplicationEditComponent
+                    },
+                    {
+                        path: 'edit/:guid',
+                        component: ProgramEditComponent,
+                    },
+                    {
+                        path: '', pathMatch: 'full', redirectTo: 'overview'
+                    },
+                ]
+            },
+            {
+                path: 'keys',
+                component: KeysComponent,
+                children: [
+                    {
+                        path: 'overview',
+                        component: KeysOverviewComponent,
+                        resolve: {
+                            keys: KeyResolverService
+                        }
+                    },
+                    {
+                        path: 'edit/:id',
+                        component: KeyEditComponent
+                    }
+                ]
+            },
+            {
+                path: 'data',
+                component: DataComponent
             }
-          },
-          {
-            path: 'edit/:id',
-            component: KeyEditComponent
-          }
+
         ]
-      },
-    ]
-  },
-  { path: 'login', component: LoginComponent },
+    },
+    { path: 'login', component: LoginComponent },
 ]);

@@ -34,15 +34,9 @@ export class ScreenerEffects {
   @Effect() saveData$ = this.actions$
       .filter(action => action.type === ScreenerActionTypes.SAVE_DATA)
       .map(action => [action.payload.screener, action.payload.credentials])
-      .do( thing => console.log(thing) )
       .switchMap( ([payload, options]) => {
         return this.http.post(URL, payload, options)
-          .map(res => ({ type: ScreenerActionTypes.SAVE_DATA_SUCCESS, payload: res.json() }))
           .timeout(TIMEOUT)
           .catch((e) => Observable.of({ type: ScreenerActionTypes.SAVE_DATA_FAILURE, payload: e.message }));
-      })
-      .map(action => {
-        return action.payload.type === ScreenerActionTypes.SAVE_DATA_SUCCESS ?
-          { type: ScreenerActionTypes.LOAD_DATA_SUCCESS, payload: action.payload } : action;
       })
 }

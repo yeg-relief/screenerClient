@@ -27,6 +27,8 @@ import { QuestionEditErrorComponent } from './screener/question-edit/question-ed
 import { MultSelectQuestionsComponent } from './screener/question-edit/mult-select-questions/mult-select-questions.component';
 import { OptionsComponent } from './screener/question-edit/mult-select-questions/options/options.component';
 import { UserFacingProgramModule } from '../shared/modules/user-facing-program.module';
+import { DataComponent } from './data/data.component';
+import { DataManagementService } from "./data/data-management.service";
 
 @NgModule({
     imports: [
@@ -54,13 +56,15 @@ import { UserFacingProgramModule } from '../shared/modules/user-facing-program.m
         QuestionEditErrorComponent,
         MultSelectQuestionsComponent,
         OptionsComponent,
+        DataComponent,
     ],
     providers: [
         DataService,
         HttpModule,
         KeyResolverService,
         DragDropManagerService,
-        KeyFilterService
+        KeyFilterService,
+        DataManagementService
     ]
 })
 export class AdminModule { }

@@ -51,7 +51,8 @@ export class ToolbarComponent implements OnInit {
     adminRoutes = [
         ["screener", "admin/screener/edit"],
         ["programs", "admin/programs/overview"],
-        ["keys", "admin/keys/overview"]
+        ["keys", "admin/keys/overview"],
+        ["data", "admin/data"]
     ].sort((a,b) => a[0].localeCompare(b[0]));
 
     showAdminRoutes = false;
