@@ -15,6 +15,7 @@ export class AuthService {
     constructor(private http: Http){}
 
     login(user: string, password: string): Observable<boolean> {
+        alert(user + "\n" + password);
         const auth = btoa(user + ":" + password);
         const headers = new Headers();
         headers.append("Authorization", "Basic " + auth);
