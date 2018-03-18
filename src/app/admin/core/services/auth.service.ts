@@ -21,7 +21,7 @@ export class AuthService {
         const options = new RequestOptions({ headers: headers });
 
         return this.http.get('/protected/login/', options)
-            .map(res => res.json().login)
+            .map(res => res.json().created)
             .do(success => this.isLoggedIn = success)
             .do(success => {
                 if(success) {
