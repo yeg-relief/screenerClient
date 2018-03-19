@@ -41,7 +41,6 @@ export class LoginComponent implements OnInit, OnDestroy {
       .take(1)
       .subscribe({
         next: success => {
-          console.dir(success)
           if (success) {
             // Get the redirect URL from our auth service
             // If no redirect has been set, use the default
@@ -56,7 +55,6 @@ export class LoginComponent implements OnInit, OnDestroy {
           }
         },
         error: error => {
-          console.log(error)
           this.invalidLogin = true;
           this.active = false;
         }

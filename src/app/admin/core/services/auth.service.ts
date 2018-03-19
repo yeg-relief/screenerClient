@@ -15,7 +15,6 @@ export class AuthService {
     constructor(private http: Http){}
 
     login(user: string, password: string): Observable<boolean> {
-        alert(user + "\n" + password);
         const auth = btoa(user + ":" + password);
         const headers = new Headers();
         headers.append("Authorization", "Basic " + auth);
@@ -23,10 +22,8 @@ export class AuthService {
 
         return this.http.get('/protected/login/', options)
             .map(res => res.json().created)
-            .do(console.dir)
             .do(success => this.isLoggedIn = success)
             .do(success => {
-                console.log(success);
                 if(success) {
                     this.credentials = auth;
                 }
