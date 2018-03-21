@@ -16,4 +16,8 @@ export class ProgramListComponent {
     navigateToDetails(guid: string) {
         this.router.navigate(['./details/' + guid ], {relativeTo: this.route})
     }
+
+    encodeURIComponent(programTitle) {
+        return encodeURIComponent(programTitle)
+    }
 }

@@ -1,5 +1,13 @@
 <md-list>
-    <div class="program-item" *ngFor="let program of programs" (click)="navigateToDetails(program.guid)">
+    <div
+        ga-on="click"
+        ga-event-category="Program"
+        ga-event-action="detail"
+        [attr.ga-event-label]="encodeURIComponent(program.title)"
+        class="program-item"
+        *ngFor="let program of programs"
+        (click)="navigateToDetails(program.guid)">
+
         <md-list-item>
             <h3 mdLine> {{program.title}} </h3>
             <p mdLine><span> {{program.description}} </span></p>
@@ -7,6 +15,6 @@
         </md-list-item>
         <app-list-tag-container [tags]="program.tags"></app-list-tag-container>
         <md-divider></md-divider>
-    </div>
 
+    </div>
 </md-list>

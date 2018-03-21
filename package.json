@@ -3,12 +3,12 @@
   "version": "0.0.0",
   "license": "MIT",
   "scripts": {
-    "start": "ng serve --proxy-config proxy.conf.json",
-    "start-prod": "ng serve --prod --proxy-config proxy.conf.json",
+    "start": "NODE_ENV=development ng serve --proxy-config proxy.conf.json",
+    "start-prod": "NODE_ENV=development ng serve --prod --proxy-config proxy.conf.json",
     "test": "ng test",
     "lint": "ng lint",
     "e2e": "ng e2e",
-    "build": "ng build --prod --build-optimizer",
+    "build": "ng build --prod --build-optimizer --sm",
     "compress": "gzip -kr dist"
   },
   "private": true,
@@ -30,6 +30,7 @@
     "@ngrx/effects": "^2.0.3",
     "@ngrx/store": "^2.2.2",
     "@types/jasmine": "^2.5.47",
+    "autotrack": "^2.4.1",
     "basscss": "^7.1.1",
     "classlist.js": "^1.1.20150312",
     "core-js": "^2.4.1",
@@ -45,7 +46,7 @@
   "devDependencies": {
     "@angular/compiler-cli": "^4.0.0",
     "@types/jasmine": "^2.5.47",
-    "@types/node": "^7.0.18",
+    "@types/node": "^7.0.56",
     "codelyzer": "^3.0.1",
     "jasmine-core": "^2.6.1",
     "karma": "^1.7.0",
