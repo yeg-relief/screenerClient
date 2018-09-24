@@ -16,3 +16,4 @@ spec:
     technology: angular
     tier: frontend
     product: youcanbenefit
+  type: NodePort
