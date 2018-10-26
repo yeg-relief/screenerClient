@@ -91,8 +91,8 @@ export class QueryService {
     }
 
     static executeParse(condition: ProgramConditionClass) : ProgramConditionClass {
-        condition.form.get('value').setValue(Number.parseInt((<string>condition.data.value), 10));
-
+        let formValue = condition.form.get('value')
+        formValue.setValue(Number.parseInt((<string>formValue.value), 10));
 
         if (Number.isNaN(condition.form.value.value)) {
             throw new Error(`A condition with name: ${condition.data.key.name} is an invalid number.`);
